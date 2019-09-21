@@ -33,6 +33,7 @@ public class Game : MonoBehaviour
     public Thing[,] Grid;
     public List<Thing> Things;
     private Dictionary<string, Sprite> _sprites;
+    private GameCursor _cursor;
 
     // simulations
     void Awake()
@@ -40,7 +41,8 @@ public class Game : MonoBehaviour
         // create array of things
         Things = new List<Thing>();
 
-        // simulations
+        // cursor
+        _cursor = new GameCursor(this);
 
         // load all sprites
         _sprites = new Dictionary<string, Sprite>();
@@ -220,6 +222,8 @@ public class Game : MonoBehaviour
 
     void Update()
     {
+        _cursor.Update();
+
         for(var i = 0; i < Things.Count; i++) 
         {
             Things[i].Update();
@@ -245,6 +249,8 @@ public class Game : MonoBehaviour
     {
         if(!Application.isPlaying)
             return;
+
+        _cursor.DrawGizmos();
 
         for(var i = 0; i < Things.Count; i++) 
         {
