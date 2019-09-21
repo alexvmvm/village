@@ -211,7 +211,7 @@ TextureImporter:
     second: colored_68
   - first:
       213: -2299730565348646779
-    second: colored_69
+    second: stone_1
   - first:
       213: 3324392388574558291
     second: colored_70
@@ -4607,7 +4607,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_69
+      name: stone_1
       rect:
         serializedVersion: 2
         x: 85

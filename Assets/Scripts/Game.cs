@@ -7,7 +7,8 @@ public enum TypeOfThing
     Grass,
     Stream,
     Path,
-    Tree
+    Tree,
+    Stone
 }
 
 
@@ -69,6 +70,10 @@ public class Game : MonoBehaviour
                 else if(Mathf.PerlinNoise(x * 0.1f, y * 0.1f) > 0.6f)
                 {
                     AddThing(Create(TypeOfThing.Tree, x, y));
+                }
+                else if(Mathf.PerlinNoise(x * 100.1f, y * 100.1f) > 0.8f)
+                {
+                    AddThing(Create(TypeOfThing.Stone, x, y));
                 }
                 else
                 {
@@ -199,6 +204,11 @@ public class Game : MonoBehaviour
                 thing.sprite = "grass_0";
                 thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
+                thing.floor = true;
+                break;
+            case TypeOfThing.Stone:
+                thing.sprite = "stone_1";
+                thing.fixedToGrid = true;
                 thing.floor = true;
                 break;
             default:
