@@ -3,12 +3,38 @@ using UnityEngine;
 
 public class TileRuleDefinition : ITileRule
 {
-    private Sprites _start;
+    private string[] _sprites;
+
+    public TileRuleDefinition(
+        string bottomEnd,
+        string topEnd,
+        string rightEnd,
+        string leftEnd,
+        string bottomRightCorner,
+        string bottomLeftCorner,
+        string topLeftCorner,
+        string topRightCorner,
+        string leftEdge,
+        string rightEdge,
+        string bottomEdge,
+        string topEdge,
+        string surrounded,
+        string vertical,
+        string horizontal
+    )
+    {
+        _sprites = new string[]
+        {
+            bottomEnd, topEnd, rightEnd, leftEnd,
+            bottomRightCorner, bottomLeftCorner, topLeftCorner, topRightCorner, 
+            leftEdge, rightEdge, bottomEdge, topEdge,
+            surrounded, vertical, horizontal
+        };
+    }
 
     private Position[] _positions = new Position[]
     {
         // ends
-        Position.None,
         Position.Top,
         Position.Bottom,
         Position.Left,
@@ -38,21 +64,17 @@ public class TileRuleDefinition : ITileRule
         Position.Left | Position.Right,
     };
 
-    public TileRuleDefinition(Sprites start)
-    {
-        _start = start;
-    }
+   
 
-    public Sprites GetSprite(Position position)
+    public string GetSprite(Position position)
     {
-        var start = (int)_start;
 
-        for(var i = 1; i < _positions.Length; i++) 
+        for(var i = 0; i < _positions.Length; i++) 
         {
             if(position == _positions[i])
-                return (Sprites)(start + i);
+                return _sprites[i];
         }
         
-        return (Sprites)(_start + 1);
+        return _sprites[0];
     }
 }

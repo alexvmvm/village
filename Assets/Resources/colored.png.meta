@@ -100,19 +100,19 @@ TextureImporter:
     second: colored_31
   - first:
       213: 501618332475766911
-    second: colored_32
+    second: tree_1
   - first:
       213: -6839313030521803063
-    second: colored_33
+    second: tree_2
   - first:
       213: -7315634187578098713
-    second: colored_34
+    second: tree_3
   - first:
       213: 4855184231590579541
-    second: colored_35
+    second: tree_4
   - first:
       213: 4686984367499682181
-    second: colored_36
+    second: tree_5
   - first:
       213: 63486174527522109
     second: colored_37
@@ -124,19 +124,19 @@ TextureImporter:
     second: colored_39
   - first:
       213: 2814294591028845207
-    second: colored_40
+    second: path_1
   - first:
       213: 7588567374336719772
-    second: colored_41
+    second: path_2
   - first:
       213: 5391003184472165446
-    second: colored_42
+    second: path_3
   - first:
       213: 9199587094972444368
-    second: colored_43
+    second: path_4
   - first:
       213: 205176509325132626
-    second: colored_44
+    second: path_5
   - first:
       213: 3105556890735238308
     second: colored_45
@@ -412,19 +412,19 @@ TextureImporter:
     second: colored_135
   - first:
       213: -2473944488662912750
-    second: colored_136
+    second: stream_1
   - first:
       213: 1280538504992629613
-    second: colored_137
+    second: stream_2
   - first:
       213: 7150126643958531993
-    second: colored_138
+    second: stream_3
   - first:
       213: 3279467473711108629
-    second: colored_139
+    second: stream_4
   - first:
       213: -799261323839935937
-    second: colored_140
+    second: stream_5
   - first:
       213: -4980783721131139681
     second: colored_141
@@ -3830,7 +3830,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_32
+      name: tree_1
       rect:
         serializedVersion: 2
         x: 0
@@ -3851,7 +3851,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_33
+      name: tree_2
       rect:
         serializedVersion: 2
         x: 17
@@ -3872,7 +3872,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_34
+      name: tree_3
       rect:
         serializedVersion: 2
         x: 34
@@ -3893,7 +3893,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_35
+      name: tree_4
       rect:
         serializedVersion: 2
         x: 51
@@ -3914,7 +3914,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_36
+      name: tree_5
       rect:
         serializedVersion: 2
         x: 68
@@ -3998,7 +3998,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_40
+      name: path_1
       rect:
         serializedVersion: 2
         x: 136
@@ -4019,7 +4019,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_41
+      name: path_2
       rect:
         serializedVersion: 2
         x: 153
@@ -4040,7 +4040,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_42
+      name: path_3
       rect:
         serializedVersion: 2
         x: 170
@@ -4061,7 +4061,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_43
+      name: path_4
       rect:
         serializedVersion: 2
         x: 187
@@ -4082,7 +4082,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_44
+      name: path_5
       rect:
         serializedVersion: 2
         x: 204
@@ -6014,7 +6014,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_136
+      name: stream_1
       rect:
         serializedVersion: 2
         x: 136
@@ -6035,7 +6035,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_137
+      name: stream_2
       rect:
         serializedVersion: 2
         x: 153
@@ -6056,7 +6056,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_138
+      name: stream_3
       rect:
         serializedVersion: 2
         x: 170
@@ -6077,7 +6077,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_139
+      name: stream_4
       rect:
         serializedVersion: 2
         x: 187
@@ -6098,7 +6098,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: colored_140
+      name: stream_5
       rect:
         serializedVersion: 2
         x: 204

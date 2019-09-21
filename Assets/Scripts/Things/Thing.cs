@@ -4,7 +4,7 @@ using System;
 public class Thing
 {   
     // properties    
-    public Sprites sprite;
+    public string sprite;
     public Game main;
     public Transform transform; 
     public SpriteRenderer spriteRenderer;
@@ -39,15 +39,15 @@ public class Thing
 
     public void SetSprite()
     {
-        this.spriteRenderer.sprite = tileRule != null ?
-            main.GetSprite(tileRule.GetSprite(GetGridPositions())) :
-            main.GetSprite(sprite);
+        var spriteName = tileRule != null ? tileRule.GetSprite(GetGridPositions()) : sprite;
+        this.spriteRenderer.sprite = main.GetSprite(spriteName);
+        this.transform.rotation = main.GetSpriteRotation(spriteName);
     }
 
     public void RefreshSprite()
     {
         SetSprite();
-
+        
         var px = Mathf.FloorToInt(transform.position.x);
         var py = Mathf.FloorToInt(transform.position.y);
         

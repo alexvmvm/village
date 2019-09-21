@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class RandomTiles : ITileRule
 {
-    private Sprites[] _sprites;
+    private string[] _sprites;
 
-    public RandomTiles(params Sprites[] sprites)
+    public RandomTiles(params string[] sprites)
     {
         _sprites = sprites;
     }
 
-    public Sprites GetSprite(Position position)
+    public string GetSprite(Position position)
     {
         return _sprites[Random.Range(0, _sprites.Length)];
     }
