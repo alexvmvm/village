@@ -5,7 +5,7 @@ public class Thing
 {   
     // properties    
     public string sprite;
-    public Game main;
+    public Game game;
     public Transform transform; 
     public SpriteRenderer spriteRenderer;
     public bool fixedToGrid;
@@ -15,6 +15,7 @@ public class Thing
     public bool floor;
     public bool wall;
     public string positionalAudioGroup;
+    public string pathTag;
 
     public Thing(TypeOfThing type)
     {
@@ -34,13 +35,18 @@ public class Thing
     public void Setup()
     {
         RefreshSprite();
+
+        if(!string.IsNullOrEmpty(pathTag))
+        {
+            game.UpdateAstarPath(transform.position.ToVector2IntFloor(), pathTag);
+        }
     }
 
     public void SetSprite()
     {
         var spriteName = tileRule != null ? tileRule.GetSprite(GetGridPositions()) : sprite;
-        this.spriteRenderer.sprite = main.GetSprite(spriteName);
-        this.transform.rotation = main.GetSpriteRotation(spriteName);
+        this.spriteRenderer.sprite = game.GetSprite(spriteName);
+        this.transform.rotation = game.GetSpriteRotation(spriteName);
     }
 
     public void RefreshSprite()
@@ -57,7 +63,7 @@ public class Thing
                 if(x == px && y == py)
                     continue;
                 
-                var thing = main.GetThingOnGrid(x, y);
+                var thing = game.GetThingOnGrid(x, y);
                 if(thing != null)
                 {
                     thing.SetSprite();
@@ -80,7 +86,7 @@ public class Thing
                 if(x == px && y == py)
                     continue;
                 
-                var thing = main.GetThingOnGrid(x, y);
+                var thing = game.GetThingOnGrid(x, y);
                 if(thing != null && thing.group == group)
                 {
                     var vector = new Vector2Int(x - px, y - py);

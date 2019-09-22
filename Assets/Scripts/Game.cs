@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public enum TypeOfThing
 {
@@ -30,6 +31,7 @@ public class Game : MonoBehaviour
 {
     public Vector2Int MapSize = Vector2Int.one * 10;
     public ObjectPooler ObjectPooler;
+    public AstarPath AstarPath;
     public Thing[,] Grid;
     public List<Thing> Things;
     private Dictionary<string, Sprite> _sprites;
@@ -58,6 +60,9 @@ public class Game : MonoBehaviour
         }
 
         Debug.Log(string.Format("Loaded {0} audio clips", _audioClips.Count));
+
+        // load path
+        AstarPath = FindObjectOfType<AstarPath>();
 
         // create array of things
         Things = new List<Thing>();
@@ -199,7 +204,7 @@ public class Game : MonoBehaviour
         var thing = new Thing(thingType)
         {
             transform = transform,
-            main = this,
+            game = this,
             spriteRenderer = transform.GetComponent<SpriteRenderer>()
         };
 
@@ -210,6 +215,7 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("colored_5", "colored_6", "colored_7");
                 thing.floor = true;
+                thing.pathTag = "ground";
                 break;
             case TypeOfThing.Stream:
                 thing.fixedToGrid = true;
@@ -221,6 +227,7 @@ public class Game : MonoBehaviour
                 thing.group = 1;
                 thing.wall = true;
                 thing.positionalAudioGroup = "river";
+                thing.pathTag = "blocking";
                 break;
             case TypeOfThing.Path:
                 thing.fixedToGrid = true;
@@ -238,6 +245,7 @@ public class Game : MonoBehaviour
                 thing.tileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
                 thing.floor = true;
                 thing.positionalAudioGroup = "trees";
+                thing.pathTag = "foliage";
                 break;
             case TypeOfThing.Stone:
                 thing.sprite = "stone_1";
@@ -250,6 +258,29 @@ public class Game : MonoBehaviour
                 
         return thing;
     }
+
+    /*
+        Pathfinding
+    */
+    int TagFromString(string tag)
+    {
+        return System.Array.IndexOf(AstarPath.GetTagNames(), tag);
+    }
+
+    public void UpdateAstarPath(Vector2Int position, string pathTag)
+    {
+        var graphupdate = new GraphUpdateObject
+        {
+            setTag = TagFromString(pathTag),
+            bounds = new Bounds(new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Vector3.one),
+            modifyTag = true
+        };
+
+        AstarPath.UpdateGraphs(graphupdate);
+    }
+
+
+ 
 
     void Update()
     {
