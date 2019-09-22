@@ -258,7 +258,6 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.fixedToGrid = true;
                 break;
             default:
                 throw new System.Exception(string.Format("Unable to create tile {0}", thingType.ToString()));
