@@ -9,7 +9,8 @@ public enum TypeOfThing
     Stream,
     Path,
     Tree,
-    Stone
+    Stone,
+    WoodFloorBlueprint
 }
 
 
@@ -215,6 +216,7 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("colored_5", "colored_6", "colored_7");
                 thing.floor = true;
+                thing.buildOn = true;
                 thing.pathTag = "ground";
                 break;
             case TypeOfThing.Stream:
@@ -251,6 +253,12 @@ public class Game : MonoBehaviour
                 thing.sprite = "stone_1";
                 thing.fixedToGrid = true;
                 thing.floor = true;
+                break;
+            case TypeOfThing.WoodFloorBlueprint:
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.fixedToGrid = true;
                 break;
             default:
                 throw new System.Exception(string.Format("Unable to create tile {0}", thingType.ToString()));

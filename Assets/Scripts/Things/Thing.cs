@@ -8,6 +8,7 @@ public class Thing
     public Game game;
     public Transform transform; 
     public SpriteRenderer spriteRenderer;
+    public int sortingOrder;
     public bool fixedToGrid;
     public ITileRule tileRule;
     public int group;
@@ -16,7 +17,9 @@ public class Thing
     public bool wall;
     public string positionalAudioGroup;
     public string pathTag;
-
+    public bool buildOn;
+    public TypeOfThing blueprint;
+    public TypeOfThing cost;
     public Thing(TypeOfThing type)
     {
         this.type = type;
@@ -46,12 +49,16 @@ public class Thing
     {
         var spriteName = tileRule != null ? tileRule.GetSprite(GetGridPositions()) : sprite;
         this.spriteRenderer.sprite = game.GetSprite(spriteName);
+        this.spriteRenderer.sortingOrder = sortingOrder;
         this.transform.rotation = game.GetSpriteRotation(spriteName);
     }
 
     public void RefreshSprite()
     {
         SetSprite();
+
+        if(!fixedToGrid)
+            return;
         
         var px = Mathf.FloorToInt(transform.position.x);
         var py = Mathf.FloorToInt(transform.position.y);
@@ -119,7 +126,7 @@ public class Thing
         transform.gameObject.SetActive(false);
     }
     
-    public void Update()
+    public virtual void Update()
     {
         
     }

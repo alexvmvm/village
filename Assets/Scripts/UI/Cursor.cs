@@ -37,6 +37,7 @@ public class GameCursor
             _cursor.gameObject.SetActive(true);
         }
 
+        // update cursor position
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var position = new Vector3(
             Mathf.RoundToInt(mousePosition.x), 
@@ -45,6 +46,21 @@ public class GameCursor
 
         _cursor.transform.position = position;
 
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            var x = Mathf.FloorToInt(position.x);
+            var y = Mathf.FloorToInt(position.y);
+            var current = _game.GetThingOnGrid(x, y);
+
+            if(current == null || !current.buildOn) 
+                return;
+
+            _game.AddThing(_game.Create(TypeOfThing.WoodFloorBlueprint, x, y));
+                
+            Debug.Log("adding");
+        }
+
+        // check for dragging
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
             _mouseDown = true;
