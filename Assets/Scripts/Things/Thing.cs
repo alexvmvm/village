@@ -14,8 +14,7 @@ public class Thing
     public TypeOfThing type;
     public bool floor;
     public bool wall;
-    public bool gurder;
-    public bool pressurized;
+    public string positionalAudioGroup;
 
     public Thing(TypeOfThing type)
     {
@@ -121,11 +120,6 @@ public class Thing
 
     public void DrawGizmos()
     {
-        if(floor)
-        {
-            Gizmos.color = pressurized ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(transform.position, 0.1f);
-        }
   
     }
 }

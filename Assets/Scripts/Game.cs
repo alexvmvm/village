@@ -33,17 +33,14 @@ public class Game : MonoBehaviour
     public Thing[,] Grid;
     public List<Thing> Things;
     private Dictionary<string, Sprite> _sprites;
+    private Dictionary<string, AudioClip> _audioClips;
     private GameCursor _cursor;
+
+    private List<PositionalAudio> _positionalAudio;
 
     // simulations
     void Awake()
     {
-        // create array of things
-        Things = new List<Thing>();
-
-        // cursor
-        _cursor = new GameCursor(this);
-
         // load all sprites
         _sprites = new Dictionary<string, Sprite>();
         foreach(var sprite in Resources.LoadAll<Sprite>(""))
@@ -51,7 +48,31 @@ public class Game : MonoBehaviour
             _sprites.Add(sprite.name, sprite);
         }
 
+        Debug.Log(string.Format("Loaded {0} sprites", _sprites.Count));
+
+        // load all audio
+        _audioClips = new Dictionary<string, AudioClip>();
+        foreach(var audioClip in Resources.LoadAll<AudioClip>("Music"))
+        {
+            _audioClips.Add(audioClip.name, audioClip);
+        }
+
+        Debug.Log(string.Format("Loaded {0} audio clips", _audioClips.Count));
+
+        // create array of things
+        Things = new List<Thing>();
+
+        // cursor
+        _cursor = new GameCursor(this);
+
         Grid = new Thing[MapSize.x, MapSize.y];
+
+        // positional audio
+        _positionalAudio = new List<PositionalAudio>()
+        {
+            new PositionalAudio(this, "river", "running_water"),
+            new PositionalAudio(this, "trees", "birds")
+        };
     }
 
     void Start()
@@ -110,6 +131,14 @@ public class Game : MonoBehaviour
             return Quaternion.identity;
         var rotation = int.Parse(name.Substring(name.IndexOf('!') + 1));
         return Quaternion.Euler(0, 0, rotation);
+    }
+
+    public AudioClip GetAudioClip(string name)
+    {
+        if(!_audioClips.ContainsKey(name))
+            throw new System.Exception(string.Format("Unable to find audio clip {0} in resources", name));
+
+        return _audioClips[name];
     }
 
     public Thing GetThingOnGrid(Vector2Int position)
@@ -191,6 +220,7 @@ public class Game : MonoBehaviour
                     "stream_4", "stream_1", "stream_1!90");
                 thing.group = 1;
                 thing.wall = true;
+                thing.positionalAudioGroup = "river";
                 break;
             case TypeOfThing.Path:
                 thing.fixedToGrid = true;
@@ -207,6 +237,7 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
                 thing.floor = true;
+                thing.positionalAudioGroup = "trees";
                 break;
             case TypeOfThing.Stone:
                 thing.sprite = "stone_1";
@@ -227,6 +258,11 @@ public class Game : MonoBehaviour
         for(var i = 0; i < Things.Count; i++) 
         {
             Things[i].Update();
+        }
+
+        foreach(var positionalAudio in _positionalAudio)
+        {
+            positionalAudio.Update();
         }
 
         if(Input.GetKeyDown(KeyCode.P))
@@ -255,6 +291,11 @@ public class Game : MonoBehaviour
         for(var i = 0; i < Things.Count; i++) 
         {
             Things[i].DrawGizmos();
+        }
+
+        foreach(var positionalAudio in _positionalAudio)
+        {
+            positionalAudio.DrawGizmos();
         }
     }
 
