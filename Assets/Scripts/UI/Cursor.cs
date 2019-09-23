@@ -52,7 +52,7 @@ public class GameCursor
             var y = Mathf.FloorToInt(position.y);
             var current = _game.GetThingOnGrid(x, y);
 
-            if(current == null || !current.buildOn) 
+            if(current == null) 
                 return;
 
             _game.AddThing(_game.Create(TypeOfThing.WoodFloorBlueprint, x, y));

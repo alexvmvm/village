@@ -17,9 +17,7 @@ public class Thing
     public bool wall;
     public string positionalAudioGroup;
     public string pathTag;
-    public bool buildOn;
-    public TypeOfThing blueprint;
-    public TypeOfThing cost;
+    public Construction construction;
     public Thing(TypeOfThing type)
     {
         this.type = type;

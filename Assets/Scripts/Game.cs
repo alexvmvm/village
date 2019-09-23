@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
@@ -216,7 +217,6 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("colored_5", "colored_6", "colored_7");
                 thing.floor = true;
-                thing.buildOn = true;
                 thing.pathTag = "ground";
                 break;
             case TypeOfThing.Stream:
@@ -258,6 +258,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Tree);
                 break;
             default:
                 throw new System.Exception(string.Format("Unable to create tile {0}", thingType.ToString()));
@@ -314,6 +315,16 @@ public class Game : MonoBehaviour
         {
             var random = Things[UnityEngine.Random.Range(0, Things.Count)];
             RemoveThing(random);
+        }
+
+        if(Input.GetKeyDown(KeyCode.B))
+        {
+            var toBuild = Things.Where(t => t.construction != null).ToArray();
+            foreach(var thing in toBuild)
+            {
+                thing.construction.Construct();
+                thing.Destroy();
+            }
         }
     }
     
