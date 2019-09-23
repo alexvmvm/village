@@ -5,6 +5,7 @@ public class Thing
 {   
     // properties    
     public string sprite;
+    public string name;
     public Game game;
     public Transform transform; 
     public SpriteRenderer spriteRenderer;
@@ -18,6 +19,7 @@ public class Thing
     public string positionalAudioGroup;
     public string pathTag;
     public Construction construction;
+
     public Thing(TypeOfThing type)
     {
         this.type = type;
