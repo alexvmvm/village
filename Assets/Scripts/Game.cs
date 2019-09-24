@@ -11,7 +11,14 @@ public enum TypeOfThing
     Path,
     Tree,
     Stone,
-    WoodFloorBlueprint
+    WoodFloor,
+    WoodWall,
+    StoneFloor,
+    StoneWall,
+    WoodFloorBlueprint,
+    WoodWallBlueprint,
+    StoneFloorBlueprint,
+    StoneWallBlueprint
 }
 
 
@@ -36,6 +43,7 @@ public class Game : MonoBehaviour
     public AstarPath AstarPath;
     public Thing[,] Grid;
     public List<Thing> Things;
+    public TypeOfThing? CurrentType;
     private Dictionary<string, Sprite> _sprites;
     private Dictionary<string, AudioClip> _audioClips;
     private GameCursor _cursor;
@@ -198,17 +206,9 @@ public class Game : MonoBehaviour
         Things.Remove(thing);
     }
 
-    public Thing Create(TypeOfThing thingType, int x, int y)
+    public Thing Create(TypeOfThing thingType)
     {
-        var transform = ObjectPooler.GetPooledObject().transform;
-        transform.position = new Vector3(x, y, 0);
-
-        var thing = new Thing(thingType)
-        {
-            transform = transform,
-            game = this,
-            spriteRenderer = transform.GetComponent<SpriteRenderer>()
-        };
+        var thing = new Thing(thingType) { game = this };
 
         switch(thingType)
         {
@@ -227,7 +227,7 @@ public class Game : MonoBehaviour
                     "stream_3", "stream_3!180", "stream_3!90", "stream_3!270",
                     "stream_4", "stream_1", "stream_1!90");
                 thing.group = 1;
-                thing.wall = true;
+                thing.floor = true;
                 thing.positionalAudioGroup = "river";
                 thing.pathTag = "blocking";
                 break;
@@ -239,7 +239,7 @@ public class Game : MonoBehaviour
                     "path_3", "path_3!180", "path_3!90", "path_3!270",
                     "path_4", "path_1", "path_1!90");
                 thing.group = 1;
-                thing.wall = true;
+                thing.floor = true;
                 break;
             case TypeOfThing.Tree:
                 thing.sprite = "grass_0";
@@ -253,17 +253,73 @@ public class Game : MonoBehaviour
                 thing.sprite = "stone_1";
                 thing.fixedToGrid = true;
                 thing.floor = true;
+                thing.pathTag = "foliage";
                 break;
+            case TypeOfThing.WoodFloor:
+                thing.sprite = "colored_16";
+                thing.fixedToGrid = true;
+                thing.floor = true;
+            break;
+            case TypeOfThing.WoodWall:
+                thing.sprite = "colored_98";
+                thing.fixedToGrid = true;
+                thing.floor = true;
+            break;
+            case TypeOfThing.StoneFloor:
+                thing.sprite = "colored_416";
+                thing.fixedToGrid = true;
+                thing.floor = true;
+            break;
+            case TypeOfThing.StoneWall:
+                thing.sprite = "colored_580";
+                thing.fixedToGrid = true;
+                thing.floor = true;
+            break;
             case TypeOfThing.WoodFloorBlueprint:
+                thing.name = "Wood";
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Tree);
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodFloor, ConstructionGroup.Floors);
+                break;
+            case TypeOfThing.WoodWallBlueprint:
+                thing.name = "Wood";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodWall, ConstructionGroup.Walls);
+                break;
+            case TypeOfThing.StoneFloorBlueprint:
+                thing.name = "Stone";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneFloor, ConstructionGroup.Floors);
+                break;
+            case TypeOfThing.StoneWallBlueprint:
+                thing.name = "Stone";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneWall, ConstructionGroup.Walls);
                 break;
             default:
                 throw new System.Exception(string.Format("Unable to create tile {0}", thingType.ToString()));
         }
                 
+        return thing;
+    }
+
+    public Thing Create(TypeOfThing thingType, int x, int y)
+    {
+        var thing = Create(thingType);
+
+        var transform = ObjectPooler.GetPooledObject().transform;
+        transform.position = new Vector3(x, y, 0);
+
+        thing.transform = transform;
+        thing.spriteRenderer = transform.GetComponent<SpriteRenderer>();
+
         return thing;
     }
 

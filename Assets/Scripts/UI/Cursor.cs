@@ -54,10 +54,8 @@ public class GameCursor
 
             if(current == null) 
                 return;
-
-            _game.AddThing(_game.Create(TypeOfThing.WoodFloorBlueprint, x, y));
-                
-            Debug.Log("adding");
+            if(_game.CurrentType.HasValue)            
+                _game.AddThing(_game.Create(_game.CurrentType.Value, x, y));
         }
 
         // check for dragging
@@ -74,6 +72,11 @@ public class GameCursor
         if(_mouseDown)
         {
             _max = _cursor.transform.position;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            _game.CurrentType = null;
         }
 
     }
