@@ -124,6 +124,7 @@ public class Thing
     public void Destroy()
     {
         transform.gameObject.SetActive(false);
+        game.Things.Remove(this);
     }
     
     public virtual void Update()

@@ -72,7 +72,7 @@ public class Game : MonoBehaviour
         Debug.Log(string.Format("Loaded {0} audio clips", _audioClips.Count));
 
         // load path
-        AstarPath = FindObjectOfType<AstarPath>();
+        // AstarPath = FindObjectOfType<AstarPath>();
 
         // create array of things
         Things = new List<Thing>();

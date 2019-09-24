@@ -32,6 +32,7 @@ public class Construction
     {
         var thing = _game.Create(_builds, _thing.gridPosition.x, _thing.gridPosition.y);
         _game.AddThing(thing);
+        _thing.Destroy();
     }
 
     public static string GetGroupSprite(ConstructionGroup group)
