@@ -43,16 +43,12 @@ public class GameCursor
     {
         if(_current == null)
             return;
-
-        _cursorObj.SetActive(true);
     }
 
     void MouseUp()
     {
         if(_current == null)
             return;
-
-        _cursorObj.SetActive(false);
 
         for(var x = Mathf.FloorToInt(_min.x); x < Mathf.FloorToInt(_max.x); x++)
         {
@@ -113,8 +109,6 @@ public class GameCursor
             _current = _game.Create(_game.CurrentType.Value);
         }
 
-    
-
         // update cursor position
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var position = new Vector3(
@@ -123,6 +117,8 @@ public class GameCursor
         );  
 
         _cursor.transform.position = position;
+
+        _cursorObj.SetActive(_current != null);
 
         // check for dragging
         if(Input.GetKeyDown(KeyCode.Mouse0))
@@ -150,11 +146,16 @@ public class GameCursor
                     _move.x = _down.x;
                 }
             }
-
+        
             // move mouse callback for drawing previews etc.
-            MouseMove();
-
         }
+        else
+        {
+            _down = _cursor.transform.position;
+            _move = _down;
+        }
+
+        MouseMove();
 
         // if player has finished interaction
         // call mouse up event
