@@ -133,6 +133,9 @@ public class Game : MonoBehaviour
 
     public Sprite GetSprite(string name)
     {
+        if(string.IsNullOrEmpty(name))
+            throw new System.Exception("Sprite name is null");
+
         var spriteName = name.Contains("!") ? name.Substring(0, name.IndexOf('!')) : name;
         if(!_sprites.ContainsKey(spriteName))
             throw new System.Exception(string.Format("Unable to find sprite {0} in resources", spriteName));
@@ -213,13 +216,16 @@ public class Game : MonoBehaviour
         switch(thingType)
         {
             case TypeOfThing.Grass:
-                thing.sprite = "grass_0";
+                thing.name = "grass";
+                thing.sprite = "colored_5";
                 thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("colored_5", "colored_6", "colored_7");
                 thing.floor = true;
                 thing.pathTag = "ground";
                 break;
             case TypeOfThing.Stream:
+                thing.name = "stream";
+                thing.sprite = "stream_4";
                 thing.fixedToGrid = true;
                 thing.tileRule = new TileRuleDefinition(
                     "stream_5!180", "stream_5", "stream_5!270", "stream_5!90", 
@@ -232,6 +238,8 @@ public class Game : MonoBehaviour
                 thing.pathTag = "blocking";
                 break;
             case TypeOfThing.Path:
+                thing.name = "path";
+                thing.sprite = "path_4";
                 thing.fixedToGrid = true;
                 thing.tileRule = new TileRuleDefinition(
                     "path_5!180", "path_5", "path_5!270", "path_5!90", 
@@ -242,7 +250,8 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 break;
             case TypeOfThing.Tree:
-                thing.sprite = "grass_0";
+                thing.name = "tree";
+                thing.sprite = "tree_1";
                 thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
                 thing.floor = true;
@@ -250,27 +259,32 @@ public class Game : MonoBehaviour
                 thing.pathTag = "foliage";
                 break;
             case TypeOfThing.Stone:
+                thing.name = "stone";
                 thing.sprite = "stone_1";
                 thing.fixedToGrid = true;
                 thing.floor = true;
                 thing.pathTag = "foliage";
                 break;
             case TypeOfThing.WoodFloor:
+                thing.name = "wood floor";
                 thing.sprite = "colored_16";
                 thing.fixedToGrid = true;
                 thing.floor = true;
             break;
             case TypeOfThing.WoodWall:
+                thing.name = "wood wall";
                 thing.sprite = "colored_98";
                 thing.fixedToGrid = true;
                 thing.floor = true;
             break;
             case TypeOfThing.StoneFloor:
+                thing.name = "stone floor";
                 thing.sprite = "colored_416";
                 thing.fixedToGrid = true;
                 thing.floor = true;
             break;
             case TypeOfThing.StoneWall:
+                thing.name = "stone wall";
                 thing.sprite = "colored_580";
                 thing.fixedToGrid = true;
                 thing.floor = true;
