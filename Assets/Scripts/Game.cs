@@ -164,6 +164,11 @@ public class Game : MonoBehaviour
         return GetThingOnGrid(position.x, position.y);
     }
 
+    public bool IsOnGrid(int x, int y)
+    {
+        return x >= 0 && x < MapSize.x && y >= 0 && y < MapSize.y;
+    }
+
     public Thing GetThingOnGrid(int x, int y)
     {
         if(x >= 0 && x < MapSize.x && y >= 0 && y < MapSize.y)

@@ -8,12 +8,12 @@ public class GameCursor
     private Transform _cursor;
     private SpriteRenderer _spriteRenderer;
 
-    private Vector3 _min;
-    private Vector3 _max;
+    private Vector3 _down;
+    private Vector3 _move;
+    private Vector3 _min { get { return Vector3.Min(_down, _move);  } }
+    private Vector3 _max { get { return Vector3.Max(_down, _move) + Vector3.one;  } }
     private bool _mouseDown;
-
-    private Vector2Int _minVec2Int { get { return _min.ToVector2IntFloor(); } }
-    private Vector2Int _maxVec2Int { get { return _max.ToVector2IntFloor(); } }
+    private Thing _current;
 
     public GameCursor(Game game)
     {
@@ -23,6 +23,24 @@ public class GameCursor
         _spriteRenderer = _cursor.gameObject.GetComponent<SpriteRenderer>();
         _spriteRenderer.sprite = _game.GetSprite("crosshair025");
         _spriteRenderer.sortingOrder = (int)SortingOrders.UI;
+    }
+
+    void MouseUp()
+    {
+        if(_current == null)
+            return;
+
+
+        for(var x = Mathf.FloorToInt(_min.x); x < Mathf.FloorToInt(_max.x); x++)
+        {
+            for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
+            {
+                if(!_game.IsOnGrid(x, y))
+                    continue;
+                _game.AddThing(_game.Create(_game.CurrentType.Value, x, y));        
+            }
+        }
+        
     }
 
     public void Update()
@@ -37,6 +55,18 @@ public class GameCursor
             _cursor.gameObject.SetActive(true);
         }
 
+        // setup example thing
+        if(!_game.CurrentType.HasValue && _current != null)
+        {
+            _current = null;
+        }
+        else if(_game.CurrentType.HasValue && (_current == null || _current.type != _game.CurrentType.Value))
+        {   
+            _current = _game.Create(_game.CurrentType.Value);
+        }
+
+    
+
         // update cursor position
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var position = new Vector3(
@@ -46,32 +76,48 @@ public class GameCursor
 
         _cursor.transform.position = position;
 
-        if(Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            var x = Mathf.FloorToInt(position.x);
-            var y = Mathf.FloorToInt(position.y);
-            var current = _game.GetThingOnGrid(x, y);
+        // if(Input.GetKeyDown(KeyCode.Mouse0))
+        // {
+        //     var x = Mathf.FloorToInt(position.x);
+        //     var y = Mathf.FloorToInt(position.y);
+        //     var current = _game.GetThingOnGrid(x, y);
+        //     _mouseDown = true;
 
-            if(current == null) 
-                return;
-            if(_game.CurrentType.HasValue)            
-                _game.AddThing(_game.Create(_game.CurrentType.Value, x, y));
-        }
+        //     if(current == null) 
+        //         return;
+        //     if(_game.CurrentType.HasValue)            
+        //         _game.AddThing(_game.Create(_game.CurrentType.Value, x, y));
+        // }
 
         // check for dragging
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
             _mouseDown = true;
-            _min = _cursor.transform.position;
+            _down = _cursor.transform.position;
         }
-        else if(Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            _mouseDown = false;
-        }
-
+        
         if(_mouseDown)
         {
-            _max = _cursor.transform.position;
+            _move = _cursor.transform.position;
+
+            if(_current != null && _current.tileRule != null && _current.tileRule is TileRuleDefinition)
+            {   
+                if (_max.x - _min.x > _max.y - _min.y)
+                {
+                    _move.y = _down.y;
+                }
+                else
+                {
+                    _move.x = _down.x;
+                }
+            }
+
+        }
+
+        if(Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            _mouseDown = false;
+            MouseUp();
         }
 
         if(Input.GetKeyDown(KeyCode.Mouse1))
@@ -97,8 +143,8 @@ public class GameCursor
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(_min + (_max - _min) / 2, _max - _min);
         
-            Gizmos.DrawWireSphere(_minVec2Int.ToVector3(), 0.2f);
-            Gizmos.DrawWireSphere(_maxVec2Int.ToVector3(), 0.2f);
+            Gizmos.DrawWireSphere(_min, 0.2f);
+            Gizmos.DrawWireSphere(_max, 0.4f);
         }
 
         Gizmos.color = Color.green;
