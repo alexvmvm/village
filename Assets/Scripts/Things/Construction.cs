@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public enum ConstructionGroup
 {
@@ -26,6 +27,21 @@ public class Construction
         _thing = thing;
         _game = game;
         _group = group;
+    }
+
+    bool ConstructAtPosition(Vector2Int position)
+    {
+        return _game.Things.Any(t => t.construction != null && t.gridPosition == position);
+    }
+
+    public bool IsPlaceableAt(int x, int y)
+    {
+        var current = _game.GetThingOnGrid(x, y);
+        if(current == null)
+            return false;
+        if(ConstructAtPosition(current.gridPosition))
+            return false;
+        return current.floor && current.buildOn;
     }
 
     public void Construct()

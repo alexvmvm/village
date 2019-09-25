@@ -14,7 +14,12 @@ public class GameCursor
     private Vector3 _max { get { return Vector3.Max(_down, _move) + Vector3.one;  } }
     private bool _mouseDown;
     private Thing _current;
-
+    private GameObject _cursorObj;
+    private MeshFromPoints _meshFromPoints;
+    private MeshRenderer _meshRenderer;
+    private Vector2 _validUV = new Vector2(0.5f, 0.5f);
+    private Vector2 _invalidUV = new Vector2(0, 0);
+    
     public GameCursor(Game game)
     {
         _game = game;
@@ -23,6 +28,23 @@ public class GameCursor
         _spriteRenderer = _cursor.gameObject.GetComponent<SpriteRenderer>();
         _spriteRenderer.sprite = _game.GetSprite("crosshair025");
         _spriteRenderer.sortingOrder = (int)SortingOrders.UI;
+        
+        _cursorObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Cursor Mesh"));
+        _cursorObj.transform.SetParent(_game.transform);
+        _cursorObj.transform.position = new Vector3(0, 0, -2);
+
+        _meshFromPoints = _cursorObj.AddComponent<MeshFromPoints>();
+        _meshRenderer = _cursorObj.AddComponent<MeshRenderer>();
+        _cursorObj.SetActive(false);
+
+    }
+
+    void MouseDown()
+    {
+        if(_current == null)
+            return;
+
+        _cursorObj.SetActive(true);
     }
 
     void MouseUp()
@@ -30,17 +52,43 @@ public class GameCursor
         if(_current == null)
             return;
 
+        _cursorObj.SetActive(false);
 
         for(var x = Mathf.FloorToInt(_min.x); x < Mathf.FloorToInt(_max.x); x++)
         {
             for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
             {
-                if(!_game.IsOnGrid(x, y))
+                if(_current.construction != null && !_current.construction.IsPlaceableAt(x, y))
                     continue;
-                _game.AddThing(_game.Create(_game.CurrentType.Value, x, y));        
+
+                _game.AddThing(_game.Create(_game.CurrentType.Value, x, y));       
             }
         }
         
+    }
+
+    void MouseMove()
+    {
+        if(_current == null)
+            return;
+
+        var list = new List<Quad>();
+        for(var x = Mathf.FloorToInt(_min.x); x < Mathf.FloorToInt(_max.x); x++)
+        {
+            for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
+            {
+                var valid = _current.construction != null && !_current.construction.IsPlaceableAt(x, y) ?
+                    _invalidUV : _validUV;
+
+                list.Add(new Quad {
+                    position = new Vector2(x - 0.5f, y - 0.5f),
+                    uv = valid,
+                    tUnit = 0.5f
+                });    
+            }
+        }
+
+        _meshFromPoints.Create(list.ToArray());
     }
 
     public void Update()
@@ -76,31 +124,22 @@ public class GameCursor
 
         _cursor.transform.position = position;
 
-        // if(Input.GetKeyDown(KeyCode.Mouse0))
-        // {
-        //     var x = Mathf.FloorToInt(position.x);
-        //     var y = Mathf.FloorToInt(position.y);
-        //     var current = _game.GetThingOnGrid(x, y);
-        //     _mouseDown = true;
-
-        //     if(current == null) 
-        //         return;
-        //     if(_game.CurrentType.HasValue)            
-        //         _game.AddThing(_game.Create(_game.CurrentType.Value, x, y));
-        // }
-
         // check for dragging
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
             _mouseDown = true;
             _down = _cursor.transform.position;
+            MouseDown();
         }
         
+        // update move position
+        // check if current tile is rule based so we can setup
+        // the correct max/min
         if(_mouseDown)
         {
             _move = _cursor.transform.position;
 
-            if(_current != null && _current.tileRule != null && _current.tileRule is TileRuleDefinition)
+            if(_current != null && _current.pipe)
             {   
                 if (_max.x - _min.x > _max.y - _min.y)
                 {
@@ -112,14 +151,21 @@ public class GameCursor
                 }
             }
 
+            // move mouse callback for drawing previews etc.
+            MouseMove();
+
         }
 
+        // if player has finished interaction
+        // call mouse up event
         if(Input.GetKeyUp(KeyCode.Mouse0))
         {
             _mouseDown = false;
             MouseUp();
         }
 
+        // if right click cancel current
+        // tile
         if(Input.GetKeyDown(KeyCode.Mouse1))
         {
             _game.CurrentType = null;

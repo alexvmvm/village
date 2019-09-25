@@ -46,6 +46,7 @@ public class Game : MonoBehaviour
     public TypeOfThing? CurrentType;
     private Dictionary<string, Sprite> _sprites;
     private Dictionary<string, AudioClip> _audioClips;
+    private Dictionary<string, Material> _materials;
     private GameCursor _cursor;
 
     private List<PositionalAudio> _positionalAudio;
@@ -70,6 +71,15 @@ public class Game : MonoBehaviour
         }
 
         Debug.Log(string.Format("Loaded {0} audio clips", _audioClips.Count));
+
+        _materials = new Dictionary<string, Material>();
+        foreach(var material in Resources.LoadAll<Material>("Materials"))
+        {
+            _materials.Add(material.name, material);
+        }
+
+        Debug.Log(string.Format("Loaded {0} materials", _materials.Count));
+
 
         // load path
         // AstarPath = FindObjectOfType<AstarPath>();
@@ -120,11 +130,6 @@ public class Game : MonoBehaviour
                 
             }
         }
-
-        for(var y = 0; y < MapSize.y; y++)
-        {
-          
-        }
     }
 
     /*
@@ -157,6 +162,14 @@ public class Game : MonoBehaviour
             throw new System.Exception(string.Format("Unable to find audio clip {0} in resources", name));
 
         return _audioClips[name];
+    }
+
+    public Material GetMaterial(string name)
+    {
+        if(!_materials.ContainsKey(name))
+            throw new System.Exception(string.Format("Unable to find material {0} in resources", name));
+
+        return _materials[name];
     }
 
     public Thing GetThingOnGrid(Vector2Int position)
@@ -227,11 +240,13 @@ public class Game : MonoBehaviour
                 thing.tileRule = new RandomTiles("colored_5", "colored_6", "colored_7");
                 thing.floor = true;
                 thing.pathTag = "ground";
+                thing.buildOn = true;
                 break;
             case TypeOfThing.Stream:
                 thing.name = "stream";
                 thing.sprite = "stream_4";
                 thing.fixedToGrid = true;
+                thing.pipe = true;
                 thing.tileRule = new TileRuleDefinition(
                     "stream_5!180", "stream_5", "stream_5!270", "stream_5!90", 
                     "stream_2!180", "stream_2!90", "stream_2", "stream_2!270",
@@ -246,6 +261,7 @@ public class Game : MonoBehaviour
                 thing.name = "path";
                 thing.sprite = "path_4";
                 thing.fixedToGrid = true;
+                thing.pipe = true;
                 thing.tileRule = new TileRuleDefinition(
                     "path_5!180", "path_5", "path_5!270", "path_5!90", 
                     "path_2!180", "path_2!90", "path_2", "path_2!270",
@@ -275,24 +291,33 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_16";
                 thing.fixedToGrid = true;
                 thing.floor = true;
+                thing.buildOn = true;
             break;
             case TypeOfThing.WoodWall:
                 thing.name = "wood wall";
                 thing.sprite = "colored_98";
                 thing.fixedToGrid = true;
                 thing.floor = true;
+                thing.pipe = true;
+                thing.tileRule = new TileRuleDefinition(
+                    "colored_98", "colored_98", "colored_98", "colored_98", 
+                    "colored_98", "colored_98", "colored_98", "colored_98",
+                    "colored_98", "colored_98", "colored_98", "colored_98",
+                    "colored_98", "colored_98", "colored_98");
             break;
             case TypeOfThing.StoneFloor:
                 thing.name = "stone floor";
                 thing.sprite = "colored_416";
                 thing.fixedToGrid = true;
                 thing.floor = true;
+                thing.buildOn = true;
             break;
             case TypeOfThing.StoneWall:
                 thing.name = "stone wall";
                 thing.sprite = "colored_580";
                 thing.fixedToGrid = true;
                 thing.floor = true;
+                thing.pipe = true;
             break;
             case TypeOfThing.WoodFloorBlueprint:
                 thing.name = "Wood";
@@ -307,6 +332,7 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
                 thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodWall, ConstructionGroup.Walls);
+                thing.pipe = true;
                 break;
             case TypeOfThing.StoneFloorBlueprint:
                 thing.name = "Stone";
@@ -321,6 +347,7 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
                 thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneWall, ConstructionGroup.Walls);
+                thing.pipe = true;
                 break;
             default:
                 throw new System.Exception(string.Format("Unable to create tile {0}", thingType.ToString()));

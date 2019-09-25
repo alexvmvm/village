@@ -16,6 +16,8 @@ public class Thing
     public TypeOfThing type;
     public bool floor;
     public bool wall;
+    public bool buildOn;
+    public bool pipe;
     public string positionalAudioGroup;
     public string pathTag;
     public Construction construction;
