@@ -11,6 +11,9 @@ public enum TypeOfThing
     Path,
     Tree,
     Stone,
+    Log,
+    Villager,
+    Chicken,
     WoodFloor,
     WoodWall,
     StoneFloor,
@@ -199,18 +202,25 @@ public class Game : MonoBehaviour
     {
         if(thing.fixedToGrid)
         {
-            var existing = GetThingOnGrid(thing.gridPosition.x, thing.gridPosition.y);
-            if(existing != null)
+            if(IsOnGrid(thing.gridPosition.x, thing.gridPosition.y))
             {
-                RemoveThing(existing);
+                var existing = GetThingOnGrid(thing.gridPosition.x, thing.gridPosition.y);
+                if(existing != null)
+                {
+                    RemoveThing(existing);
+                }
+
+                Grid[thing.gridPosition.x, thing.gridPosition.y] = thing;
+
+                Things.Add(thing);
+                thing.Setup();
             }
-
-            Grid[thing.gridPosition.x, thing.gridPosition.y] = thing;
         }
-
-        Things.Add(thing);
-        
-        thing.Setup();
+        else
+        {
+            Things.Add(thing);
+            thing.Setup();
+        }
     }
 
     public void RemoveThing(Thing thing)
@@ -349,6 +359,28 @@ public class Game : MonoBehaviour
                 thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneWall, ConstructionGroup.Walls);
                 thing.pipe = true;
                 break;
+
+            /*
+                Objects
+            */
+
+            case TypeOfThing.Log:
+                thing.name = "Log";
+                thing.sprite = "colored_transparent_209";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+            break;
+            case TypeOfThing.Villager:
+                thing.name = " Villager";
+                thing.sprite = "colored_transparent_24";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+            break;
+            case TypeOfThing.Chicken:
+                thing.name = " Chicken";
+                thing.sprite = "colored_transparent_249";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.agent = new Agent(this, thing);
+            break;
+
             default:
                 throw new System.Exception(string.Format("Unable to create tile {0}", thingType.ToString()));
         }

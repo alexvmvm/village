@@ -21,6 +21,7 @@ public class Thing
     public string positionalAudioGroup;
     public string pathTag;
     public Construction construction;
+    public Agent agent;
 
     public Thing(TypeOfThing type)
     {
@@ -131,7 +132,10 @@ public class Thing
     
     public virtual void Update()
     {
-        
+        if(agent != null)
+        {
+            agent.Update();
+        }
     }
 
     public void DrawGizmos()
