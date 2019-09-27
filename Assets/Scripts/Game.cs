@@ -387,6 +387,7 @@ public class Game : MonoBehaviour
                 thing.name = " Villager";
                 thing.sprite = "colored_transparent_24";
                 thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.agent = new Villager(this, thing);
             break;
             case TypeOfThing.Chicken:
                 thing.name = " Chicken";

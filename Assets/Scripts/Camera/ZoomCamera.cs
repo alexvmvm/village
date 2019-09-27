@@ -7,6 +7,7 @@ public class ZoomCamera : MonoBehaviour
 {
     public float MinZoom = 10f;
     public float MaxZoom = 20f;
+    public float StartZoom = 15f;
 	public float ScrollSpeed = 1f;
     public float ZoomShortcutIncrement = 2f;
     public float Damping;
@@ -16,6 +17,11 @@ public class ZoomCamera : MonoBehaviour
     private float _targetZoom;
 
     private static float _t;
+
+    void Start()
+    {
+        _targetZoom = StartZoom;
+    }
 
     // Update is called once per frame
     void LateUpdate () 
