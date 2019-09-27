@@ -23,9 +23,11 @@ public class Thing
     public Construction construction;
     public Agent agent;
 
-    public Thing(TypeOfThing type)
+    public Thing(TypeOfThing type, Transform transform)
     {
         this.type = type;
+        this.transform = transform;
+        this.spriteRenderer = transform.GetComponent<SpriteRenderer>();
     }
 
     public Vector2Int gridPosition
@@ -46,9 +48,6 @@ public class Thing
         {
             game.UpdateAstarPath(transform.position.ToVector2IntFloor(), pathTag);
         }
-
-        if(agent != null)
-            agent.Setup();
     }
 
     public void SetSprite()

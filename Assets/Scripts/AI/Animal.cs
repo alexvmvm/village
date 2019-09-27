@@ -12,15 +12,13 @@ public class Animal : Agent
         _goal = new Dictionary<string, bool>();
         _world = new Dictionary<string, bool>();
 
-        _world.Add("isIdle", false);
-        _goal.Add("isIdle", true);
-    }
+        _world.Add("isIdle", true);
+        _goal.Add("isIdle", false);
 
-    public override void Setup()
-    {
-        base.Setup();
-
-        AddAction(new Idle(_game, _movement)); 
+        AddAction(new Idle(_game, _movement) {
+            Effects         = { { "isIdle", false } },
+            Preconditions   = { { "isIdle", true } }
+        }); 
     }
 
     public override Dictionary<string, bool> GetGoal()

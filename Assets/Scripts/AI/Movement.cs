@@ -27,7 +27,7 @@ public class Movement : MonoBehaviour
     public bool FailedToFollowPath { get { return _failedToFollowPath; } }
 
     public bool IsMoving { get { return _aiPath.hasPath && !_aiPath.reachedEndOfPath; } }
-
+    private AstarPath _aStarPath;
     private AIPath _aiPath;
     private Seeker _seeker;
     private bool _failedToFollowPath;
@@ -45,6 +45,8 @@ public class Movement : MonoBehaviour
         _aiPath.orientation = OrientationMode.YAxisForward;
         _aiPath.enableRotation = false;
         _aiPath.gravity = Vector3.zero;
+
+        _aStarPath = FindObjectOfType<AstarPath>();
 
         _seeker = GetComponent<Seeker>();
         _seeker.traversableTags &= ~(1 << _game.TagFromString("foliage"));
@@ -74,7 +76,7 @@ public class Movement : MonoBehaviour
         _aiPath.isStopped = false;
     }
 
-    void CancelCurrentPath()
+    public void CancelCurrentPath()
     {
         // current best way to clear the current path
         _seeker.StartPath(transform.position, transform.position);

@@ -26,7 +26,6 @@ public abstract class Agent
     private AgentState _state;
     protected Movement _movement;
     private DateTime _created;
-    private bool _setup;
 
     public Agent(Game game, Thing thing)
     {
@@ -37,13 +36,9 @@ public abstract class Agent
         _available = new HashSet<GOAPAction>();
         _actions = new Queue<GOAPAction>();
         _useable = new List<GOAPAction>();
-    }
 
-    public virtual void Setup()
-    {
-        _created = new DateTime();
+        _created = DateTime.Now;
         _movement = _thing.transform.gameObject.AddComponent<Movement>();
-        _setup = true;
     }
 
     public void AddAction(GOAPAction action)
@@ -98,9 +93,6 @@ public abstract class Agent
 
     public void Update()
     {
-        if(!_setup)
-            return;
-
         switch(_state)
         {
             case AgentState.Planning:

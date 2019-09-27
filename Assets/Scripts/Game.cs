@@ -206,7 +206,7 @@ public class Game : MonoBehaviour
     /*
         Things
     */
-    public void AddThing(Thing thing)
+    public Thing AddThing(Thing thing)
     {
         if(thing.fixedToGrid)
         {
@@ -229,6 +229,8 @@ public class Game : MonoBehaviour
             Things.Add(thing);
             thing.Setup();
         }
+
+        return thing;
     }
 
     public void RemoveThing(Thing thing)
@@ -245,11 +247,19 @@ public class Game : MonoBehaviour
         Things.Remove(thing);
     }
 
-    public Thing Create(TypeOfThing thingType, Transform transform = null)
+    public Thing Create(TypeOfThing thingType)
     {
-        var thing = new Thing(thingType) 
+        return Create(thingType, 0, 0);
+    }
+
+    public Thing Create(TypeOfThing thingType, int x, int y)
+    {
+        var transform = ObjectPooler.GetPooledObject().transform;
+        transform.position = new Vector3(x, y, 0);
+        transform.name = thingType.ToString();
+
+        var thing = new Thing(thingType, transform) 
         { 
-            transform = transform,
             game = this 
         };
 
@@ -403,18 +413,11 @@ public class Game : MonoBehaviour
         return thing;
     }
 
-    public Thing Create(TypeOfThing thingType, int x, int y)
+    public Thing CreateAndAddThing(TypeOfThing type, int x, int y)
     {
-        var transform = ObjectPooler.GetPooledObject().transform;
-        transform.position = new Vector3(x, y, 0);
-        transform.name = thingType.ToString();
-
-        var thing = Create(thingType, transform);
-
-        thing.spriteRenderer = transform.GetComponent<SpriteRenderer>();
-
-        return thing;
+        return AddThing(Create(type, x, y));
     }
+
 
     /*
         Pathfinding
