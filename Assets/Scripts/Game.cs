@@ -133,6 +133,14 @@ public class Game : MonoBehaviour
                 
             }
         }
+
+        for(var i = 0; i < 10; i++) 
+        {
+            var x = UnityEngine.Random.Range(0, MapSize.x);
+            var y = UnityEngine.Random.Range(0, MapSize.y);
+
+            AddThing(Create(TypeOfThing.Chicken, x, y));
+        }
     }
 
     /*
@@ -237,9 +245,13 @@ public class Game : MonoBehaviour
         Things.Remove(thing);
     }
 
-    public Thing Create(TypeOfThing thingType)
+    public Thing Create(TypeOfThing thingType, Transform transform = null)
     {
-        var thing = new Thing(thingType) { game = this };
+        var thing = new Thing(thingType) 
+        { 
+            transform = transform,
+            game = this 
+        };
 
         switch(thingType)
         {
@@ -309,6 +321,7 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.floor = true;
                 thing.pipe = true;
+                thing.pathTag = "blocking";
                 thing.tileRule = new TileRuleDefinition(
                     "colored_98", "colored_98", "colored_98", "colored_98", 
                     "colored_98", "colored_98", "colored_98", "colored_98",
@@ -327,6 +340,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_580";
                 thing.fixedToGrid = true;
                 thing.floor = true;
+                thing.pathTag = "blocking";
                 thing.pipe = true;
             break;
             case TypeOfThing.WoodFloorBlueprint:
@@ -378,7 +392,7 @@ public class Game : MonoBehaviour
                 thing.name = " Chicken";
                 thing.sprite = "colored_transparent_249";
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.agent = new Agent(this, thing);
+                thing.agent = new Animal(this, thing);
             break;
 
             default:
@@ -390,12 +404,12 @@ public class Game : MonoBehaviour
 
     public Thing Create(TypeOfThing thingType, int x, int y)
     {
-        var thing = Create(thingType);
-
         var transform = ObjectPooler.GetPooledObject().transform;
         transform.position = new Vector3(x, y, 0);
+        transform.name = thingType.ToString();
 
-        thing.transform = transform;
+        var thing = Create(thingType, transform);
+
         thing.spriteRenderer = transform.GetComponent<SpriteRenderer>();
 
         return thing;
@@ -404,7 +418,7 @@ public class Game : MonoBehaviour
     /*
         Pathfinding
     */
-    int TagFromString(string tag)
+    public int TagFromString(string tag)
     {
         return System.Array.IndexOf(AstarPath.GetTagNames(), tag);
     }

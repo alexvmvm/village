@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Pathfinding;
 using UnityEngine;
 
 public enum AgentState
@@ -11,7 +13,7 @@ public enum AgentState
     Completed
 }
 
-public class Agent 
+public abstract class Agent 
 {
     private Game _game;
     private Thing _thing;
@@ -19,11 +21,9 @@ public class Agent
     private HashSet<GOAPAction> _available;
     private Queue<GOAPAction> _actions;
     private List<GOAPAction> _useable;
-    private Dictionary<string, bool> _goal;
-    private Dictionary<string, bool> _worldState;
-    private Dictionary<string, bool> _currentState;
     private GOAPAction _current;
     private AgentState _state;
+    protected Movement _movement;
 
     public Agent(Game game, Thing thing)
     {
@@ -35,7 +35,24 @@ public class Agent
         _actions = new Queue<GOAPAction>();
         _useable = new List<GOAPAction>();
 
+        if(thing.transform == null)
+            return;
+        
+        _movement = thing.transform.gameObject.AddComponent<Movement>();
+        
     }
+
+    public void SetActions(params GOAPAction[] actions)
+    {
+        _available.Clear();
+        foreach(var action in actions)
+        {
+            _available.Add(action);
+        }
+    }
+
+    public abstract Dictionary<string, bool> GetWorldState();
+    public abstract Dictionary<string, bool> GetGoal();
 
     bool Plan(Dictionary<string, bool> world, Dictionary<string, bool> goal, Queue<GOAPAction> plan)
     {
@@ -79,51 +96,6 @@ public class Agent
         }
     }
 
-    // IEnumerator AgentPoll()
-    // {
-    //     while (true)
-    //     {
-    //         _actions.Clear();
-                
-
-    //         var planFound = false;
-
-    //         // no plan
-    //         if (_goal.Count > 0)
-    //         {
-    //             if (Plan(_worldState, _goal, _actions))
-    //             {
-    //                 planFound = true;
-    //             }
-    //             else
-    //             {
-    //                 yield return _waitAfterPlanNotFound;
-    //             }
-    //         }
-
-    //         if (planFound)
-    //         {
-    //             while (_actions.Count() > 0)
-    //             {
-    //                 _current = _actions.Dequeue();
-
-    //                 yield return StartCoroutine(_current.Perform());
-
-    //                 // failed to peform action
-    //                 if (!_current.IsDone())
-    //                 {
-    //                     Debug.Log("Failed plan");
-    //                     break;
-    //                 }
-    //             }
-    //         }
-
-    //         _current = null;
-
-    //         yield return null;
-    //     }
-    // }
-
     public void Update()
     {
         switch(_state)
@@ -131,7 +103,7 @@ public class Agent
             case AgentState.Planning:
             {
                 _actions.Clear();
-                if(Plan(_worldState, _goal, _actions))
+                if(Plan(GetWorldState(), GetGoal(), _actions))
                     _state = AgentState.Picking;
             }
             break;

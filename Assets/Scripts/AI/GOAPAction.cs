@@ -17,8 +17,17 @@ public abstract class GOAPAction
 
     public float Cost = 1f;
 
-    private readonly Dictionary<string, bool> _preconditions = new Dictionary<string, bool>();
-    private readonly Dictionary<string, bool> _effects = new Dictionary<string, bool>();
+    protected readonly Dictionary<string, bool> _preconditions;
+    protected readonly Dictionary<string, bool> _effects;
+
+    protected Game _game;
+
+    public GOAPAction(Game game)
+    {
+        _preconditions = new Dictionary<string, bool>();
+        _effects = new Dictionary<string, bool>();
+        _game = game;
+    }
 
     abstract public bool Perform();
     abstract public bool IsDone();
