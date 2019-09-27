@@ -15,8 +15,9 @@ public enum AgentState
 
 public abstract class Agent 
 {
-    private Game _game;
-    private Thing _thing;
+    public DateTime Created { get { return _created; } }
+    protected Game _game;
+    protected Thing _thing;
     private NormalPlanner _planner;
     private HashSet<GOAPAction> _available;
     private Queue<GOAPAction> _actions;
@@ -24,31 +25,30 @@ public abstract class Agent
     private GOAPAction _current;
     private AgentState _state;
     protected Movement _movement;
+    private DateTime _created;
+    private bool _setup;
 
     public Agent(Game game, Thing thing)
     {
         _game = game;
-        _thing = thing;
-
+        _thing = thing;        
+    
         _planner = new NormalPlanner();
         _available = new HashSet<GOAPAction>();
         _actions = new Queue<GOAPAction>();
         _useable = new List<GOAPAction>();
-
-        if(thing.transform == null)
-            return;
-        
-        _movement = thing.transform.gameObject.AddComponent<Movement>();
-        
     }
 
-    public void SetActions(params GOAPAction[] actions)
+    public virtual void Setup()
     {
-        _available.Clear();
-        foreach(var action in actions)
-        {
-            _available.Add(action);
-        }
+        _created = new DateTime();
+        _movement = _thing.transform.gameObject.AddComponent<Movement>();
+        _setup = true;
+    }
+
+    public void AddAction(GOAPAction action)
+    {
+        _available.Add(action);
     }
 
     public abstract Dictionary<string, bool> GetWorldState();
@@ -98,6 +98,9 @@ public abstract class Agent
 
     public void Update()
     {
+        if(!_setup)
+            return;
+
         switch(_state)
         {
             case AgentState.Planning:

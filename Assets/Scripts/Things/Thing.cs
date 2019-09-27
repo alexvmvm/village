@@ -46,6 +46,9 @@ public class Thing
         {
             game.UpdateAstarPath(transform.position.ToVector2IntFloor(), pathTag);
         }
+
+        if(agent != null)
+            agent.Setup();
     }
 
     public void SetSprite()

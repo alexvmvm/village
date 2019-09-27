@@ -14,8 +14,8 @@ public class Idle : GOAPAction
     {
         _movement = movement;
 
-        _preconditions.Add("isIdle", false);
-        _effects.Add("isIdle", true);
+        Preconditions.Add("isIdle", false);
+        Effects.Add("isIdle", true);
     }
 
     public override bool IsDone()

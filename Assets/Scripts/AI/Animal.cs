@@ -9,16 +9,18 @@ public class Animal : Agent
 
     public Animal(Game game, Thing thing) : base(game, thing)
     {
-
-        SetActions(
-            new Idle(game, _movement)
-        ); 
-
         _goal = new Dictionary<string, bool>();
         _world = new Dictionary<string, bool>();
 
         _world.Add("isIdle", false);
         _goal.Add("isIdle", true);
+    }
+
+    public override void Setup()
+    {
+        base.Setup();
+
+        AddAction(new Idle(_game, _movement)); 
     }
 
     public override Dictionary<string, bool> GetGoal()

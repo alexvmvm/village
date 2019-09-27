@@ -12,21 +12,19 @@ public struct ActionState
 
 public abstract class GOAPAction
 {
-    public Dictionary<string, bool> Preconditions { get { return _preconditions; } }
-    public Dictionary<string, bool> Effects { get { return _effects; } }
+    public Dictionary<string, bool> Preconditions;
+    public Dictionary<string, bool> Effects;
 
     public float Cost = 1f;
-
-    protected readonly Dictionary<string, bool> _preconditions;
-    protected readonly Dictionary<string, bool> _effects;
 
     protected Game _game;
 
     public GOAPAction(Game game)
     {
-        _preconditions = new Dictionary<string, bool>();
-        _effects = new Dictionary<string, bool>();
         _game = game;
+
+        Preconditions = new Dictionary<string, bool>();
+        Effects = new Dictionary<string, bool>();
     }
 
     abstract public bool Perform();

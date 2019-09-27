@@ -384,13 +384,13 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
             break;
             case TypeOfThing.Villager:
-                thing.name = " Villager";
+                thing.name = "Villager";
                 thing.sprite = "colored_transparent_24";
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.agent = new Villager(this, thing);
             break;
             case TypeOfThing.Chicken:
-                thing.name = " Chicken";
+                thing.name = "Chicken";
                 thing.sprite = "colored_transparent_249";
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.agent = new Animal(this, thing);
@@ -453,9 +453,9 @@ public class Game : MonoBehaviour
             positionalAudio.Update();
         }
 
-        if(Input.GetKeyDown(KeyCode.P))
+        if(Input.GetKeyDown(KeyCode.V))
         {
-            AddThing(Create(TypeOfThing.Stream, 
+            AddThing(Create(TypeOfThing.Villager, 
                 UnityEngine.Random.Range(0, MapSize.x), 
                 UnityEngine.Random.Range(0, MapSize.y)));
         }
