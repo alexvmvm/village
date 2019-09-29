@@ -7,6 +7,7 @@ public enum ConstructionGroup
 {
     Floors,
     Walls,
+    Furniture,
     Objects
 }
 

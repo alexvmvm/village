@@ -22,7 +22,9 @@ public enum TypeOfThing
     WoodFloorBlueprint,
     WoodWallBlueprint,
     StoneFloorBlueprint,
-    StoneWallBlueprint
+    StoneWallBlueprint,
+    DoorBlueprint,
+    Door
 }
 
 
@@ -391,6 +393,24 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
                 thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneWall, ConstructionGroup.Walls, TypeOfThing.Stone);
                 thing.pipe = true;
+                break;
+
+            /*
+                Furniture
+            */
+            case TypeOfThing.DoorBlueprint:
+                thing.name = "Door";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Door, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                break;
+            
+            case TypeOfThing.Door:
+                thing.name = "Door";
+                thing.sprite = "colored_297";
+                thing.fixedToGrid = true;
+                thing.floor = true;
                 break;
 
             /*
