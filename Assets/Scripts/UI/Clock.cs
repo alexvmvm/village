@@ -13,6 +13,11 @@ public class Clock : MonoBehaviour
 
     private float _rotationalSpeed;
 
+    public void SetTimeScale(float timeScale)
+    {
+        Time.timeScale = timeScale;
+    }
+
     // Update is called once per frame
     void Update()
     {

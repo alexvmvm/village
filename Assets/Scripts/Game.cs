@@ -11,9 +11,10 @@ public enum TypeOfThing
     Path,
     Tree,
     Stone,
-    Log,
+    Wood,
     Villager,
     Chicken,
+    Chick,
     WoodFloor,
     WoodWall,
     StoneFloor,
@@ -141,6 +142,14 @@ public class Game : MonoBehaviour
 
             AddThing(Create(TypeOfThing.Chicken, x, y));
         }
+
+        for(var i = 0; i < 10; i++) 
+        {
+            var x = UnityEngine.Random.Range(0, MapSize.x);
+            var y = UnityEngine.Random.Range(0, MapSize.y);
+
+            AddThing(Create(TypeOfThing.Chick, x, y));
+        }
     }
 
     /*
@@ -254,11 +263,11 @@ public class Game : MonoBehaviour
 
     public Thing Create(TypeOfThing thingType, int x, int y)
     {
-        var transform = ObjectPooler.GetPooledObject().transform;
-        transform.position = new Vector3(x, y, 0);
-        transform.name = thingType.ToString();
+        var obj = ObjectPooler.GetPooledObject();
+        obj.transform.position = new Vector3(x, y, 0);
+        obj.transform.name = thingType.ToString();
 
-        var thing = new Thing(thingType, transform) 
+        var thing = new Thing(thingType, obj.transform) 
         { 
             game = this 
         };
@@ -358,14 +367,14 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodFloor, ConstructionGroup.Floors);
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodFloor, ConstructionGroup.Floors, TypeOfThing.Wood);
                 break;
             case TypeOfThing.WoodWallBlueprint:
                 thing.name = "Wood";
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodWall, ConstructionGroup.Walls);
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodWall, ConstructionGroup.Walls, TypeOfThing.Wood);
                 thing.pipe = true;
                 break;
             case TypeOfThing.StoneFloorBlueprint:
@@ -373,14 +382,14 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneFloor, ConstructionGroup.Floors);
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneFloor, ConstructionGroup.Floors, TypeOfThing.Stone);
                 break;
             case TypeOfThing.StoneWallBlueprint:
                 thing.name = "Stone";
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneWall, ConstructionGroup.Walls);
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneWall, ConstructionGroup.Walls, TypeOfThing.Stone);
                 thing.pipe = true;
                 break;
 
@@ -388,7 +397,7 @@ public class Game : MonoBehaviour
                 Objects
             */
 
-            case TypeOfThing.Log:
+            case TypeOfThing.Wood:
                 thing.name = "Log";
                 thing.sprite = "colored_transparent_209";
                 thing.sortingOrder = (int)SortingOrders.Objects;
@@ -402,6 +411,14 @@ public class Game : MonoBehaviour
             case TypeOfThing.Chicken:
                 thing.name = "Chicken";
                 thing.sprite = "colored_transparent_249";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.agent = new Animal(this, thing);
+            break;
+            case TypeOfThing.Chick:
+                thing.name = "Chick";
+                thing.scale = Vector3.one * 0.5f;
+                thing.sprite = "colored_transparent_248";
+                thing.color = Color.yellow;
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.agent = new Animal(this, thing);
             break;
@@ -458,8 +475,10 @@ public class Game : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.V))
         {
+            //FindObjectOfType<VillageManager>().CreateNewVillager();
+
             AddThing(Create(TypeOfThing.Villager, 
-                UnityEngine.Random.Range(0, MapSize.x), 
+                Mathf.FloorToInt(MapSize.x / 2), 
                 UnityEngine.Random.Range(0, MapSize.y)));
         }
 

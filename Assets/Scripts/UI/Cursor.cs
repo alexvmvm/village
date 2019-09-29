@@ -91,12 +91,12 @@ public class GameCursor
     {
         if(MouseOverUIElement.MouseOverElement)
         {
-            _cursor.gameObject.SetActive(false);
+            _spriteRenderer.enabled = false;
             return;
         }
         else
         {
-            _cursor.gameObject.SetActive(true);
+            _spriteRenderer.enabled = true;
         }
 
         // setup example thing

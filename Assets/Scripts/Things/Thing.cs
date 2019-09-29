@@ -7,8 +7,11 @@ public class Thing
     public string sprite;
     public string name;
     public Game game;
+    public int hitpoints = 100;
     public Transform transform; 
     public SpriteRenderer spriteRenderer;
+    public Color color = Color.white;
+    public Vector3 scale = Vector3.one;
     public int sortingOrder;
     public bool fixedToGrid;
     public ITileRule tileRule;
@@ -55,6 +58,8 @@ public class Thing
         var spriteName = tileRule != null ? tileRule.GetSprite(GetGridPositions()) : sprite;
         this.spriteRenderer.sprite = game.GetSprite(spriteName);
         this.spriteRenderer.sortingOrder = sortingOrder;
+        this.spriteRenderer.color = color;
+        this.transform.localScale = scale;
         this.transform.rotation = game.GetSpriteRotation(spriteName);
     }
 

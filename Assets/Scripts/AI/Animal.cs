@@ -21,6 +21,11 @@ public class Animal : Agent
         }); 
     }
 
+    public override void ActionCompleted(GOAPAction action)
+    {
+        
+    }
+
     public override Dictionary<string, bool> GetGoal()
     {
         return _goal;

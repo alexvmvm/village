@@ -70,7 +70,7 @@ namespace Tests
                         
         }
 
-            [UnityTest]
+        [UnityTest]
         public IEnumerator ShouldCreateObjectsPastedPooledAmountIfGrowTrue()
         {
             var pooledAmount = 1000;
@@ -91,6 +91,55 @@ namespace Tests
                 
                 // should be activated
                 Assert.IsTrue(obj.activeSelf);
+
+                if(i % 10 == 0)
+                    yield return null;
+            }
+            
+                        
+        }
+        
+        [UnityTest]
+        public IEnumerator ShouldRemoveAddedComponents()
+        {
+            var pooledAmount = 1000;
+
+            _objectPooler.WillGrow = true;
+            _objectPooler.PooledAmount = pooledAmount;
+            _objectPooler.GameObject = _child;
+
+            Assert.AreEqual(_obj.transform.childCount, 0);
+
+            for(var i = 0; i < pooledAmount; i++)
+            {
+                var obj = _objectPooler.GetPooledObject();
+                obj.transform.position = new Vector3(
+                    UnityEngine.Random.Range(-100, 100),
+                    UnityEngine.Random.Range(-100, 100)
+                );
+                
+                // should be activated
+                Assert.IsTrue(obj.activeSelf);
+
+                obj.AddComponent<BoxCollider2D>();
+
+                if(i % 10 == 0)
+                    yield return null;
+            }
+
+            for(var i = 0; i < pooledAmount; i++)
+            {
+                var obj = _objectPooler.GetPooledObject();
+                obj.transform.position = new Vector3(
+                    UnityEngine.Random.Range(-100, 100),
+                    UnityEngine.Random.Range(-100, 100)
+                );
+                
+                // should be activated
+                Assert.IsTrue(obj.activeSelf);
+
+                // should not have components from previous object
+                Assert.IsNull(obj.GetComponent<BoxCollider2D>());
 
                 if(i % 10 == 0)
                     yield return null;

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Villager : Agent
 {
+    private bool _requestedResidence;
     private Dictionary<string, bool> _goal;
     private Dictionary<string, bool> _world;
     public Villager(Game game, Thing thing) : base(game, thing)
@@ -14,10 +15,13 @@ public class Villager : Agent
         _goal = new Dictionary<string, bool>();
         _world = new Dictionary<string, bool>();
 
-        _world.Add("isIdle", true);
-        _world.Add("hasLogs", false);
 
-        _goal.Add("hasLogs", true);
+
+
+        AddAction(new RequestResidence(_game, _thing) {
+            Preconditions   = { { "hasRequestedResidence", false } },
+            Effects         = { { "hasRequestedResidence", true } },
+        });
 
         AddAction(new Idle(_game, _movement) {
             Preconditions   = { { "isIdle", true } },
@@ -25,9 +29,27 @@ public class Villager : Agent
         }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Tree) {
-            Preconditions   = { { "hasLogs", false } },
-            Effects         = { { "hasLogs", true } }
+            Preconditions   = { { "hasWood", false } },
+            Effects         = { { "hasWood", true } }
         }); 
+
+         AddAction(new GetResource(_game, _movement, TypeOfThing.Stone) {
+            Preconditions   = { { "hasStone", false } },
+            Effects         = { { "hasStone", true } }
+        }); 
+
+        AddAction(new Construct(_game, _movement, TypeOfThing.Wood) {
+            Preconditions   = { { "hasWood", true } },
+            Effects         = { { "isWorking", true }, }
+        });
+
+        AddAction(new Construct(_game, _movement, TypeOfThing.Stone) {
+            Preconditions   = { { "hasStone", true } },
+            Effects         = { { "isWorking", true }, }
+        });
+
+
+        AddAction(new Construct(_game, _movement, TypeOfThing.Stone));
         
         // AddAction(new GetResource(_game, _movement, TypeOfThing.Tree));
         // AddAction(new GetResource(_game, _movement, TypeOfThing.Stone));
@@ -37,13 +59,35 @@ public class Villager : Agent
 
     }
 
+    public override void ActionCompleted(GOAPAction action)
+    {
+        if(action is RequestResidence)
+            _requestedResidence = true;
+    }
+
     public override Dictionary<string, bool> GetGoal()
     {
+        _goal.Clear();
+        if(!_requestedResidence)
+        {
+            _goal["hasRequestedResidence"] = true;
+        }
+        else
+        {
+            _goal["isWorking"] = true;
+        }
+
         return _goal;
     }
 
     public override Dictionary<string, bool> GetWorldState()
     {
+        _world["hasRequestedResidence"] = _requestedResidence;
+        _world["isIdle"] =  true;
+        _world["hasWood"] = false;
+        _world["hasStone"] =  false;
+        _world["isWorking"] = false;
+        
         return _world;
     }
 }

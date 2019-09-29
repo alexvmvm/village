@@ -14,20 +14,8 @@ public class VillageManager : MonoBehaviour
         _game = FindObjectOfType<Game>();
     }
 
-    void Start()
+    public void VillagerArrived(string name)
     {
-        EventManager.StartListening(Constants.VILLAGER_ARRIVED, VillagerArrived);
-    }
-
-    void VillagerArrived()
-    {
-        var thing = _game.Things
-            .Where(t => t.type == TypeOfThing.Villager)
-            .OrderByDescending(t => t.agent.Created)
-            .ToArray()
-            .FirstOrDefault();
-
-        Debug.Log("Villager Arrived " + thing.name);
-        VillagerArrivedPanel.Activate(thing.name);
+        VillagerArrivedPanel.Activate(name);
     }
 }

@@ -16,6 +16,7 @@ public enum AgentState
 public abstract class Agent 
 {
     public DateTime Created { get { return _created; } }
+    public float Age { get { return _age; } }
     protected Game _game;
     protected Thing _thing;
     private NormalPlanner _planner;
@@ -26,6 +27,7 @@ public abstract class Agent
     private AgentState _state;
     protected Movement _movement;
     private DateTime _created;
+    private float _age;
 
     public Agent(Game game, Thing thing)
     {
@@ -45,6 +47,8 @@ public abstract class Agent
     {
         _available.Add(action);
     }
+
+    public abstract void ActionCompleted(GOAPAction action);
 
     public abstract Dictionary<string, bool> GetWorldState();
     public abstract Dictionary<string, bool> GetGoal();
@@ -93,6 +97,8 @@ public abstract class Agent
 
     public void Update()
     {
+        _age += Time.deltaTime;
+
         switch(_state)
         {
             case AgentState.Planning:
@@ -117,7 +123,11 @@ public abstract class Agent
             {
                 _current.Perform();
                 if(_current.IsDone())
+                {
+                    ActionCompleted(_current);
                     _state = AgentState.Picking;
+                }
+                    
             }
             break;
             case AgentState.Completed:

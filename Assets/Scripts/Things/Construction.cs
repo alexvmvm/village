@@ -14,19 +14,22 @@ public class Construction
 {   
     public ConstructionGroup Group { get { return _group; } }
     public TypeOfThing BuildType { get { return _builds; } }
+    public TypeOfThing Requires { get { return _requires; } }
     private Game _game;
     private Thing _thing;
     private TypeOfThing _buildOn;
     private TypeOfThing _builds;    
+    private TypeOfThing _requires;
     private ConstructionGroup _group;
 
-    public Construction(Game game, Thing thing, TypeOfThing buildOn, TypeOfThing builds, ConstructionGroup group)
+    public Construction(Game game, Thing thing, TypeOfThing buildOn, TypeOfThing builds, ConstructionGroup group, TypeOfThing requires)
     {
         _buildOn = buildOn;
         _builds = builds;
         _thing = thing;
         _game = game;
         _group = group;
+        _requires = requires;
     }
 
     bool ConstructAtPosition(Vector2Int position)

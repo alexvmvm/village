@@ -12,17 +12,10 @@ public class Movement : MonoBehaviour
 {
     public bool IsStopped 
     { 
-        get 
-        { 
-            return _aiPath.isStopped; 
-        } 
-
-        set 
-        {
-            _aiPath.isStopped = value;
-        }
+        get { return _aiPath.isStopped; } 
+        set { _aiPath.isStopped = value; }
     }
-    public bool ReachedEndOfPath { get { return _aiPath != null && _aiPath.reachedEndOfPath;  } }
+    public bool ReachedEndOfPath { get { return _reachedEndOfPath;  } }
 
     public bool FailedToFollowPath { get { return _failedToFollowPath; } }
 
@@ -31,12 +24,11 @@ public class Movement : MonoBehaviour
     private AIPath _aiPath;
     private Seeker _seeker;
     private bool _failedToFollowPath;
+    private bool _reachedEndOfPath;
     private List<GraphNode> _nodes;
     private float _maxSpeed;
     private List<Vector3> _waypoints;
     private Game _game;
-    
-    
     void Awake()
     {
         _game = FindObjectOfType<Game>();
@@ -108,7 +100,12 @@ public class Movement : MonoBehaviour
     
     public void MoveTo(Vector3 position)
     {
-        StartCoroutine(MoveTo(position, (ok) => {}));
+        _reachedEndOfPath = false;
+        StartCoroutine(MoveTo(position, (ok) => {
+            _reachedEndOfPath = ok;
+            if(!ok) 
+                _failedToFollowPath = true;
+        }));
     }
 
     IEnumerator MoveTo(Vector3 position, Action<bool> callback)
@@ -118,33 +115,33 @@ public class Movement : MonoBehaviour
         yield return StartCoroutine(FollowPath(pathToTarget, callback));
     }
 
-    IEnumerator MoveToClosest(IEnumerable<Vector3> positions, Action<bool> callback)
-    {
-        // move to resource
-        var pathToTarget = _seeker.StartMultiTargetPath(transform.position, positions.ToArray(), false);
-        yield return StartCoroutine(FollowPath(pathToTarget, callback));
-    }
+    // IEnumerator MoveToClosest(IEnumerable<Vector3> positions, Action<bool> callback)
+    // {
+    //     // move to resource
+    //     var pathToTarget = _seeker.StartMultiTargetPath(transform.position, positions.ToArray(), false);
+    //     yield return StartCoroutine(FollowPath(pathToTarget, callback));
+    // }
 
-    public IEnumerator FollowCurrentPath(Action<bool> callback)
-    {
-        yield return StartCoroutine(MoveThroughWaypoints(_waypoints, callback));
-    }
+    // public IEnumerator FollowCurrentPath(Action<bool> callback)
+    // {
+    //     yield return StartCoroutine(MoveThroughWaypoints(_waypoints, callback));
+    // }
 
-    IEnumerator MoveThroughWaypoints(IEnumerable<Vector3> waypoints, Action<bool> callback)
-    {
-        var array = waypoints.ToArray();
-        for(var i = 0; i < array.Length; i++)
-        {
-            var pathCompleted = false;
-            yield return StartCoroutine(MoveTo(array[i], (ok) => pathCompleted = ok));
-            if(!pathCompleted)
-            {
-                callback(false);
-                yield break;
-            }
-        }
-        callback(true);
-    }
+    // IEnumerator MoveThroughWaypoints(IEnumerable<Vector3> waypoints, Action<bool> callback)
+    // {
+    //     var array = waypoints.ToArray();
+    //     for(var i = 0; i < array.Length; i++)
+    //     {
+    //         var pathCompleted = false;
+    //         yield return StartCoroutine(MoveTo(array[i], (ok) => pathCompleted = ok));
+    //         if(!pathCompleted)
+    //         {
+    //             callback(false);
+    //             yield break;
+    //         }
+    //     }
+    //     callback(true);
+    // }
 
     IEnumerator FollowPath(Path path, Action<bool> callback)
     {
@@ -158,7 +155,7 @@ public class Movement : MonoBehaviour
             yield break;
         }
 
-        while (!ReachedEndOfPath)
+        while (!_aiPath.reachedEndOfPath)
         {     
             if(FailedToFollowPath)
             {

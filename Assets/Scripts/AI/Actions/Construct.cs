@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class GetResource : GOAPAction
+public class Construct : GOAPAction
 {
     private Movement _movement;
     private Thing _target;
@@ -11,10 +11,12 @@ public class GetResource : GOAPAction
     private bool _isDone;
     private TypeOfThing _type;
 
-    public GetResource(Game game, Movement movement, TypeOfThing type) : base(game)
+    public Construct(Game game, Movement movement, TypeOfThing type) : base(game)
     {
         _movement = movement;
         _type = type;
+
+        
     }
 
     public override bool IsDone()
@@ -26,7 +28,7 @@ public class GetResource : GOAPAction
     {
 
         _target = _game.Things
-            .Where(t => t.type == _type)
+            .Where(t => t.construction != null && t.construction.Requires == _type)
             .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position))
             .FirstOrDefault();
 
@@ -47,9 +49,7 @@ public class GetResource : GOAPAction
 
         if(_movement.ReachedEndOfPath)
         {
-            _target.hitpoints -= 10;
-            if(_target.hitpoints <= 0)
-                _game.CreateAndAddThing(TypeOfThing.Grass, _target.gridPosition.x, _target.gridPosition.y);
+            _target.construction.Construct();
             _isDone = true;
         }
         
