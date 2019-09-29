@@ -6,10 +6,12 @@ public class RequestResidence : GOAPAction
 {
     private bool _isDone;
     private Thing _thing;
+    private VillageManager _villageManager;
 
     public RequestResidence(Game game, Thing thing) : base(game)
     {
         _thing = thing;
+        _villageManager = MonoBehaviour.FindObjectOfType<VillageManager>();
     }
 
     public override bool IsDone()
@@ -24,7 +26,8 @@ public class RequestResidence : GOAPAction
 
     public override bool Perform()
     {
-        MonoBehaviour.FindObjectOfType<VillageManager>().VillagerArrived(_thing.name);
+        if(_villageManager != null)
+            _villageManager.VillagerArrived(_thing.name);
         _isDone = true;
         return true;
     }

@@ -449,7 +449,7 @@ public class Game : MonoBehaviour
         var graphupdate = new GraphUpdateObject
         {
             setTag = TagFromString(pathTag),
-            bounds = new Bounds(new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Vector3.one),
+            bounds = new Bounds(new Vector3(position.x, position.y, 0), Vector3.one),
             modifyTag = true
         };
 

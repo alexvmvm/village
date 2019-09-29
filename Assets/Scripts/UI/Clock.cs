@@ -36,7 +36,6 @@ public class Clock : MonoBehaviour
         }
         else 
         {
-            Debug.Log((0.5f - timeUnit) * 2);
             RenderSettings.ambientLight = Color.Lerp(Night, Day, (timeUnit - 0.5f) * 2);
         }
     }

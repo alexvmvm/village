@@ -133,6 +133,11 @@ public class Thing
 
     public void Destroy()
     {
+        if(!string.IsNullOrEmpty(pathTag))
+        {
+            game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground");
+        }
+
         transform.gameObject.SetActive(false);
         game.Things.Remove(this);
     }
