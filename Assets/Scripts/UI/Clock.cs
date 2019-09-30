@@ -26,7 +26,7 @@ public class Clock : MonoBehaviour
 
         // rotate clock
         var rotation = timeUnit * 360;
-        ClockFace.transform.rotation = Quaternion.Euler(0, 0, rotation);
+        ClockFace.transform.rotation = Quaternion.Euler(0, 0, -rotation);
         
 
         // update ambient color

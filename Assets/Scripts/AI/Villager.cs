@@ -5,20 +5,26 @@ using UnityEngine;
 
 public class Villager : Agent
 {
+    public string Firstname { get { return _firstname; } }
+    public string Lastname { get { return _lastname; } }
+    public string Fullname { get { return Firstname + " " + Lastname; } }
+    private string _firstname;
+    private string _lastname;
     private bool _requestedResidence;
     private Dictionary<string, bool> _goal;
     private Dictionary<string, bool> _world;
     public Villager(Game game, Thing thing) : base(game, thing)
     {
-        _thing.name = NameGenerator.GenerateCharacterName();
+        _firstname = NameGenerator.GenerateFirstName();
+        _lastname = NameGenerator.GenerateLastName();
+
+        _thing.name = string.Format("{0} {1}", _firstname, _lastname);
 
         _goal = new Dictionary<string, bool>();
         _world = new Dictionary<string, bool>();
 
 
-
-
-        AddAction(new RequestResidence(_game, _thing) {
+        AddAction(new RequestResidence(_game, _thing, this) {
             Preconditions   = { { "hasRequestedResidence", false } },
             Effects         = { { "hasRequestedResidence", true } },
         });
@@ -50,13 +56,6 @@ public class Villager : Agent
 
 
         AddAction(new Construct(_game, _movement, TypeOfThing.Stone));
-        
-        // AddAction(new GetResource(_game, _movement, TypeOfThing.Tree));
-        // AddAction(new GetResource(_game, _movement, TypeOfThing.Stone));
-    
-        // AddAction(new ConvertResource(_game, _movement, TypeOfThing.Tree));
-        // AddAction(new ConvertResource(_game, _movement, TypeOfThing.Stone));
-
     }
 
     public override void ActionCompleted(GOAPAction action)

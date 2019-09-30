@@ -18,6 +18,7 @@ public class Thing
     public int group;
     public TypeOfThing type;
     public bool floor;
+    public bool playerBuiltFloor;
     public bool wall;
     public bool buildOn;
     public bool pipe;
@@ -25,6 +26,7 @@ public class Thing
     public string pathTag;
     public Construction construction;
     public Agent agent;
+    public FamilyChest familyChest;
 
     public Thing(TypeOfThing type, Transform transform)
     {
@@ -115,20 +117,23 @@ public class Thing
                         position = position | Position.Left;
                     else if(vector == Vector2Int.right)
                         position = position | Position.Right;
-                    // else if(vector == Vector2Int.up + Vector2Int.left)
-                    //     position = position | Position.TopLeft;
-                    // else if(vector == Vector2Int.up + Vector2Int.right)
-                    //     position = position | Position.TopRight;
-                    // else if(vector == Vector2Int.down + Vector2Int.left)
-                    //     position = position | Position.BottomLeft;
-                    // else if(vector == Vector2Int.down + Vector2Int.right)
-                    //     position = position | Position.BottomRight;
                 }
 
             }
         }
 
         return position;
+    }
+
+    public Thing[] GetNeighboursOnGrid()
+    {
+        return new Thing[]
+        {
+            game.GetThingOnGrid(gridPosition + Vector2Int.up),
+            game.GetThingOnGrid(gridPosition + Vector2Int.down),
+            game.GetThingOnGrid(gridPosition + Vector2Int.left),
+            game.GetThingOnGrid(gridPosition + Vector2Int.right)
+        };
     }
 
     public void Destroy()
@@ -145,13 +150,16 @@ public class Thing
     public virtual void Update()
     {
         if(agent != null)
-        {
             agent.Update();
-        }
+        
+        if(familyChest != null)
+            familyChest.Update();
+
     }
 
     public void DrawGizmos()
     {
-  
+        if(familyChest != null)
+            familyChest.DrawGizmos();
     }
 }

@@ -24,7 +24,8 @@ public enum TypeOfThing
     StoneFloorBlueprint,
     StoneWallBlueprint,
     DoorBlueprint,
-    Door
+    Door,
+    FamilyChest
 }
 
 
@@ -241,6 +242,11 @@ public class Game : MonoBehaviour
             thing.Setup();
         }
 
+        if(thing.floor)
+        {
+
+        }
+
         return thing;
     }
 
@@ -334,6 +340,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_16";
                 thing.fixedToGrid = true;
                 thing.floor = true;
+                thing.playerBuiltFloor = true;
                 thing.buildOn = true;
             break;
             case TypeOfThing.WoodWall:
@@ -354,6 +361,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_416";
                 thing.fixedToGrid = true;
                 thing.floor = true;
+                thing.playerBuiltFloor = true;
                 thing.buildOn = true;
             break;
             case TypeOfThing.StoneWall:
@@ -413,6 +421,15 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 break;
 
+
+            case TypeOfThing.FamilyChest:
+                thing.name = "Chest";
+                thing.sprite = "colored_200";
+                thing.familyChest = new FamilyChest(this, thing);
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.fixedToGrid = true;
+            break;
+
             /*
                 Objects
             */
@@ -442,6 +459,12 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.agent = new Animal(this, thing);
             break;
+
+            /*
+                Misc
+            */
+
+
 
             default:
                 throw new System.Exception(string.Format("Unable to create tile {0}", thingType.ToString()));

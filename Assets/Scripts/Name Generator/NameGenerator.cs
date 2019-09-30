@@ -17,23 +17,33 @@ public class NameGenerator
         "light", "two", "foot", "green" 
     };
 
+    public static string GenerateLastName()
+    {
+        var lastname = "";
+        var lastnameCount = UnityEngine.Random.Range(2, 4);
+        for (var i = 0; i < lastnameCount; i++)
+        {
+            var index = Random.Range(0, Lastnames.Length);
+            lastname += Lastnames[index];
+        }
 
-    public static string GenerateCharacterName()
+        return lastname.ToUppercaseFirst();
+    }
+
+    public static string GenerateFirstName()
     {
         var firstname = "";
         var firstnameCount = UnityEngine.Random.Range(2, 4);
         for (var i = 0; i < firstnameCount; i++)
         {
-            firstname += Firstnames[Random.Range(0, Firstnames.Length)];
+            var index = Random.Range(0, Firstnames.Length);
+            firstname += Firstnames[index];
         }
+        return firstname.ToUppercaseFirst();
+    }
 
-        var lastname = "";
-        var lastnameCount = UnityEngine.Random.Range(2, 4);
-        for (var i = 0; i < lastnameCount; i++)
-        {
-            lastname += Lastnames[Random.Range(0, Lastnames.Length)];
-        }
-
-        return string.Format("{0} {1}", firstname.ToUppercaseFirst(), lastname.ToUppercaseFirst());
+    public static string GenerateCharacterName()
+    {
+        return string.Format("{0} {1}", GenerateFirstName(), GenerateLastName());
     }   
 }

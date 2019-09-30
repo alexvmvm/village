@@ -5,56 +5,60 @@ using UnityEngine;
 public class GameCursor 
 {
     private Game _game;
-    private Transform _cursor;
+    private Transform _crosshairCursor;
     private SpriteRenderer _spriteRenderer;
-
     private Vector3 _down;
     private Vector3 _move;
     private Vector3 _min { get { return Vector3.Min(_down, _move);  } }
     private Vector3 _max { get { return Vector3.Max(_down, _move) + Vector3.one;  } }
     private bool _mouseDown;
-    private Thing _current;
-    private GameObject _cursorObj;
+    private Thing _currentToBuild;
+    private GameObject _cursorMeshObj;
     private MeshFromPoints _meshFromPoints;
     private MeshRenderer _meshRenderer;
     private Vector2 _validUV = new Vector2(0.5f, 0.5f);
     private Vector2 _invalidUV = new Vector2(0, 0);
+    private Thing _mouseOverThing;
+    private InfoPanel _infoPanel;
+    private Vector3 _cursorPosition;
     
     public GameCursor(Game game)
     {
         _game = game;
-        _cursor = _game.ObjectPooler.GetPooledObject().transform;
+        _crosshairCursor = _game.ObjectPooler.GetPooledObject().transform;
 
-        _spriteRenderer = _cursor.gameObject.GetComponent<SpriteRenderer>();
+        _spriteRenderer = _crosshairCursor.gameObject.GetComponent<SpriteRenderer>();
         _spriteRenderer.sprite = _game.GetSprite("crosshair025");
         _spriteRenderer.sortingOrder = (int)SortingOrders.UI;
         
-        _cursorObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Cursor Mesh"));
-        _cursorObj.transform.SetParent(_game.transform);
-        _cursorObj.transform.position = new Vector3(0, 0, -2);
+        _cursorMeshObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Cursor Mesh"));
+        _cursorMeshObj.transform.SetParent(_game.transform);
+        _cursorMeshObj.transform.position = new Vector3(0, 0, -2);
 
-        _meshFromPoints = _cursorObj.AddComponent<MeshFromPoints>();
-        _meshRenderer = _cursorObj.AddComponent<MeshRenderer>();
-        _cursorObj.SetActive(false);
+        _meshFromPoints = _cursorMeshObj.AddComponent<MeshFromPoints>();
+        _meshRenderer = _cursorMeshObj.AddComponent<MeshRenderer>();
+        _cursorMeshObj.SetActive(false);
+
+        _infoPanel = MonoBehaviour.FindObjectOfType<InfoPanel>();
 
     }
 
     void MouseDown()
     {
-        if(_current == null)
+        if(_currentToBuild == null)
             return;
     }
 
     void MouseUp()
     {
-        if(_current == null)
+        if(_currentToBuild == null)
             return;
 
         for(var x = Mathf.FloorToInt(_min.x); x < Mathf.FloorToInt(_max.x); x++)
         {
             for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
             {
-                if(_current.construction != null && !_current.construction.IsPlaceableAt(x, y))
+                if(_currentToBuild.construction != null && !_currentToBuild.construction.IsPlaceableAt(x, y))
                     continue;
 
                 _game.AddThing(_game.Create(_game.CurrentType.Value, x, y));       
@@ -65,7 +69,7 @@ public class GameCursor
 
     void MouseMove()
     {
-        if(_current == null)
+        if(_currentToBuild == null)
             return;
 
         var list = new List<Quad>();
@@ -73,7 +77,7 @@ public class GameCursor
         {
             for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
             {
-                var valid = _current.construction != null && !_current.construction.IsPlaceableAt(x, y) ?
+                var valid = _currentToBuild.construction != null && !_currentToBuild.construction.IsPlaceableAt(x, y) ?
                     _invalidUV : _validUV;
 
                 list.Add(new Quad {
@@ -89,42 +93,57 @@ public class GameCursor
 
     public void Update()
     {
+        // if currently over another panel 
+        // don't do anything
         if(MouseOverUIElement.MouseOverElement)
         {
             _spriteRenderer.enabled = false;
             return;
         }
-        else
-        {
+
+        // if spriteRenderer has been disabled
+        // due to mouse over panel, re-enable
+        if(!_spriteRenderer.enabled)
             _spriteRenderer.enabled = true;
-        }
 
-        // setup example thing
-        if(!_game.CurrentType.HasValue && _current != null)
+
+        // setup example thing on _current from 
+        // selected type on game
+        if(!_game.CurrentType.HasValue && _currentToBuild != null)
         {
-            _current = null;
+            _currentToBuild = null;
         }
-        else if(_game.CurrentType.HasValue && (_current == null || _current.type != _game.CurrentType.Value))
+        else if(_game.CurrentType.HasValue && (_currentToBuild == null || _currentToBuild.type != _game.CurrentType.Value))
         {   
-            _current = _game.Create(_game.CurrentType.Value);
+            _currentToBuild = _game.Create(_game.CurrentType.Value);
         }
 
-        // update cursor position
+        // update cursor position to mouse position
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var position = new Vector3(
             Mathf.RoundToInt(mousePosition.x), 
             Mathf.RoundToInt(mousePosition.y)
         );  
+        
+        // if cursor has moved to a different grid position
+        if(_cursorPosition != position)
+        {
+            _cursorPosition = position;
+            _crosshairCursor.transform.position = position;
+            _mouseOverThing = _game.GetThingOnGrid(position.ToVector2IntFloor());
+            _infoPanel.Setup(_mouseOverThing);
+        }
 
-        _cursor.transform.position = position;
+        // disable cursor mesh if no current selected
+        // thing being constructed
+        _cursorMeshObj.SetActive(_currentToBuild != null);
 
-        _cursorObj.SetActive(_current != null);
-
+        
         // check for dragging
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
             _mouseDown = true;
-            _down = _cursor.transform.position;
+            _down = _crosshairCursor.transform.position;
             MouseDown();
         }
         
@@ -133,9 +152,9 @@ public class GameCursor
         // the correct max/min
         if(_mouseDown)
         {
-            _move = _cursor.transform.position;
+            _move = _crosshairCursor.transform.position;
 
-            if(_current != null && _current.pipe)
+            if(_currentToBuild != null && _currentToBuild.pipe)
             {   
                 if (_max.x - _min.x > _max.y - _min.y)
                 {
@@ -151,7 +170,7 @@ public class GameCursor
         }
         else
         {
-            _down = _cursor.transform.position;
+            _down = _crosshairCursor.transform.position;
             _move = _down;
         }
 
