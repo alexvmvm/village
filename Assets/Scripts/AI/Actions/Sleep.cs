@@ -7,7 +7,6 @@ public class Sleep : GOAPAction
     private Clock _clock;
     private Thing _thing;
     private Movement _movement;
-    private Villager _villager;
     private bool _started;
     private Vector3 _target;
     public Sleep(Game game, Thing thing, Movement movement) : base(game)

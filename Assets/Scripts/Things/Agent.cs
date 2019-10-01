@@ -14,31 +14,24 @@ public enum AgentState
 public abstract class Agent 
 {
     public DateTime Created { get { return _created; } }
-    public float Age { get { return _age; } }
     protected Game _game;
-    // protected Thing _thing;
     private NormalPlanner _planner;
     private HashSet<GOAPAction> _available;
     private Queue<GOAPAction> _actions;
     private List<GOAPAction> _useable;
     private GOAPAction _current;
     private AgentState _state;
-    // protected Movement _movement;
     private DateTime _created;
-    private float _age;
 
     public Agent(Game game)
     {
-        _game = game;
-        // _thing = thing;        
-    
+        _game = game;    
         _planner = new NormalPlanner();
         _available = new HashSet<GOAPAction>();
         _actions = new Queue<GOAPAction>();
         _useable = new List<GOAPAction>();
 
         _created = DateTime.Now;
-        // _movement = _thing.transform.gameObject.AddComponent<Movement>();
     }
 
     public void AddAction(GOAPAction action)
@@ -95,8 +88,6 @@ public abstract class Agent
 
     public virtual void Update()
     {
-        _age += Time.deltaTime;
-
         switch(_state)
         {
             case AgentState.Planning:
