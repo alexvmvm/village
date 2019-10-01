@@ -19,7 +19,7 @@ public abstract class Agent
     private HashSet<GOAPAction> _available;
     private Queue<GOAPAction> _actions;
     private List<GOAPAction> _useable;
-    private GOAPAction _current;
+    protected GOAPAction _current;
     private AgentState _state;
     private DateTime _created;
 

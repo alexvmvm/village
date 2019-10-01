@@ -32,6 +32,9 @@ public class Idle : GOAPAction
         if(!_game.IsOnGrid((int)_target.x, (int)_target.y))
             return false;
 
+        if(!_movement.IsPathPossible(_target))
+            return false;
+
         _timeToWait = Random.Range(0, 10);
 
         return true;

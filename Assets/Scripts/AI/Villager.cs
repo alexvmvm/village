@@ -23,6 +23,12 @@ public class Villager : Agent
     private Clock _clock;
     private int _nightsSleptInHome;
 
+    /* 
+        Survival
+    */
+
+    private bool _thirsty;
+
     public Villager(Game game, Thing thing) : base(game)
     {
         _thing = thing;
@@ -79,6 +85,16 @@ public class Villager : Agent
             Cost = 99999 // last resort
         }); 
 
+
+        /*
+            Survival
+        */
+
+        AddAction(new DrinkFromStream(_game, _movement) {
+            Preconditions   = { { "isThirsty", true } },
+            Effects         = { { "isThirsty", false }, { "needsFullfilled", true } }
+        }); 
+
         /*
             Resources
         */
@@ -133,12 +149,21 @@ public class Villager : Agent
 
             _nightsSleptInHome += 1;
         }
+
+        // thirsty after sleeping
+        if(action is Sleep || action is SleepAtHome)
+        {
+            _thirsty = true;
+        }
         
         if(action is RequestResidence)
         {
             _villagerManager.TriggerEvent(VillagerEvent.VillagerArrived, this);
             _requestedResidence = true;
         }
+
+        if(action is DrinkFromStream)
+            _thirsty = false;
             
 
     }
@@ -163,6 +188,10 @@ public class Villager : Agent
         {
             _goal["isSleeping"] = true;
         }
+        else if(_thirsty)
+        {
+            _goal["needsFullfilled"] = true;
+        }
         else
         {
             _goal["isWorking"] = true;
@@ -186,10 +215,17 @@ public class Villager : Agent
         _world["hasStone"] =  _thing.inventory.IsHolding(TypeOfThing.Stone);
         _world["hasFullInventory"] = _thing.inventory.IsHoldingSomething();
 
+        /*
+            Survival
+        */
+
+        _world["isThirsty"] = _thirsty;
+
         _world["isWorking"] = false;
         _world["isSleeping"] = false;
         _world["hasHome"] =  FamilyChest != null;
         _world["hasLeftVillage"] = false;
+        _world["needsFullfilled"] = false;
         
         return _world;
     }
@@ -207,7 +243,12 @@ public class Villager : Agent
         
         var text = "";
 
-        text += string.Format("idleTime: {0}", _idleTime);
+        if(_current != null)
+        {
+            text += string.Format("current action: {0}\n", _current.ToString());
+        }
+
+        text += string.Format("idleTime: {0}\n", _idleTime);
 
         var style = new GUIStyle();
         style.fontSize = 10;
