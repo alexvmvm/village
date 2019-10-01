@@ -38,12 +38,16 @@ public class Movement : MonoBehaviour
         _aiPath.enableRotation = false;
         _aiPath.gravity = Vector3.zero;
         _aiPath.maxSpeed = 2f;
+        _aiPath.pickNextWaypointDist = 0.5f;
 
         _aStarPath = FindObjectOfType<AstarPath>();
 
         _seeker = GetComponent<Seeker>();
+        _seeker.startEndModifier.exactStartPoint = StartEndModifier.Exactness.NodeConnection;
+        _seeker.startEndModifier.exactEndPoint = StartEndModifier.Exactness.SnapToNode;
         _seeker.traversableTags &= ~(1 << _game.TagFromString("foliage"));
         _seeker.traversableTags &= ~(1 << _game.TagFromString("blocking"));
+        
 
 
         _nodes = new List<GraphNode>();

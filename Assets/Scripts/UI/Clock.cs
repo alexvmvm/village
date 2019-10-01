@@ -35,6 +35,16 @@ public class Clock : MonoBehaviour
         return Mathf.FloorToInt(WorldTime) % (int)SecondsInADay;
     }
 
+    public void MakeNight()
+    {
+        WorldTime = 0f;
+    }
+
+    public void MakeDay()
+    {
+        WorldTime = 190f;
+    }
+
     // Update is called once per frame
     void Update()
     {

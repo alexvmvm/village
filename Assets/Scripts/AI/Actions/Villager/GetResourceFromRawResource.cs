@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class GetResource : GOAPAction
+public class GetResourceFromRawResource : GOAPAction
 {
     private Movement _movement;
     private Thing _target;
@@ -12,7 +12,7 @@ public class GetResource : GOAPAction
     private TypeOfThing _type;
     private Inventory _inventory;
 
-    public GetResource(Game game, Movement movement, TypeOfThing type, Inventory inventory) : base(game)
+    public GetResourceFromRawResource(Game game, Movement movement, TypeOfThing type, Inventory inventory) : base(game)
     {
         _movement = movement;
         _type = type;
@@ -36,9 +36,22 @@ public class GetResource : GOAPAction
             return false;
 
         // set action cost based on distance
-        Cost = Vector2.Distance(_target.transform.position, _movement.transform.position);
+        Cost = Vector2.Distance(_target.transform.position, _movement.transform.position) + 10;
 
         return _movement.IsPathPossible(_target.transform.position);
+    }
+
+    TypeOfThing RawResourceToProcessed(TypeOfThing rawResource)
+    {
+        switch(rawResource)
+        {
+            case TypeOfThing.Tree:
+                return TypeOfThing.Wood;
+            case TypeOfThing.Rock:
+                return TypeOfThing.Stone;
+            default:
+                throw new System.Exception(string.Format("Unknown raw resource conversion {0}", rawResource));
+        }
     }
 
     public override bool Perform()
@@ -55,7 +68,16 @@ public class GetResource : GOAPAction
 
         if(_movement.ReachedEndOfPath)
         {
-            _inventory.HoldThing(_target);
+            // get resource to hold
+            var processedResourceType = RawResourceToProcessed(_type);
+            var resource = _game.CreateAndAddThing(processedResourceType, 0, 0);
+            resource.hitpoints = 10;
+            _inventory.HoldThing(resource);
+
+            // damage existing resource
+            _target.hitpoints -= 10;
+            if(_target.hitpoints <= 0)
+                _game.CreateAndAddThing(TypeOfThing.Grass, _target.gridPosition.x, _target.gridPosition.y);
             _isDone = true;
         }
         

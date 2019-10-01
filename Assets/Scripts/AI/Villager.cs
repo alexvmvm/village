@@ -76,19 +76,29 @@ public class Villager : Agent
         AddAction(new Idle(_game, _movement) {
             Preconditions   = { { "isWorking", false }, { "hasFullInventory", false } },
             Effects         = { { "isWorking", true } },
-            Cost = 10
+            Cost = 99999 // last resort
         }); 
 
         /*
             Resources
         */
 
-        AddAction(new GetResource(_game, _movement, TypeOfThing.Tree, thing.inventory) {
+        AddAction(new GetResourceFromRawResource(_game, _movement, TypeOfThing.Tree, thing.inventory) {
             Preconditions   = { { "hasWood", false },   { "hasFullInventory", false } },
             Effects         = { { "hasWood", true },    { "hasFullInventory", true } }
         }); 
 
-         AddAction(new GetResource(_game, _movement, TypeOfThing.Rock, thing.inventory) {
+         AddAction(new GetResourceFromRawResource(_game, _movement, TypeOfThing.Rock, thing.inventory) {
+            Preconditions   = { { "hasStone", false },  { "hasFullInventory", false } },
+            Effects         = { { "hasStone", true },   { "hasFullInventory", true } }
+        }); 
+
+        AddAction(new GetResource(_game, _movement, TypeOfThing.Wood, thing.inventory) {
+            Preconditions   = { { "hasWood", false },   { "hasFullInventory", false } },
+            Effects         = { { "hasWood", true },    { "hasFullInventory", true } }
+        }); 
+
+         AddAction(new GetResource(_game, _movement, TypeOfThing.Stone, thing.inventory) {
             Preconditions   = { { "hasStone", false },  { "hasFullInventory", false } },
             Effects         = { { "hasStone", true },   { "hasFullInventory", true } }
         }); 
