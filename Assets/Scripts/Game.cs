@@ -499,8 +499,16 @@ public class Game : MonoBehaviour
         AstarPath.UpdateGraphs(graphupdate);
     }
 
-
- 
+    /*
+        Querying
+    */
+    
+    public Thing FindChestForFamily(string lastname)
+    {
+        return Things
+            .Where(t => t.type == TypeOfThing.FamilyChest && t.belongsToFamily == lastname)
+            .FirstOrDefault();
+    }
 
     void Update()
     {

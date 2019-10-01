@@ -21,6 +21,8 @@ public class GameCursor
     private Thing _mouseOverThing;
     private InfoPanel _infoPanel;
     private Vector3 _cursorPosition;
+    private bool _fixCursorPosition;
+    private ActionPanel _actionPanel;
     
     public GameCursor(Game game)
     {
@@ -40,13 +42,16 @@ public class GameCursor
         _cursorMeshObj.SetActive(false);
 
         _infoPanel = MonoBehaviour.FindObjectOfType<InfoPanel>();
+        _actionPanel = MonoBehaviour.FindObjectOfType<ActionPanel>();
 
     }
 
     void MouseDown()
     {
-        if(_currentToBuild == null)
-            return;
+        if(_currentToBuild == null && _mouseOverThing != null && _mouseOverThing.CanBeSeletected())
+        {
+            _fixCursorPosition = true;
+        }
     }
 
     void MouseUp()
@@ -97,14 +102,14 @@ public class GameCursor
         // don't do anything
         if(MouseOverUIElement.MouseOverElement)
         {
-            _spriteRenderer.enabled = false;
+            //_spriteRenderer.enabled = false;
             return;
         }
 
         // if spriteRenderer has been disabled
         // due to mouse over panel, re-enable
-        if(!_spriteRenderer.enabled)
-            _spriteRenderer.enabled = true;
+        // if(!_spriteRenderer.enabled)
+        //     _spriteRenderer.enabled = true;
 
 
         // setup example thing on _current from 
@@ -124,14 +129,18 @@ public class GameCursor
             Mathf.RoundToInt(mousePosition.x), 
             Mathf.RoundToInt(mousePosition.y)
         );  
+
+        if(_currentToBuild != null)
+            _fixCursorPosition = false;
         
         // if cursor has moved to a different grid position
-        if(_cursorPosition != position)
+        if(_cursorPosition != position && !_fixCursorPosition)
         {
             _cursorPosition = position;
             _crosshairCursor.transform.position = position;
             _mouseOverThing = _game.GetThingOnGrid(position.ToVector2IntFloor());
             _infoPanel.Setup(_mouseOverThing);
+            _actionPanel.Setup(_mouseOverThing);
         }
 
         // disable cursor mesh if no current selected
@@ -189,6 +198,8 @@ public class GameCursor
         if(Input.GetKeyDown(KeyCode.Mouse1))
         {
             _game.CurrentType = null;
+            _fixCursorPosition = false;
+            _actionPanel.Clear();
         }
 
     }

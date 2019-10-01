@@ -8,11 +8,13 @@ public class Villager : Agent
     public string Firstname { get { return _firstname; } }
     public string Lastname { get { return _lastname; } }
     public string Fullname { get { return Firstname + " " + Lastname; } }
+    public FamilyChest FamilyChest { get { return _familyChestThing != null ? _familyChestThing.familyChest : null; } }
     private string _firstname;
     private string _lastname;
     private bool _requestedResidence;
     private Dictionary<string, bool> _goal;
     private Dictionary<string, bool> _world;
+    private Thing _familyChestThing;
     public Villager(Game game, Thing thing) : base(game, thing)
     {
         _firstname = NameGenerator.GenerateFirstName();
@@ -81,11 +83,14 @@ public class Villager : Agent
 
     public override Dictionary<string, bool> GetWorldState()
     {
+        _familyChestThing = _game.FindChestForFamily(Lastname);
+
         _world["hasRequestedResidence"] = _requestedResidence;
         _world["isIdle"] =  true;
         _world["hasWood"] = false;
         _world["hasStone"] =  false;
         _world["isWorking"] = false;
+        _world["hasHome"] =  FamilyChest != null;
         
         return _world;
     }

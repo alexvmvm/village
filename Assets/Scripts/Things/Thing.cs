@@ -6,6 +6,7 @@ public class Thing
     // properties    
     public string sprite;
     public string name;
+    public string belongsToFamily;
     public Game game;
     public int hitpoints = 100;
     public Transform transform; 
@@ -136,6 +137,29 @@ public class Thing
         };
     }
 
+    public bool CanBeSeletected()
+    {
+        switch(type)
+        {
+            case TypeOfThing.FamilyChest:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public void OnSelected()
+    {
+        switch(type)
+        {
+            case TypeOfThing.FamilyChest:
+                Debug.Log("Selcted");
+                break;
+            default:
+                break;
+        }
+    }
+
     public void Destroy()
     {
         if(!string.IsNullOrEmpty(pathTag))
@@ -161,5 +185,21 @@ public class Thing
     {
         if(familyChest != null)
             familyChest.DrawGizmos();
+
+#if UNITY_EDITOR
+               
+            if(!string.IsNullOrEmpty(belongsToFamily))
+            {
+                var style = new GUIStyle();
+                style.fontSize = 10;
+                style.normal.textColor = Color.white;
+
+                // current actions
+                var position = transform.position + Vector3.up;
+                UnityEditor.Handles.Label(position, belongsToFamily, style);
+            }
+
+       
+#endif
     }
 }
