@@ -9,8 +9,9 @@ public enum TypeOfThing
     Grass,
     Stream,
     Path,
-    Tree,
+    Rock,
     Stone,
+    Tree,
     Wood,
     Villager,
     Chicken,
@@ -25,7 +26,8 @@ public enum TypeOfThing
     StoneWallBlueprint,
     DoorBlueprint,
     Door,
-    FamilyChest
+    FamilyChest,
+    FamilyChestBlueprint
 }
 
 
@@ -55,8 +57,8 @@ public class Game : MonoBehaviour
     private Dictionary<string, AudioClip> _audioClips;
     private Dictionary<string, Material> _materials;
     private GameCursor _cursor;
-
     private List<PositionalAudio> _positionalAudio;
+    private Director _director;
 
     // simulations
     void Awake()
@@ -105,6 +107,9 @@ public class Game : MonoBehaviour
             new PositionalAudio(this, "river", "running_water"),
             new PositionalAudio(this, "trees", "birds")
         };
+
+        // director ai
+        _director = new Director(this);
     }
 
     void Start()
@@ -128,7 +133,7 @@ public class Game : MonoBehaviour
                 }
                 else if(Mathf.PerlinNoise(x * 100.1f, y * 100.1f) > 0.8f)
                 {
-                    AddThing(Create(TypeOfThing.Stone, x, y));
+                    AddThing(Create(TypeOfThing.Rock, x, y));
                 }
                 else
                 {
@@ -328,13 +333,23 @@ public class Game : MonoBehaviour
                 thing.positionalAudioGroup = "trees";
                 thing.pathTag = "foliage";
                 break;
-            case TypeOfThing.Stone:
-                thing.name = "stone";
+            case TypeOfThing.Wood:
+                thing.name = "Log";
+                thing.sprite = "colored_transparent_209";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+            break;
+            case TypeOfThing.Rock:
+                thing.name = "rock";
                 thing.sprite = "stone_1";
                 thing.fixedToGrid = true;
                 thing.floor = true;
                 thing.pathTag = "foliage";
                 break;
+            case TypeOfThing.Stone:
+                thing.name = "stone";
+                thing.sprite = "colored_transparent_68";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+            break;
             case TypeOfThing.WoodFloor:
                 thing.name = "wood floor";
                 thing.sprite = "colored_16";
@@ -421,9 +436,16 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 break;
 
+            case TypeOfThing.FamilyChestBlueprint:
+                thing.name = "Family Chest";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.FamilyChest, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
 
             case TypeOfThing.FamilyChest:
-                thing.name = "Chest";
+                thing.name = "Family Chest";
                 thing.sprite = "colored_200";
                 thing.familyChest = new FamilyChest(this, thing);
                 thing.sortingOrder = (int)SortingOrders.Objects;
@@ -433,16 +455,12 @@ public class Game : MonoBehaviour
             /*
                 Objects
             */
-
-            case TypeOfThing.Wood:
-                thing.name = "Log";
-                thing.sprite = "colored_transparent_209";
-                thing.sortingOrder = (int)SortingOrders.Objects;
-            break;
             case TypeOfThing.Villager:
                 thing.name = "Villager";
                 thing.sprite = "colored_transparent_24";
+                thing.color = new Color(235/255f, 155/255f, 200/255f);
                 thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.inventory = new Inventory(thing);
                 thing.agent = new Villager(this, thing);
             break;
             case TypeOfThing.Chicken:
@@ -510,9 +528,15 @@ public class Game : MonoBehaviour
             .FirstOrDefault();
     }
 
+    public Vector3 GetVillageExit()
+    {
+        return new Vector3(Mathf.FloorToInt(MapSize.x / 2), 0);
+    }
+
     void Update()
     {
         _cursor.Update();
+        _director.Update();
 
         for(var i = 0; i < Things.Count; i++) 
         {

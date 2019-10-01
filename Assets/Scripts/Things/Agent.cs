@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Pathfinding;
 using UnityEngine;
 
 public enum AgentState
@@ -18,21 +16,21 @@ public abstract class Agent
     public DateTime Created { get { return _created; } }
     public float Age { get { return _age; } }
     protected Game _game;
-    protected Thing _thing;
+    // protected Thing _thing;
     private NormalPlanner _planner;
     private HashSet<GOAPAction> _available;
     private Queue<GOAPAction> _actions;
     private List<GOAPAction> _useable;
     private GOAPAction _current;
     private AgentState _state;
-    protected Movement _movement;
+    // protected Movement _movement;
     private DateTime _created;
     private float _age;
 
-    public Agent(Game game, Thing thing)
+    public Agent(Game game)
     {
         _game = game;
-        _thing = thing;        
+        // _thing = thing;        
     
         _planner = new NormalPlanner();
         _available = new HashSet<GOAPAction>();
@@ -40,7 +38,7 @@ public abstract class Agent
         _useable = new List<GOAPAction>();
 
         _created = DateTime.Now;
-        _movement = _thing.transform.gameObject.AddComponent<Movement>();
+        // _movement = _thing.transform.gameObject.AddComponent<Movement>();
     }
 
     public void AddAction(GOAPAction action)
@@ -95,7 +93,7 @@ public abstract class Agent
         }
     }
 
-    public void Update()
+    public virtual void Update()
     {
         _age += Time.deltaTime;
 
@@ -136,6 +134,11 @@ public abstract class Agent
             }
             break;
         }
+    }
+
+    public virtual void DrawGizmos()
+    {
+        
     }
 
 }

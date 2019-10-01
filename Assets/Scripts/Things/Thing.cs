@@ -28,6 +28,7 @@ public class Thing
     public Construction construction;
     public Agent agent;
     public FamilyChest familyChest;
+    public Inventory inventory;
 
     public Thing(TypeOfThing type, Transform transform)
     {
@@ -185,6 +186,9 @@ public class Thing
     {
         if(familyChest != null)
             familyChest.DrawGizmos();
+
+        if(agent != null)
+            agent.DrawGizmos();
 
 #if UNITY_EDITOR
                

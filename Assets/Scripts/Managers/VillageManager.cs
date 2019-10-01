@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+public enum VillagerEvent
+{
+    VillagerArrived,
+    VillagerLeft
+}
+
 public class VillageManager : MonoBehaviour
 {
     public VillagerArrivedPanel VillagerArrivedPanel;
@@ -23,8 +29,16 @@ public class VillageManager : MonoBehaviour
             .Distinct();
     }
 
-    public void VillagerArrived(string name)
+    public void TriggerEvent(VillagerEvent villagerEvent, Villager villager)
     {
-        VillagerArrivedPanel.Activate(name);
+        switch(villagerEvent)
+        {
+            case VillagerEvent.VillagerArrived:
+                VillagerArrivedPanel.ShowMessage(string.Format("{0} has arrived in the village. Find them a place to live.", villager.Fullname));
+            break;
+            case VillagerEvent.VillagerLeft:
+                VillagerArrivedPanel.ShowMessage(string.Format("{0} has decided to find a home elsewhere and is leaving.", villager.Fullname));
+            break;
+        }
     }
 }

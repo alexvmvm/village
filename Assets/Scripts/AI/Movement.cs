@@ -37,6 +37,7 @@ public class Movement : MonoBehaviour
         _aiPath.orientation = OrientationMode.YAxisForward;
         _aiPath.enableRotation = false;
         _aiPath.gravity = Vector3.zero;
+        _aiPath.maxSpeed = 2f;
 
         _aStarPath = FindObjectOfType<AstarPath>();
 

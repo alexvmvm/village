@@ -2,28 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Animal : Agent
+public class Director : Agent
 {
     private Dictionary<string, bool> _goal;
     private Dictionary<string, bool> _world;
-    private Movement _movement;
-    private Thing _thing;
 
-    public Animal(Game game, Thing thing) : base(game)
+    public Director(Game game) : base(game)
     {
-        _thing = thing;
-        _movement = _thing.transform.gameObject.AddComponent<Movement>();
-
         _goal = new Dictionary<string, bool>();
         _world = new Dictionary<string, bool>();
 
-        _world.Add("isIdle", true);
-        _goal.Add("isIdle", false);
-
-        AddAction(new Idle(_game, _movement) {
-            Effects         = { { "isIdle", false } },
-            Preconditions   = { { "isIdle", true } }
-        }); 
+        AddAction(new SpawnVillager(game) {
+            Preconditions = { { "isWorking", false } },
+            Effects = { { "isWorking", true } }
+        });
     }
 
     public override void ActionCompleted(GOAPAction action)
@@ -33,11 +25,13 @@ public class Animal : Agent
 
     public override Dictionary<string, bool> GetGoal()
     {
+        _goal["isWorking"] = true;
         return _goal;
     }
 
     public override Dictionary<string, bool> GetWorldState()
     {
+        _world["isWorking"] = false;
         return _world;
     }
 }

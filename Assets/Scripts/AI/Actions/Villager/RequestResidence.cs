@@ -29,7 +29,7 @@ public class RequestResidence : GOAPAction
     public override bool Perform()
     {
         if(_villageManager != null)
-            _villageManager.VillagerArrived(_villager.Fullname);
+            _villageManager.TriggerEvent(VillagerEvent.VillagerArrived, _villager);
         _isDone = true;
         return true;
     }

@@ -14,9 +14,9 @@ public class VillagerArrivedPanel : MonoBehaviour
         transform.position = Camera.main.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
     }
     
-    public void Activate(string name)
+    public void ShowMessage(string message)
     {
-        Text.text = string.Format("{0} has arrived in the village. Find them a house to live in.", name);
+        Text.text = message;
         gameObject.SetActive(true);
     }
 }

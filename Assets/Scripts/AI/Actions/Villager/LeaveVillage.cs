@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class Construct : GOAPAction
+public class LeaveVillage : GOAPAction
 {
     private Movement _movement;
-    private Thing _target;
+    private Thing _thing;
     private bool _started;
     private bool _isDone;
-    private TypeOfThing _type;
+    private VillageManager _villageManager;
+    private Villager _villager;
 
-    public Construct(Game game, Movement movement, TypeOfThing type) : base(game)
+    public LeaveVillage(Game game, Movement movement, Thing thing, Villager villager) : base(game)
     {
         _movement = movement;
-        _type = type;
-
-        
+        _thing = thing;
+        _villager = villager;
+        _villageManager = MonoBehaviour.FindObjectOfType<VillageManager>();
     }
 
     public override bool IsDone()
@@ -26,21 +27,18 @@ public class Construct : GOAPAction
 
     public override bool IsPossibleToPerform()
     {
-
-        _target = _game.Things
-            .Where(t => t.construction != null && t.construction.Requires == _type)
-            .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position))
-            .FirstOrDefault();
-
-        return _target != null && _movement.IsPathPossible(_target.transform.position);
+        return true;
     }
 
     public override bool Perform()
     {
         if(!_started)
         {
+            if(_villageManager != null)
+                _villageManager.TriggerEvent(VillagerEvent.VillagerLeft, _villager);
+
             _movement.CancelCurrentPath();
-            _movement.MoveTo(_target.transform.position);
+            _movement.MoveTo(_game.GetVillageExit());
             _started = true;
         }
 
@@ -49,17 +47,15 @@ public class Construct : GOAPAction
 
         if(_movement.ReachedEndOfPath)
         {
-            _target.construction.Construct();
+            _thing.Destroy();
             _isDone = true;
         }
-        
         
         return true;
     }
 
     public override void Reset()
     {
-       _started = false;
-       _isDone = false;
+
     }
 }

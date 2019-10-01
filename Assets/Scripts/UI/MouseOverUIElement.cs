@@ -13,6 +13,11 @@ public class MouseOverUIElement : MonoBehaviour, IPointerEnterHandler, IPointerE
         MouseOverElement = true;
     }
 
+    void OnDisable()
+    {
+        MouseOverElement = false;
+    }
+
     public void OnPointerExit(PointerEventData eventData)
     {
         MouseOverElement = false;

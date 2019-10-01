@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class FamilyChest 
 {
@@ -18,6 +19,11 @@ public class FamilyChest
         _seen = new HashSet<Thing>();
         _queue = new Queue<Thing>();
         _color = ExtensionMethods.RandomColor();
+    }
+
+    public Vector3 GetRandomPositionInHouse()
+    {
+        return _seen.ToList().Shuffle().FirstOrDefault().gridPosition.ToVector3();
     }
 
     public void Update()
