@@ -6,7 +6,8 @@ using System.Linq;
 public enum VillagerEvent
 {
     VillagerArrived,
-    VillagerLeft
+    VillagerLeft,
+    VillagerFirstNightAtHome
 }
 
 public class VillageManager : MonoBehaviour
@@ -38,6 +39,9 @@ public class VillageManager : MonoBehaviour
             break;
             case VillagerEvent.VillagerLeft:
                 VillagerArrivedPanel.ShowMessage(string.Format("{0} has decided to find a home elsewhere and is leaving.", villager.Fullname));
+            break;
+            case VillagerEvent.VillagerFirstNightAtHome:
+                VillagerArrivedPanel.ShowMessage(string.Format("{0} spent their first night at home. Looks like they're staying.", villager.Fullname));
             break;
         }
     }

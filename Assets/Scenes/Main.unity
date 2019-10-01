@@ -2921,7 +2921,7 @@ MonoBehaviour:
   WorldTime: 300
   SecondsInADay: 360
   HourOfDay: 0
-  MorningHour: 7
+  MorningHour: 5
   NightHour: 23
   TimeOfDay: 0
   Day: {r: 1, g: 1, b: 1, a: 0}

@@ -14,12 +14,14 @@ public class Villager : Agent
     private bool _requestedResidence;
     private Dictionary<string, bool> _goal;
     private Dictionary<string, bool> _world;
+    private VillageManager _villagerManager;
     private Thing _familyChestThing;
     private Thing _thing;
     private Movement _movement;
     private float _idleTime;
     private bool _leaveVillage;
     private Clock _clock;
+    private int _nightsSleptInHome;
 
     public Villager(Game game, Thing thing) : base(game)
     {
@@ -36,11 +38,13 @@ public class Villager : Agent
         _goal = new Dictionary<string, bool>();
         _world = new Dictionary<string, bool>();
 
+        _villagerManager = MonoBehaviour.FindObjectOfType<VillageManager>();
+
         /*
             Misc
         */
 
-        AddAction(new RequestResidence(_game, _thing, this) {
+        AddAction(new RequestResidence(_game, _thing) {
             Preconditions   = { { "hasRequestedResidence", false } },
             Effects         = { { "hasRequestedResidence", true } },
         });
@@ -55,7 +59,12 @@ public class Villager : Agent
             Effects         = { { "hasFullInventory", false } },
         });
 
-        AddAction(new Sleep(_game, _thing, _movement, this) {
+        AddAction(new SleepAtHome(_game, _thing, _movement, this) {
+            Preconditions   = { { "isSleeping", false }, { "hasFullInventory", false }, { "hasHome", true } },
+            Effects         = { { "isSleeping", true } },
+        });
+
+        AddAction(new Sleep(_game, _thing, _movement) {
             Preconditions   = { { "isSleeping", false }, { "hasFullInventory", false } },
             Effects         = { { "isSleeping", true } },
         });
@@ -102,11 +111,26 @@ public class Villager : Agent
 
     public override void ActionCompleted(GOAPAction action)
     {
-        if(action is RequestResidence)
-            _requestedResidence = true;
-
         if(!(action is Idle))
+        {
             _idleTime = 0f;
+        }
+        
+        if(action is SleepAtHome)
+        {
+            if(_nightsSleptInHome == 0)
+                _villagerManager.TriggerEvent(VillagerEvent.VillagerFirstNightAtHome, this);
+
+            _nightsSleptInHome += 1;
+        }
+        
+        if(action is RequestResidence)
+        {
+            _villagerManager.TriggerEvent(VillagerEvent.VillagerArrived, this);
+            _requestedResidence = true;
+        }
+            
+
     }
 
     bool ShouldLeaveVillage()

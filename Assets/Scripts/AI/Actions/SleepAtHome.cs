@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sleep : GOAPAction
+public class SleepAtHome : GOAPAction
 {
     private Clock _clock;
     private Thing _thing;
@@ -10,10 +10,12 @@ public class Sleep : GOAPAction
     private Villager _villager;
     private bool _started;
     private Vector3 _target;
-    public Sleep(Game game, Thing thing, Movement movement) : base(game)
+    private Thing _bed;
+    public SleepAtHome(Game game, Thing thing, Movement movement, Villager villager) : base(game)
     {
         _clock = MonoBehaviour.FindObjectOfType<Clock>();
         _thing = thing;
+        _villager = villager;
         _movement = movement;
     }
 
@@ -31,7 +33,14 @@ public class Sleep : GOAPAction
     {
         if(!_started)
         {
-            _target = _thing.transform.position;
+
+            _bed = _villager.FamilyChest.GetFreeBedInHouse();
+            if(_bed != null)
+                _target = _bed.transform.position;
+            else
+                _target = _villager.FamilyChest.GetRandomPositionInHouse();
+
+
             _movement.CancelCurrentPath();
             _movement.MoveTo(_target);
             _started = true;
