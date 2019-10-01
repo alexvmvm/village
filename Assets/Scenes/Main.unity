@@ -2919,10 +2919,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ClockFace: {fileID: 378299115}
   WorldTime: 300
-  SecondsInADay: 360
+  SecondsInADay: 120
   HourOfDay: 0
   MorningHour: 7
   NightHour: 23
+  TimeOfDay: 0
   Day: {r: 1, g: 1, b: 1, a: 0}
   Night: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 0}
 --- !u!1 &748496890

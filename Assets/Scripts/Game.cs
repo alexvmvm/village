@@ -26,6 +26,8 @@ public enum TypeOfThing
     StoneWallBlueprint,
     DoorBlueprint,
     Door,
+    BedBlueprint,
+    Bed,
     FamilyChest,
     FamilyChestBlueprint
 }
@@ -428,7 +430,6 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
                 thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Door, ConstructionGroup.Furniture, TypeOfThing.Wood);
                 break;
-            
             case TypeOfThing.Door:
                 thing.name = "Door";
                 thing.sprite = "colored_297";
@@ -436,16 +437,30 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 break;
 
+            case TypeOfThing.BedBlueprint:
+                thing.name = "Bed";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Bed, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                break;
+            
+            case TypeOfThing.Bed:
+                thing.name = "Bed";
+                thing.sprite = "colored_261";
+                thing.fixedToGrid = true;
+                thing.floor = true;
+                break;
+
             case TypeOfThing.FamilyChestBlueprint:
-                thing.name = "Family Chest";
+                thing.name = "Chest";
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
                 thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.FamilyChest, ConstructionGroup.Furniture, TypeOfThing.Wood);
             break;
-
             case TypeOfThing.FamilyChest:
-                thing.name = "Family Chest";
+                thing.name = "Chest";
                 thing.sprite = "colored_200";
                 thing.familyChest = new FamilyChest(this, thing);
                 thing.sortingOrder = (int)SortingOrders.Objects;

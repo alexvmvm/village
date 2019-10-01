@@ -10,6 +10,7 @@ public class Sleep : GOAPAction
     private Villager _villager;
     private bool _started;
     private Vector3 _target;
+    private Thing _bed;
     public Sleep(Game game, Thing thing, Movement movement, Villager villager) : base(game)
     {
         _clock = MonoBehaviour.FindObjectOfType<Clock>();
@@ -34,7 +35,11 @@ public class Sleep : GOAPAction
         {
             if(_villager.FamilyChest != null)
             {
-                _target = _villager.FamilyChest.GetRandomPositionInHouse();
+                _bed = _villager.FamilyChest.GetFreeBedInHouse();
+                if(_bed != null)
+                    _target = _bed.transform.position;
+                else
+                    _target = _villager.FamilyChest.GetRandomPositionInHouse();
             }
             else
                 _target = _thing.transform.position;

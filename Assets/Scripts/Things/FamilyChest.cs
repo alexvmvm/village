@@ -7,7 +7,7 @@ public class FamilyChest
 {
     private Game _game;
     private Thing _thing;
-    
+    private List<Thing> _beds;
     private HashSet<Thing> _seen;
     private Queue<Thing> _queue;
     private Color _color;
@@ -19,6 +19,8 @@ public class FamilyChest
         _seen = new HashSet<Thing>();
         _queue = new Queue<Thing>();
         _color = ExtensionMethods.RandomColor();
+
+        _beds = new List<Thing>();
     }
 
     public Vector3 GetRandomPositionInHouse()
@@ -26,8 +28,15 @@ public class FamilyChest
         return _seen.ToList().Shuffle().FirstOrDefault().gridPosition.ToVector3();
     }
 
+    public Thing GetFreeBedInHouse()
+    {
+        return _beds.FirstOrDefault();
+    }
+
     public void Update()
     {
+        _beds.Clear();
+
         _seen.Clear();
         _queue.Clear();
 
@@ -46,9 +55,28 @@ public class FamilyChest
 
             foreach(var neighbour in neighbours)
             {
-                if(neighbour.playerBuiltFloor || neighbour.type == TypeOfThing.Door)
+                switch(neighbour.type)
                 {
-                    _queue.Enqueue(neighbour);
+                    case TypeOfThing.Door:
+                        _queue.Enqueue(neighbour);
+                    break;
+                    case TypeOfThing.Bed:
+                        if(!_beds.Contains(neighbour))
+                            _beds.Add(neighbour);
+                        _queue.Enqueue(neighbour);
+                    break;
+                    default:
+                        if(neighbour.playerBuiltFloor)
+                            _queue.Enqueue(neighbour);
+                    break;
+                }
+
+                if(
+                    neighbour.playerBuiltFloor || 
+                    neighbour.type == TypeOfThing.Door ||
+                    neighbour.type == TypeOfThing.Bed)
+                {
+                    
                 }
             }
             
