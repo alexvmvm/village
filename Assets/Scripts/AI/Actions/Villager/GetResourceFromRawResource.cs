@@ -28,7 +28,7 @@ public class GetResourceFromRawResource : GOAPAction
     {
 
         _target = _game.Things
-            .Where(t => t.type == _type)
+            .Where(t => t.type == _type && _movement.IsPathPossible(t.transform.position))
             .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position))
             .FirstOrDefault();
         
@@ -38,7 +38,7 @@ public class GetResourceFromRawResource : GOAPAction
         // set action cost based on distance
         Cost = Vector2.Distance(_target.transform.position, _movement.transform.position) + 10;
 
-        return _movement.IsPathPossible(_target.transform.position);
+        return true;
     }
 
     TypeOfThing RawResourceToProcessed(TypeOfThing rawResource)

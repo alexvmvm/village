@@ -14,6 +14,7 @@ public enum AgentState
 public abstract class Agent 
 {
     public DateTime Created { get { return _created; } }
+    public GOAPAction CurentAction { get { return _current; } }
     protected Game _game;
     private NormalPlanner _planner;
     private HashSet<GOAPAction> _available;

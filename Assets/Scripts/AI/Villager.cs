@@ -141,7 +141,7 @@ public class Villager : Agent
         
         if(action is SleepAtHome)
         {
-            if(_nightsSleptInHome == 0)
+            if(_nightsSleptInHome == 0 && _villagerManager != null)
                 _villagerManager.TriggerEvent(VillagerEvent.VillagerFirstNightAtHome, this);
 
             _nightsSleptInHome += 1;
@@ -155,7 +155,8 @@ public class Villager : Agent
         
         if(action is RequestResidence)
         {
-            _villagerManager.TriggerEvent(VillagerEvent.VillagerArrived, this);
+            if(_villagerManager != null)
+                _villagerManager.TriggerEvent(VillagerEvent.VillagerArrived, this);
             _requestedResidence = true;
         }
 

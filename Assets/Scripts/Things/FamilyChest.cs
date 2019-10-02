@@ -55,6 +55,9 @@ public class FamilyChest
 
             foreach(var neighbour in neighbours)
             {
+                if(neighbour == null)
+                    continue;
+
                 switch(neighbour.type)
                 {
                     case TypeOfThing.Door:
