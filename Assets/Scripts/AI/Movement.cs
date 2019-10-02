@@ -100,9 +100,7 @@ public class Movement : MonoBehaviour
 
     public bool IsPathPossible(Vector3 position)
     {          
-        var current = _aStarPath.GetNearest(transform.position).node;
-        var target = _aStarPath.GetNearest(transform.position).node;
-        return PathUtilities.IsPathPossible(new List<GraphNode> { current, target}, _seeker.traversableTags);
+        return _game.ZoneGraph.IsPathPossible(transform.position, position);
     }
     
     public void MoveTo(Vector3 position)

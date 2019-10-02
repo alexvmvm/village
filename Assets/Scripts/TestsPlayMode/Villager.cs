@@ -36,7 +36,7 @@ namespace Tests
 
             game.MoveToDay();
             
-            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Chicken).ToArray())
+            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Chicken || t.type == TypeOfThing.Villager).ToArray())
                 thing.Destroy();
 
             for(var x = 0; x < game.MapSize.x; x++)
@@ -64,7 +64,7 @@ namespace Tests
 
             var timeToWait = 5f;
             
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(3f);
 
             while(timeToWait > 0)
             {
@@ -76,6 +76,59 @@ namespace Tests
 
                 yield return null;
             }
+        }
+
+        
+        [UnityTest]
+        public IEnumerator ShouldTryToGetResourceWherePathIsPossible()
+        {
+            var game = _game.GetComponent<Game>();
+
+            game.MoveToDay();
+            
+            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Chicken || t.type == TypeOfThing.Villager).ToArray())
+                thing.Destroy();
+
+            for(var x = 0; x < game.MapSize.x; x++)
+            {
+                for(var y = 0; y < game.MapSize.y; y++)
+                {
+                    game.CreateAndAddThing(TypeOfThing.Grass, x, y);
+                }
+            }
+
+            var villager = game.CreateAndAddThing(TypeOfThing.Villager, 10, 10);
+            game.CreateAndAddThing(TypeOfThing.WoodFloorBlueprint, 11, 10);
+            game.CreateAndAddThing(TypeOfThing.Tree, 10, 25);
+
+            for(var x = 0; x <= 20; x++)
+            {
+                for(var y = 0; y <= 20; y++)
+                {
+                    if(x == 0 || y == 0 || x == 20 || y == 20)
+                    {
+                        game.CreateAndAddThing(TypeOfThing.StoneFloor, x, y);
+                    }
+                }
+            }
+
+            var timeToWait = 5f;
+            
+            yield return new WaitForSeconds(3f);
+
+            while(timeToWait > 0)
+            {
+                timeToWait -= Time.deltaTime;
+                if(villager.agent.CurentAction != null && !(villager.agent.CurentAction is GetResourceFromRawResource))
+                {
+                    Assert.Pass();
+                    yield break;
+                }
+
+                yield return null;
+            }
+
+            Assert.Fail("Failed to try to get resource");
         }
     }
 }

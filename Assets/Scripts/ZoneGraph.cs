@@ -91,7 +91,7 @@ public class ZoneGraph
     }
 
     void UpdateGraph()
-    {
+    {        
         _graph.Clear();
 
         foreach(var region in _regions)
@@ -171,10 +171,18 @@ public class ZoneGraph
             _game.GetThingOnGrid(position).floor;
     }
 
+    bool RegionExistsAtPoint(Vector3 position)
+    {
+        return _regions.Any(r => r.Contains(position.ToVector2IntFloor()));
+    }
+
     public bool IsPathPossible(Vector3 start, Vector3 end)
     {
-        var a = _regions.Where(r => r.Contains(start.ToVector2IntFloor())).FirstOrDefault();
-        var b = _regions.Where(r => r.Contains(end.ToVector2IntFloor())).FirstOrDefault();
+        if(!RegionExistsAtPoint(start) || !RegionExistsAtPoint(end))
+            return false;
+
+        var a = _regions.Where(r => r.Contains(start.ToVector2IntFloor())).First();
+        var b = _regions.Where(r => r.Contains(end.ToVector2IntFloor())).First();
 
         return _graph.ShortestPathToVertex(a, b, (rect) => false) != null;
     }
