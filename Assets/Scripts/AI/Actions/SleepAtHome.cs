@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SleepAtHome : GOAPAction
 {
-    private Clock _clock;
     private Thing _thing;
     private Movement _movement;
     private Villager _villager;
@@ -13,7 +12,6 @@ public class SleepAtHome : GOAPAction
     private Thing _bed;
     public SleepAtHome(Game game, Thing thing, Movement movement, Villager villager) : base(game)
     {
-        _clock = MonoBehaviour.FindObjectOfType<Clock>();
         _thing = thing;
         _villager = villager;
         _movement = movement;
@@ -21,12 +19,12 @@ public class SleepAtHome : GOAPAction
 
     public override bool IsDone()
     {
-        return _clock.TimeOfDay == TimeOfDay.Day;
+        return _game.WorldTime.GetTimeOfDay() == TimeOfDay.Day;
     }
 
     public override bool IsPossibleToPerform()
     {
-        return _clock.TimeOfDay == TimeOfDay.Night;
+        return _game.WorldTime.GetTimeOfDay() == TimeOfDay.Night;
     }
 
     public override bool Perform()
@@ -51,7 +49,7 @@ public class SleepAtHome : GOAPAction
 
         if(_movement.ReachedEndOfPath)
         {
-            switch(_clock.TimeOfDay)
+            switch(_game.WorldTime.GetTimeOfDay())
             {
                 case TimeOfDay.Night:
                     _thing.transform.rotation = Quaternion.Euler(0, 0, 90);

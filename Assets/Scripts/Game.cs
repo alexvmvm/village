@@ -55,13 +55,13 @@ public class Game : MonoBehaviour
     public Thing[,] Grid;
     public List<Thing> Things;
     public TypeOfThing? CurrentType;
+    public WorldTime WorldTime;
     private Dictionary<string, Sprite> _sprites;
     private Dictionary<string, AudioClip> _audioClips;
     private Dictionary<string, Material> _materials;
     private GameCursor _cursor;
     private List<PositionalAudio> _positionalAudio;
     private Director _director;
-
     // simulations
     void Awake()
     {
@@ -103,6 +103,9 @@ public class Game : MonoBehaviour
 
         Grid = new Thing[MapSize.x, MapSize.y];
 
+        // time 
+        WorldTime = new WorldTime(360, 5, 23);
+
         // positional audio
         _positionalAudio = new List<PositionalAudio>()
         {
@@ -112,6 +115,8 @@ public class Game : MonoBehaviour
 
         // director ai
         _director = new Director(this);
+
+    
     }
 
     void Start()
@@ -520,12 +525,14 @@ public class Game : MonoBehaviour
         return System.Array.IndexOf(AstarPath.GetTagNames(), tag);
     }
 
-    public void UpdateAstarPath(Vector2Int position, string pathTag)
+    public void UpdateAstarPath(Vector2Int position, string pathTag, bool walkable)
     {
         var graphupdate = new GraphUpdateObject
         {
             setTag = TagFromString(pathTag),
             bounds = new Bounds(new Vector3(position.x, position.y, 0), Vector3.one),
+            modifyWalkability = true,
+            setWalkability = walkable,
             modifyTag = true
         };
 
@@ -548,10 +555,24 @@ public class Game : MonoBehaviour
         return new Vector3(Mathf.FloorToInt(MapSize.x / 2), 0);
     }
 
+    public void MoveToNight()
+    {
+        WorldTime.TimeSinceStart += (1 - WorldTime.NormalizedTimeOfDay) * WorldTime.SecondsInADay;
+    }
+
+    public void MoveToDay()
+    {
+        WorldTime.TimeSinceStart += 
+            (1 - WorldTime.NormalizedTimeOfDay) * WorldTime.SecondsInADay +
+            (WorldTime.SecondsInADay/2);
+    }
+
     void Update()
     {
         _cursor.Update();
         _director.Update();
+
+        WorldTime.Update();
 
         for(var i = 0; i < Things.Count; i++) 
         {

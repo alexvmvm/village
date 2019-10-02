@@ -20,7 +20,6 @@ public class Villager : Agent
     private Movement _movement;
     private float _idleTime;
     private bool _leaveVillage;
-    private Clock _clock;
     private int _nightsSleptInHome;
 
     /* 
@@ -33,8 +32,6 @@ public class Villager : Agent
     {
         _thing = thing;
         _movement = _thing.transform.gameObject.AddComponent<Movement>();
-
-        _clock = MonoBehaviour.FindObjectOfType<Clock>();
 
         _firstname = NameGenerator.GenerateFirstName();
         _lastname = NameGenerator.GenerateLastName();
@@ -170,7 +167,7 @@ public class Villager : Agent
 
     bool ShouldLeaveVillage()
     {
-        return _idleTime > _clock.SecondsInADay && FamilyChest == null;
+        return _idleTime > _game.WorldTime.SecondsInADay && FamilyChest == null;
     }
 
     public override Dictionary<string, bool> GetGoal()
@@ -184,7 +181,7 @@ public class Villager : Agent
         {
             _goal["hasLeftVillage"] = true;
         }
-        else if(_clock.TimeOfDay == TimeOfDay.Night)
+        else if(_game.WorldTime.GetTimeOfDay() == TimeOfDay.Night)
         {
             _goal["isSleeping"] = true;
         }

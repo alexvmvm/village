@@ -25,6 +25,7 @@ public class Thing
     public bool pipe;
     public string positionalAudioGroup;
     public string pathTag;
+    public bool walkable = true;
     public Construction construction;
     public Agent agent;
     public FamilyChest familyChest;
@@ -53,7 +54,7 @@ public class Thing
 
         if(!string.IsNullOrEmpty(pathTag))
         {
-            game.UpdateAstarPath(transform.position.ToVector2IntFloor(), pathTag);
+            game.UpdateAstarPath(transform.position.ToVector2IntFloor(), pathTag, walkable);
         }
     }
 
@@ -165,7 +166,7 @@ public class Thing
     {
         if(!string.IsNullOrEmpty(pathTag))
         {
-            game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground");
+            game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
         }
 
         transform.gameObject.SetActive(false);

@@ -139,8 +139,11 @@ public class GameCursor
             _cursorPosition = position;
             _crosshairCursor.transform.position = position;
             _mouseOverThing = _game.GetThingOnGrid(position.ToVector2IntFloor());
-            _infoPanel.Setup(_mouseOverThing);
-            _actionPanel.Setup(_mouseOverThing);
+            
+            if(_infoPanel != null)
+                _infoPanel.Setup(_mouseOverThing);
+            if(_actionPanel != null)
+                _actionPanel.Setup(_mouseOverThing);
         }
 
         // disable cursor mesh if no current selected

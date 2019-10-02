@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class Sleep : GOAPAction
 {
-    private Clock _clock;
+    private Game _game;
     private Thing _thing;
     private Movement _movement;
     private bool _started;
     private Vector3 _target;
     public Sleep(Game game, Thing thing, Movement movement) : base(game)
     {
-        _clock = MonoBehaviour.FindObjectOfType<Clock>();
+        _game = game;
         _thing = thing;
         _movement = movement;
     }
 
     public override bool IsDone()
     {
-        return _clock.TimeOfDay == TimeOfDay.Day;
+        return _game.WorldTime.GetTimeOfDay() == TimeOfDay.Day;
     }
 
     public override bool IsPossibleToPerform()
     {
-        return _clock.TimeOfDay == TimeOfDay.Night;
+        return _game.WorldTime.GetTimeOfDay() == TimeOfDay.Night;
     }
 
     public override bool Perform()
@@ -41,7 +41,7 @@ public class Sleep : GOAPAction
 
         if(_movement.ReachedEndOfPath)
         {
-            switch(_clock.TimeOfDay)
+            switch(_game.WorldTime.GetTimeOfDay())
             {
                 case TimeOfDay.Night:
                     _thing.transform.rotation = Quaternion.Euler(0, 0, 90);

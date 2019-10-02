@@ -11,66 +11,35 @@ public enum TimeOfDay
 
 public class Clock : MonoBehaviour
 {
-    
+    public Game Game;
     public Transform ClockFace;
-    public float WorldTime;
-    public float SecondsInADay = 60;
-    public int HourOfDay;
-    public int MorningHour = 7;
-    public int NightHour = 23;
-    public TimeOfDay TimeOfDay;
     public Color Day;
     public Color Night;
 
     private float _rotationalSpeed;
-    private float _normalizedTime { get { return ((WorldTime % SecondsInADay) / SecondsInADay); } } 
 
     public void SetTimeScale(float timeScale)
     {
         Time.timeScale = timeScale;
     }
-    
-    public int GetHourOfDay()
-    {
-        return Mathf.FloorToInt(WorldTime) % (int)SecondsInADay;
-    }
-
-    public void MakeNight()
-    {
-        WorldTime = 0f;
-    }
-
-    public void MakeDay()
-    {
-        WorldTime = 190f;
-    }
 
     // Update is called once per frame
     void Update()
     {
-        WorldTime += Time.deltaTime;
+        var normTime = Game.WorldTime.NormalizedTimeOfDay;
 
         // rotate clock
-        var rotation = _normalizedTime * 360;
+        var rotation = normTime * 360;
         ClockFace.transform.rotation = Quaternion.Euler(0, 0, -rotation);
 
-        // hour of day
-        HourOfDay = Mathf.FloorToInt(_normalizedTime * 24); 
-        
-        // time of day
-        if(HourOfDay >= NightHour || HourOfDay < MorningHour)
-            TimeOfDay = TimeOfDay.Night;
-        else
-            TimeOfDay = TimeOfDay.Day;
-
         // update ambient color
-        if(_normalizedTime < 0.5) 
+        if(normTime < 0.5) 
         {
-            RenderSettings.ambientLight = Color.Lerp(Night, Day, _normalizedTime * 2);
+            RenderSettings.ambientLight = Color.Lerp(Night, Day, normTime * 2);
         }
         else 
         {
-            RenderSettings.ambientLight = Color.Lerp(Day, Night, (_normalizedTime - 0.5f) * 2);
+            RenderSettings.ambientLight = Color.Lerp(Day, Night, (normTime - 0.5f) * 2);
         }
     }
 }
