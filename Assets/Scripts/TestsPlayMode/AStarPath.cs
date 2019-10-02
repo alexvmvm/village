@@ -50,8 +50,9 @@ namespace Tests
                         game.CreateAndAddThing(TypeOfThing.WoodWall, x, y);
                     }
                 }
-                yield return null;
             }
+
+            yield return null;
 
             var tag = game.TagFromString("blocking");
             for(var x = 0; x < game.MapSize.x; x++)
@@ -94,8 +95,9 @@ namespace Tests
                         game.CreateAndAddThing(TypeOfThing.WoodWall, x, y);
                     }
                 }
-                yield return null;
             }
+
+            yield return null;
 
             for(var x = 0; x < game.MapSize.x; x++)
             {
@@ -107,8 +109,9 @@ namespace Tests
                         thing.Destroy();
                     }
                 }
-                yield return null;
             }
+
+            yield return null;
 
             var tag = game.TagFromString("blocking");
             for(var x = 0; x < game.MapSize.x; x++)

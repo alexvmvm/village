@@ -47,9 +47,10 @@ namespace Tests
 
                 var thing = game.Create(TypeOfThing.Chicken, x, y);
                 game.AddThing(thing);
-
-                yield return null;
             }       
+
+            
+            yield return null;
 
             var count = 0;
             foreach(var chicken in game.Things.Where(t => t.type == TypeOfThing.Chicken).ToArray())
@@ -85,9 +86,9 @@ namespace Tests
 
                 var thing = game.Create(TypeOfThing.Villager, x, y);
                 game.AddThing(thing);
-
-                yield return null;
             }       
+
+            yield return null;
 
             var count = 0;
             foreach(var villager in game.Things.Where(t => t.type == TypeOfThing.Villager).ToArray())

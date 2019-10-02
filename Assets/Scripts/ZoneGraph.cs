@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Profiling;
 
 public class ZoneGraph 
 {
 
     private Game _game;
-    private bool _dirty;
     private Graph<RectInt> _graph;
     private Queue<Vector2Int> _queue;
     private HashSet<Vector2Int> _seen;
     private List<RectInt> _regions;
     private List<Vector2Int> _toCheck;
+    private List<RectInt> _regionsToRemove;
+    private List<RectInt> _newRegions;
+    private Vector2Int[] _neighbours;
 
     public ZoneGraph(Game game)
     {
@@ -24,7 +27,23 @@ public class ZoneGraph
         _queue = new Queue<Vector2Int>();
         _seen = new HashSet<Vector2Int>();
         _toCheck = new List<Vector2Int>();
+        _regionsToRemove = new List<RectInt>();
+        _newRegions = new List<RectInt>();
+
         _graph = new Graph<RectInt>();
+
+        _neighbours = new Vector2Int[]
+        {
+            Vector2Int.up,
+            Vector2Int.down,
+            Vector2Int.left,
+            Vector2Int.right
+        };
+    }
+
+    public void Start()
+    {
+        CreateRegionsThatDoNotExist();
     }
     
     void ThingAdded(Thing thing)
@@ -47,31 +66,49 @@ public class ZoneGraph
     
     public void UpdateRegions()
     {
-        var overlappingRegions = _regions.Where(r => _toCheck.Any(p => r.Contains(p))).ToArray();
+        Profiler.BeginSample("ZoneGraph_UpdateRegions");
 
-        foreach(var region in overlappingRegions)
+        _regionsToRemove.Clear();
+
+        foreach(var position in _toCheck)
+        {
+            if(IsRegionAtPoint(position))
+            {
+                _regionsToRemove.Add(FindRegionAtPosition(position));
+            }
+        }
+        
+        if(_regionsToRemove.Count == 0)
+            return;
+
+        foreach(var region in _regionsToRemove)
         {
             _graph.Remove(region);
             _regions.Remove(region);
         }
 
-        Init();
-
-        UpdateGraph();
+        CreateRegionsThatDoNotExist();
 
         _toCheck.Clear();
+
+        Profiler.EndSample();
     }
 
-    public void Init()
+    public void CreateRegionsThatDoNotExist()
     {
-        _regions.Clear();
+        Profiler.BeginSample("ZoneGraph_CreateRegionsThatDoNotExist");
+
         _queue.Clear();
         _seen.Clear();
+        _newRegions.Clear();
+
 
         foreach(var position in _game.Things.Where(t => t.fixedToGrid && t.floor).Select(t => t.gridPosition))
         {
             _queue.Enqueue(position);
         }
+
+        Profiler.BeginSample("ZoneGraph_CreateRegionsThatDoNotExist_CreateNewRects");
 
         while(_queue.Count > 0)
         {
@@ -84,36 +121,65 @@ public class ZoneGraph
 
             var rect = FindRect(current);
 
+            // var rect = new RectInt(current.x, current.y, 1, 1);
+
+            // while(IsSuitableForZonePlacement(rect.max + Vector2Int.right))
+            //     rect.max += Vector2Int.right;
+
+            // while(IsSuitableForZonePlacement(rect.min + Vector2Int.left))
+            //     rect.min += Vector2Int.left;
+
+            // while(IsClearHorizontally(rect.min.x, rect.max.x, rect.max.y + 1))
+            //     rect.max += Vector2Int.up;
+
+            // while(IsClearHorizontally(rect.min.x, rect.max.x, rect.min.y - 1))
+            //     rect.min += Vector2Int.up;
+            
+                    
             _regions.Add(rect);
+            _newRegions.Add(rect);
         }
 
-        UpdateGraph();
-    }
+        Profiler.EndSample();
 
-    void UpdateGraph()
-    {        
-        _graph.Clear();
+        Profiler.BeginSample("ZoneGraph_CreateRegionsThatDoNotExist_GraphUpdate");
 
-        foreach(var region in _regions)
+        // remove regions from graph
+        foreach(var region in _regionsToRemove)
+        {
+            _graph.Remove(region);
+        }
+
+        foreach(var region in _newRegions)
         { 
-            if(!_graph.Contains(region))
-                _graph.AddNode(region);
+            _graph.AddNode(region);
+        }
 
+        foreach(var region in _newRegions)
+        {
             foreach(var n in _regions.Where(r => region.AdjacentTo(r)))
             {
-                if(!_graph.Contains(n))
-                    _graph.AddNode(n);
-
                 _graph.AddUndirectedEdge(_graph.GetNodeByValue(region), _graph.GetNodeByValue(n), 0);
             }
         }
+
+        Profiler.EndSample();
+
+
+        Profiler.EndSample();
     }
 
     RectInt FindRect(Vector2Int position)
     {        
+        Profiler.BeginSample("FindRect_MinMaxLeftRight");
+
         var max = FindPosition(position, Vector2Int.right);
         var min = FindPosition(position, Vector2Int.left);
-    
+
+        Profiler.EndSample();
+
+        Profiler.BeginSample("FindRect_MinMaxUpDown");
+
         while(IsClearBelow(min, max))
         {
             min.y -= 1;
@@ -123,6 +189,8 @@ public class ZoneGraph
         {
             max.y += 1;
         }
+
+        Profiler.EndSample();
 
         var width = max.x - min.x + 1;
         var height = max.y - min.y + 1;
@@ -162,29 +230,65 @@ public class ZoneGraph
         return true;
     }
 
-    bool IsSuitableForZonePlacement(Vector2Int position)
+    bool IsClearHorizontally(int xMin, int xMax, int y)
     {
-        return 
-            !_regions.Any(r => r.Contains(position)) &&
-            _game.GetThingOnGrid(position) != null && 
-            _game.GetThingOnGrid(position).fixedToGrid &&
-            _game.GetThingOnGrid(position).floor;
+        for(var x = xMin; x <= xMax; x++)
+        {
+            if(!IsSuitableForZonePlacement(new Vector2Int(x, y)))
+                return false;
+        }
+
+        return true;
     }
 
-    bool RegionExistsAtPoint(Vector3 position)
+    bool IsSuitableForZonePlacement(Vector2Int position)
     {
-        return _regions.Any(r => r.Contains(position.ToVector2IntFloor()));
+        if(_regions.Any(r => r.Contains(position)))
+            return false;
+
+        var thing = _game.GetThingOnGrid(position);
+
+        if(thing == null)
+            return false;
+
+        return thing.fixedToGrid && thing.floor;
+    }
+
+    bool IsRegionAtPoint(Vector2Int position)
+    {
+        return _regions.Any(r => r.Contains(position) || r.AdjacentTo(position));
+    }
+
+    RectInt FindRegionAtPosition(Vector2Int position)
+    {
+        return _regions.First(r => r.Contains(position) || r.AdjacentTo(position));
     }
 
     public bool IsPathPossible(Vector3 start, Vector3 end)
     {
-        if(!RegionExistsAtPoint(start) || !RegionExistsAtPoint(end))
+        Profiler.BeginSample("ZoneGraph_IsPathPossible");
+
+        var startVec2Int = start.ToVector2IntFloor();
+        var endVec2Int = end.ToVector2IntFloor();
+
+        if(!IsRegionAtPoint(startVec2Int) || !(IsRegionAtPoint(endVec2Int)))
+        {
+            Profiler.EndSample();
             return false;
+        }
 
-        var a = _regions.Where(r => r.Contains(start.ToVector2IntFloor())).First();
-        var b = _regions.Where(r => r.Contains(end.ToVector2IntFloor())).First();
+        var a = FindRegionAtPosition(startVec2Int);
+        var b = FindRegionAtPosition(endVec2Int);
 
-        return _graph.ShortestPathToVertex(a, b, (rect) => false) != null;
+        if(a.Equals(b))
+        {
+            Profiler.EndSample();
+            return true;
+        }
+
+        Profiler.EndSample();
+
+        return _graph.IsPathBetweenNodes(_graph.GetNodeByValue(a), _graph.GetNodeByValue(b));
     }
 
     public void Update()
@@ -225,6 +329,8 @@ public class ZoneGraph
         foreach(var region in _regions)
         {
             var node = _graph.GetNodeByValue(region);
+            if(node == null)
+                continue;
             foreach(var neighbour in node.Neighbors)
             {
                 Gizmos.DrawLine(region.center, neighbour.Value.center);

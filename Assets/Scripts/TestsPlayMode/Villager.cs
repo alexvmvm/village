@@ -30,6 +30,79 @@ namespace Tests
 
 
         [UnityTest]
+        public IEnumerator ShouldRequestResidenceInitially()
+        {
+            var game = _game.GetComponent<Game>();
+
+            game.MoveToDay();
+            
+            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Chicken || t.type == TypeOfThing.Villager).ToArray())
+                thing.Destroy();
+
+            for(var x = 0; x < game.MapSize.x; x++)
+            {
+                for(var y = 0; y < game.MapSize.y; y++)
+                {
+                    game.CreateAndAddThing(TypeOfThing.Grass, x, y);
+                }
+            }
+
+            var villager = game.CreateAndAddThing(TypeOfThing.Villager, 10, 10);
+
+
+            var timeToWait = 10f;
+            
+            while(timeToWait > 0)
+            {
+                timeToWait -= Time.deltaTime;
+                if(villager.agent.CurentAction != null && villager.agent.CurentAction is RequestResidence)
+                {
+                    Assert.Pass();
+                }
+                yield return null;
+            }
+
+            Assert.Fail();
+        }
+
+        
+        [UnityTest]
+        public IEnumerator ShouldIdleAfterRequestingResidence()
+        {
+            var game = _game.GetComponent<Game>();
+
+            game.MoveToDay();
+            
+            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Chicken || t.type == TypeOfThing.Villager).ToArray())
+                thing.Destroy();
+
+            for(var x = 0; x < game.MapSize.x; x++)
+            {
+                for(var y = 0; y < game.MapSize.y; y++)
+                {
+                    game.CreateAndAddThing(TypeOfThing.Grass, x, y);
+                }
+            }
+
+            var villager = game.CreateAndAddThing(TypeOfThing.Villager, 10, 10);
+
+
+            var timeToWait = 5f;
+
+            while(timeToWait > 0)
+            {
+                timeToWait -= Time.deltaTime;
+                if(villager.agent.CurentAction != null && villager.agent.CurentAction is Idle)
+                {
+                    Assert.Pass();
+                }
+                yield return null;
+            }
+
+            Assert.Fail();
+        }
+
+        [UnityTest]
         public IEnumerator ShouldNotTryToGetResourceWherePathIsNotPossible()
         {
             var game = _game.GetComponent<Game>();

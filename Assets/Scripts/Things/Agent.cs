@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public enum AgentState
 {
@@ -63,8 +64,12 @@ public abstract class Agent
             }  
         }
 
+        Profiler.BeginSample("Agent_BuildPlan");
+
         // Build graph
         _planner.BuildPlan(world, _useable, goal, _actions);
+
+        Profiler.EndSample();
 
         if (_actions.Count == 0)
         {
@@ -122,6 +127,7 @@ public abstract class Agent
             break;
             case AgentState.Completed:
             {
+                _current = null;
                 _state = AgentState.Planning;
             }
             break;

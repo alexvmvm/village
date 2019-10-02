@@ -303,6 +303,20 @@ public static class ExtensionMethods
             (a.min.y == b.max.y && a.max.x > b.min.x && a.min.x < b.max.x);
     }
 
+    public static bool AdjacentTo(this RectInt a, Vector2Int b)
+    {
+        return 
+            a.Contains(b + Vector2Int.up) || 
+            a.Contains(b + Vector2Int.down) || 
+            a.Contains(b + Vector2Int.left) || 
+            a.Contains(b + Vector2Int.right);
+    }
+
+    public static bool Contains(this RectInt a, int x, int y)
+    {
+        return x >= a.min.x && x < a.max.x && y >= a.min.y && y < a.max.y;
+    }
+
     public static Vector2Int[] ToPointsArray(this RectInt rect)
     {
         var array = new Vector2Int[rect.width * rect.height];

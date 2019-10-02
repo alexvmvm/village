@@ -39,8 +39,9 @@ namespace Tests
                     var thing = game.Create(TypeOfThing.Grass, x, y);
                     game.AddThing(thing);
                 }
-                yield return null;
             }
+
+            yield return null;
 
             for(var x = 0; x < game.MapSize.x; x++)
             {
@@ -64,8 +65,9 @@ namespace Tests
                     var thing = game.Create(TypeOfThing.Grass, x, y);
                     game.AddThing(thing);
                 }
-                yield return null;
             }
+
+            yield return null;
 
             for(var x = 0; x < game.MapSize.x; x++)
             {
@@ -73,8 +75,9 @@ namespace Tests
                 {
                     game.RemoveThing(game.GetThingOnGrid(x, y));
                 }
-                yield return null;
             }
+
+            yield return null;
 
             for(var x = 0; x < game.MapSize.x; x++)
             {
@@ -110,15 +113,17 @@ namespace Tests
                     var blueprint = game.Create(thing.type, x, y);
                     game.AddThing(blueprint);
                     placed.Add(blueprint);
-                    yield return null;
                 }     
             }
+            
+            yield return null;
 
             foreach(var thing in placed)
             {
                 thing.construction.Construct();
-                yield return null;
             }
+
+            yield return null;
             
             foreach(var thing in placed)
             {

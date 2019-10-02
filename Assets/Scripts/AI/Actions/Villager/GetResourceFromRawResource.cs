@@ -27,18 +27,24 @@ public class GetResourceFromRawResource : GOAPAction
     public override bool IsPossibleToPerform()
     {
 
-        _target = _game.Things
-            .Where(t => t.type == _type && _movement.IsPathPossible(t.transform.position))
-            .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position))
-            .FirstOrDefault();
-        
-        if(_target == null)
-            return false;
+        var targets = _game.Things
+            .Where(t => t.type == _type)
+            .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
 
-        // set action cost based on distance
-        Cost = Vector2.Distance(_target.transform.position, _movement.transform.position) + 10;
+        foreach(var target in targets)
+        {
+            if(_movement.IsPathPossible(target.transform.position))
+            {
+                _target = target;
 
-        return true;
+                // set action cost based on distance
+                Cost = Vector2.Distance(_target.transform.position, _movement.transform.position) + 10;
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     TypeOfThing RawResourceToProcessed(TypeOfThing rawResource)

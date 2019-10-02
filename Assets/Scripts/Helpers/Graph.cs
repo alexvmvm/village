@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using UnityEngine.Profiling;
 
 public class Node<T>
 {
@@ -116,14 +117,16 @@ public class Graph<T> : IEnumerable<T>
     private Dictionary<T, T> _previous;
     private List<T> _path;
     private HashSet<T> _excluded;
-    private Queue<T> _queue;
+    private Queue<GraphNode<T>> _queue;
+    private HashSet<GraphNode<T>> _seen;
 
     public Graph() : this(null) 
     { 
         _previous = new Dictionary<T, T>();
         _path = new List<T>{};
         _excluded = new HashSet<T>();
-        _queue = new Queue<T>();
+        _queue = new Queue<GraphNode<T>>();
+        _seen = new HashSet<GraphNode<T>>();
     }
 
     public Graph(NodeList<T> nodeSet) : base()
@@ -238,77 +241,115 @@ public class Graph<T> : IEnumerable<T>
         throw new NotImplementedException();
     }
 
-    public IEnumerable<T> ShortestPathToVertex(T start, T end, Func<T, bool> filter) 
+    public bool IsPathBetweenNodes(GraphNode<T> start, GraphNode<T> end)
     {
-        _previous.Clear();
-        _path.Clear();
+        Profiler.BeginSample("Graph_IsPathBetweenNodes");
+
+        _seen.Clear();
         _queue.Clear();
 
         _queue.Enqueue(start);
 
-        while (_queue.Count > 0) {
+        while (_queue.Count > 0) 
+        {
             var vertex = _queue.Dequeue();
+
+            if(_seen.Contains(vertex))
+                continue;
+
+            _seen.Add(vertex);
 
             if(vertex.Equals(end))
             {
-                var current = end;
-                while (!current.Equals(start)) {
-                    _path.Add(current);
-                    current = _previous[current];
-                };
-
-                _path.Add(start);
-                _path.Reverse();
-
-                return _path;
+                Profiler.EndSample();
+                return true;
             }
 
-            foreach(GraphNode<T> neighbor in GetNodeByValue(vertex).Neighbors) {
-                if (_previous.ContainsKey(neighbor.Value) || filter(vertex))
-                    continue;
-                _previous[neighbor.Value] = vertex;
-                _queue.Enqueue(neighbor.Value);
-            }
-        }
+            Profiler.BeginSample("Graph_IsPathBetweenNodes_GetNeighbours");    
 
-        return null;
-    }
-
-    public IEnumerable<T> ShortestPathSearch(T start, Func<T, bool> filter, Func<T, bool> predicate) {
-
-        _previous.Clear();
-        _path.Clear();
-        _queue.Clear();
-
-        _queue.Enqueue(start);
-
-        while (_queue.Count > 0) {
-            var vertex = _queue.Dequeue();
-
-            if(predicate(vertex))
+            foreach(GraphNode<T> neighbor in vertex.Neighbors) 
             {
-                var current = vertex;
-                while (!current.Equals(start)) {
-                    _path.Add(current);
-                    current = _previous[current];
-                };
-
-                _path.Add(start);
-                _path.Reverse();
-
-                return _path;
+                _queue.Enqueue(neighbor);
             }
 
-            foreach(GraphNode<T> neighbor in GetNodeByValue(vertex).Neighbors) {
-                if (_previous.ContainsKey(neighbor.Value) || filter(vertex))
-                    continue;
-                _previous[neighbor.Value] = vertex;
-                _queue.Enqueue(neighbor.Value);
-            }
+            Profiler.EndSample();
         }
 
-        return null;
+        Profiler.EndSample();
+        return false;
     }
+
+    // public IEnumerable<T> ShortestPathToVertex(T start, T end, Func<T, bool> filter) 
+    // {
+    //     _previous.Clear();
+    //     _path.Clear();
+    //     _queue.Clear();
+
+    //     _queue.Enqueue(start);
+
+    //     while (_queue.Count > 0) {
+    //         var vertex = _queue.Dequeue();
+
+    //         if(vertex.Equals(end))
+    //         {
+    //             var current = end;
+    //             while (!current.Equals(start)) {
+    //                 _path.Add(current);
+    //                 current = _previous[current];
+    //             };
+
+    //             _path.Add(start);
+    //             _path.Reverse();
+
+    //             return _path;
+    //         }
+
+    //         foreach(GraphNode<T> neighbor in GetNodeByValue(vertex).Neighbors) {
+    //             if (_previous.ContainsKey(neighbor.Value) || filter(vertex))
+    //                 continue;
+    //             _previous[neighbor.Value] = vertex;
+    //             _queue.Enqueue(neighbor.Value);
+    //         }
+    //     }
+
+    //     return null;
+    // }
+
+    // public IEnumerable<T> ShortestPathSearch(T start, Func<T, bool> filter, Func<T, bool> predicate) {
+
+    //     _previous.Clear();
+    //     _path.Clear();
+    //     _queue.Clear();
+
+    //     _queue.Enqueue(start);
+
+    //     while (_queue.Count > 0) {
+    //         var vertex = _queue.Dequeue();
+
+    //         if(predicate(vertex))
+    //         {
+    //             var current = vertex;
+    //             while (!current.Equals(start)) {
+    //                 _path.Add(current);
+    //                 current = _previous[current];
+    //             };
+
+    //             _path.Add(start);
+    //             _path.Reverse();
+
+    //             return _path;
+    //         }
+
+    //         foreach(GraphNode<T> neighbor in GetNodeByValue(vertex).Neighbors) {
+    //             if (_previous.ContainsKey(neighbor.Value) || filter(vertex))
+    //                 continue;
+    //             _previous[neighbor.Value] = vertex;
+    //             _queue.Enqueue(neighbor.Value);
+    //         }
+    //     }
+
+    //     return null;
+    // }
 
 
     public NodeList<T> Nodes

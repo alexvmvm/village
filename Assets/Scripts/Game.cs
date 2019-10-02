@@ -153,21 +153,23 @@ public class Game : MonoBehaviour
             }
         }
 
-        for(var i = 0; i < 10; i++) 
-        {
-            var x = UnityEngine.Random.Range(0, MapSize.x);
-            var y = UnityEngine.Random.Range(0, MapSize.y);
+        // for(var i = 0; i < 10; i++) 
+        // {
+        //     var x = UnityEngine.Random.Range(0, MapSize.x);
+        //     var y = UnityEngine.Random.Range(0, MapSize.y);
 
-            AddThing(Create(TypeOfThing.Chicken, x, y));
-        }
+        //     AddThing(Create(TypeOfThing.Chicken, x, y));
+        // }
 
-        for(var i = 0; i < 10; i++) 
-        {
-            var x = UnityEngine.Random.Range(0, MapSize.x);
-            var y = UnityEngine.Random.Range(0, MapSize.y);
+        // for(var i = 0; i < 10; i++) 
+        // {
+        //     var x = UnityEngine.Random.Range(0, MapSize.x);
+        //     var y = UnityEngine.Random.Range(0, MapSize.y);
 
-            AddThing(Create(TypeOfThing.Chick, x, y));
-        }
+        //     AddThing(Create(TypeOfThing.Chick, x, y));
+        // }
+
+        _zoneGraph.Start();
     }
 
     /*
