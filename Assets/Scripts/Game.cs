@@ -47,6 +47,9 @@ public enum Position
     TopLeft     = 128
 }
 
+public delegate void ThingAdded(Thing thing);
+public delegate void ThingRemoved(Thing thing);
+
 public class Game : MonoBehaviour
 {
     public Vector2Int MapSize = Vector2Int.one * 10;
@@ -56,13 +59,15 @@ public class Game : MonoBehaviour
     public List<Thing> Things;
     public TypeOfThing? CurrentType;
     public WorldTime WorldTime;
+    public ThingAdded OnThingAdded;
+    public ThingRemoved OnThingRemoved;
     private Dictionary<string, Sprite> _sprites;
     private Dictionary<string, AudioClip> _audioClips;
     private Dictionary<string, Material> _materials;
     private GameCursor _cursor;
     private List<PositionalAudio> _positionalAudio;
     private Director _director;
-    // simulations
+    private ZoneGraph _zoneGraph;
     void Awake()
     {
         // load all sprites
@@ -91,9 +96,8 @@ public class Game : MonoBehaviour
 
         Debug.Log(string.Format("Loaded {0} materials", _materials.Count));
 
-
-        // load path
-        // AstarPath = FindObjectOfType<AstarPath>();
+        // zone graph
+        _zoneGraph = new ZoneGraph(this);
 
         // create array of things
         Things = new List<Thing>();
@@ -115,8 +119,6 @@ public class Game : MonoBehaviour
 
         // director ai
         _director = new Director(this);
-
-    
     }
 
     void Start()
@@ -246,17 +248,18 @@ public class Game : MonoBehaviour
 
                 Things.Add(thing);
                 thing.Setup();
+
+                if(OnThingAdded != null)
+                    OnThingAdded(thing);
             }
         }
         else
         {
             Things.Add(thing);
             thing.Setup();
-        }
 
-        if(thing.floor)
-        {
-
+            if(OnThingAdded != null)
+                    OnThingAdded(thing);
         }
 
         return thing;
@@ -274,6 +277,9 @@ public class Game : MonoBehaviour
 
         thing.Destroy();
         Things.Remove(thing);
+
+        if(OnThingRemoved != null)
+            OnThingRemoved(thing);
     }
 
     public Thing Create(TypeOfThing thingType)
@@ -314,7 +320,6 @@ public class Game : MonoBehaviour
                     "stream_3", "stream_3!180", "stream_3!90", "stream_3!270",
                     "stream_4", "stream_1", "stream_1!90");
                 thing.group = 1;
-                thing.floor = true;
                 thing.positionalAudioGroup = "river";
                 thing.pathTag = "blocking";
                 break;
@@ -336,7 +341,6 @@ public class Game : MonoBehaviour
                 thing.sprite = "tree_1";
                 thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
-                thing.floor = true;
                 thing.positionalAudioGroup = "trees";
                 thing.pathTag = "foliage";
                 break;
@@ -369,7 +373,6 @@ public class Game : MonoBehaviour
                 thing.name = "wood wall";
                 thing.sprite = "colored_98";
                 thing.fixedToGrid = true;
-                thing.floor = true;
                 thing.pipe = true;
                 thing.pathTag = "blocking";
                 thing.tileRule = new TileRuleDefinition(
@@ -390,7 +393,6 @@ public class Game : MonoBehaviour
                 thing.name = "stone wall";
                 thing.sprite = "colored_580";
                 thing.fixedToGrid = true;
-                thing.floor = true;
                 thing.pathTag = "blocking";
                 thing.pipe = true;
             break;
@@ -574,6 +576,8 @@ public class Game : MonoBehaviour
 
         WorldTime.Update();
 
+        _zoneGraph.Update();
+
         for(var i = 0; i < Things.Count; i++) 
         {
             Things[i].Update();
@@ -618,6 +622,7 @@ public class Game : MonoBehaviour
             return;
 
         _cursor.DrawGizmos();
+        _zoneGraph.DrawGizmos();
 
         for(var i = 0; i < Things.Count; i++) 
         {

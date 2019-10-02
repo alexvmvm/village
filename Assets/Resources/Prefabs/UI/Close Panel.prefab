@@ -21,7 +21,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2415271705692425017
 RectTransform:
   m_ObjectHideFlags: 0
@@ -271,12 +271,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 19.59
       objectReference: {fileID: 0}
-    - target: {fileID: 9124701343539032612, guid: 3e1795d048bece241be7554b0dda6838,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: a3b7de66527477a468e4b3b1849ff620,
-        type: 3}
     - target: {fileID: 9124701343042767123, guid: 3e1795d048bece241be7554b0dda6838,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -307,6 +301,12 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 9124701343539032612, guid: 3e1795d048bece241be7554b0dda6838,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a3b7de66527477a468e4b3b1849ff620,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e1795d048bece241be7554b0dda6838, type: 3}
 --- !u!224 &6856087592390320588 stripped

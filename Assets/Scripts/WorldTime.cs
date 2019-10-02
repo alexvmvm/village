@@ -18,6 +18,9 @@ public class WorldTime
         _secondsInADay = secondsInADay;
         _nightHour = nightHour;
         _morningHour = morningHour;
+
+        // start in day..
+        TimeSinceStart = 160f;
     }
 
     public TimeOfDay GetTimeOfDay()
