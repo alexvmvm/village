@@ -12,6 +12,8 @@ public enum TypeOfThing
     Rock,
     Stone,
     Tree,
+    AppleTree,
+    Mushroom,
     Wood,
     Villager,
     Chicken,
@@ -129,6 +131,10 @@ public class Game : MonoBehaviour
             for(var y = 0; y < MapSize.y; y++)
             {
 
+                var noise = Mathf.PerlinNoise(x * 0.1f, y * 0.1f);
+                var noise2 = Mathf.PerlinNoise(x * 1234.1f, y * 1234.1f);
+                var noise3 = Mathf.PerlinNoise(x * 34343.1f, y * 34343.1f);
+                
                 if(x == MapSize.x - 3)
                 {
                     AddThing(Create(TypeOfThing.Stream, x, y));
@@ -137,13 +143,21 @@ public class Game : MonoBehaviour
                 {
                     AddThing(Create(TypeOfThing.Path, x, y));
                 }
-                else if(Mathf.PerlinNoise(x * 0.1f, y * 0.1f) > 0.6f)
+                else if(noise > 0.6f && noise < 0.65f)
+                {
+                    AddThing(Create(TypeOfThing.AppleTree, x, y));
+                }
+                else if(noise > 0.65f)
                 {
                     AddThing(Create(TypeOfThing.Tree, x, y));
                 }
-                else if(Mathf.PerlinNoise(x * 100.1f, y * 100.1f) > 0.8f)
+                else if(noise2 > 0.8f)
                 {
                     AddThing(Create(TypeOfThing.Rock, x, y));
+                }
+                else if(noise3 > 0.85f)
+                {
+                    AddThing(Create(TypeOfThing.Mushroom, x, y));
                 }
                 else
                 {
@@ -153,21 +167,21 @@ public class Game : MonoBehaviour
             }
         }
 
-        // for(var i = 0; i < 10; i++) 
-        // {
-        //     var x = UnityEngine.Random.Range(0, MapSize.x);
-        //     var y = UnityEngine.Random.Range(0, MapSize.y);
+        for(var i = 0; i < 5; i++) 
+        {
+            var x = UnityEngine.Random.Range(0, MapSize.x);
+            var y = UnityEngine.Random.Range(0, MapSize.y);
 
-        //     AddThing(Create(TypeOfThing.Chicken, x, y));
-        // }
+            AddThing(Create(TypeOfThing.Chicken, x, y));
+        }
 
-        // for(var i = 0; i < 10; i++) 
-        // {
-        //     var x = UnityEngine.Random.Range(0, MapSize.x);
-        //     var y = UnityEngine.Random.Range(0, MapSize.y);
+        for(var i = 0; i < 10; i++) 
+        {
+            var x = UnityEngine.Random.Range(0, MapSize.x);
+            var y = UnityEngine.Random.Range(0, MapSize.y);
 
-        //     AddThing(Create(TypeOfThing.Chick, x, y));
-        // }
+            AddThing(Create(TypeOfThing.Chick, x, y));
+        }
 
         _zoneGraph.Start();
     }
@@ -345,6 +359,18 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
                 thing.positionalAudioGroup = "trees";
+                thing.pathTag = "foliage";
+                break;
+            case TypeOfThing.AppleTree:
+                thing.name = "apple tree";
+                thing.sprite = "colored_68";
+                thing.fixedToGrid = true;
+                thing.pathTag = "foliage";
+                break;
+            case TypeOfThing.Mushroom:
+                thing.name = "mushroom";
+                thing.sprite = "colored_71";
+                thing.fixedToGrid = true;
                 thing.pathTag = "foliage";
                 break;
             case TypeOfThing.Wood:
