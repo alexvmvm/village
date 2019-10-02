@@ -134,7 +134,7 @@ public class Villager : Agent
 
     public override void ActionCompleted(GOAPAction action)
     {
-        if(!(action is Idle))
+        if(!(action is Idle) && !(action is Sleep))
         {
             _idleTime = 0f;
         }

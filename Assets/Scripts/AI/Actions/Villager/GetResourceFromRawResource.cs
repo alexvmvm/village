@@ -3,48 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class GetResourceFromRawResource : GOAPAction
+public class GetResourceFromRawResource : MoveGOAPAction
 {
     private Movement _movement;
-    private Thing _target;
-    private bool _started;
-    private bool _isDone;
     private TypeOfThing _type;
     private Inventory _inventory;
 
-    public GetResourceFromRawResource(Game game, Movement movement, TypeOfThing type, Inventory inventory) : base(game)
+    public GetResourceFromRawResource(Game game, Movement movement, TypeOfThing type, Inventory inventory) : base(game, movement)
     {
         _movement = movement;
         _type = type;
         _inventory = inventory;
-    }
-
-    public override bool IsDone()
-    {
-        return _isDone;
-    }
-
-    public override bool IsPossibleToPerform()
-    {
-
-        var targets = _game.Things
-            .Where(t => t.type == _type)
-            .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
-
-        foreach(var target in targets)
-        {
-            if(_movement.IsPathPossible(target.transform.position))
-            {
-                _target = target;
-
-                // set action cost based on distance
-                Cost = Vector2.Distance(_target.transform.position, _movement.transform.position) + 10;
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     TypeOfThing RawResourceToProcessed(TypeOfThing rawResource)
@@ -60,40 +29,26 @@ public class GetResourceFromRawResource : GOAPAction
         }
     }
 
-    public override bool Perform()
+    public override IEnumerable<Thing> GetThings()
     {
-        if(!_started)
-        {
-            _movement.CancelCurrentPath();
-            _movement.MoveTo(_target.transform.position);
-            _started = true;
-        }
-
-        if(_movement.FailedToFollowPath)
-            return false;
-
-        if(_movement.ReachedEndOfPath)
-        {
-            // get resource to hold
-            var processedResourceType = RawResourceToProcessed(_type);
-            var resource = _game.CreateAndAddThing(processedResourceType, 0, 0);
-            resource.hitpoints = 10;
-            _inventory.HoldThing(resource);
-
-            // damage existing resource
-            _target.hitpoints -= 10;
-            if(_target.hitpoints <= 0)
-                _game.CreateAndAddThing(TypeOfThing.Grass, _target.gridPosition.x, _target.gridPosition.y);
-            _isDone = true;
-        }
-        
-        
-        return true;
+        return _game.Things
+            .Where(t => t.type == _type)
+            .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
     }
 
-    public override void Reset()
+    public override bool PerformAtTarget()
     {
-       _started = false;
-       _isDone = false;
+        // get resource to hold
+        var processedResourceType = RawResourceToProcessed(_type);
+        var resource = _game.CreateAndAddThing(processedResourceType, 0, 0);
+        resource.hitpoints = 10;
+        _inventory.HoldThing(resource);
+
+        // damage existing resource
+        _target.hitpoints -= 10;
+        if(_target.hitpoints <= 0)
+            _game.CreateAndAddThing(TypeOfThing.Grass, _target.gridPosition.x, _target.gridPosition.y);
+        
+        return true;
     }
 }

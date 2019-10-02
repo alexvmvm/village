@@ -3,59 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class LeaveVillage : GOAPAction
+public class LeaveVillage : MoveGOAPAction
 {
-    private Movement _movement;
     private Thing _thing;
-    private bool _started;
-    private bool _isDone;
     private VillageManager _villageManager;
     private Villager _villager;
 
-    public LeaveVillage(Game game, Movement movement, Thing thing, Villager villager) : base(game)
+    public LeaveVillage(Game game, Movement movement, Thing thing, Villager villager) : base(game, movement)
     {
-        _movement = movement;
         _thing = thing;
         _villager = villager;
         _villageManager = MonoBehaviour.FindObjectOfType<VillageManager>();
     }
 
-    public override bool IsDone()
+    public override void BeforeStartMoving()
     {
-        return _isDone;
+        if(_villageManager != null)
+            _villageManager.TriggerEvent(VillagerEvent.VillagerLeft, _villager);
     }
 
-    public override bool IsPossibleToPerform()
+    public override IEnumerable<Thing> GetThings()
     {
+        return _game.Things
+            .Where(t => t.type == TypeOfThing.Path)
+            .OrderBy(t => t.transform.position.y);
+    }
+
+    public override bool PerformAtTarget()
+    {
+        _thing.Destroy();
         return true;
-    }
-
-    public override bool Perform()
-    {
-        if(!_started)
-        {
-            if(_villageManager != null)
-                _villageManager.TriggerEvent(VillagerEvent.VillagerLeft, _villager);
-
-            _movement.CancelCurrentPath();
-            _movement.MoveTo(_game.GetVillageExit());
-            _started = true;
-        }
-
-        if(_movement.FailedToFollowPath)
-            return false;
-
-        if(_movement.ReachedEndOfPath)
-        {
-            _thing.Destroy();
-            _isDone = true;
-        }
-        
-        return true;
-    }
-
-    public override void Reset()
-    {
-
     }
 }
