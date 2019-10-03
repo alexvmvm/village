@@ -39,6 +39,7 @@ public class Movement : MonoBehaviour
         _aiPath.gravity = Vector3.zero;
         _aiPath.maxSpeed = 2f;
         _aiPath.pickNextWaypointDist = 0.5f;
+        _aiPath.endReachedDistance = 0.8f;
 
         _aStarPath = FindObjectOfType<AstarPath>();
 

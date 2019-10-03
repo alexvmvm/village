@@ -44,6 +44,16 @@ public class Villager : Agent
         _villagerManager = MonoBehaviour.FindObjectOfType<VillageManager>();
 
         /*
+            Name Label 
+        */
+        var labelObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Label"));    
+        labelObj.transform.SetParent(_thing.transform);
+        labelObj.transform.localPosition = new Vector3(0, -0.8f, 0);
+        labelObj.GetComponentInChildren<TextMesh>().text = Fullname;
+        labelObj.GetComponentInChildren<MeshRenderer>().sortingOrder = (int)SortingOrders.Labels;
+      
+
+        /*
             Misc
         */
 
