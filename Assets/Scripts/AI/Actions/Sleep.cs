@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Sleep : GOAPAction
 {
-    private Game _game;
     private Thing _thing;
     private Movement _movement;
     private bool _started;
     private Vector3 _target;
     public Sleep(Game game, Thing thing, Movement movement) : base(game)
     {
-        _game = game;
         _thing = thing;
         _movement = movement;
     }
@@ -58,5 +56,10 @@ public class Sleep : GOAPAction
     public override void Reset()
     {
         _started = false;
+    }
+
+    public override string ToString()
+    {
+        return "Sleeping on Ground";
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class FamilyChest 
+public class Coop 
 {
     private Game _game;
     private Thing _thing;
@@ -11,8 +11,10 @@ public class FamilyChest
     private HashSet<Thing> _seen;
     private Queue<Thing> _queue;
     private Color _color;
+    private Thing _cockeral;
+    private Thing _chicken;
     
-    public FamilyChest(Game game, Thing thing)
+    public Coop(Game game, Thing thing)
     {
         _game = game;
         _thing = thing;
@@ -23,14 +25,29 @@ public class FamilyChest
         _beds = new List<Thing>();
     }
 
-    public Vector3 GetRandomPositionInHouse()
+    public bool IsSetup()
     {
-        return _seen.ToList().Shuffle().FirstOrDefault().gridPosition.ToVector3();
+        return HasChicken() && HasCockeral();
     }
 
-    public Thing GetFreeBedInHouse()
+    public bool HasChicken()
     {
-        return _beds.FirstOrDefault();
+        return _chicken != null;
+    }
+
+    public bool HasCockeral()
+    {
+        return _cockeral != null;
+    }
+
+    public void AddCockeral(Thing thing)
+    {
+        _cockeral = thing;
+    }
+
+    public void AddChicken(Thing thing)
+    {
+        _chicken = thing;
     }
 
     public void Update()
@@ -42,7 +59,7 @@ public class FamilyChest
 
         _queue.Enqueue(_game.GetThingOnGrid(_thing.gridPosition));
 
-        while(_queue.Count > 0)
+        while(_queue.Count > 0 && _seen.Count() < 20)
         {
             var current = _queue.Dequeue();
             
@@ -58,21 +75,9 @@ public class FamilyChest
                 if(neighbour == null)
                     continue;
 
-                switch(neighbour.type)
-                {
-                    case TypeOfThing.Door:
-                        _queue.Enqueue(neighbour);
-                    break;
-                    case TypeOfThing.Bed:
-                        if(!_beds.Contains(neighbour))
-                            _beds.Add(neighbour);
-                        _queue.Enqueue(neighbour);
-                    break;
-                    default:
-                        if(neighbour.playerBuiltFloor)
-                            _queue.Enqueue(neighbour);
-                    break;
-                }
+                if(neighbour.floor)
+                    _queue.Enqueue(neighbour);
+                
             }
             
         }

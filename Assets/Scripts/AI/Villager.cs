@@ -21,12 +21,14 @@ public class Villager : Agent
     private float _idleTime;
     private bool _leaveVillage;
     private int _nightsSleptInHome;
+    private TextMesh _textMesh;
 
     /* 
         Survival
     */
 
     private bool _thirsty;
+    private bool _hungry;
 
     public Villager(Game game, Thing thing) : base(game)
     {
@@ -49,7 +51,9 @@ public class Villager : Agent
         var labelObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Label"));    
         labelObj.transform.SetParent(_thing.transform);
         labelObj.transform.localPosition = new Vector3(0, -0.8f, 0);
-        labelObj.GetComponentInChildren<TextMesh>().text = Fullname;
+
+        _textMesh = labelObj.GetComponentInChildren<TextMesh>();
+        _textMesh.text = Fullname;
         labelObj.GetComponentInChildren<MeshRenderer>().sortingOrder = (int)SortingOrders.Labels;
       
 
@@ -102,6 +106,11 @@ public class Villager : Agent
             Effects         = { { "isThirsty", false }, { "needsFullfilled", true } }
         }); 
 
+        AddAction(new EastSomething(_game, thing.inventory) {
+            Preconditions   = { { "isHungry", true },   { "hasSomethingToEat", true } },
+            Effects         = { { "isHungry", false },  { "needsFullfilled", true } }
+        }); 
+
         /*
             Resources
         */
@@ -111,20 +120,27 @@ public class Villager : Agent
             Effects         = { { "hasWood", true },    { "hasFullInventory", true } }
         }); 
 
-         AddAction(new GetResourceFromRawResource(_game, _movement, TypeOfThing.Rock, thing.inventory) {
+        AddAction(new GetResourceFromRawResource(_game, _movement, TypeOfThing.Rock, thing.inventory) {
             Preconditions   = { { "hasStone", false },  { "hasFullInventory", false } },
             Effects         = { { "hasStone", true },   { "hasFullInventory", true } }
         }); 
+
+        AddAction(new GetResourceFromRawResource(_game, _movement, TypeOfThing.Mushroom, thing.inventory) {
+            Preconditions   = { { "hasMushroom", false },  { "hasFullInventory", false },   { "hasSomethingToEat", false } },
+            Effects         = { { "hasMushroom", true },   { "hasFullInventory", true },    { "hasSomethingToEat", true } }
+        }); 
+
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Wood, thing.inventory) {
             Preconditions   = { { "hasWood", false },   { "hasFullInventory", false } },
             Effects         = { { "hasWood", true },    { "hasFullInventory", true } }
         }); 
 
-         AddAction(new GetResource(_game, _movement, TypeOfThing.Stone, thing.inventory) {
+        AddAction(new GetResource(_game, _movement, TypeOfThing.Stone, thing.inventory) {
             Preconditions   = { { "hasStone", false },  { "hasFullInventory", false } },
             Effects         = { { "hasStone", true },   { "hasFullInventory", true } }
-        }); 
+        });
+         
 
         /*
             Construction
@@ -161,6 +177,7 @@ public class Villager : Agent
         if(action is Sleep || action is SleepAtHome)
         {
             _thirsty = true;
+            _hungry = true;
         }
         
         if(action is RequestResidence)
@@ -172,7 +189,9 @@ public class Villager : Agent
 
         if(action is DrinkFromStream)
             _thirsty = false;
-            
+        
+        if(action is EastSomething)
+            _hungry = false;
 
     }
 
@@ -196,7 +215,7 @@ public class Villager : Agent
         {
             _goal["isSleeping"] = true;
         }
-        else if(_thirsty)
+        else if(_thirsty || _hungry)
         {
             _goal["needsFullfilled"] = true;
         }
@@ -221,6 +240,9 @@ public class Villager : Agent
         
         _world["hasWood"] = _thing.inventory.IsHolding(TypeOfThing.Wood);
         _world["hasStone"] =  _thing.inventory.IsHolding(TypeOfThing.Stone);
+        _world["hasMushroom"] = _thing.inventory.IsHolding(TypeOfThing.Mushroom);
+
+        _world["hasSomethingToEat"] = _thing.inventory.IsHoldingSomethingToEat();
         _world["hasFullInventory"] = _thing.inventory.IsHoldingSomething();
 
         /*
@@ -228,6 +250,7 @@ public class Villager : Agent
         */
 
         _world["isThirsty"] = _thirsty;
+        _world["isHungry"] = _hungry;
 
         _world["isWorking"] = false;
         _world["isSleeping"] = false;
@@ -243,6 +266,9 @@ public class Villager : Agent
         base.Update();
 
         _idleTime += Time.deltaTime;
+        
+        _textMesh.text = $"{Fullname}\n{(CurentAction == null ? "" : CurentAction.ToString())}";
+        _textMesh.transform.rotation = Quaternion.identity;
     }
 
     public override void DrawGizmos()

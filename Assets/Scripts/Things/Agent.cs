@@ -12,6 +12,14 @@ public enum AgentState
     Completed
 }
 
+public struct Task
+{
+    public string Goal;
+    public bool TimeLimited;
+    public int StartHour;
+    public int EndHour;
+}
+
 public abstract class Agent 
 {
     public DateTime Created { get { return _created; } }

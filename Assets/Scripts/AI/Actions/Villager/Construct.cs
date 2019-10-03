@@ -72,4 +72,12 @@ public class Construct : GOAPAction
        _started = false;
        _isDone = false;
     }
+
+    public override string ToString() 
+    {
+        if(_target == null || _target.construction == null)
+            return base.ToString();
+
+        return $"Building {_target.construction.BuildType.ToString()}";
+    }
 }

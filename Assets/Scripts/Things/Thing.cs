@@ -7,6 +7,7 @@ public class Thing
     public string sprite;
     public string name;
     public string belongsToFamily;
+    public bool assignToFamily;
     public Game game;
     public int hitpoints = 100;
     public Transform transform; 
@@ -29,6 +30,7 @@ public class Thing
     public Construction construction;
     public Agent agent;
     public FamilyChest familyChest;
+    public Coop coop;
     public Inventory inventory;
 
     public Thing(TypeOfThing type, Transform transform)
@@ -141,13 +143,7 @@ public class Thing
 
     public bool CanBeSeletected()
     {
-        switch(type)
-        {
-            case TypeOfThing.FamilyChest:
-                return true;
-            default:
-                return false;
-        }
+        return assignToFamily;
     }
 
     public void OnSelected()
@@ -181,6 +177,8 @@ public class Thing
         if(familyChest != null)
             familyChest.Update();
 
+        if(coop != null)
+            coop.Update();
     }
 
     public void DrawGizmos()
@@ -190,6 +188,9 @@ public class Thing
 
         if(agent != null)
             agent.DrawGizmos();
+
+        if(coop != null)
+            coop.DrawGizmos();
 
 #if UNITY_EDITOR
                

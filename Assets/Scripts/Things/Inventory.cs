@@ -35,6 +35,11 @@ public class Inventory
         return _holding != null;
     }
 
+    public bool IsHoldingSomethingToEat()
+    {
+        return _holding != null && _holding.type == TypeOfThing.Mushroom;
+    }
+
     public bool IsHolding(TypeOfThing type)
     {
         return _holding != null && _holding.type == type;

@@ -45,7 +45,7 @@ public class Construction
             return false;
         if(ConstructAtPosition(current.gridPosition))
             return false;
-        return current.floor && current.buildOn;
+        return current.buildOn;
     }
 
     public void Construct()

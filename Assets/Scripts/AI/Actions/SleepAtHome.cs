@@ -67,4 +67,9 @@ public class SleepAtHome : GOAPAction
     {
         _started = false;
     }
+
+    public override string ToString()
+    {
+        return "Sleeping At Home";
+    }
 }

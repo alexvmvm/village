@@ -24,4 +24,9 @@ public class DrinkFromStream : MoveGOAPAction
     {
         return true;
     }
+
+    public override string ToString()
+    {
+        return "Drinking from Stream";
+    }
 }

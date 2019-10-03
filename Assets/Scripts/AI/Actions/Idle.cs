@@ -35,7 +35,7 @@ public class Idle : GOAPAction
         if(!_movement.IsPathPossible(_target))
             return false;
 
-        _timeToWait = Random.Range(0, 10);
+        _timeToWait = Random.Range(0, 4);
 
         return true;
     }

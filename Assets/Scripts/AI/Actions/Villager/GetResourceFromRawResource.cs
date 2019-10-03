@@ -24,6 +24,8 @@ public class GetResourceFromRawResource : MoveGOAPAction
                 return TypeOfThing.Wood;
             case TypeOfThing.Rock:
                 return TypeOfThing.Stone;
+            case TypeOfThing.Mushroom:
+                return TypeOfThing.Mushroom;
             default:
                 throw new System.Exception(string.Format("Unknown raw resource conversion {0}", rawResource));
         }
@@ -50,5 +52,10 @@ public class GetResourceFromRawResource : MoveGOAPAction
             _game.CreateAndAddThing(TypeOfThing.Grass, _target.gridPosition.x, _target.gridPosition.y);
         
         return true;
+    }
+
+    public override string ToString()
+    {
+        return $"Getting {RawResourceToProcessed(_type).ToString()}";
     }
 }

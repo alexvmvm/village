@@ -18,6 +18,7 @@ public enum TypeOfThing
     Villager,
     Chicken,
     Chick,
+    Cockerel,
     WoodFloor,
     WoodWall,
     StoneFloor,
@@ -26,8 +27,14 @@ public enum TypeOfThing
     WoodWallBlueprint,
     StoneFloorBlueprint,
     StoneWallBlueprint,
+    FenceBlueprint,
+    Fence,
     DoorBlueprint,
     Door,
+    GateBlueprint,
+    Gate,
+    ChickenCoopBlueprint,
+    ChickenCoop,
     BedBlueprint,
     Bed,
     FamilyChest,
@@ -181,6 +188,14 @@ public class Game : MonoBehaviour
             var y = UnityEngine.Random.Range(0, MapSize.y);
 
             AddThing(Create(TypeOfThing.Chick, x, y));
+        }
+
+        for(var i = 0; i < 3; i++) 
+        {
+            var x = UnityEngine.Random.Range(0, MapSize.x);
+            var y = UnityEngine.Random.Range(0, MapSize.y);
+
+            AddThing(Create(TypeOfThing.Cockerel, x, y));
         }
 
         _zoneGraph.Start();
@@ -382,7 +397,6 @@ public class Game : MonoBehaviour
                 thing.name = "rock";
                 thing.sprite = "stone_1";
                 thing.fixedToGrid = true;
-                thing.floor = true;
                 thing.pathTag = "foliage";
                 break;
             case TypeOfThing.Stone:
@@ -398,6 +412,13 @@ public class Game : MonoBehaviour
                 thing.playerBuiltFloor = true;
                 thing.buildOn = true;
             break;
+            case TypeOfThing.WoodFloorBlueprint:
+                thing.name = "Wood";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodFloor, ConstructionGroup.Floors, TypeOfThing.Wood);
+                break;
             case TypeOfThing.WoodWall:
                 thing.name = "wood wall";
                 thing.sprite = "colored_98";
@@ -410,28 +431,6 @@ public class Game : MonoBehaviour
                     "colored_98", "colored_98", "colored_98", "colored_98",
                     "colored_98", "colored_98", "colored_98");
             break;
-            case TypeOfThing.StoneFloor:
-                thing.name = "stone floor";
-                thing.sprite = "colored_416";
-                thing.fixedToGrid = true;
-                thing.floor = true;
-                thing.playerBuiltFloor = true;
-                thing.buildOn = true;
-            break;
-            case TypeOfThing.StoneWall:
-                thing.name = "stone wall";
-                thing.sprite = "colored_580";
-                thing.fixedToGrid = true;
-                thing.pathTag = "blocking";
-                thing.pipe = true;
-            break;
-            case TypeOfThing.WoodFloorBlueprint:
-                thing.name = "Wood";
-                thing.sprite = "colored_transparent_855";
-                thing.floor = true;
-                thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodFloor, ConstructionGroup.Floors, TypeOfThing.Wood);
-                break;
             case TypeOfThing.WoodWallBlueprint:
                 thing.name = "Wood";
                 thing.sprite = "colored_transparent_855";
@@ -440,6 +439,34 @@ public class Game : MonoBehaviour
                 thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodWall, ConstructionGroup.Walls, TypeOfThing.Wood);
                 thing.pipe = true;
                 break;
+            case TypeOfThing.Fence:
+                thing.name = "fence";
+                thing.sprite = "colored_98";
+                thing.fixedToGrid = true;
+                thing.pipe = true;
+                thing.pathTag = "blocking";
+                thing.tileRule = new TileRuleDefinition(
+                    "colored_98", "colored_98", "colored_98", "colored_98", 
+                    "colored_98", "colored_98", "colored_98", "colored_98",
+                    "colored_98", "colored_98", "colored_98", "colored_98",
+                    "colored_98", "colored_98", "colored_98");
+            break;
+            case TypeOfThing.FenceBlueprint:
+                thing.name = "fence";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Fence, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.pipe = true;
+                break;
+            case TypeOfThing.StoneFloor:
+                thing.name = "stone floor";
+                thing.sprite = "colored_416";
+                thing.fixedToGrid = true;
+                thing.floor = true;
+                thing.playerBuiltFloor = true;
+                thing.buildOn = true;
+            break;
             case TypeOfThing.StoneFloorBlueprint:
                 thing.name = "Stone";
                 thing.sprite = "colored_transparent_855";
@@ -447,6 +474,13 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
                 thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneFloor, ConstructionGroup.Floors, TypeOfThing.Stone);
                 break;
+            case TypeOfThing.StoneWall:
+                thing.name = "stone wall";
+                thing.sprite = "colored_580";
+                thing.fixedToGrid = true;
+                thing.pathTag = "blocking";
+                thing.pipe = true;
+            break;
             case TypeOfThing.StoneWallBlueprint:
                 thing.name = "Stone";
                 thing.sprite = "colored_transparent_855";
@@ -464,11 +498,31 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Door, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.construction = new Construction(
+                    this, thing, 
+                    TypeOfThing.Grass | TypeOfThing.WoodWall | TypeOfThing.StoneWall, 
+                    TypeOfThing.Door, ConstructionGroup.Furniture, TypeOfThing.Wood);
                 break;
             case TypeOfThing.Door:
                 thing.name = "Door";
                 thing.sprite = "colored_297";
+                thing.fixedToGrid = true;
+                thing.floor = true;
+                break;
+
+            case TypeOfThing.GateBlueprint:
+                thing.name = "Gate";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(
+                    this, thing, 
+                    TypeOfThing.Grass | TypeOfThing.Fence, 
+                    TypeOfThing.Gate, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                break;
+            case TypeOfThing.Gate:
+                thing.name = "Gate";
+                thing.sprite = "colored_99";
                 thing.fixedToGrid = true;
                 thing.floor = true;
                 break;
@@ -501,6 +555,23 @@ public class Game : MonoBehaviour
                 thing.familyChest = new FamilyChest(this, thing);
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.fixedToGrid = true;
+                thing.assignToFamily = true;
+            break;
+
+            case TypeOfThing.ChickenCoopBlueprint:
+                thing.name = "Coop";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.ChickenCoop, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
+            case TypeOfThing.ChickenCoop:
+                thing.name = "Coop";
+                thing.sprite = "colored_265";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.coop = new Coop(this, thing);
+                thing.fixedToGrid = true;
+                thing.assignToFamily = true;
             break;
 
             /*
@@ -518,6 +589,13 @@ public class Game : MonoBehaviour
                 thing.name = "Chicken";
                 thing.sprite = "colored_transparent_249";
                 thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.agent = new Animal(this, thing);
+            break;
+            case TypeOfThing.Cockerel:
+                thing.name = "Cockerl";
+                thing.sprite = "colored_transparent_249";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.color = Color.red;
                 thing.agent = new Animal(this, thing);
             break;
             case TypeOfThing.Chick:
@@ -579,6 +657,11 @@ public class Game : MonoBehaviour
         return Things
             .Where(t => t.type == TypeOfThing.FamilyChest && t.belongsToFamily == lastname)
             .FirstOrDefault();
+    }
+    
+    public IEnumerable<Thing> FindCoopsForFamily(string lastname)
+    {
+        return Things.Where(t => t.type == TypeOfThing.ChickenCoop && t.belongsToFamily == lastname);
     }
 
     public Vector3 GetVillageExit()

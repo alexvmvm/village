@@ -18,15 +18,13 @@ public class ActionPanel : MonoBehaviour
         if(thing == null)
             return;
 
-        switch(thing.type)
+        if(thing.assignToFamily)
         {
-            case TypeOfThing.FamilyChest:
-                AssignFamily.gameObject.SetActive(true);
-                AssignFamily.onClick.RemoveAllListeners();
-                AssignFamily.onClick.AddListener(() => {
-                    AssignFamilyPanel.Setup(thing);
-                });
-            break;
+            AssignFamily.gameObject.SetActive(true);
+            AssignFamily.onClick.RemoveAllListeners();
+            AssignFamily.onClick.AddListener(() => {
+                AssignFamilyPanel.Setup(thing);
+            });
         }
     }
 

@@ -32,6 +32,11 @@ public abstract class GOAPAction
     abstract public bool IsPossibleToPerform();
 
     abstract public void Reset();
+
+    public override string ToString()
+    {
+        return this.GetType().ToString();
+    }
 }
 
 
