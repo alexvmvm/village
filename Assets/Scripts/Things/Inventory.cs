@@ -17,6 +17,10 @@ public class Inventory
     public void HoldThing(Thing thing)
     {
         _holding = thing;
+
+        if(_holding.agent != null)
+            _holding.agent.PauseAgent();
+
         _holding.transform.SetParent(_parent.transform);
         _holding.transform.localPosition = Vector3.up;
     }

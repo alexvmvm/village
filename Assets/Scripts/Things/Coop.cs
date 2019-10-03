@@ -11,7 +11,6 @@ public class Coop
     private HashSet<Thing> _seen;
     private Queue<Thing> _queue;
     private Color _color;
-    private Thing _cockeral;
     private Thing _chicken;
     
     public Coop(Game game, Thing thing)
@@ -24,10 +23,10 @@ public class Coop
 
         _beds = new List<Thing>();
     }
-
+    
     public bool IsSetup()
     {
-        return HasChicken() && HasCockeral();
+        return HasChicken();
     }
 
     public bool HasChicken()
@@ -35,19 +34,10 @@ public class Coop
         return _chicken != null;
     }
 
-    public bool HasCockeral()
-    {
-        return _cockeral != null;
-    }
-
-    public void AddCockeral(Thing thing)
-    {
-        _cockeral = thing;
-    }
-
     public void AddChicken(Thing thing)
     {
         _chicken = thing;
+        _chicken.transform.position = _thing.transform.position;
     }
 
     public void Update()
@@ -75,7 +65,7 @@ public class Coop
                 if(neighbour == null)
                     continue;
 
-                if(neighbour.floor)
+                if(neighbour.floor && neighbour.type != TypeOfThing.Gate)
                     _queue.Enqueue(neighbour);
                 
             }

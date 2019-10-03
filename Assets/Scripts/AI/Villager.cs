@@ -96,6 +96,13 @@ public class Villager : Agent
             Cost = 99999 // last resort
         }); 
 
+        /*
+            Farming
+        */
+        AddAction(new FillCoop(_game, _movement, this, thing.inventory) {
+            Preconditions   = { { "hasChicken", true } },
+            Effects         = { { "isWorking", true }, { "hasChicken", false }  }
+        });
 
         /*
             Survival
@@ -139,6 +146,11 @@ public class Villager : Agent
         AddAction(new GetResource(_game, _movement, TypeOfThing.Stone, thing.inventory) {
             Preconditions   = { { "hasStone", false },  { "hasFullInventory", false } },
             Effects         = { { "hasStone", true },   { "hasFullInventory", true } }
+        });
+
+        AddAction(new GetResource(_game, _movement, TypeOfThing.Chicken, thing.inventory) {
+            Preconditions   = { { "hasChicken", false },  { "hasFullInventory", false } },
+            Effects         = { { "hasChicken", true },   { "hasFullInventory", true } }
         });
          
 
@@ -241,6 +253,7 @@ public class Villager : Agent
         _world["hasWood"] = _thing.inventory.IsHolding(TypeOfThing.Wood);
         _world["hasStone"] =  _thing.inventory.IsHolding(TypeOfThing.Stone);
         _world["hasMushroom"] = _thing.inventory.IsHolding(TypeOfThing.Mushroom);
+        _world["hasChicken"] = _thing.inventory.IsHolding(TypeOfThing.Chicken);
 
         _world["hasSomethingToEat"] = _thing.inventory.IsHoldingSomethingToEat();
         _world["hasFullInventory"] = _thing.inventory.IsHoldingSomething();

@@ -26,6 +26,21 @@ public class Animal : Agent
         }); 
     }
 
+    public override void PauseAgent()
+    {
+        base.PauseAgent();
+
+        _movement.CancelCurrentPath();
+        _movement.SetStopped(true);
+    }
+
+    public override void UnPauseAgent()
+    {
+        base.UnPauseAgent();
+
+        _movement.SetStopped(false);
+    }
+
     public override void ActionCompleted(GOAPAction action)
     {
         

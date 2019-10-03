@@ -9,7 +9,8 @@ public enum AgentState
     Planning,
     Picking,
     Performing,
-    Completed
+    Completed,
+    Paused
 }
 
 public struct Task
@@ -100,6 +101,16 @@ public abstract class Agent
         }
     }
 
+    public virtual void PauseAgent()
+    {
+        _state = AgentState.Paused;
+    }
+
+    public virtual void UnPauseAgent()
+    {
+        _state = AgentState.Planning;
+    }
+
     public virtual void Update()
     {
         switch(_state)
@@ -138,6 +149,8 @@ public abstract class Agent
                 _current = null;
                 _state = AgentState.Planning;
             }
+            break;
+            case AgentState.Paused:
             break;
         }
     }
