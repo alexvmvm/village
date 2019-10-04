@@ -392,7 +392,6 @@ public class Game : MonoBehaviour
                 thing.group = 1;
                 thing.positionalAudioGroup = "river";
                 thing.pathTag = "blocking";
-                thing.resource = true;
                 break;
             case TypeOfThing.Path:
                 thing.name = "path";
@@ -417,6 +416,7 @@ public class Game : MonoBehaviour
                 // thing.pathTag = "foliage";
                 thing.resource = true;
                 thing.produces = TypeOfThing.Wood;
+                thing.hitpoints = 20;
                 break;
             case TypeOfThing.BerryBush:
                 thing.name = "apple tree";
@@ -426,6 +426,7 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 thing.edible = true;
                 thing.resource = true;
+                thing.hitpoints = 20;
                 break;
             case TypeOfThing.Mushroom:
                 thing.name = "mushroom";
@@ -435,6 +436,7 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 thing.edible = true;
                 thing.resource = true;
+                thing.hitpoints = 1;
                 break;
             case TypeOfThing.Wood:
                 thing.name = "Log";
@@ -448,7 +450,7 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.resource = true;
                 thing.produces = TypeOfThing.Wood;
-                thing.hitpoints = 20;
+                thing.hitpoints = 5;
                 thing.fixedToGrid = true;
             break;
             case TypeOfThing.Rock:
@@ -459,6 +461,7 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 thing.resource = true;
                 thing.produces = TypeOfThing.Stone;
+                thing.hitpoints = 20;
                 break;
             case TypeOfThing.Stone:
                 thing.name = "stone";
@@ -472,6 +475,7 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.resource = true;
                 thing.floor = true;
+                thing.hitpoints = 10;
                 break;
             case TypeOfThing.Ore:
                 thing.name = "ore";
@@ -479,6 +483,7 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.resource = true;
                 thing.floor = true;
+                thing.hitpoints = 5;
                 break;
             case TypeOfThing.WoodFloor:
                 thing.name = "wood floor";

@@ -45,6 +45,14 @@ public class Thing
     public Coop coop;
     public Inventory inventory;
 
+    /*
+        Show Label
+    */
+    public bool showLabel;
+
+    private TextMesh _textMesh;
+    private GameObject _labelObj;
+
     public Thing(TypeOfThing type, Transform transform)
     {
         this.type = type;
@@ -62,6 +70,20 @@ public class Thing
                 Mathf.FloorToInt(transform.position.x),
                 Mathf.FloorToInt(transform.position.y));
         }
+    }
+
+    public void SetLabel(string label)
+    {
+        if(_labelObj == null)
+        {
+            _labelObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Label"));    
+            _labelObj.transform.SetParent(transform);
+            _labelObj.transform.localPosition = new Vector3(0, -0.8f, 0);
+            _labelObj.GetComponentInChildren<MeshRenderer>().sortingOrder = (int)SortingOrders.Labels;
+            _textMesh = _labelObj.GetComponentInChildren<TextMesh>();
+        }
+
+        _textMesh.text = label;
     }
 
     public void Setup()
@@ -179,6 +201,9 @@ public class Thing
             game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
         }
 
+        if(_labelObj != null)
+            GameObject.Destroy(_labelObj);
+
         transform.gameObject.SetActive(false);
         game.Things.Remove(this);
     }
@@ -193,6 +218,9 @@ public class Thing
 
         if(coop != null)
             coop.Update();
+
+        if(resource)
+            SetLabel($"x{hitpoints}");
     }
 
     public void DrawGizmos()
