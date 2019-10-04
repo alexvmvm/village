@@ -332,6 +332,13 @@ public class Game : MonoBehaviour
                     OnThingAdded(thing);
         }
 
+        switch(thing.type)
+        {
+            case TypeOfThing.Villager:
+                EventManager.TriggerEvent(Constants.VILLAGER_ARRIVED);
+            break;
+        }
+
         return thing;
     }
 

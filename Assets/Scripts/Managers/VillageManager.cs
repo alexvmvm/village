@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 
 public enum VillagerEvent
@@ -13,12 +14,51 @@ public enum VillagerEvent
 public class VillageManager : MonoBehaviour
 {
     public VillagerArrivedPanel VillagerArrivedPanel;
+    public ObjectPooler FamilyPanels;
 
     private Game _game;
 
     void Awake()
     {
         _game = FindObjectOfType<Game>();
+    }
+
+    void OnEnable()
+    {
+        EventManager.StartListening(Constants.VILLAGER_ARRIVED, UpdateFamilyPanels);
+        EventManager.StartListening(Constants.VILLAGER_LEFT, UpdateFamilyPanels);
+    }
+
+    public IEnumerable<IGrouping<string, Thing>> GetFamiliesByLastname()
+    {
+        return _game.Things
+            .Where(t => t.type == TypeOfThing.Villager)
+            .GroupBy(t => (t.agent as Villager).Lastname);
+    }
+
+    void UpdateFamilyPanels()
+    {
+        FamilyPanels.DeactivateAll();
+        foreach(var group in GetFamiliesByLastname())
+        {
+            var obj = FamilyPanels.GetPooledObject();
+            obj.GetComponentInChildren<Text>().text = group.Key;
+
+            // var familyPanel = obj.GetComponent<FamilyPanel>();
+            // familyPanel.FamilyName.text = group.Key;
+
+            // familyPanel.PeoplePooler.DeactivateAll();
+            // foreach(var thing in group)
+            // {
+            //     var personObj = familyPanel.PeoplePooler.GetPooledObject();
+            //     personObj.GetComponentInChildren<Text>().text = (thing.agent as Villager).Fullname;
+            //     personObj.SetActive(true);
+            // }
+
+            obj.SetActive(true);
+        }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(FamilyPanels.transform as RectTransform);
     }
 
     public IEnumerable<string> GetDistinctSurnames()

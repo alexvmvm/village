@@ -49,15 +49,15 @@ public class Villager : ThingAgent
             Misc
         */
 
-        AddAction(new RequestResidence(_game, _thing) {
-            Preconditions   = { { "hasRequestedResidence", false } },
-            Effects         = { { "hasRequestedResidence", true } },
-        });
+        // AddAction(new RequestResidence(_game, _thing) {
+        //     Preconditions   = { { "hasRequestedResidence", false } },
+        //     Effects         = { { "hasRequestedResidence", true } },
+        // });
 
-        AddAction(new LeaveVillage(_game, _movement, _thing, this) {
-            Preconditions   = { { "hasLeftVillage", false } },
-            Effects         = { { "hasLeftVillage", true } },
-        });
+        // AddAction(new LeaveVillage(_game, _movement, _thing, this) {
+        //     Preconditions   = { { "hasLeftVillage", false } },
+        //     Effects         = { { "hasLeftVillage", true } },
+        // });
 
         AddAction(new Drop(_game, _thing) {
             Preconditions   = { { "hasFullInventory", true } },
@@ -169,7 +169,6 @@ public class Villager : ThingAgent
             Preconditions   = { { "hasThing", TypeOfThing.Clay } },
             Effects         = { { "isWorking", true }, }
         });
-
     }
 
     public override void ActionCompleted(GOAPAction action)
@@ -217,15 +216,17 @@ public class Villager : ThingAgent
     public override Dictionary<string, object> GetGoal()
     {
         _goal.Clear();
-        if(!_requestedResidence)
-        {
-            _goal["hasRequestedResidence"] = true;
-        }
-        else if(ShouldLeaveVillage())
-        {
-            _goal["hasLeftVillage"] = true;
-        }
-        else if(_game.WorldTime.GetTimeOfDay() == TimeOfDay.Night)
+        // if(!_requestedResidence)
+        // {
+        //     _goal["hasRequestedResidence"] = true;
+        // }
+        // else if(ShouldLeaveVillage())
+        // {
+        //     _goal["hasLeftVillage"] = true;
+        // }
+        // else 
+        
+        if(_game.WorldTime.GetTimeOfDay() == TimeOfDay.Night)
         {
             _goal["isSleeping"] = true;
         }
