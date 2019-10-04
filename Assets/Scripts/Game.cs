@@ -18,6 +18,7 @@ public enum TypeOfThing
     BerryBush,
     Mushroom,
     Wood,
+    FallenWood,
     Villager,
     Hen,
     Chick,
@@ -43,7 +44,8 @@ public enum TypeOfThing
     FamilyChest,
     FamilyChestBlueprint,
     Kiln,
-    KilnBlueprint
+    KilnBlueprint,
+    Axe
 }
 
 
@@ -200,6 +202,14 @@ public class Game : MonoBehaviour
             AddThing(Create(TypeOfThing.Stream, x, y));
             rand = UnityEngine.Random.Range(0, 2);
             AddThing(Create(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, x + 1, y));
+        }
+
+        for(var i = 0; i < 20; i++)
+        {
+            var x = UnityEngine.Random.Range(0, MapSize.x);
+            var y = UnityEngine.Random.Range(0, MapSize.y);
+
+            CreateAndAddThing(TypeOfThing.FallenWood, x, y);
         }
 
         // for(var i = 0; i < 5; i++) 
@@ -400,17 +410,20 @@ public class Game : MonoBehaviour
             case TypeOfThing.Tree:
                 thing.name = "tree";
                 thing.sprite = "tree_1";
-                thing.fixedToGrid = false;
+                thing.fixedToGrid = true;
                 thing.tileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
                 thing.positionalAudioGroup = "trees";
-                thing.pathTag = "foliage";
+                thing.floor = true;
+                // thing.pathTag = "foliage";
                 thing.resource = true;
+                thing.produces = TypeOfThing.Wood;
                 break;
             case TypeOfThing.BerryBush:
                 thing.name = "apple tree";
                 thing.sprite = "colored_68";
                 thing.fixedToGrid = true;
-                thing.pathTag = "foliage";
+                // thing.pathTag = "foliage";
+                thing.floor = true;
                 thing.edible = true;
                 thing.resource = true;
                 break;
@@ -418,7 +431,8 @@ public class Game : MonoBehaviour
                 thing.name = "mushroom";
                 thing.sprite = "colored_71";
                 thing.fixedToGrid = true;
-                thing.pathTag = "foliage";
+                // thing.pathTag = "foliage";
+                thing.floor = true;
                 thing.edible = true;
                 thing.resource = true;
                 break;
@@ -428,12 +442,23 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.resource = true;
             break;
+            case TypeOfThing.FallenWood:
+                thing.name = "Log";
+                thing.sprite = "colored_70";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.resource = true;
+                thing.produces = TypeOfThing.Wood;
+                thing.hitpoints = 20;
+                thing.fixedToGrid = true;
+            break;
             case TypeOfThing.Rock:
                 thing.name = "rock";
                 thing.sprite = "stone_1";
                 thing.fixedToGrid = true;
-                thing.pathTag = "foliage";
+                // thing.pathTag = "foliage";
+                thing.floor = true;
                 thing.resource = true;
+                thing.produces = TypeOfThing.Stone;
                 break;
             case TypeOfThing.Stone:
                 thing.name = "stone";
@@ -445,15 +470,15 @@ public class Game : MonoBehaviour
                 thing.name = "clay";
                 thing.sprite = "colored_1";
                 thing.fixedToGrid = true;
-                thing.pathTag = "foliage";
                 thing.resource = true;
+                thing.floor = true;
                 break;
             case TypeOfThing.Ore:
                 thing.name = "ore";
                 thing.sprite = "colored_4";
                 thing.fixedToGrid = true;
-                thing.pathTag = "foliage";
                 thing.resource = true;
+                thing.floor = true;
                 break;
             case TypeOfThing.WoodFloor:
                 thing.name = "wood floor";
@@ -614,7 +639,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Kiln, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Kiln, ConstructionGroup.Furniture, TypeOfThing.Clay);
             break;
             case TypeOfThing.Kiln:
                 thing.name = "Kiln";
@@ -639,6 +664,11 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.assignToFamily = true;
             break;
+            case TypeOfThing.Axe:
+                thing.name = "axe";
+                thing.sprite = "colored_transparent_937";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                break;
 
             /*
                 Objects
