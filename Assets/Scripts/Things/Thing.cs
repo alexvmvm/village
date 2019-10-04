@@ -24,6 +24,18 @@ public class Thing
     public bool wall;
     public bool buildOn;
     public bool pipe;
+    public bool edible;
+    
+    /*
+        Get Thing
+    */
+    public bool resource;
+    public TypeOfThing produces;
+    public TypeOfThing requiredToGet;
+    
+    /*
+        Audio
+    */
     public string positionalAudioGroup;
     public string pathTag;
     public bool walkable = true;
@@ -38,6 +50,8 @@ public class Thing
         this.type = type;
         this.transform = transform;
         this.spriteRenderer = transform.GetComponent<SpriteRenderer>();
+        this.produces = type;
+        this.requiredToGet = TypeOfThing.None;
     }
 
     public Vector2Int gridPosition

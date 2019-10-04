@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Villager : Agent
+public class Villager : ThingAgent
 {
     public string Firstname { get { return _firstname; } }
     public string Lastname { get { return _lastname; } }
@@ -12,16 +12,14 @@ public class Villager : Agent
     private string _firstname;
     private string _lastname;
     private bool _requestedResidence;
-    private Dictionary<string, bool> _goal;
-    private Dictionary<string, bool> _world;
+    private Dictionary<string, object> _goal;
+    private Dictionary<string, object> _world;
     private VillageManager _villagerManager;
     private Thing _familyChestThing;
-    private Thing _thing;
     private Movement _movement;
     private float _idleTime;
     private bool _leaveVillage;
     private int _nightsSleptInHome;
-    private TextMesh _textMesh;
 
     /* 
         Survival
@@ -30,7 +28,7 @@ public class Villager : Agent
     private bool _thirsty;
     private bool _hungry;
 
-    public Villager(Game game, Thing thing) : base(game)
+    public Villager(Game game, Thing thing) : base(game, thing)
     {
         _thing = thing;
         _movement = _thing.transform.gameObject.AddComponent<Movement>();
@@ -40,22 +38,12 @@ public class Villager : Agent
 
         _thing.name = string.Format("{0} {1}", _firstname, _lastname);
 
-        _goal = new Dictionary<string, bool>();
-        _world = new Dictionary<string, bool>();
+        _goal = new Dictionary<string, object>();
+        _world = new Dictionary<string, object>();
 
         _villagerManager = MonoBehaviour.FindObjectOfType<VillageManager>();
 
-        /*
-            Name Label 
-        */
-        var labelObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Label"));    
-        labelObj.transform.SetParent(_thing.transform);
-        labelObj.transform.localPosition = new Vector3(0, -0.8f, 0);
 
-        _textMesh = labelObj.GetComponentInChildren<TextMesh>();
-        _textMesh.text = Fullname;
-        labelObj.GetComponentInChildren<MeshRenderer>().sortingOrder = (int)SortingOrders.Labels;
-      
 
         /*
             Misc
@@ -148,7 +136,7 @@ public class Villager : Agent
             Effects         = { { "hasStone", true },   { "hasFullInventory", true } }
         });
 
-        AddAction(new GetResource(_game, _movement, TypeOfThing.Chicken, thing.inventory) {
+        AddAction(new GetResource(_game, _movement, TypeOfThing.Hen, thing.inventory) {
             Preconditions   = { { "hasChicken", false },  { "hasFullInventory", false } },
             Effects         = { { "hasChicken", true },   { "hasFullInventory", true } }
         });
@@ -212,7 +200,7 @@ public class Villager : Agent
         return _idleTime > _game.WorldTime.SecondsInADay && FamilyChest == null;
     }
 
-    public override Dictionary<string, bool> GetGoal()
+    public override Dictionary<string, object> GetGoal()
     {
         _goal.Clear();
         if(!_requestedResidence)
@@ -239,7 +227,7 @@ public class Villager : Agent
         return _goal;
     }
 
-    public override Dictionary<string, bool> GetWorldState()
+    public override Dictionary<string, object> GetWorldState()
     {
         _familyChestThing = _game.FindChestForFamily(Lastname);
 
@@ -253,7 +241,7 @@ public class Villager : Agent
         _world["hasWood"] = _thing.inventory.IsHolding(TypeOfThing.Wood);
         _world["hasStone"] =  _thing.inventory.IsHolding(TypeOfThing.Stone);
         _world["hasMushroom"] = _thing.inventory.IsHolding(TypeOfThing.Mushroom);
-        _world["hasChicken"] = _thing.inventory.IsHolding(TypeOfThing.Chicken);
+        _world["hasChicken"] = _thing.inventory.IsHolding(TypeOfThing.Hen);
 
         _world["hasSomethingToEat"] = _thing.inventory.IsHoldingSomethingToEat();
         _world["hasFullInventory"] = _thing.inventory.IsHoldingSomething();
@@ -280,8 +268,7 @@ public class Villager : Agent
 
         _idleTime += Time.deltaTime;
         
-        _textMesh.text = $"{Fullname}\n{(CurentAction == null ? "" : CurentAction.ToString())}";
-        _textMesh.transform.rotation = Quaternion.identity;
+        SetLabel($"{Fullname}\n{(CurentAction == null ? "" : CurentAction.ToString())}");
     }
 
     public override void DrawGizmos()

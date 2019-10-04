@@ -36,7 +36,7 @@ namespace Tests
 
             game.MoveToDay();
             
-            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Chicken || t.type == TypeOfThing.Villager).ToArray())
+            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Hen || t.type == TypeOfThing.Villager).ToArray())
                 thing.Destroy();
 
             for(var x = 0; x < game.MapSize.x; x++)
@@ -73,7 +73,7 @@ namespace Tests
 
             game.MoveToDay();
             
-            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Chicken || t.type == TypeOfThing.Villager).ToArray())
+            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Hen || t.type == TypeOfThing.Villager).ToArray())
                 thing.Destroy();
 
             for(var x = 0; x < game.MapSize.x; x++)
@@ -109,7 +109,7 @@ namespace Tests
 
             game.MoveToDay();
             
-            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Chicken || t.type == TypeOfThing.Villager).ToArray())
+            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Hen || t.type == TypeOfThing.Villager).ToArray())
                 thing.Destroy();
 
             for(var x = 0; x < game.MapSize.x; x++)
@@ -159,7 +159,7 @@ namespace Tests
 
             game.MoveToDay();
             
-            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Chicken || t.type == TypeOfThing.Villager).ToArray())
+            foreach(var thing in game.Things.Where(t => t.type == TypeOfThing.Chick || t.type == TypeOfThing.Hen || t.type == TypeOfThing.Villager).ToArray())
                 thing.Destroy();
 
             for(var x = 0; x < game.MapSize.x; x++)

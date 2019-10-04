@@ -10,16 +10,8 @@ public class ManualPlacementPanel : MonoBehaviour
     public ObjectPooler ButtonPooler;
     public Game Game;
 
-    private List<Thing> _things;
-
     void Start()
     {
-        _things = new List<Thing>();
-        foreach(TypeOfThing thingType in Enum.GetValues(typeof(TypeOfThing)))
-        {
-            _things.Add(Game.Create(thingType));
-        }
-
         SetupButtons();
     }
 
@@ -27,7 +19,7 @@ public class ManualPlacementPanel : MonoBehaviour
     {
          ButtonPooler.DeactivateAll();
         
-        foreach(var thing in _things)
+        foreach(var thing in Game.AllThings)
         {
             var obj = ButtonPooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();

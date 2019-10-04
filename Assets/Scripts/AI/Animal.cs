@@ -2,27 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Animal : Agent
+public class Animal : ThingAgent
 {
-    private Dictionary<string, bool> _goal;
-    private Dictionary<string, bool> _world;
+    public Thing Coop;
+    private Dictionary<string, object> _goal;
+    private Dictionary<string, object> _world;
     private Movement _movement;
-    private Thing _thing;
 
-    public Animal(Game game, Thing thing) : base(game)
+    public Animal(Game game, Thing thing) : base(game, thing)
     {
         _thing = thing;
         _movement = _thing.transform.gameObject.AddComponent<Movement>();
 
-        _goal = new Dictionary<string, bool>();
-        _world = new Dictionary<string, bool>();
+        _goal = new Dictionary<string, object>();
+        _world = new Dictionary<string, object>();
 
-        _world.Add("isIdle", true);
-        _goal.Add("isIdle", false);
+        AddAction(new IdleInCoop(_game, _movement, this) {
+            Effects         = { { "isIdle", false } },
+            Preconditions   = { { "isIdle", true },     { "isInCoop", true } }
+        });
 
         AddAction(new Idle(_game, _movement) {
             Effects         = { { "isIdle", false } },
-            Preconditions   = { { "isIdle", true } }
+            Preconditions   = { { "isIdle", true } },
+            Cost = 10
         }); 
     }
 
@@ -46,13 +49,23 @@ public class Animal : Agent
         
     }
 
-    public override Dictionary<string, bool> GetGoal()
+    public override Dictionary<string, object> GetGoal()
     {
+        _goal["isIdle"] = false;
         return _goal;
     }
 
-    public override Dictionary<string, bool> GetWorldState()
+    public override Dictionary<string, object> GetWorldState()
     {
+        _world["isIdle"] = true;
+        _world["isInCoop"]  = Coop != null;
         return _world;
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        SetLabel($"{_thing.type.ToString()}\n{(CurentAction == null ? "" : CurentAction.ToString())}");
     }
 }

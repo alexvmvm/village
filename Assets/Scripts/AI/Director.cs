@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Director : Agent
 {
-    private Dictionary<string, bool> _goal;
-    private Dictionary<string, bool> _world;
+    private Dictionary<string, object> _goal;
+    private Dictionary<string, object> _world;
 
     public Director(Game game) : base(game)
     {
-        _goal = new Dictionary<string, bool>();
-        _world = new Dictionary<string, bool>();
+        _goal = new Dictionary<string, object>();
+        _world = new Dictionary<string, object>();
 
         AddAction(new SpawnVillager(game) {
             Preconditions = { { "isWorking", false } },
@@ -23,13 +23,13 @@ public class Director : Agent
         
     }
 
-    public override Dictionary<string, bool> GetGoal()
+    public override Dictionary<string, object> GetGoal()
     {
         _goal["isWorking"] = true;
         return _goal;
     }
 
-    public override Dictionary<string, bool> GetWorldState()
+    public override Dictionary<string, object> GetWorldState()
     {
         _world["isWorking"] = false;
         return _world;

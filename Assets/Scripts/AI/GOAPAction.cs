@@ -12,8 +12,8 @@ public struct ActionState
 
 public abstract class GOAPAction
 {
-    public Dictionary<string, bool> Preconditions;
-    public Dictionary<string, bool> Effects;
+    public Dictionary<string, object> Preconditions;
+    public Dictionary<string, object> Effects;
 
     public float Cost = 1f;
 
@@ -23,8 +23,8 @@ public abstract class GOAPAction
     {
         _game = game;
 
-        Preconditions = new Dictionary<string, bool>();
-        Effects = new Dictionary<string, bool>();
+        Preconditions = new Dictionary<string, object>();
+        Effects = new Dictionary<string, object>();
     }
 
     abstract public bool Perform();

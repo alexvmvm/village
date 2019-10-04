@@ -11,8 +11,6 @@ public class BuildingPanel : MonoBehaviour
     public ObjectPooler GroupPooler;
     public ObjectPooler ButtonPooler;
     
-    private List<Thing> _things;
-
     void Awake()
     {
         GroupPooler.DeactivateAll();
@@ -28,25 +26,19 @@ public class BuildingPanel : MonoBehaviour
                 SetupGroupButtons(group);
             });
         }
-
-        _things = new List<Thing>();
-        foreach(TypeOfThing thingType in Enum.GetValues(typeof(TypeOfThing)))
-        {
-            _things.Add(Game.Create(thingType));
-        }
     }
 
     public void SetupGroupButtons(ConstructionGroup group)
     {
         ButtonPooler.DeactivateAll();
         
-        foreach(var thing in _things.Where(t => t.construction != null && t.construction.Group == group))
+        foreach(var thing in Game.AllThings.Where(t => t.construction != null && t.construction.Group == group))
         {
             var obj = ButtonPooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();
             obj.SetActive(true);
 
-            var thingToBuild = _things.Where(t => t.type == thing.construction.BuildType).FirstOrDefault();
+            var thingToBuild = Game.AllThings.Where(t => t.type == thing.construction.BuildType).FirstOrDefault();
             obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Game.GetSprite(thingToBuild.sprite);
 
             var button = obj.GetComponentInChildren<Button>();

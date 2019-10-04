@@ -38,6 +38,15 @@ public class Coop
     {
         _chicken = thing;
         _chicken.transform.position = _thing.transform.position;
+        
+        var animal = _chicken.agent as Animal;
+        animal.Coop = _thing;
+
+    }
+
+    public Vector3 GetRandomPositionInCoop()
+    {
+        return _seen.ToList().Shuffle().FirstOrDefault().gridPosition.ToVector3();
     }
 
     public void Update()

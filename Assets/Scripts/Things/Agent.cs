@@ -52,10 +52,10 @@ public abstract class Agent
 
     public abstract void ActionCompleted(GOAPAction action);
 
-    public abstract Dictionary<string, bool> GetWorldState();
-    public abstract Dictionary<string, bool> GetGoal();
+    public abstract Dictionary<string, object> GetWorldState();
+    public abstract Dictionary<string, object> GetGoal();
 
-    bool Plan(Dictionary<string, bool> world, Dictionary<string, bool> goal, Queue<GOAPAction> plan)
+    bool Plan(Dictionary<string, object> world, Dictionary<string, object> goal, Queue<GOAPAction> plan)
     {
 
         // Reset actions

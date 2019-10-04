@@ -6,19 +6,22 @@ using Pathfinding;
 
 public enum TypeOfThing
 {
+    None,
     Grass,
     Stream,
     Path,
     Rock,
     Stone,
+    Clay,
+    Ore,
     Tree,
-    AppleTree,
+    BerryBush,
     Mushroom,
     Wood,
     Villager,
-    Chicken,
+    Hen,
     Chick,
-    Cockerel,
+    Rooster,
     WoodFloor,
     WoodWall,
     StoneFloor,
@@ -38,7 +41,9 @@ public enum TypeOfThing
     BedBlueprint,
     Bed,
     FamilyChest,
-    FamilyChestBlueprint
+    FamilyChestBlueprint,
+    Kiln,
+    KilnBlueprint
 }
 
 
@@ -67,6 +72,7 @@ public class Game : MonoBehaviour
     public AstarPath AstarPath;
     public Thing[,] Grid;
     public List<Thing> Things;
+    public List<Thing> AllThings;
     public TypeOfThing? CurrentType;
     public WorldTime WorldTime;
     public ThingAdded OnThingAdded;
@@ -111,6 +117,19 @@ public class Game : MonoBehaviour
 
         // create array of things
         Things = new List<Thing>();
+        
+        // setup all things
+        AllThings = new List<Thing>();
+
+        foreach(TypeOfThing thingType in Enum.GetValues(typeof(TypeOfThing)))
+        {
+            if(thingType == TypeOfThing.None)
+                continue;
+            var thing = Create(thingType);
+            if(thing.agent != null)
+                thing.agent.PauseAgent();
+            AllThings.Add(thing);
+        }
 
         // cursor
         _cursor = new GameCursor(this);
@@ -142,17 +161,9 @@ public class Game : MonoBehaviour
                 var noise2 = Mathf.PerlinNoise(x * 1234.1f, y * 1234.1f);
                 var noise3 = Mathf.PerlinNoise(x * 34343.1f, y * 34343.1f);
                 
-                if(x == MapSize.x - 3)
+                if(noise > 0.6f && noise < 0.65f)
                 {
-                    AddThing(Create(TypeOfThing.Stream, x, y));
-                }
-                else if(x == Mathf.FloorToInt(MapSize.x / 2))
-                {
-                    AddThing(Create(TypeOfThing.Path, x, y));
-                }
-                else if(noise > 0.6f && noise < 0.65f)
-                {
-                    AddThing(Create(TypeOfThing.AppleTree, x, y));
+                    AddThing(Create(TypeOfThing.BerryBush, x, y));
                 }
                 else if(noise > 0.65f)
                 {
@@ -174,29 +185,46 @@ public class Game : MonoBehaviour
             }
         }
 
-        for(var i = 0; i < 5; i++) 
+        for(var y = 0; y < MapSize.y; y++)
         {
-            var x = UnityEngine.Random.Range(0, MapSize.x);
-            var y = UnityEngine.Random.Range(0, MapSize.y);
-
-            AddThing(Create(TypeOfThing.Chicken, x, y));
+            var x = Mathf.FloorToInt(MapSize.x / 2);
+            AddThing(Create(TypeOfThing.Path, x, y));
         }
 
-        for(var i = 0; i < 10; i++) 
+        var rand = 0;
+        for(var y = 0; y < MapSize.y; y++)
         {
-            var x = UnityEngine.Random.Range(0, MapSize.x);
-            var y = UnityEngine.Random.Range(0, MapSize.y);
-
-            AddThing(Create(TypeOfThing.Chick, x, y));
+            var x = MapSize.x - 3;
+            rand = UnityEngine.Random.Range(0, 4);
+            AddThing(Create(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, x - 1, y));
+            AddThing(Create(TypeOfThing.Stream, x, y));
+            rand = UnityEngine.Random.Range(0, 2);
+            AddThing(Create(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, x + 1, y));
         }
 
-        for(var i = 0; i < 3; i++) 
-        {
-            var x = UnityEngine.Random.Range(0, MapSize.x);
-            var y = UnityEngine.Random.Range(0, MapSize.y);
+        // for(var i = 0; i < 5; i++) 
+        // {
+        //     var x = UnityEngine.Random.Range(0, MapSize.x);
+        //     var y = UnityEngine.Random.Range(0, MapSize.y);
 
-            AddThing(Create(TypeOfThing.Cockerel, x, y));
-        }
+        //     AddThing(Create(TypeOfThing.Hen, x, y));
+        // }
+
+        // for(var i = 0; i < 10; i++) 
+        // {
+        //     var x = UnityEngine.Random.Range(0, MapSize.x);
+        //     var y = UnityEngine.Random.Range(0, MapSize.y);
+
+        //     AddThing(Create(TypeOfThing.Chick, x, y));
+        // }
+
+        // for(var i = 0; i < 3; i++) 
+        // {
+        //     var x = UnityEngine.Random.Range(0, MapSize.x);
+        //     var y = UnityEngine.Random.Range(0, MapSize.y);
+
+        //     AddThing(Create(TypeOfThing.Rooster, x, y));
+        // }
 
         _zoneGraph.Start();
     }
@@ -354,6 +382,7 @@ public class Game : MonoBehaviour
                 thing.group = 1;
                 thing.positionalAudioGroup = "river";
                 thing.pathTag = "blocking";
+                thing.resource = true;
                 break;
             case TypeOfThing.Path:
                 thing.name = "path";
@@ -371,39 +400,61 @@ public class Game : MonoBehaviour
             case TypeOfThing.Tree:
                 thing.name = "tree";
                 thing.sprite = "tree_1";
-                thing.fixedToGrid = true;
+                thing.fixedToGrid = false;
                 thing.tileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
                 thing.positionalAudioGroup = "trees";
                 thing.pathTag = "foliage";
+                thing.resource = true;
                 break;
-            case TypeOfThing.AppleTree:
+            case TypeOfThing.BerryBush:
                 thing.name = "apple tree";
                 thing.sprite = "colored_68";
                 thing.fixedToGrid = true;
                 thing.pathTag = "foliage";
+                thing.edible = true;
+                thing.resource = true;
                 break;
             case TypeOfThing.Mushroom:
                 thing.name = "mushroom";
                 thing.sprite = "colored_71";
                 thing.fixedToGrid = true;
                 thing.pathTag = "foliage";
+                thing.edible = true;
+                thing.resource = true;
                 break;
             case TypeOfThing.Wood:
                 thing.name = "Log";
                 thing.sprite = "colored_transparent_209";
                 thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.resource = true;
             break;
             case TypeOfThing.Rock:
                 thing.name = "rock";
                 thing.sprite = "stone_1";
                 thing.fixedToGrid = true;
                 thing.pathTag = "foliage";
+                thing.resource = true;
                 break;
             case TypeOfThing.Stone:
                 thing.name = "stone";
                 thing.sprite = "colored_transparent_68";
                 thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.resource = true;
             break;
+            case TypeOfThing.Clay:
+                thing.name = "clay";
+                thing.sprite = "colored_1";
+                thing.fixedToGrid = true;
+                thing.pathTag = "foliage";
+                thing.resource = true;
+                break;
+            case TypeOfThing.Ore:
+                thing.name = "ore";
+                thing.sprite = "colored_4";
+                thing.fixedToGrid = true;
+                thing.pathTag = "foliage";
+                thing.resource = true;
+                break;
             case TypeOfThing.WoodFloor:
                 thing.name = "wood floor";
                 thing.sprite = "colored_16";
@@ -558,6 +609,21 @@ public class Game : MonoBehaviour
                 thing.assignToFamily = true;
             break;
 
+              case TypeOfThing.KilnBlueprint:
+                thing.name = "Kiln";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Kiln, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
+            case TypeOfThing.Kiln:
+                thing.name = "Kiln";
+                thing.sprite = "colored_257";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.fixedToGrid = true;
+                thing.assignToFamily = true;
+            break;
+
             case TypeOfThing.ChickenCoopBlueprint:
                 thing.name = "Coop";
                 thing.sprite = "colored_transparent_855";
@@ -585,13 +651,13 @@ public class Game : MonoBehaviour
                 thing.inventory = new Inventory(thing);
                 thing.agent = new Villager(this, thing);
             break;
-            case TypeOfThing.Chicken:
+            case TypeOfThing.Hen:
                 thing.name = "Chicken";
                 thing.sprite = "colored_transparent_249";
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.agent = new Animal(this, thing);
             break;
-            case TypeOfThing.Cockerel:
+            case TypeOfThing.Rooster:
                 thing.name = "Cockerl";
                 thing.sprite = "colored_transparent_249";
                 thing.sortingOrder = (int)SortingOrders.Objects;

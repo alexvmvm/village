@@ -33,7 +33,7 @@ namespace Tests
         {
             var game = _game.GetComponent<Game>();
 
-            foreach(var chicken in game.Things.Where(t => t.type == TypeOfThing.Chicken).ToArray())
+            foreach(var chicken in game.Things.Where(t => t.type == TypeOfThing.Hen).ToArray())
             {
                 chicken.Destroy();
                 game.RemoveThing(chicken);
@@ -45,7 +45,7 @@ namespace Tests
                 var x = UnityEngine.Random.Range(0, game.MapSize.x);
                 var y = UnityEngine.Random.Range(0, game.MapSize.y);
 
-                var thing = game.Create(TypeOfThing.Chicken, x, y);
+                var thing = game.Create(TypeOfThing.Hen, x, y);
                 game.AddThing(thing);
             }       
 
@@ -53,7 +53,7 @@ namespace Tests
             yield return null;
 
             var count = 0;
-            foreach(var chicken in game.Things.Where(t => t.type == TypeOfThing.Chicken).ToArray())
+            foreach(var chicken in game.Things.Where(t => t.type == TypeOfThing.Hen).ToArray())
             {
                 Assert.IsNotNull(chicken);
                 Assert.IsNotNull(chicken.agent);

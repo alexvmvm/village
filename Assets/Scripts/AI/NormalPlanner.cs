@@ -8,10 +8,10 @@ public class NormalPlanner
     {
 		public Node parent;
 		public float runningCost;
-		public Dictionary<string,bool> state;
+		public Dictionary<string,object> state;
 		public GOAPAction action;
 
-		public Node(Node parent, float runningCost, Dictionary<string,bool> state, GOAPAction action) 
+		public Node(Node parent, float runningCost, Dictionary<string,object> state, GOAPAction action) 
         {
 			this.parent = parent;
 			this.runningCost = runningCost;
@@ -29,12 +29,12 @@ public class NormalPlanner
 		_result = new List<GOAPAction>();
 	}
 
-    bool InState(Dictionary<string,bool> test, Dictionary<string,bool> state) {
+    bool InState(Dictionary<string,object> test, Dictionary<string,object> state) {
 		bool allMatch = true;
-		foreach (KeyValuePair<string,bool> t in test) 
+		foreach (KeyValuePair<string,object> t in test) 
         {
 			bool match = false;
-			foreach (KeyValuePair<string,bool> s in state) 
+			foreach (KeyValuePair<string,object> s in state) 
             {
 				if (s.Equals(t)) 
                 {
@@ -48,7 +48,7 @@ public class NormalPlanner
 		return allMatch;
 	}
 
-    public void BuildPlan(Dictionary<string, bool> agentState, List<GOAPAction> usable, Dictionary<string, bool> goal, Queue<GOAPAction> plan)
+    public void BuildPlan(Dictionary<string, object> agentState, List<GOAPAction> usable, Dictionary<string, object> goal, Queue<GOAPAction> plan)
     {
 		_leaves.Clear();
 		_result.Clear();
@@ -83,9 +83,9 @@ public class NormalPlanner
 
     }
 
-    private Dictionary<string,bool> PopulateState(Dictionary<string,bool> currentState, Dictionary<string,bool> stateChange) {
+    private Dictionary<string,object> PopulateState(Dictionary<string,object> currentState, Dictionary<string,object> stateChange) {
 	    
-        var state = new Dictionary<string,bool> ();
+        var state = new Dictionary<string,object> ();
 		
         // copy the KVPs over as new objects
 		foreach (var s in currentState) 
@@ -112,7 +112,7 @@ public class NormalPlanner
 		return subset;
 	}
 
-    bool BuildPlan(Node parent,  List<Node> leaves, List<GOAPAction> usable, Dictionary<string, bool> goal)
+    bool BuildPlan(Node parent,  List<Node> leaves, List<GOAPAction> usable, Dictionary<string, object> goal)
     {
         bool foundOne = false;
 
