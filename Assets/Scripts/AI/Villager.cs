@@ -120,10 +120,10 @@ public class Villager : ThingAgent
             Effects         = { { "hasThing", TypeOfThing.Mushroom },  { "hasFullInventory", true }, { "hasEdibleThing", true } }
         }); 
 
-        AddAction(new GetResource(_game, _movement, TypeOfThing.Tree, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false }, { "hasThing", TypeOfThing.Axe } },
-            Effects         = { { "hasThing", TypeOfThing.Wood },  { "hasFullInventory", true } }
-        }); 
+        // AddAction(new GetResource(_game, _movement, TypeOfThing.Tree, thing.inventory) {
+        //     Preconditions   = { { "hasFullInventory", false }, { "hasThing", TypeOfThing.Axe } },
+        //     Effects         = { { "hasThing", TypeOfThing.Wood },  { "hasFullInventory", true } }
+        // }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.FallenWood, thing.inventory) {
             Preconditions   = { { "hasFullInventory", false } },
