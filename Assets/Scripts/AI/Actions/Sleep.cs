@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Sleep : GOAPAction
 {
@@ -8,10 +9,25 @@ public class Sleep : GOAPAction
     private Movement _movement;
     private bool _started;
     private Vector3 _target;
-    public Sleep(Game game, Thing thing, Movement movement) : base(game)
+    private Villager _villager;
+
+    public Sleep(Game game, Thing thing, Movement movement, Villager villager) : base(game)
     {
         _thing = thing;
         _movement = movement;
+        _villager = villager;
+    }
+
+
+    Thing FindBed()
+    {
+        return _game.Things
+            .Where(t => 
+                t.type == TypeOfThing.Bed || 
+                t.type == TypeOfThing.ForagedBed && 
+                (t.ownedBy == _villager.Fullname || string.IsNullOrEmpty(t.ownedBy)))
+            .OrderByDescending(t => t.ownedBy == _villager.Fullname)
+            .FirstOrDefault();
     }
 
     public override bool IsDone()
@@ -28,7 +44,20 @@ public class Sleep : GOAPAction
     {
         if(!_started)
         {
-            _target = _thing.transform.position;
+            var bed = FindBed();
+
+            if(bed == null)
+            {
+                _target = _thing.transform.position; 
+            }
+            else
+            {
+                _target = bed.transform.position;   
+                if(bed.ownedBy != _villager.Fullname)
+                    bed.ownedBy = _villager.Fullname;
+            }
+
+            
             _movement.CancelCurrentPath();
             _movement.MoveTo(_target);
             _started = true;
@@ -60,6 +89,6 @@ public class Sleep : GOAPAction
 
     public override string ToString()
     {
-        return "Sleeping on Ground";
+        return "Sleeping";
     }
 }

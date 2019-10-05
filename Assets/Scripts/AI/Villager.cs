@@ -64,12 +64,12 @@ public class Villager : ThingAgent
             Effects         = { { "hasFullInventory", false } },
         });
 
-        AddAction(new SleepAtHome(_game, _thing, _movement, this) {
-            Preconditions   = { { "isSleeping", false }, { "hasFullInventory", false }, { "hasHome", true } },
-            Effects         = { { "isSleeping", true } },
-        });
+        // AddAction(new SleepAtHome(_game, _thing, _movement, this) {
+        //     Preconditions   = { { "isSleeping", false }, { "hasFullInventory", false }, { "hasHome", true } },
+        //     Effects         = { { "isSleeping", true } },
+        // });
 
-        AddAction(new Sleep(_game, _thing, _movement) {
+        AddAction(new Sleep(_game, _thing, _movement, this) {
             Preconditions   = { { "isSleeping", false }, { "hasFullInventory", false } },
             Effects         = { { "isSleeping", true } },
         });

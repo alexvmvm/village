@@ -8,6 +8,7 @@ public class Thing
     public string name;
     public string belongsToFamily;
     public bool assignToFamily;
+    public string ownedBy;
     public Game game;
     public int hitpoints = 100;
     public Transform transform; 
@@ -218,9 +219,15 @@ public class Thing
 
         if(coop != null)
             coop.Update();
-    
+
+        var label = "";
         if(resource)
-            SetLabel($"x{hitpoints}");
+            label += $"x{hitpoints}\n";
+        if(!string.IsNullOrEmpty(ownedBy))
+            label += $"owner: {ownedBy}\n";
+
+        if(!string.IsNullOrEmpty(label))
+            SetLabel(label);
     }
 
     public void DrawGizmos()
