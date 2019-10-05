@@ -218,7 +218,7 @@ public class Thing
 
         if(coop != null)
             coop.Update();
-
+    
         if(resource)
             SetLabel($"x{hitpoints}");
     }

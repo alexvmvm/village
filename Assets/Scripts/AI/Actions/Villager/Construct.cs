@@ -51,15 +51,17 @@ public class Construct : GOAPAction
         {
             _target.construction.Construct();
 
-            var resource = _thing.inventory.Holding;
-            resource.hitpoints -= 1; 
-            
-            if(resource.hitpoints == 0)
+            if(_thing.inventory.IsHoldingSomething())
             {
-                _thing.inventory.Drop();
-                resource.Destroy();
+                var resource = _thing.inventory.Holding;
+                resource.hitpoints -= 1; 
+                
+                if(resource.hitpoints == 0)
+                {
+                    _thing.inventory.Drop();
+                    resource.Destroy();
+                }
             }
-            
             _isDone = true;
         }
         
