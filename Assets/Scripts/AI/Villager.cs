@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class Villager : ThingAgent
 {
     public string Firstname { get { return _firstname; } }
@@ -231,7 +233,18 @@ public class Villager : ThingAgent
     {
 
         if(action.Effects.ContainsKey("isRested") && (bool)action.Effects["isRested"])
-            _rest = 0f;
+            _rest = 0f;        
+
+        if(action.Effects.ContainsKey("increaseWarmth"))
+        {
+             _warmth += (float)action.Effects["increaseWarmth"];
+        }
+
+        if(action.Effects.ContainsKey("setWarmth"))
+        {
+             _warmth = (float)action.Effects["setWarmth"];
+        }
+           
 
         // thirsty after sleeping
         if(action is Sleep)

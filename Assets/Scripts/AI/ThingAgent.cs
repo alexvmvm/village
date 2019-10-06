@@ -22,6 +22,7 @@ public abstract class ThingAgent : Agent
         
 
         _textMesh = _labelObj.GetComponentInChildren<TextMesh>();
+        _textMesh.alignment = TextAlignment.Center;
     }
 
     public void SetLabel(string label)

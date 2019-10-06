@@ -49,14 +49,18 @@ public class Sleep : GOAPAction
             if(bed == null)
             {
                 _target = _thing.transform.position; 
+
+                Effects["increaseWarmth"] = -0.5f;
             }
             else
             {
                 _target = bed.transform.position;   
                 if(bed.ownedBy != _villager.Fullname)
                     bed.ownedBy = _villager.Fullname;
+            
+                Effects["setWarmth"] = 0f;
             }
-
+        
             
             _movement.CancelCurrentPath();
             _movement.MoveTo(_target);
