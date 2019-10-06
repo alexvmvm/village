@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class NormalPlanner
 {
@@ -118,7 +119,6 @@ public class NormalPlanner
 
         foreach (var action in usable) 
         {
-
 			// if the parent state has the conditions for this action's preconditions, we can use it here
 			if (InState(action.Preconditions, parent.state) ) {
 
@@ -127,7 +127,8 @@ public class NormalPlanner
 				//Debug.Log(GoapAgent.prettyPrint(currentState));
 				var node = new Node(parent, parent.runningCost+action.Cost, currentState, action);
 
-				if (InState(goal, currentState)) {
+				if (goal.Any(kv => currentState.ContainsKey(kv.Key) && currentState[kv.Key].Equals(kv.Value) && parent.state.ContainsKey(kv.Key) && !parent.state[kv.Key].Equals(kv.Value))) 
+				{
 					// we found a solution!
 					leaves.Add(node);
 					foundOne = true;

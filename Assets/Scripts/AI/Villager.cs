@@ -17,16 +17,15 @@ public class Villager : ThingAgent
     private VillageManager _villagerManager;
     private Thing _familyChestThing;
     private Movement _movement;
-    private float _idleTime;
-    private bool _leaveVillage;
-    private int _nightsSleptInHome;
 
     /* 
         Survival
     */
 
-    private bool _thirsty;
-    private bool _hungry;
+    private float _thirst;
+    private float _hunger;
+    private float _warmth;
+    private float _rest;
 
     public Villager(Game game, Thing thing) : base(game, thing)
     {
@@ -70,8 +69,8 @@ public class Villager : ThingAgent
         // });
 
         AddAction(new Sleep(_game, _thing, _movement, this) {
-            Preconditions   = { { "isSleeping", false }, { "hasFullInventory", false } },
-            Effects         = { { "isSleeping", true } },
+            Preconditions   = { { "isRested", false },    { "hasFullInventory", false } },
+            Effects         = { { "isRested", true } },
         });
 
         /*
@@ -87,10 +86,10 @@ public class Villager : ThingAgent
         /*
             Farming
         */
-        AddAction(new FillCoop(_game, _movement, this, thing.inventory) {
-            Preconditions   = { { "hasChicken", true } },
-            Effects         = { { "isWorking", true }, { "hasChicken", false }  }
-        });
+        // AddAction(new FillCoop(_game, _movement, this, thing.inventory) {
+        //     Preconditions   = { { "hasChicken", true } },
+        //     Effects         = { { "isWorking", true }, { "hasChicken", false } }
+        // });
 
         /*
             Survival
@@ -98,12 +97,12 @@ public class Villager : ThingAgent
 
         AddAction(new DrinkFromStream(_game, _movement) {
             Preconditions   = { { "isThirsty", true } },
-            Effects         = { { "isThirsty", false }, { "needsFullfilled", true } }
+            Effects         = { { "isThirsty", false } }
         }); 
 
         AddAction(new EastSomething(_game, thing.inventory) {
             Preconditions   = { { "isHungry", true },   { "hasEdibleThing", true } },
-            Effects         = { { "isHungry", false },  { "needsFullfilled", true } }
+            Effects         = { { "isHungry", false } }
         }); 
 
         /*
@@ -162,7 +161,7 @@ public class Villager : ThingAgent
         
         AddAction(new GetFactoryThing(_game, _movement, TypeOfThing.ClayForge, TypeOfThing.Axe, thing.inventory) {
             Preconditions   = { { "hasThing", TypeOfThing.Ore } },
-            Effects         = { { "hasThing", TypeOfThing.Axe },  { "hasFullInventory", true },  { "isWorking", true } }
+            Effects         = { { "hasThing", TypeOfThing.Axe },  { "hasFullInventory", true } }
         });
 
 
@@ -190,84 +189,18 @@ public class Villager : ThingAgent
         });
     }
 
-    public override void ActionCompleted(GOAPAction action)
-    {
-        if(!(action is Idle) && !(action is Sleep))
-        {
-            _idleTime = 0f;
-        }
-        
-        if(action is SleepAtHome)
-        {
-            if(_nightsSleptInHome == 0 && _villagerManager != null)
-                _villagerManager.TriggerEvent(VillagerEvent.VillagerFirstNightAtHome, this);
-
-            _nightsSleptInHome += 1;
-        }
-
-        // thirsty after sleeping
-        if(action is Sleep || action is SleepAtHome)
-        {
-            _thirsty = true;
-            _hungry = true;
-        }
-        
-        if(action is RequestResidence)
-        {
-            if(_villagerManager != null)
-                _villagerManager.TriggerEvent(VillagerEvent.VillagerArrived, this);
-            _requestedResidence = true;
-        }
-
-        if(action is DrinkFromStream)
-            _thirsty = false;
-        
-        if(action is EastSomething)
-            _hungry = false;
-
-    }
-
-    bool ShouldLeaveVillage()
-    {
-        return _idleTime > _game.WorldTime.SecondsInADay && FamilyChest == null;
-    }
-
     public override Dictionary<string, object> GetGoal()
     {
-        _goal.Clear();
-        // if(!_requestedResidence)
-        // {
-        //     _goal["hasRequestedResidence"] = true;
-        // }
-        // else if(ShouldLeaveVillage())
-        // {
-        //     _goal["hasLeftVillage"] = true;
-        // }
-        // else 
-        
-        if(_game.WorldTime.GetTimeOfDay() == TimeOfDay.Night)
-        {
-            _goal["isSleeping"] = true;
-        }
-        else if(_hungry)
-        {
-            _goal["needsFullfilled"] = true;
-        }
-        else
-        {
-            _goal["isWorking"] = true;
-        }
+        _goal["isWorking"] = true;
+        _goal["isHungry"] = false;
+        _goal["isRested"] = true;
+        _goal["isThirsty"] = false;
 
         return _goal;
     }
 
     public override Dictionary<string, object> GetWorldState()
     {
-        _familyChestThing = _game.FindChestForFamily(Lastname);
-
-        _world["hasRequestedResidence"] = _requestedResidence;
-        _world["isIdle"] =  true;
-        
         /*
             Resources
         */
@@ -285,25 +218,56 @@ public class Villager : ThingAgent
             Survival
         */
 
-        _world["isThirsty"] = _thirsty;
-        _world["isHungry"] = _hungry;
-
+        _world["isThirsty"] = _thirst < 0f;
+        _world["isHungry"] = _hunger < 0f;
+        _world["isRested"] = _rest > 0f;
         _world["isWorking"] = false;
-        _world["isSleeping"] = false;
-        _world["hasHome"] =  FamilyChest != null;
-        _world["hasLeftVillage"] = false;
-        _world["needsFullfilled"] = false;
+
         
         return _world;
+    }
+
+    public override void ActionCompleted(GOAPAction action)
+    {
+
+        if(action.Effects.ContainsKey("isRested") && (bool)action.Effects["isRested"])
+            _rest = 0f;
+
+        // thirsty after sleeping
+        if(action is Sleep)
+        {
+            _thirst = -1f;
+            _hunger = -1f;
+        }
+        
+        if(action is DrinkFromStream)
+            _thirst = 0f;
+        
+        if(action is EastSomething)
+            _hunger = 0f;
+
     }
 
     public override void Update()
     {
         base.Update();
-
-        _idleTime += Time.deltaTime;
         
-        SetLabel($"{Fullname}\n{(CurentAction == null ? "" : CurentAction.ToString())}");
+        if(_game.WorldTime.GetTimeOfDay() == TimeOfDay.Night && _rest >= 0f)
+        {
+            _rest = -1f;
+        }
+
+        var label = Fullname + "\n";
+
+        if(CurentAction != null)
+            label += $"{CurentAction.ToString()}\n";
+
+        label += string.Format("hunger: {0}\n", _hunger);
+        label += string.Format("thirst: {0}\n", _thirst);
+        label += string.Format("warmth: {0}\n", _warmth);
+        label += string.Format("rest: {0}\n", _rest);
+
+        SetLabel(label);
     }
 
     public override void DrawGizmos()
@@ -317,7 +281,10 @@ public class Villager : ThingAgent
             text += string.Format("current action: {0}\n", _current.ToString());
         }
 
-        text += string.Format("idleTime: {0}\n", _idleTime);
+        text += string.Format("hunger: {0}\n", _hunger);
+        text += string.Format("thirst: {0}\n", _thing);
+        text += string.Format("warmth: {0}\n", _warmth);
+        text += string.Format("rest: {0}\n", _rest);
 
         var style = new GUIStyle();
         style.fontSize = 10;
