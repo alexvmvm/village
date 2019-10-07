@@ -19,6 +19,7 @@ public class Villager : ThingAgent
     private VillageManager _villagerManager;
     private Thing _familyChestThing;
     private Movement _movement;
+    private Needs _needs;
 
     /* 
         Survival
@@ -33,6 +34,8 @@ public class Villager : ThingAgent
     {
         _thing = thing;
         _movement = _thing.transform.gameObject.AddComponent<Movement>();
+
+        _needs = new Needs(game);
 
         _firstname = NameGenerator.GenerateFirstName();
         _lastname = NameGenerator.GenerateLastName();
@@ -70,7 +73,7 @@ public class Villager : ThingAgent
         //     Effects         = { { "isSleeping", true } },
         // });
 
-        AddAction(new Sleep(_game, _thing, _movement, this) {
+        AddAction(new Sleep(_game, _thing, _movement, this, _needs) {
             Preconditions   = { { "isRested", false },    { "hasFullInventory", false } },
             Effects         = { { "isRested", true } },
         });
@@ -196,6 +199,7 @@ public class Villager : ThingAgent
         _goal["isWorking"] = true;
         _goal["isHungry"] = false;
         _goal["isRested"] = true;
+        _goal["isWarm"] = true;
         _goal["isThirsty"] = false;
 
         return _goal;
@@ -223,6 +227,7 @@ public class Villager : ThingAgent
         _world["isThirsty"] = _thirst < 0f;
         _world["isHungry"] = _hunger < 0f;
         _world["isRested"] = _rest > 0f;
+        _world["isWarm"] = !_needs.IsCold();
         _world["isWorking"] = false;
 
         
@@ -234,16 +239,6 @@ public class Villager : ThingAgent
 
         if(action.Effects.ContainsKey("isRested") && (bool)action.Effects["isRested"])
             _rest = 0f;        
-
-        if(action.Effects.ContainsKey("increaseWarmth"))
-        {
-             _warmth += (float)action.Effects["increaseWarmth"];
-        }
-
-        if(action.Effects.ContainsKey("setWarmth"))
-        {
-             _warmth = (float)action.Effects["setWarmth"];
-        }
            
 
         // thirsty after sleeping
@@ -264,6 +259,12 @@ public class Villager : ThingAgent
     public override void Update()
     {
         base.Update();
+
+        if(_needs.IsDead())
+        {
+            PauseAgent();
+            _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
+        }
         
         if(_game.WorldTime.GetTimeOfDay() == TimeOfDay.Night && _rest >= 0f)
         {
@@ -272,12 +273,17 @@ public class Villager : ThingAgent
 
         var label = Fullname + "\n";
 
-        if(CurentAction != null)
+        if(_needs.IsDead())
+        {
+            label += $"DEAD\n";
+            label += _needs.GetReasonsForDeath();
+        }
+        else if(CurentAction != null)
             label += $"{CurentAction.ToString()}\n";
 
         label += string.Format("hunger: {0}\n", _hunger);
         label += string.Format("thirst: {0}\n", _thirst);
-        label += string.Format("warmth: {0}\n", _warmth);
+        label += string.Format("warmth: {0}\n", _needs.Warmth);
         label += string.Format("rest: {0}\n", _rest);
 
         SetLabel(label);
@@ -296,7 +302,7 @@ public class Villager : ThingAgent
 
         text += string.Format("hunger: {0}\n", _hunger);
         text += string.Format("thirst: {0}\n", _thing);
-        text += string.Format("warmth: {0}\n", _warmth);
+        text += string.Format("warmth: {0}\n", _needs.Warmth);
         text += string.Format("rest: {0}\n", _rest);
 
         var style = new GUIStyle();

@@ -10,12 +10,14 @@ public class Sleep : GOAPAction
     private bool _started;
     private Vector3 _target;
     private Villager _villager;
+    private Needs _needs;
 
-    public Sleep(Game game, Thing thing, Movement movement, Villager villager) : base(game)
+    public Sleep(Game game, Thing thing, Movement movement, Villager villager, Needs needs) : base(game)
     {
         _thing = thing;
         _movement = movement;
         _villager = villager;
+        _needs = needs;
     }
 
 
@@ -49,19 +51,18 @@ public class Sleep : GOAPAction
             if(bed == null)
             {
                 _target = _thing.transform.position; 
-
-                Effects["increaseWarmth"] = -0.5f;
+                
+                _needs.Trigger(NeedsEvent.SLEPT_OUTSIDE);
             }
             else
             {
                 _target = bed.transform.position;   
                 if(bed.ownedBy != _villager.Fullname)
                     bed.ownedBy = _villager.Fullname;
-            
-                Effects["setWarmth"] = 0f;
+                
+                _needs.Trigger(NeedsEvent.SLEPT_IN_BED);
             }
         
-            
             _movement.CancelCurrentPath();
             _movement.MoveTo(_target);
             _started = true;
