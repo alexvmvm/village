@@ -14,6 +14,7 @@ public enum TypeOfThing
     Stone,
     Clay,
     Ore,
+    Iron,
     Tree,
     BerryBush,
     Mushroom,
@@ -498,6 +499,13 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 thing.hitpoints = 5;
                 break;
+            case TypeOfThing.Iron:
+                thing.name = "iron";
+                thing.sprite = "colored_transparent_721";
+                thing.resource = true;
+                thing.hitpoints = 5;
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                break;
             case TypeOfThing.MudFloor:
                 thing.name = "mud floor";
                 thing.sprite = "colored_0";
@@ -711,10 +719,11 @@ public class Game : MonoBehaviour
             break;
             case TypeOfThing.ClayForge:
                 thing.name = "Clay Forge";
-                thing.sprite = "colored_257";
+                thing.sprite = "colored_680";
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.fixedToGrid = true;
                 thing.assignToFamily = true;
+                thing.factory = new Factory(this, thing);
             break;
 
             case TypeOfThing.ChickenCoopBlueprint:
@@ -843,6 +852,17 @@ public class Game : MonoBehaviour
         WorldTime.TimeSinceStart += 
             (1 - WorldTime.NormalizedTimeOfDay) * WorldTime.SecondsInADay +
             (WorldTime.SecondsInADay/2);
+    }
+
+    /*
+        Debug
+    */
+    public void AddJobToAllFactories()
+    {
+        foreach(var thing in Things.Where(t => t.factory != null))
+        {
+            thing.factory.RequestJob();
+        }
     }
 
     void Update()

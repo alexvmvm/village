@@ -45,6 +45,7 @@ public class Thing
     public FamilyChest familyChest;
     public Coop coop;
     public Inventory inventory;
+    public Factory factory;
 
     /*
         Show Label
@@ -220,6 +221,9 @@ public class Thing
         if(coop != null)
             coop.Update();
 
+        if(factory != null)
+            factory.Update();
+        
         var label = "";
         if(resource)
             label += $"x{hitpoints}\n";
@@ -240,6 +244,9 @@ public class Thing
 
         if(coop != null)
             coop.DrawGizmos();
+
+        if(factory != null)
+            factory.DrawGizmos();
 
 #if UNITY_EDITOR
                

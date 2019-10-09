@@ -164,9 +164,9 @@ public class Villager : ThingAgent
             Factories
         */
         
-        AddAction(new GetFactoryThing(_game, _movement, TypeOfThing.ClayForge, TypeOfThing.Axe, thing.inventory) {
+        AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.ClayForge, TypeOfThing.Iron, thing.inventory) {
             Preconditions   = { { "hasThing", TypeOfThing.Ore } },
-            Effects         = { { "hasThing", TypeOfThing.Axe },  { "hasFullInventory", true } }
+            Effects         = { { "hasThing", TypeOfThing.Iron },  { "hasFullInventory", true }, { "isWorking", true } }
         });
 
 

@@ -7,26 +7,72 @@ public class Factory
 {
     private Game _game;
     private Thing _thing;
-    private TypeOfThing _input;
-    private TypeOfThing _output;
-    private int _jobs;
+    private Queue<TypeOfThing> _jobs;
+    private float _timer;
+    private float _timeToProduce;
+    private int _requested;
 
-    public Factory(Game game, Thing thing, TypeOfThing input, TypeOfThing output)
+    public Factory(Game game, Thing thing)
     {
         _game = game;
         _thing = thing;
-        _input = input;
-        _output = output;
+        _jobs = new Queue<TypeOfThing>();
+        _timeToProduce = 60f;
+    }
+    
+    public bool IsRequested()
+    {
+        return _requested > 0;
     }
 
-    public bool HasJob()
+    public bool IsProducing()
     {
-        return _jobs > 0;
+        return _jobs.Count > 0;
     }
 
-    public Thing CompleteJob()
+    public void RequestJob()
     {
-        _jobs = Mathf.Max(0, _jobs -= 1);
-        return _game.CreateAndAddThing(_output, _thing.gridPosition.x, _thing.gridPosition.y);
+        _requested++;
+    }
+
+    public void QueueThingToProduce(TypeOfThing thing)
+    {
+        _jobs.Enqueue(thing);
+        _requested -= 1;
+        _timer = _timeToProduce;
+    }
+    
+    public void Update()
+    {
+        if(_jobs.Count == 0)
+            return;
+        
+        if(_timer > 0)
+        {
+            _timer -= Time.deltaTime;
+        }
+        else
+        {
+            var item = _jobs.Dequeue();
+            _game.CreateAndAddThing(item, _thing.gridPosition.x, _thing.gridPosition.y - 1);
+            _timer = _timeToProduce;
+        }
+    }
+
+    public void DrawGizmos()
+    {
+        #if UNITY_EDITOR
+               
+        var style = new GUIStyle();
+        style.fontSize = 10;
+        style.normal.textColor = Color.white;
+
+        var label = $"jobs: {_requested}\ntimer: {_timer}";
+
+        // current actions
+        var position = _thing.transform.position + Vector3.up;
+        UnityEditor.Handles.Label(position, label, style);
+                  
+#endif
     }
 }
