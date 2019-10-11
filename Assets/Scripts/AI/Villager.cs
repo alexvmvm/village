@@ -179,6 +179,7 @@ public class Villager : ThingAgent
             Effects         = { { "hasThing", TypeOfThing.Axe }, { "hasFullInventory", true }, { "isWorking", true } }
         });
 
+
         /*
             Construction
         */
