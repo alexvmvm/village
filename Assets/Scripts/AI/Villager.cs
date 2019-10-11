@@ -149,6 +149,11 @@ public class Villager : ThingAgent
             Effects         = { { "hasThing", TypeOfThing.Ore },    { "hasFullInventory", true } }
         }); 
 
+        AddAction(new GetResource(_game, _movement, TypeOfThing.Iron, thing.inventory) {
+            Preconditions   = { { "hasFullInventory", false } },
+            Effects         = { { "hasThing", TypeOfThing.Iron },    { "hasFullInventory", true } }
+        }); 
+
         AddAction(new GetResource(_game, _movement, TypeOfThing.Stone, thing.inventory) {
             Preconditions   = { { "hasFullInventory", false } },
             Effects         = { { "hasThing", TypeOfThing.Stone },   { "hasFullInventory", true } }
@@ -167,6 +172,11 @@ public class Villager : ThingAgent
         AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.ClayForge, TypeOfThing.Iron, thing.inventory) {
             Preconditions   = { { "hasThing", TypeOfThing.Ore } },
             Effects         = { { "hasThing", TypeOfThing.Iron },  { "hasFullInventory", true }, { "isWorking", true } }
+        });
+
+        AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.Workbench, TypeOfThing.Axe, thing.inventory) {
+            Preconditions   = { { "hasThing", TypeOfThing.Iron } },
+            Effects         = { { "hasThing", TypeOfThing.Axe }, { "hasFullInventory", true }, { "isWorking", true } }
         });
 
 

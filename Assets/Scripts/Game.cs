@@ -52,6 +52,8 @@ public enum TypeOfThing
     FamilyChestBlueprint,
     ClayForge,
     ClayForgeBlueprint,
+    Workbench,
+    WorkbenchBlueprint,
     Axe
 }
 
@@ -503,7 +505,7 @@ public class Game : MonoBehaviour
                 thing.name = "iron";
                 thing.sprite = "colored_transparent_721";
                 thing.resource = true;
-                thing.hitpoints = 5;
+                thing.hitpoints = 1;
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 break;
             case TypeOfThing.MudFloor:
@@ -720,6 +722,22 @@ public class Game : MonoBehaviour
             case TypeOfThing.ClayForge:
                 thing.name = "Clay Forge";
                 thing.sprite = "colored_680";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.fixedToGrid = true;
+                thing.assignToFamily = true;
+                thing.factory = new Factory(this, thing);
+            break;
+
+            case TypeOfThing.WorkbenchBlueprint:
+                thing.name = "Workbench";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Workbench, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
+            case TypeOfThing.Workbench:
+                thing.name = "Workbench";
+                thing.sprite = "colored_228";
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.fixedToGrid = true;
                 thing.assignToFamily = true;
