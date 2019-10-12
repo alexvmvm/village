@@ -21,20 +21,19 @@ public class SubmitFactoryJob : MoveGOAPAction
     public override IEnumerable<Thing> GetThings()
     {
         return _game.Things
-            .Where(t => t.type == _factoryType && t.factory.IsRequested() && !t.factory.IsProducing())
+            .Where(t => t.type == _factoryType && t.factory.IsPossibleToCraftSomething() && !t.factory.IsProducing())
             .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
     }
 
     public override bool PerformAtTarget()
     {
-        
-        if(_inventory.IsHoldingSomething())
-        {
-            _inventory.Holding.Destroy();
-            _inventory.Drop();
-        }
+        // if(_inventory.IsHoldingSomething())
+        // {
+        //     _inventory.Holding.Destroy();
+        //     _inventory.Drop();
+        // }
 
-        _target.factory.QueueThingToProduce(_output);
+        _target.factory.Craft();
 
         return true;
     }

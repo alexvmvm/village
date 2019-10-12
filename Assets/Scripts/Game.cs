@@ -54,7 +54,8 @@ public enum TypeOfThing
     ClayForgeBlueprint,
     Workbench,
     WorkbenchBlueprint,
-    Axe
+    Axe,
+    Hoe
 }
 
 
@@ -288,6 +289,12 @@ public class Game : MonoBehaviour
         return _materials[name];
     }
 
+    
+    public Thing GetThingNotInScene(TypeOfThing type)
+    {
+        return AllThings.Where(t => t.type == type).FirstOrDefault();
+    }
+
     public Thing GetThingOnGrid(Vector2Int position)
     {
         return GetThingOnGrid(position.x, position.y);
@@ -507,6 +514,7 @@ public class Game : MonoBehaviour
                 thing.resource = true;
                 thing.hitpoints = 1;
                 thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Ore };
                 break;
             case TypeOfThing.MudFloor:
                 thing.name = "mud floor";
@@ -725,7 +733,7 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.fixedToGrid = true;
                 thing.assignToFamily = true;
-                thing.factory = new Factory(this, thing);
+                thing.factory = new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Iron });
             break;
 
             case TypeOfThing.WorkbenchBlueprint:
@@ -741,7 +749,7 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.fixedToGrid = true;
                 thing.assignToFamily = true;
-                thing.factory = new Factory(this, thing);
+                thing.factory = new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe });
             break;
 
             case TypeOfThing.ChickenCoopBlueprint:
@@ -763,6 +771,13 @@ public class Game : MonoBehaviour
                 thing.name = "axe";
                 thing.sprite = "colored_transparent_937";
                 thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Wood, TypeOfThing.Iron };
+                break;
+            case TypeOfThing.Hoe:
+                thing.name = "hoe";
+                thing.sprite = "colored_transparent_837";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Wood, TypeOfThing.Iron };
                 break;
 
             /*
@@ -875,13 +890,13 @@ public class Game : MonoBehaviour
     /*
         Debug
     */
-    public void AddJobToAllFactories()
-    {
-        foreach(var thing in Things.Where(t => t.factory != null))
-        {
-            thing.factory.RequestJob();
-        }
-    }
+    // public void AddJobToAllFactories()
+    // {
+    //     foreach(var thing in Things.Where(t => t.factory != null))
+    //     {
+    //         thing.factory.RequestJob();
+    //     }
+    // }
 
     void Update()
     {

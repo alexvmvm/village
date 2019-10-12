@@ -55,6 +55,11 @@ public class Thing
     private TextMesh _textMesh;
     private GameObject _labelObj;
 
+    /*
+        Crafting
+    */
+    public TypeOfThing[] requiredToCraft;
+
     public Thing(TypeOfThing type, Transform transform)
     {
         this.type = type;
@@ -95,6 +100,11 @@ public class Thing
         if(!string.IsNullOrEmpty(pathTag))
         {
             game.UpdateAstarPath(transform.position.ToVector2IntFloor(), pathTag, walkable);
+        }
+
+        if(factory != null)
+        {
+            factory.Setup();
         }
     }
 
