@@ -64,17 +64,17 @@ public class Villager : ThingAgent
         // });
 
         AddAction(new Drop(_game, _thing) {
-            Preconditions   = { { "hasFullInventory", true } },
-            Effects         = { { "hasFullInventory", false } },
+            Preconditions   = { { "hasAnything", true } },
+            Effects         = { { "hasAnything", false } },
         });
 
         // AddAction(new SleepAtHome(_game, _thing, _movement, this) {
-        //     Preconditions   = { { "isSleeping", false }, { "hasFullInventory", false }, { "hasHome", true } },
+        //     Preconditions   = { { "isSleeping", false }, { "hasAnything", false }, { "hasHome", true } },
         //     Effects         = { { "isSleeping", true } },
         // });
 
         AddAction(new Sleep(_game, _thing, _movement, this, _needs) {
-            Preconditions   = { { "isRested", false },    { "hasFullInventory", false } },
+            Preconditions   = { { "isRested", false },    { "hasAnything", false } },
             Effects         = { { "isRested", true } },
         });
 
@@ -83,7 +83,7 @@ public class Villager : ThingAgent
         */
 
         AddAction(new Idle(_game, _movement) {
-            Preconditions   = { { "isWorking", false }, { "hasFullInventory", false } },
+            Preconditions   = { { "isWorking", false }, { "hasAnything", false } },
             Effects         = { { "isWorking", true } },
             Cost = 99999 // last resort
         }); 
@@ -115,53 +115,53 @@ public class Villager : ThingAgent
         */
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Rock, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Stone },   { "hasFullInventory", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Stone },   { "hasAnything", true } }
         }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Mushroom, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Mushroom },  { "hasFullInventory", true }, { "hasEdibleThing", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Mushroom },  { "hasAnything", true }, { "hasEdibleThing", true } }
         }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Tree, thing.inventory) {
             Preconditions   = { { "hasThing", TypeOfThing.Axe } },
-            Effects         = { { "hasThing", TypeOfThing.Wood },  { "hasFullInventory", true }, }
+            Effects         = { { "hasThing", TypeOfThing.Wood },  { "hasAnything", true }, }
         }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.FallenWood, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Wood },    { "hasFullInventory", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Wood }, { "hasWood", true },   { "hasAnything", true } }
         }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Wood, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Wood },    { "hasFullInventory", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Wood },    { "hasAnything", true } }
         }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Clay, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Clay },    { "hasFullInventory", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Clay },    { "hasAnything", true } }
         }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Ore, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Ore },    { "hasFullInventory", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Ore },    { "hasAnything", true } }
         }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Iron, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Iron },    { "hasFullInventory", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Iron },  { "hasIron", true },   { "hasAnything", true } }
         }); 
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Stone, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Stone },   { "hasFullInventory", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Stone },   { "hasAnything", true } }
         });
 
         AddAction(new GetResource(_game, _movement, TypeOfThing.Axe, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Axe },   { "hasFullInventory", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Axe },   { "hasAnything", true } }
         });
         
 
@@ -169,55 +169,48 @@ public class Villager : ThingAgent
             Factories
         */
 
-        AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Ore, thing.inventory) {
-            Preconditions   = { { "hasThing", TypeOfThing.Ore } },
-            Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
-            Cost = 10
-        });
+        // AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Ore, thing.inventory) {
+        //     Preconditions   = { { "hasThing", TypeOfThing.Ore } },
+        //     Effects         = { { "hasAnything", false }, { "isWorking", true } }
+        // });
 
-        AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Iron, thing.inventory) {
-            Preconditions   = { { "hasThing", TypeOfThing.Iron } },
-            Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
-            Cost = 10
-        });
+        // AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Iron, thing.inventory) {
+        //     Preconditions   = { { "hasThing", TypeOfThing.Iron } },
+        //     Effects         = { { "hasAnything", false }, { "isWorking", true } },
+        // });
 
-        AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Wood, thing.inventory) {
-            Preconditions   = { { "hasThing", TypeOfThing.Wood } },
-            Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
-            Cost = 10
-        });
+        // AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Wood, thing.inventory) {
+        //     Preconditions   = { { "hasThing", TypeOfThing.Wood } },
+        //     Effects         = { { "hasAnything", false }, { "isWorking", true } },
+        // });
         
         AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.ClayForge, TypeOfThing.Iron, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
+            Preconditions   = { { "hasWood", true }, { "hasIron", true } },
             Effects         = { { "hasThig", TypeOfThing.Iron }, { "isWorking", true } },
-            Cost = 1
         });
 
         AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.Workbench, TypeOfThing.Axe, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThing", TypeOfThing.Axe }, { "isWorking", true } }
+            Preconditions   = { { "hasAnything", false } },
+            Effects         = { { "hasThing", TypeOfThing.Axe }, { "isWorking", true } },
         });
-
 
         /*
             Construction
         */
+        foreach(var type in new TypeOfThing[] { 
+            TypeOfThing.Wood, 
+            TypeOfThing.Stone, 
+            TypeOfThing.Clay 
+            })
+        {
+            AddAction(new Construct(_game, _movement, type, _thing) {
+                Preconditions   = { { "hasThing", type } },
+                Effects         = { { "isWorking", true }, }
+            });
+        }
+      
 
-        AddAction(new Construct(_game, _movement, TypeOfThing.Wood, _thing) {
-            Preconditions   = { { "hasThing", TypeOfThing.Wood } },
-            Effects         = { { "isWorking", true }, }
-        });
-
-        AddAction(new Construct(_game, _movement, TypeOfThing.Stone, _thing) {
-            Preconditions   = { { "hasThing", TypeOfThing.Stone } },
-            Effects         = { { "isWorking", true }, }
-        });
-
-        AddAction(new Construct(_game, _movement, TypeOfThing.Clay, _thing) {
-            Preconditions   = { { "hasThing", TypeOfThing.Clay } },
-            Effects         = { { "isWorking", true }, }
-        });
-
+        // construct something that requries no resources
         AddAction(new Construct(_game, _movement, TypeOfThing.None, _thing) {
             Effects         = { { "isWorking", true }, }
         });
@@ -247,7 +240,7 @@ public class Villager : ThingAgent
             _thing.inventory.IsHoldingSomething() && 
             _thing.inventory.IsHoldingSomethingToEat();
 
-        _world["hasFullInventory"] = _thing.inventory.IsHoldingSomething();
+        _world["hasAnything"] = _thing.inventory.IsHoldingSomething();
 
         /*
             Survival

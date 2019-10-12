@@ -19,7 +19,7 @@ public class FillFactoryHopper : MoveGOAPAction
     public override IEnumerable<Thing> GetThings()
     {
         return _game.Things
-            .Where(t =>  t.factory != null && t.factory.RequiresTypeOfThing(_resource))
+            .Where(t =>  t.factory != null && !t.factory.IsPossibleToCraftSomething() && t.factory.RequiresTypeOfThing(_resource))
             .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
     }
 

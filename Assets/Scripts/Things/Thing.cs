@@ -106,6 +106,11 @@ public class Thing
         {
             factory.Setup();
         }
+
+        if(agent != null)
+        {
+            agent.Setup();
+        }
     }
 
     public void SetSprite()

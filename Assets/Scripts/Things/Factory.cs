@@ -153,7 +153,21 @@ public class Factory
         style.fontSize = 10;
         style.normal.textColor = Color.white;
 
-        var label = $"timer: {_timer}";
+        var label = $"timer: {_timer}\n";
+
+        label += "queued\n";
+        foreach(var kv in _queued)
+        {
+            label += $"{kv.Key.ToString()}: {kv.Value}\n";
+        }
+
+        label += "hopper\n";
+        foreach(var kv in _hopper)
+        {
+            label += $"{kv.Key.ToString()}: {kv.Value}\n";
+        }
+
+
 
         // current actions
         var position = _thing.transform.position + Vector3.up;

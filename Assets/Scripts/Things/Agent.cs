@@ -37,6 +37,11 @@ public abstract class Agent
         _created = DateTime.Now;
     }
 
+    public virtual void Setup()
+    {
+        
+    }
+
     public void AddAction(GOAPAction action)
     {
         _available.Add(action);
