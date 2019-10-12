@@ -101,11 +101,6 @@ public class Thing
         {
             game.UpdateAstarPath(transform.position.ToVector2IntFloor(), pathTag, walkable);
         }
-
-        if(factory != null)
-        {
-            factory.Setup();
-        }
     }
 
     public void SetSprite()

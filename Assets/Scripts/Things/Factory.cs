@@ -11,10 +11,8 @@ public class Factory
     private Queue<TypeOfThing> _jobs;
     private float _timer;
     private float _timeToProduce;
-    private TypeOfThing[] _produces;
     private Dictionary<TypeOfThing, int> _queued;
-    private Dictionary<TypeOfThing, int> _hopper;
-    private Dictionary<TypeOfThing, TypeOfThing[]> _map;
+    private TypeOfThing[] _produces;
 
     public Factory(Game game, Thing thing, TypeOfThing[] produces)
     {
@@ -22,22 +20,12 @@ public class Factory
         _thing = thing;
         _jobs = new Queue<TypeOfThing>();
         _timeToProduce = 60f;
-        _produces = produces;
         _queued = new Dictionary<TypeOfThing, int>();
-        _hopper = new Dictionary<TypeOfThing, int>();
-        _map = new Dictionary<TypeOfThing, TypeOfThing[]>();
-    
+        _produces = produces;
+
         foreach(var type in produces)
         {
             _queued[type] = 0;
-        }
-    }
-
-    public void Setup()
-    {
-        foreach(var type in _produces)
-        {
-            _map[type] = _game.GetThingNotInScene(type).requiredToCraft;
         }
     }
 
@@ -52,62 +40,16 @@ public class Factory
         _queued[thingToProduce] = Mathf.Max(_queued[thingToProduce], 0);
     }
 
-    public void AddToHopper(TypeOfThing hopper)
+    public void Craft(TypeOfThing thing)
     {
-        if(!_hopper.ContainsKey(hopper))
-            _hopper[hopper] = 0;
-        _hopper[hopper] += 1;
-    }
-    
-    public bool RequiresTypeOfThing(TypeOfThing type)
-    {
-        // all queud that need this thing
-        var totalRequired = _queued
-            .Where(kv => kv.Value > 0 && _map[kv.Key].Contains(type))
-            .Sum(kv => kv.Value);
-
-        return totalRequired > 0 && (!_hopper.ContainsKey(type) || _hopper[type] < totalRequired);
+        RemoveThingToProduce(thing);
+        _jobs.Enqueue(thing);
+        _timer = _timeToProduce;
     }
 
-    public bool IsPossibleToCraftSomething()
+    public bool IsQueuedForProduction(TypeOfThing type)
     {
-        foreach(var kv in _queued)
-        {
-            if(_queued[kv.Key] == 0)
-                continue;
-
-            var found = 0;
-            foreach(var required in _map[kv.Key])
-            {
-                if(!RequiresTypeOfThing(required))
-                    found++;
-            }
-            if(found == _map.Count())
-                return true;
-        }
-        return false;
-    }
-
-    public void Craft()
-    {
-        foreach(var kv in _queued.ToArray())
-        {
-            if(_queued[kv.Key] == 0)
-                continue;
-
-            var found = 0;
-            foreach(var required in _map[kv.Key])
-            {
-                if(!RequiresTypeOfThing(required))
-                    found++;
-            }
-
-            if(found == _map.Count())
-            {
-                _queued[kv.Key] -= 1;
-                QueueThingToProduce(kv.Key);
-            }
-        }
+        return _queued[type] > 0;
     }
 
     public int GetQueuedCount(TypeOfThing thing)
@@ -124,8 +66,7 @@ public class Factory
 
     void QueueThingToProduce(TypeOfThing thing)
     {
-        _jobs.Enqueue(thing);
-        _timer = _timeToProduce;
+        
     }
     
     public void Update()

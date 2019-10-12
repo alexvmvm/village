@@ -169,32 +169,34 @@ public class Villager : ThingAgent
             Factories
         */
 
-        AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Ore, thing.inventory) {
-            Preconditions   = { { "hasThing", TypeOfThing.Ore } },
-            Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
-            Cost = 10
-        });
+        // AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Ore, thing.inventory) {
+        //     Preconditions   = { { "hasThing", TypeOfThing.Ore } },
+        //     Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
+        //     Cost = 10
+        // });
 
-        AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Iron, thing.inventory) {
-            Preconditions   = { { "hasThing", TypeOfThing.Iron } },
-            Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
-            Cost = 10
-        });
+        // AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Iron, thing.inventory) {
+        //     Preconditions   = { { "hasThing", TypeOfThing.Iron } },
+        //     Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
+        //     Cost = 10
+        // });
 
-        AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Wood, thing.inventory) {
-            Preconditions   = { { "hasThing", TypeOfThing.Wood } },
-            Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
-            Cost = 10
-        });
+        // AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Wood, thing.inventory) {
+        //     Preconditions   = { { "hasThing", TypeOfThing.Wood } },
+        //     Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
+        //     Cost = 10
+        // });
+
+        
         
         AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.ClayForge, TypeOfThing.Iron, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
-            Effects         = { { "hasThig", TypeOfThing.Iron }, { "isWorking", true } },
+            Preconditions   = { { "hasThing", TypeOfThing.Ore } },
+            Effects         = { { "hasThing", TypeOfThing.Iron }, { "isWorking", true } },
             Cost = 1
         });
 
         AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.Workbench, TypeOfThing.Axe, thing.inventory) {
-            Preconditions   = { { "hasFullInventory", false } },
+            Preconditions   = { { "hasThing", TypeOfThing.Iron } },
             Effects         = { { "hasThing", TypeOfThing.Axe }, { "isWorking", true } }
         });
 
