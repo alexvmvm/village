@@ -9,13 +9,15 @@ public class SubmitFactoryJob : MoveGOAPAction
     private Inventory _inventory;
     private TypeOfThing _factoryType;
     private TypeOfThing _output;
+    private bool _requiresAgentToMake;
 
-    public SubmitFactoryJob(Game game, Movement movement, TypeOfThing factoryType, TypeOfThing output, Inventory inventory) : base(game, movement)
+    public SubmitFactoryJob(Game game, Movement movement, TypeOfThing factoryType, TypeOfThing output, Inventory inventory, bool requiresAgentToMake) : base(game, movement)
     {
         _movement = movement;
         _factoryType = factoryType;
         _inventory = inventory;
         _output = output;
+        _requiresAgentToMake = requiresAgentToMake;
     }
 
     public override IEnumerable<Thing> GetThings()
@@ -33,7 +35,12 @@ public class SubmitFactoryJob : MoveGOAPAction
             _inventory.Drop();
         }
 
-        _target.factory.Craft(_output);
+        if(!_target.factory.IsProducing())
+            _target.factory.Craft(_output);
+
+        if(_requiresAgentToMake && _target.factory.IsProducing())
+            return false;
+
 
         return true;
     }

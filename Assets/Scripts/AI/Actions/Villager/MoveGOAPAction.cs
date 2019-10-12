@@ -65,7 +65,7 @@ public abstract class MoveGOAPAction : GOAPAction
         if(_movement.ReachedEndOfPath)
         {
             if(!PerformAtTarget())
-                return false;
+                return true;
  
             _isDone = true;
         }

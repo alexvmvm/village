@@ -733,7 +733,7 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.fixedToGrid = true;
                 thing.assignToFamily = true;
-                thing.factory = new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Iron });
+                thing.factory = new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Iron }, true);
             break;
 
             case TypeOfThing.WorkbenchBlueprint:

@@ -189,13 +189,13 @@ public class Villager : ThingAgent
 
         
         
-        AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.ClayForge, TypeOfThing.Iron, thing.inventory) {
+        AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.ClayForge, TypeOfThing.Iron, thing.inventory, false) {
             Preconditions   = { { "hasThing", TypeOfThing.Ore } },
             Effects         = { { "hasThing", TypeOfThing.Iron }, { "isWorking", true } },
             Cost = 1
         });
 
-        AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.Workbench, TypeOfThing.Axe, thing.inventory) {
+        AddAction(new SubmitFactoryJob(_game, _movement, TypeOfThing.Workbench, TypeOfThing.Axe, thing.inventory, true) {
             Preconditions   = { { "hasThing", TypeOfThing.Iron } },
             Effects         = { { "hasThing", TypeOfThing.Axe }, { "isWorking", true } }
         });
