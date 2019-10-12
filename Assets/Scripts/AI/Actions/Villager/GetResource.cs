@@ -34,7 +34,7 @@ public class GetResource : MoveGOAPAction
             // damage existing resource
             _target.hitpoints -= 10;
             if(_target.hitpoints <= 0)
-                _game.CreateAndAddThing(TypeOfThing.Grass, _target.gridPosition.x, _target.gridPosition.y);
+                _game.CreateAndAddThing(TypeOfThing.MudFloor, _target.gridPosition.x, _target.gridPosition.y);
         }
         else
         {
