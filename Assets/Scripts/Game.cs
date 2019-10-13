@@ -454,8 +454,6 @@ public class Game : MonoBehaviour
                 thing.name = "mushroom";
                 thing.sprite = "colored_71";
                 thing.fixedToGrid = true;
-                // thing.pathTag = "foliage";
-                thing.floor = true;
                 thing.edible = true;
                 thing.resource = true;
                 thing.hitpoints = 1;
