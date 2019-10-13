@@ -13,7 +13,7 @@ public class Factory
     private float _timeToProduce;
     private Dictionary<TypeOfThing, int> _queued;
     private TypeOfThing[] _produces;
-    private Light _light;
+    private GameObject _light;
     private bool _lightOnMake;
 
     public Factory(Game game, Thing thing, TypeOfThing[] produces, bool lightOnMake = false)
@@ -26,11 +26,10 @@ public class Factory
         _produces = produces;
         _lightOnMake = lightOnMake;
 
-        var light = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Factory Light"));
-        light.transform.SetParent(thing.transform);
-        light.transform.localPosition = new Vector3(0, 0, -1);
-        _light = light.GetComponent<Light>();
-        _light.enabled = false;
+        _light = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Factory Light"));
+        _light.transform.SetParent(thing.transform);
+        _light.transform.localPosition = new Vector3(0, 0, -1);
+        _light.SetActive(false);
 
         foreach(var type in produces)
         {
@@ -81,8 +80,8 @@ public class Factory
         {
             _timer -= Time.deltaTime;
 
-            if(_lightOnMake && !_light.enabled)
-                _light.enabled = true;
+            if(_lightOnMake && !_light.activeSelf)
+                _light.SetActive(true);
         }
         else
         {
@@ -90,7 +89,7 @@ public class Factory
             _game.CreateAndAddThing(item, _thing.gridPosition.x, _thing.gridPosition.y - 1);
             _timer = _timeToProduce;
             if(_lightOnMake)
-                _light.enabled = false;
+                _light.SetActive(false);
         }
     }
 

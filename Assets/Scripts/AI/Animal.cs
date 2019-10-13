@@ -17,10 +17,10 @@ public class Animal : ThingAgent
         _goal = new Dictionary<string, object>();
         _world = new Dictionary<string, object>();
 
-        AddAction(new IdleInCoop(_game, _movement, this) {
-            Effects         = { { "isIdle", false } },
-            Preconditions   = { { "isIdle", true },     { "isInCoop", true } }
-        });
+        // AddAction(new IdleInCoop(_game, _movement, this) {
+        //     Effects         = { { "isIdle", false } },
+        //     Preconditions   = { { "isIdle", true },     { "isInCoop", true } }
+        // });
 
         AddAction(new Idle(_game, _movement) {
             Effects         = { { "isIdle", false } },

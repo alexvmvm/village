@@ -8,27 +8,31 @@ public class GetResource : MoveGOAPAction
     private Movement _movement;
     private TypeOfThing _type;
     private Inventory _inventory;
+    private Villager _villager;
 
-    public GetResource(Game game, Movement movement, TypeOfThing type, Inventory inventory) : base(game, movement)
+    public GetResource(Game game, Movement movement, TypeOfThing type, Inventory inventory, Villager villager) : base(game, movement)
     {
         _movement = movement;
         _type = type;
         _inventory = inventory;
+        _villager = villager;
     }
 
     public override IEnumerable<Thing> GetThings()
     {
         return _game.Things
-            .Where(t => t.type == _type)
+            .Where(t => t.type == _type && (string.IsNullOrEmpty(t.ownedBy) || t.ownedBy == _villager.Fullname))
             .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
     }
 
     public override bool PerformAtTarget()
     {
+
         if(_target.fixedToGrid)
         {
             var resource = _game.CreateAndAddThing(_target.produces, 0, 0);
             resource.hitpoints = Mathf.Min(10, _target.hitpoints);
+            resource.ownedBy = _villager.Fullname;
             _inventory.HoldThing(resource);
 
             // damage existing resource
@@ -38,7 +42,8 @@ public class GetResource : MoveGOAPAction
         }
         else
         {
-             _inventory.HoldThing(_target);
+            _target.ownedBy = _villager.Fullname;
+            _inventory.HoldThing(_target);
         }
 
         return true;

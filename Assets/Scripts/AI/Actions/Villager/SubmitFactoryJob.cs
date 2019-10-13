@@ -10,6 +10,7 @@ public class SubmitFactoryJob : MoveGOAPAction
     private TypeOfThing _factoryType;
     private TypeOfThing _output;
     private bool _requiresAgentToMake;
+    private bool _submittedJob;
 
     public SubmitFactoryJob(Game game, Movement movement, TypeOfThing factoryType, TypeOfThing output, Inventory inventory, bool requiresAgentToMake) : base(game, movement)
     {
@@ -35,13 +36,23 @@ public class SubmitFactoryJob : MoveGOAPAction
             _inventory.Drop();
         }
 
-        if(!_target.factory.IsProducing())
+        if(!_submittedJob)
+        {
             _target.factory.Craft(_output);
+            _submittedJob = true;
+        }
 
         if(_requiresAgentToMake && _target.factory.IsProducing())
             return false;
 
 
         return true;
+    }
+
+    public override void Reset()
+    {
+        base.Reset();
+
+        _submittedJob = false;
     }
 }

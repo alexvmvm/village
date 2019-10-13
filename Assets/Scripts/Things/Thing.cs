@@ -6,6 +6,7 @@ public class Thing
     // properties    
     public string sprite;
     public string name;
+    public string description;
     public string belongsToFamily;
     public bool assignToFamily;
     public string ownedBy;
@@ -42,8 +43,6 @@ public class Thing
     public bool walkable = true;
     public Construction construction;
     public Agent agent;
-    public FamilyChest familyChest;
-    public Coop coop;
     public Inventory inventory;
     public Factory factory;
 
@@ -189,18 +188,6 @@ public class Thing
         return assignToFamily;
     }
 
-    public void OnSelected()
-    {
-        switch(type)
-        {
-            case TypeOfThing.FamilyChest:
-                Debug.Log("Selcted");
-                break;
-            default:
-                break;
-        }
-    }
-
     public void Destroy()
     {
         if(!string.IsNullOrEmpty(pathTag))
@@ -220,12 +207,6 @@ public class Thing
         if(agent != null)
             agent.Update();
         
-        if(familyChest != null)
-            familyChest.Update();
-
-        if(coop != null)
-            coop.Update();
-
         if(factory != null)
             factory.Update();
         
@@ -241,14 +222,8 @@ public class Thing
 
     public void DrawGizmos()
     {
-        if(familyChest != null)
-            familyChest.DrawGizmos();
-
         if(agent != null)
             agent.DrawGizmos();
-
-        if(coop != null)
-            coop.DrawGizmos();
 
         if(factory != null)
             factory.DrawGizmos();

@@ -40,22 +40,18 @@ public enum TypeOfThing
     Fence,
     DoorBlueprint,
     Door,
-    GateBlueprint,
-    Gate,
-    ChickenCoopBlueprint,
-    ChickenCoop,
     BedBlueprint,
     Bed,
     ForagedBed,
     ForagedBedBlueprint,
-    FamilyChest,
-    FamilyChestBlueprint,
     ClayForge,
     ClayForgeBlueprint,
     Workbench,
     WorkbenchBlueprint,
     Axe,
-    Hoe
+    Hoe,
+    Storage,
+    StorageBlueprint
 }
 
 
@@ -222,29 +218,29 @@ public class Game : MonoBehaviour
             CreateAndAddThing(TypeOfThing.FallenWood, x, y);
         }
 
-        // for(var i = 0; i < 5; i++) 
-        // {
-        //     var x = UnityEngine.Random.Range(0, MapSize.x);
-        //     var y = UnityEngine.Random.Range(0, MapSize.y);
+        for(var i = 0; i < 4; i++) 
+        {
+            var x = UnityEngine.Random.Range(0, MapSize.x);
+            var y = UnityEngine.Random.Range(0, MapSize.y);
 
-        //     AddThing(Create(TypeOfThing.Hen, x, y));
-        // }
+            AddThing(Create(TypeOfThing.Hen, x, y));
+        }
 
-        // for(var i = 0; i < 10; i++) 
-        // {
-        //     var x = UnityEngine.Random.Range(0, MapSize.x);
-        //     var y = UnityEngine.Random.Range(0, MapSize.y);
+        for(var i = 0; i < 10; i++) 
+        {
+            var x = UnityEngine.Random.Range(0, MapSize.x);
+            var y = UnityEngine.Random.Range(0, MapSize.y);
 
-        //     AddThing(Create(TypeOfThing.Chick, x, y));
-        // }
+            AddThing(Create(TypeOfThing.Chick, x, y));
+        }
 
-        // for(var i = 0; i < 3; i++) 
-        // {
-        //     var x = UnityEngine.Random.Range(0, MapSize.x);
-        //     var y = UnityEngine.Random.Range(0, MapSize.y);
+        for(var i = 0; i < 1; i++) 
+        {
+            var x = UnityEngine.Random.Range(0, MapSize.x);
+            var y = UnityEngine.Random.Range(0, MapSize.y);
 
-        //     AddThing(Create(TypeOfThing.Rooster, x, y));
-        // }
+            AddThing(Create(TypeOfThing.Rooster, x, y));
+        }
 
         _zoneGraph.Start();
     }
@@ -510,6 +506,7 @@ public class Game : MonoBehaviour
                 break;
             case TypeOfThing.Iron:
                 thing.name = "iron";
+                thing.description = "A resource used to build tools and machinery.";
                 thing.sprite = "colored_transparent_721";
                 thing.resource = true;
                 thing.hitpoints = 1;
@@ -572,11 +569,6 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.pipe = true;
                 thing.pathTag = "blocking";
-                // thing.tileRule = new TileRuleDefinition(
-                //     "colored_98", "colored_98", "colored_98", "colored_98", 
-                //     "colored_98", "colored_98", "colored_98", "colored_98",
-                //     "colored_98", "colored_98", "colored_98", "colored_98",
-                //     "colored_98", "colored_98", "colored_98");
             break;
             case TypeOfThing.ForagedWallBlueprint:
                 thing.name = "Foraged Wall";
@@ -656,24 +648,6 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.floor = true;
                 break;
-
-            case TypeOfThing.GateBlueprint:
-                thing.name = "Gate";
-                thing.sprite = "colored_transparent_855";
-                thing.floor = true;
-                thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(
-                    this, thing, 
-                    TypeOfThing.Grass | TypeOfThing.Fence, 
-                    TypeOfThing.Gate, ConstructionGroup.Furniture, TypeOfThing.Wood);
-                break;
-            case TypeOfThing.Gate:
-                thing.name = "Gate";
-                thing.sprite = "colored_99";
-                thing.fixedToGrid = true;
-                thing.floor = true;
-                break;
-
             case TypeOfThing.ForagedBedBlueprint:
                 thing.name = "Foraged Bed";
                 thing.sprite = "colored_transparent_855";
@@ -703,23 +677,6 @@ public class Game : MonoBehaviour
                 thing.fixedToGrid = true;
                 thing.floor = true;
                 break;
-
-            case TypeOfThing.FamilyChestBlueprint:
-                thing.name = "Chest";
-                thing.sprite = "colored_transparent_855";
-                thing.floor = true;
-                thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.FamilyChest, ConstructionGroup.Furniture, TypeOfThing.Wood);
-            break;
-            case TypeOfThing.FamilyChest:
-                thing.name = "Chest";
-                thing.sprite = "colored_200";
-                thing.familyChest = new FamilyChest(this, thing);
-                thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.fixedToGrid = true;
-                thing.assignToFamily = true;
-            break;
-
               case TypeOfThing.ClayForgeBlueprint:
                 thing.name = "Clay Forge";
                 thing.sprite = "colored_transparent_855";
@@ -751,34 +708,34 @@ public class Game : MonoBehaviour
                 thing.assignToFamily = true;
                 thing.factory = new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe });
             break;
-
-            case TypeOfThing.ChickenCoopBlueprint:
-                thing.name = "Coop";
-                thing.sprite = "colored_transparent_855";
-                thing.floor = true;
-                thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.ChickenCoop, ConstructionGroup.Furniture, TypeOfThing.Wood);
-            break;
-            case TypeOfThing.ChickenCoop:
-                thing.name = "Coop";
-                thing.sprite = "colored_265";
-                thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.coop = new Coop(this, thing);
-                thing.fixedToGrid = true;
-                thing.assignToFamily = true;
-            break;
             case TypeOfThing.Axe:
                 thing.name = "axe";
+                thing.description = "A tool used to chop down trees.";
                 thing.sprite = "colored_transparent_937";
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Wood, TypeOfThing.Iron };
+                thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Iron };
                 break;
             case TypeOfThing.Hoe:
                 thing.name = "hoe";
+                thing.description = "A tool used to till land for planting crops.";
                 thing.sprite = "colored_transparent_837";
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Wood, TypeOfThing.Iron };
+                thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Iron };
                 break;
+            case TypeOfThing.Storage:
+                thing.name = "storage";
+                thing.description = "A storage container used to store resources";
+                thing.sprite = "colored_200";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Wood };
+                break;
+            case TypeOfThing.StorageBlueprint:
+                thing.name = "storage";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Storage, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
 
             /*
                 Objects
@@ -857,23 +814,6 @@ public class Game : MonoBehaviour
     /*
         Querying
     */
-    
-    public Thing FindChestForFamily(string lastname)
-    {
-        return Things
-            .Where(t => t.type == TypeOfThing.FamilyChest && t.belongsToFamily == lastname)
-            .FirstOrDefault();
-    }
-    
-    public IEnumerable<Thing> FindCoopsForFamily(string lastname)
-    {
-        return Things.Where(t => t.type == TypeOfThing.ChickenCoop && t.belongsToFamily == lastname);
-    }
-
-    public Vector3 GetVillageExit()
-    {
-        return new Vector3(Mathf.FloorToInt(MapSize.x / 2), 0);
-    }
 
     public void MoveToNight()
     {
