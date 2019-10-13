@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Storage : MonoBehaviour
+public class Storage 
 {
     public Dictionary<TypeOfThing, bool> Allowed { get { return _allowed; } }
     private Dictionary<TypeOfThing, bool> _allowed;

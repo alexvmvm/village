@@ -201,7 +201,7 @@ public class Thing
 
     public bool CanBeSeletected()
     {
-        return assignToFamily;
+        return assignToFamily || factory != null || storage != null;
     }
 
     public void Destroy()
