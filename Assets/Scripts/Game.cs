@@ -32,6 +32,8 @@ public enum TypeOfThing
     WoodFloorBlueprint,
     ForagedWall,
     ForagedWallBlueprint,
+    Fire,
+    FireBlueprint,
     WoodWall,
     WoodWallBlueprint,
     StoneFloorBlueprint,
@@ -568,6 +570,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_70";
                 thing.fixedToGrid = true;
                 thing.pipe = true;
+                thing.blocksLight = true;
                 thing.pathTag = "blocking";
             break;
             case TypeOfThing.ForagedWallBlueprint:
@@ -618,6 +621,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_580";
                 thing.fixedToGrid = true;
                 thing.pathTag = "blocking";
+                thing.blocksLight = true;
                 thing.pipe = true;
             break;
             case TypeOfThing.StoneWallBlueprint:
@@ -735,6 +739,20 @@ public class Game : MonoBehaviour
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
                 thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Storage, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
+            case TypeOfThing.Fire:
+                thing.name = "fire";
+                thing.description = "A fire to keep villagers warm";
+                thing.sprite = "colored_334";
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.fire = new Fire(this, thing);
+                break;
+            case TypeOfThing.FireBlueprint:
+                thing.name = "fire";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Fire, ConstructionGroup.Furniture, TypeOfThing.Wood);
             break;
 
             /*

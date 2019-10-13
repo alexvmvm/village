@@ -59,7 +59,7 @@ public class RadialSource : MonoBehaviour
         _mesh.name = transform.name;
 
         MeshFilter.mesh = _mesh;
-		MeshRenderer.sharedMaterial.SetFloat("_Radius", Radius);
+		MeshRenderer.material.SetFloat("_Radius", Radius);
 
         if(Application.isPlaying)
             StartCoroutine(UpdateSource());
@@ -201,7 +201,7 @@ public class RadialSource : MonoBehaviour
             _time += Time.deltaTime;
             var perlin = Mathf.PerlinNoise(_time * FlickerSpeed, .1f);
             var range = Radius - Radius * FlickerRange * perlin;
-            MeshRenderer.sharedMaterial.SetFloat("_Radius", range);
+            MeshRenderer.material.SetFloat("_Radius", range);
         }
     }
 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2886025159337477339}
   - component: {fileID: 2886025159337477336}
   m_Layer: 0
-  m_Name: Factory Light
+  m_Name: Fire Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
   ZPosition: -2
   SortingOrder: 1000
   Spread: 7
-  Radius: 1
+  Radius: 3
   EdgeDistanceThreshold: 10.42
   EdgeResolveIterations: 7
   Segments: 28
@@ -125,7 +125,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4321310022201902849
 Transform:
   m_ObjectHideFlags: 0

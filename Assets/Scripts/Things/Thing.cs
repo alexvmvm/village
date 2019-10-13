@@ -24,6 +24,7 @@ public class Thing
     public bool floor;
     public bool playerBuiltFloor;
     public bool wall;
+    public bool blocksLight;
     public bool buildOn;
     public bool pipe;
     public bool edible;
@@ -45,6 +46,7 @@ public class Thing
     public Agent agent;
     public Inventory inventory;
     public Factory factory;
+    public Fire fire;
 
     /*
         Show Label
@@ -100,6 +102,19 @@ public class Thing
         {
             game.UpdateAstarPath(transform.position.ToVector2IntFloor(), pathTag, walkable);
         }
+
+        
+        if(blocksLight)
+        {
+            transform.gameObject.AddComponent<BoxCollider2D>();
+            transform.gameObject.layer = LayerMask.NameToLayer("Blocks Light");
+        }
+
+        if(fire != null)
+        {
+            fire.Setup();
+        }
+
     }
 
     public void SetSprite()
@@ -209,6 +224,9 @@ public class Thing
         
         if(factory != null)
             factory.Update();
+
+        if(fire != null)
+            fire.Update();
         
         var label = "";
         if(resource)
