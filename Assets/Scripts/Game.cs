@@ -434,6 +434,7 @@ public class Game : MonoBehaviour
                 thing.tileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
                 thing.positionalAudioGroup = "trees";
                 thing.floor = true;
+                thing.blocksLight = true;
                 // thing.pathTag = "foliage";
                 thing.resource = true;
                 thing.produces = TypeOfThing.Wood;
@@ -694,7 +695,8 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.fixedToGrid = true;
                 thing.assignToFamily = true;
-                thing.factory = new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Iron }, true);
+                thing.factory = new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Iron });
+                thing.fire = new Fire(this, thing, true);
             break;
 
             case TypeOfThing.WorkbenchBlueprint:
