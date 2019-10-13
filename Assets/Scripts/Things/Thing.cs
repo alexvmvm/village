@@ -47,6 +47,7 @@ public class Thing
     public Inventory inventory;
     public Factory factory;
     public Fire fire;
+    public Storage storage;
 
     /*
         Show Label
