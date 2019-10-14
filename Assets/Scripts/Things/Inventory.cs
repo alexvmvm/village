@@ -49,4 +49,9 @@ public class Inventory
         return _holding != null && _holding.type == type;
     }
 
+    public bool IsHoldingTool()
+    {
+        return IsHoldingSomething() && (IsHolding(TypeOfThing.Hoe) || IsHolding(TypeOfThing.Axe));
+    }
+
 }

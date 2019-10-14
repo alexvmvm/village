@@ -48,6 +48,7 @@ public class Thing
     public Factory factory;
     public Fire fire;
     public Storage storage;
+    public Crop crop;
 
     /*
         Show Label
@@ -114,6 +115,11 @@ public class Thing
         if(fire != null)
         {
             fire.Setup();
+        }
+
+        if(crop != null)
+        {
+            crop.Setup();
         }
 
     }
@@ -228,6 +234,9 @@ public class Thing
 
         if(fire != null)
             fire.Update();
+
+        if(crop != null)
+            crop.Update();
         
         var label = "";
         if(resource)
@@ -246,6 +255,9 @@ public class Thing
 
         if(factory != null)
             factory.DrawGizmos();
+
+        if(crop != null)
+            crop.DrawGizmos();
 
 #if UNITY_EDITOR
                

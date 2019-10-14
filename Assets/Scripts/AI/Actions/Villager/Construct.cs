@@ -51,7 +51,7 @@ public class Construct : GOAPAction
         {
             _target.construction.Construct();
 
-            if(_thing.inventory.IsHoldingSomething())
+            if(_thing.inventory.IsHoldingSomething() && !_thing.inventory.IsHoldingTool())
             {
                 var resource = _thing.inventory.Holding;
                 resource.hitpoints -= 1; 

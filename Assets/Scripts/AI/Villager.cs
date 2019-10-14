@@ -157,11 +157,20 @@ public class Villager : ThingAgent
             Effects         = { { "hasThing", TypeOfThing.Stone },   { "hasFullInventory", true } }
         });
 
+        AddAction(new GetResource(_game, _movement, TypeOfThing.CabbageSeed, thing.inventory, this) {
+            Preconditions   = { { "hasFullInventory", false } },
+            Effects         = { { "hasThing", TypeOfThing.CabbageSeed },   { "hasFullInventory", true } }
+        });
+
         AddAction(new GetResource(_game, _movement, TypeOfThing.Axe, thing.inventory, this) {
             Preconditions   = { { "hasFullInventory", false } },
             Effects         = { { "hasThing", TypeOfThing.Axe },   { "hasFullInventory", true } }
         });
         
+        AddAction(new GetResource(_game, _movement, TypeOfThing.Hoe, thing.inventory, this) {
+            Preconditions   = { { "hasFullInventory", false } },
+            Effects         = { { "hasThing", TypeOfThing.Hoe },   { "hasFullInventory", true } }
+        });
 
         /*
             Factories
@@ -220,6 +229,16 @@ public class Villager : ThingAgent
 
         AddAction(new Construct(_game, _movement, TypeOfThing.Clay, _thing) {
             Preconditions   = { { "hasThing", TypeOfThing.Clay } },
+            Effects         = { { "isWorking", true }, }
+        });
+
+        AddAction(new Construct(_game, _movement, TypeOfThing.Hoe, _thing) {
+            Preconditions   = { { "hasThing", TypeOfThing.Hoe } },
+            Effects         = { { "isWorking", true }, }
+        });
+
+        AddAction(new Construct(_game, _movement, TypeOfThing.CabbageSeed, _thing) {
+            Preconditions   = { { "hasThing", TypeOfThing.CabbageSeed } },
             Effects         = { { "isWorking", true }, }
         });
 

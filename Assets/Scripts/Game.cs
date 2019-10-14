@@ -29,6 +29,11 @@ public enum TypeOfThing
     StoneWall               ,
     WoodFloor               ,
     WoodFloorBlueprint      ,
+    SoilFloor               ,
+    SoilFloorBlueprint      ,
+    CabbageSeed,
+    CabbageCrop               ,
+    CabbageCropBlueprint      ,
     ForagedWall             ,
     ForagedWallBlueprint    ,
     Fire                    ,
@@ -514,6 +519,13 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Ore };
                 break;
+            case TypeOfThing.CabbageSeed:
+                thing.name = "cabbage seed";
+                thing.sprite = "colored_transparent_817";
+                thing.resource = true;
+                thing.hitpoints = 10;
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                break;
             case TypeOfThing.MudFloor:
                 thing.name = "mud floor";
                 thing.sprite = "colored_0";
@@ -527,7 +539,38 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.MudFloor, ConstructionGroup.Floors, TypeOfThing.None);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.MudFloor, ConstructionGroup.Floors, TypeOfThing.None);
+                break;
+            case TypeOfThing.SoilFloor:
+                thing.name = "soil";
+                thing.sprite = "colored_1";
+                thing.fixedToGrid = true;
+                thing.floor = true;
+                thing.playerBuiltFloor = true;
+                thing.buildOn = true;
+            break;
+            case TypeOfThing.SoilFloorBlueprint:
+                thing.name = "soil";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, null, TypeOfThing.SoilFloor, ConstructionGroup.Farming, TypeOfThing.Hoe);
+                break;
+            case TypeOfThing.CabbageCrop:
+                thing.name = "cabbage";
+                thing.sprite = "colored_transparent_204";
+                thing.tileRule = new CropTile(thing);
+                thing.playerBuiltFloor = true;
+                thing.buildOn = false;
+                thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.crop = new Crop(this, thing, 360, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" });
+            break;
+            case TypeOfThing.CabbageCropBlueprint:
+                thing.name = "cabbage";
+                thing.sprite = "colored_transparent_855";
+                thing.floor = true;
+                thing.sortingOrder = (int)SortingOrders.Blueprints;
+                thing.construction = new Construction(this, thing, TypeOfThing.SoilFloor, TypeOfThing.CabbageCrop, ConstructionGroup.Farming, TypeOfThing.CabbageSeed);
                 break;
             case TypeOfThing.WoodFloor:
                 thing.name = "wood floor";
@@ -542,7 +585,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodFloor, ConstructionGroup.Floors, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.WoodFloor, ConstructionGroup.Floors, TypeOfThing.Wood);
                 break;
             case TypeOfThing.WoodWall:
                 thing.name = "wood wall";
@@ -561,7 +604,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.WoodWall, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.WoodWall, ConstructionGroup.Walls, TypeOfThing.Wood);
                 thing.pipe = true;
                 break;
             case TypeOfThing.ForagedWall:
@@ -577,7 +620,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.ForagedWall, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.ForagedWall, ConstructionGroup.Walls, TypeOfThing.Wood);
                 thing.pipe = true;
                 break;
             case TypeOfThing.Fence:
@@ -597,7 +640,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Fence, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.Fence, ConstructionGroup.Walls, TypeOfThing.Wood);
                 thing.pipe = true;
                 break;
             case TypeOfThing.StoneFloor:
@@ -613,7 +656,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneFloor, ConstructionGroup.Floors, TypeOfThing.Stone);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.StoneFloor, ConstructionGroup.Floors, TypeOfThing.Stone);
                 break;
             case TypeOfThing.StoneWall:
                 thing.name = "stone wall";
@@ -628,7 +671,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.StoneWall, ConstructionGroup.Walls, TypeOfThing.Stone);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.StoneWall, ConstructionGroup.Walls, TypeOfThing.Stone);
                 thing.pipe = true;
                 break;
 
@@ -642,7 +685,7 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
                 thing.construction = new Construction(
                     this, thing, 
-                    TypeOfThing.Grass | TypeOfThing.WoodWall | TypeOfThing.StoneWall, 
+                    null, 
                     TypeOfThing.Door, ConstructionGroup.Furniture, TypeOfThing.Wood);
                 break;
             case TypeOfThing.Door:
@@ -656,7 +699,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.ForagedBed, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.ForagedBed, ConstructionGroup.Furniture, TypeOfThing.Wood);
                 break;
             
             case TypeOfThing.ForagedBed:
@@ -671,7 +714,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Bed, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.Bed, ConstructionGroup.Furniture, TypeOfThing.Wood);
                 break;
             
             case TypeOfThing.Bed:
@@ -685,7 +728,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.ClayForge, ConstructionGroup.Furniture, TypeOfThing.Clay);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.ClayForge, ConstructionGroup.Furniture, TypeOfThing.Clay);
             break;
             case TypeOfThing.ClayForge:
                 thing.name = "Clay Forge";
@@ -702,7 +745,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Workbench, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.Workbench, ConstructionGroup.Furniture, TypeOfThing.Wood);
             break;
             case TypeOfThing.Workbench:
                 thing.name = "Workbench";
@@ -722,7 +765,7 @@ public class Game : MonoBehaviour
             case TypeOfThing.Hoe:
                 thing.name = "hoe";
                 thing.description = "A tool used to till land for planting crops.";
-                thing.sprite = "colored_transparent_837";
+                thing.sprite = "colored_transparent_770";
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Iron };
                 break;
@@ -739,7 +782,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Storage, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.Storage, ConstructionGroup.Furniture, TypeOfThing.Wood);
             break;
             case TypeOfThing.Fire:
                 thing.name = "fire";
@@ -753,7 +796,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_855";
                 thing.floor = true;
                 thing.sortingOrder = (int)SortingOrders.Blueprints;
-                thing.construction = new Construction(this, thing, TypeOfThing.Grass, TypeOfThing.Fire, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.construction = new Construction(this, thing, null, TypeOfThing.Fire, ConstructionGroup.Furniture, TypeOfThing.Wood);
             break;
 
             /*

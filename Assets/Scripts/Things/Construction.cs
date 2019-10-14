@@ -8,7 +8,8 @@ public enum ConstructionGroup
     Floors,
     Walls,
     Furniture,
-    Objects
+    Objects,
+    Farming
 }
 
 public class Construction 
@@ -18,12 +19,12 @@ public class Construction
     public TypeOfThing Requires { get { return _requires; } }
     private Game _game;
     private Thing _thing;
-    private TypeOfThing _buildOn;
+    private TypeOfThing? _buildOn;
     private TypeOfThing _builds;    
     private TypeOfThing _requires;
     private ConstructionGroup _group;
 
-    public Construction(Game game, Thing thing, TypeOfThing buildOn, TypeOfThing builds, ConstructionGroup group, TypeOfThing requires)
+    public Construction(Game game, Thing thing, TypeOfThing? buildOn, TypeOfThing builds, ConstructionGroup group, TypeOfThing requires)
     {
         _buildOn = buildOn;
         _builds = builds;
@@ -44,6 +45,8 @@ public class Construction
         if(current == null)
             return false;
         if(ConstructAtPosition(current.gridPosition))
+            return false;
+        if(_buildOn.HasValue && _buildOn != current.type)
             return false;
         return current.buildOn;
     }
