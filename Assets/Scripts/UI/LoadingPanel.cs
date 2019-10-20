@@ -16,6 +16,14 @@ public class LoadingPanel : MonoBehaviour
         RefreshSaveFiles();
     }
 
+    void ResetAllButtonColors()
+    {
+        foreach(var obj in LoadPool.GetActiveObjects())
+        {
+            obj.GetComponentInChildren<Image>().color = Color.white;
+        }
+    }
+
     void RefreshSaveFiles()
     {
         LoadPool.DeactivateAll();
@@ -27,6 +35,8 @@ public class LoadingPanel : MonoBehaviour
             var btn = obj.GetComponentInChildren<Button>();
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(() => {
+                ResetAllButtonColors();
+                obj.GetComponentInChildren<Image>().color = Color.green;
                 SelectSave(save);
             });
             obj.SetActive(true);
@@ -37,7 +47,7 @@ public class LoadingPanel : MonoBehaviour
     {
         Load.interactable = true;
         Delete.interactable = true;
-
+        
         Delete.onClick.RemoveAllListeners();
         Delete.onClick.AddListener(() => {
             DeleteSave(saveFile);
@@ -48,6 +58,7 @@ public class LoadingPanel : MonoBehaviour
     {
         SaveFiles.DeleteSave(save);
         RefreshSaveFiles();
+        ResetAllButtonColors();
     }
 
     void OnDisable()
