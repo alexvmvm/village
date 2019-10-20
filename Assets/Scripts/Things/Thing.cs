@@ -6,6 +6,7 @@ using System.Linq;
 public class Thing
 {   
     // properties    
+    public string id;
     public string sprite;
     public string name;
     public string description;
@@ -63,6 +64,7 @@ public class Thing
 
     public Thing(TypeOfThing type, Transform transform)
     {
+        this.id = Guid.NewGuid().ToString();
         this.type = type;
         this.transform = transform;
         this.spriteRenderer = transform.GetComponent<SpriteRenderer>();
@@ -244,6 +246,22 @@ public class Thing
 
         if(!string.IsNullOrEmpty(label))
             SetLabel(label);
+    }
+
+    public ThingSave ToSaveObj()
+    {
+        return new ThingSave
+        {
+            hitpoints = hitpoints,
+            ownedBy = ownedBy
+        };
+    }
+
+    public void FromSaveObj(string id, ThingSave save)
+    {
+        this.id = id;
+        this.hitpoints = save.hitpoints;
+        this.ownedBy = save.ownedBy;
     }
 
     public void DrawGizmos()
