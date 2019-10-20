@@ -10,7 +10,8 @@ using System;
 public class Saving : MonoBehaviour
 {
     public Game Game;
-    public string SavePath;
+    public string SaveName;
+    public string SavePath { get { return $"{SaveFiles.SaveDirectory}/{SaveName}.xml"; } }
 
     public static bool IsInMacOS { get { return UnityEngine.SystemInfo.operatingSystem.IndexOf("MacOS") != -1; } }
     public static bool IsInWinOS { get { return UnityEngine.SystemInfo.operatingSystem.IndexOf("Windows") != -1; } }
@@ -119,10 +120,10 @@ public class Saving : MonoBehaviour
     public void OpenDirectory()
     {
         if (IsInWinOS)
-            System.Diagnostics.Process.Start ("explorer.exe", Application.persistentDataPath.Replace (@"/", @"\"));
+            System.Diagnostics.Process.Start ("explorer.exe", SaveFiles.SaveDirectory.Replace (@"/", @"\"));
         else if (IsInMacOS) 
         {
-            System.Diagnostics.Process.Start("open", Application.persistentDataPath);
+            System.Diagnostics.Process.Start("open", SaveFiles.SaveDirectory);
             Debug.Log (Application.persistentDataPath);
         }
             
