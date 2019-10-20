@@ -83,7 +83,8 @@ public class Game : MonoBehaviour
 {
     public ZoneGraph ZoneGraph { get { return _zoneGraph; } }
     public Vector2Int MapSize = Vector2Int.one * 10;
-    public ObjectPooler ObjectPooler;
+    // public ObjectPooler ObjectPooler;
+    public GameObject ChildObj;
     public AstarPath AstarPath;
     public Thing[,] Grid;
     public List<Thing> Things;
@@ -178,23 +179,23 @@ public class Game : MonoBehaviour
                 
                 if(noise > 0.6f && noise < 0.65f)
                 {
-                    AddThing(Create(TypeOfThing.BerryBush, x, y));
+                    CreateAndAddThing(TypeOfThing.BerryBush, x, y);
                 }
                 else if(noise > 0.65f)
                 {
-                    AddThing(Create(TypeOfThing.Tree, x, y));
+                    CreateAndAddThing(TypeOfThing.Tree, x, y);
                 }
                 else if(noise2 > 0.8f)
                 {
-                    AddThing(Create(TypeOfThing.Rock, x, y));
+                    CreateAndAddThing(TypeOfThing.Rock, x, y);
                 }
                 else if(noise3 > 0.85f)
                 {
-                    AddThing(Create(TypeOfThing.Mushroom, x, y));
+                    CreateAndAddThing(TypeOfThing.Mushroom, x, y);
                 }
                 else
                 {
-                     AddThing(Create(TypeOfThing.Grass, x, y)); 
+                    CreateAndAddThing(TypeOfThing.Grass, x, y); 
                 }
                 
             }
@@ -203,7 +204,7 @@ public class Game : MonoBehaviour
         for(var y = 0; y < MapSize.y; y++)
         {
             var x = Mathf.FloorToInt(MapSize.x / 2);
-            AddThing(Create(TypeOfThing.Path, x, y));
+            CreateAndAddThing(TypeOfThing.Path, x, y);
         }
 
         var rand = 0;
@@ -230,7 +231,7 @@ public class Game : MonoBehaviour
             var x = UnityEngine.Random.Range(0, MapSize.x);
             var y = UnityEngine.Random.Range(0, MapSize.y);
 
-            AddThing(Create(TypeOfThing.Hen, x, y));
+            CreateAndAddThing(TypeOfThing.Hen, x, y);
         }
 
         for(var i = 0; i < 10; i++) 
@@ -238,7 +239,7 @@ public class Game : MonoBehaviour
             var x = UnityEngine.Random.Range(0, MapSize.x);
             var y = UnityEngine.Random.Range(0, MapSize.y);
 
-            AddThing(Create(TypeOfThing.Chick, x, y));
+            CreateAndAddThing(TypeOfThing.Chick, x, y);
         }
 
         for(var i = 0; i < 1; i++) 
@@ -246,10 +247,18 @@ public class Game : MonoBehaviour
             var x = UnityEngine.Random.Range(0, MapSize.x);
             var y = UnityEngine.Random.Range(0, MapSize.y);
 
-            AddThing(Create(TypeOfThing.Rooster, x, y));
+            CreateAndAddThing(TypeOfThing.Rooster, x, y);
         }
 
         _zoneGraph.Start();
+    }
+
+    public GameObject InstantiateObj()
+    {
+        var obj = Instantiate(ChildObj);
+        obj.transform.SetParent(transform);
+        obj.SetActive(true);
+        return obj;
     }
 
     /*
@@ -385,7 +394,7 @@ public class Game : MonoBehaviour
 
     public Thing Create(TypeOfThing thingType, int x, int y)
     {
-        var obj = ObjectPooler.GetPooledObject();
+        var obj = InstantiateObj();
         obj.transform.position = new Vector3(x, y, 0);
         obj.transform.name = thingType.ToString();
 

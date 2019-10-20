@@ -229,7 +229,7 @@ public class Thing
         if(_labelObj != null)
             GameObject.Destroy(_labelObj);
 
-        transform.gameObject.SetActive(false);
+        GameObject.Destroy(transform.gameObject);
         game.Things.Remove(this);
     }
     

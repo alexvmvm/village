@@ -27,7 +27,7 @@ public class GameCursor
     public GameCursor(Game game)
     {
         _game = game;
-        _crosshairCursor = _game.ObjectPooler.GetPooledObject().transform;
+        _crosshairCursor = _game.InstantiateObj().transform;
 
         _spriteRenderer = _crosshairCursor.gameObject.GetComponent<SpriteRenderer>();
         _spriteRenderer.sprite = _game.GetSprite("crosshair025");

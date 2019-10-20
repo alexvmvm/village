@@ -2279,6 +2279,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 1
+--- !u!1 &251048798 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5358535171823323085, guid: fcdf011e53be1a244970d4ddc7b93b05,
+    type: 3}
+  m_PrefabInstance: {fileID: 5358535171667114958}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &255433289
 GameObject:
   m_ObjectHideFlags: 0
@@ -8335,7 +8341,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: -679.5517}
+  m_AnchoredPosition: {x: -0.000030517578, y: -677.5522}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1324053944
@@ -9248,7 +9254,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 473427271}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.6866926
+  m_Size: 0.6478206
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14985,6 +14991,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5358535172568457115, guid: fcdf011e53be1a244970d4ddc7b93b05,
+        type: 3}
+      propertyPath: ChildObj
+      value: 
+      objectReference: {fileID: 251048798}
     - target: {fileID: 5358535172568457112, guid: fcdf011e53be1a244970d4ddc7b93b05,
         type: 3}
       propertyPath: m_LocalPosition.x
