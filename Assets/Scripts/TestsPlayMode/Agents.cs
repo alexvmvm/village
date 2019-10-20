@@ -56,7 +56,7 @@ namespace Tests
             foreach(var chicken in game.Things.Where(t => t.type == TypeOfThing.Hen).ToArray())
             {
                 Assert.IsNotNull(chicken);
-                Assert.IsNotNull(chicken.agent);
+                Assert.IsNotNull(chicken.GetTrait<Agent>());
                 Assert.IsNotNull(chicken.transform);
                 Assert.IsNotNull(chicken.transform.gameObject.GetComponent<Movement>());
                 Assert.IsNotNull(chicken.transform.gameObject.GetComponent<Seeker>());
@@ -94,7 +94,7 @@ namespace Tests
             foreach(var villager in game.Things.Where(t => t.type == TypeOfThing.Villager).ToArray())
             {
                 Assert.IsNotNull(villager);
-                Assert.IsNotNull(villager.agent);
+                Assert.IsNotNull(villager.GetTrait<Agent>());
                 Assert.IsNotNull(villager.transform);
                 Assert.IsNotNull(villager.transform.gameObject.GetComponent<Movement>());
                 Assert.IsNotNull(villager.transform.gameObject.GetComponent<Seeker>());

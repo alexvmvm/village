@@ -5,16 +5,18 @@ using System.Linq;
 
 public class GetResource : MoveGOAPAction
 {
+    private Thing _thing;
     private Movement _movement;
     private TypeOfThing _type;
     private Inventory _inventory;
     private Villager _villager;
 
-    public GetResource(Game game, Movement movement, TypeOfThing type, Inventory inventory, Villager villager) : base(game, movement)
+    public GetResource(Game game, Thing thing, Movement movement, TypeOfThing type, Villager villager) : base(game, movement)
     {
+        _thing = thing;
         _movement = movement;
         _type = type;
-        _inventory = inventory;
+        _inventory = _thing.GetTrait<Inventory>();
         _villager = villager;
     }
 

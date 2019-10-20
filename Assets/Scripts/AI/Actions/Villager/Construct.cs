@@ -11,12 +11,14 @@ public class Construct : GOAPAction
     private bool _isDone;
     private TypeOfThing _type;
     private Thing _thing;
+    private Inventory _inventory;
 
     public Construct(Game game, Movement movement, TypeOfThing type, Thing thing) : base(game)
     {
         _movement = movement;
         _type = type;   
         _thing = thing;
+        _inventory = _thing.GetTrait<Inventory>();
     }
 
     public override bool IsDone()
@@ -51,14 +53,14 @@ public class Construct : GOAPAction
         {
             _target.construction.Construct();
 
-            if(_thing.inventory.IsHoldingSomething() && !_thing.inventory.IsHoldingTool())
+            if(_inventory.IsHoldingSomething() && !_inventory.IsHoldingTool())
             {
-                var resource = _thing.inventory.Holding;
+                var resource = _inventory.Holding;
                 resource.hitpoints -= 1; 
                 
                 if(resource.hitpoints == 0)
                 {
-                    _thing.inventory.Drop();
+                    _inventory.Drop();
                     resource.Destroy();
                 }
             }

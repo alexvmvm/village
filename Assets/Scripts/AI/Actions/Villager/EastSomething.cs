@@ -6,9 +6,9 @@ public class EastSomething : GOAPAction
 {
     private Inventory _inventory;
 
-    public EastSomething(Game game, Inventory inventory) : base(game)
+    public EastSomething(Game game, Thing thing) : base(game)
     {
-        _inventory = inventory;
+        _inventory = thing.GetTrait<Inventory>();
     }
 
     public override bool IsDone()

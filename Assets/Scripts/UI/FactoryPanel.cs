@@ -14,11 +14,11 @@ public class FactoryPanel : MonoBehaviour
 
     public void Setup(Thing thing)
     {
-        var factory = thing.factory;
+        var factory = thing.GetTrait<Factory>();
 
         FactoryLineItem.DeactivateAll();
 
-        foreach(var type in thing.factory.Produces)
+        foreach(var type in thing.GetTrait<Factory>().Produces)
         {
             var lineItemThing = Game.Create(type);
             var obj = FactoryLineItem.GetPooledObject();

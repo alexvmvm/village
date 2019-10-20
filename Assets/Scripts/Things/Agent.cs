@@ -13,7 +13,7 @@ public enum AgentState
     Paused
 }
 
-public abstract class Agent 
+public abstract class Agent : ITrait
 {
     public DateTime Created { get { return _created; } }
     public GOAPAction CurentAction { get { return _current; } }
@@ -35,6 +35,11 @@ public abstract class Agent
         _useable = new List<GOAPAction>();
 
         _created = DateTime.Now;
+    }
+
+    public virtual void Setup()
+    {
+        
     }
 
     public void AddAction(GOAPAction action)
@@ -151,5 +156,4 @@ public abstract class Agent
     {
         
     }
-
 }

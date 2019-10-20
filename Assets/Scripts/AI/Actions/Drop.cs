@@ -5,25 +5,27 @@ using UnityEngine;
 public class Drop : GOAPAction
 {
     private Thing _thing;
+    private Inventory _inventory;
 
     public Drop(Game game, Thing thing) : base(game)
     {
         _thing = thing;    
+        _inventory = _thing.GetTrait<Inventory>();
     }
 
     public override bool IsDone()
     {
-        return !_thing.inventory.IsHoldingSomething();
+        return !_inventory.IsHoldingSomething();
     }
 
     public override bool IsPossibleToPerform()
     {
-        return _thing.inventory != null;
+        return _inventory != null;
     }
 
     public override bool Perform()
     {
-        _thing.inventory.Drop();
+        _inventory.Drop();
         return true;
     }
 

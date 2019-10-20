@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Crop 
+public class Crop : ITrait
 {
     private Thing _thing;
     private Game _game;

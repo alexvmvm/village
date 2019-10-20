@@ -32,8 +32,8 @@ public class VillageManager : MonoBehaviour
     public IEnumerable<IGrouping<string, Thing>> GetFamiliesByLastname()
     {
         return _game.Things
-            .Where(t => t.type == TypeOfThing.Villager)
-            .GroupBy(t => (t.agent as Villager).Lastname);
+            .Where(t => t.type == TypeOfThing.Villager && t.HasTrait<Villager>())
+            .GroupBy(t => t.GetTrait<Villager>().Lastname);
     }
 
     void UpdateFamilyPanels()
@@ -64,8 +64,8 @@ public class VillageManager : MonoBehaviour
     public IEnumerable<string> GetDistinctSurnames()
     {
         return _game.Things
-            .Where(t => t.type == TypeOfThing.Villager && t.agent != null)
-            .Select(t => (t.agent as Villager))
+            .Where(t => t.type == TypeOfThing.Villager)
+            .Select(t => t.GetTrait<Villager>())
             .Select(v => v.Lastname)
             .Distinct();
     }

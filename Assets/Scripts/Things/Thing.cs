@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Thing
 {   
@@ -43,12 +45,6 @@ public class Thing
     public string pathTag;
     public bool walkable = true;
     public Construction construction;
-    public Agent agent;
-    public Inventory inventory;
-    public Factory factory;
-    public Fire fire;
-    public Storage storage;
-    public Crop crop;
 
     /*
         Show Label
@@ -62,6 +58,8 @@ public class Thing
         Crafting
     */
     public TypeOfThing[] requiredToCraft;
+    
+    private List<ITrait> _traits;
 
     public Thing(TypeOfThing type, Transform transform)
     {
@@ -70,6 +68,7 @@ public class Thing
         this.spriteRenderer = transform.GetComponent<SpriteRenderer>();
         this.produces = type;
         this.requiredToGet = TypeOfThing.None;
+        this._traits = new List<ITrait>();
     }
 
     public Vector2Int gridPosition
@@ -80,6 +79,22 @@ public class Thing
                 Mathf.FloorToInt(transform.position.x),
                 Mathf.FloorToInt(transform.position.y));
         }
+    }
+
+    public void AddTrait(ITrait trait)
+    {
+        _traits.Add(trait);
+    }
+
+
+    public T GetTrait<T>() where T : ITrait
+    {
+        return (T)_traits.Where(t => typeof(T) == t.GetType()).FirstOrDefault();
+    }
+
+    public bool HasTrait<T>() where T : ITrait
+    {
+        return GetTrait<T>() != null;
     }
 
     public void SetLabel(string label)
@@ -112,16 +127,8 @@ public class Thing
             transform.gameObject.layer = LayerMask.NameToLayer("Blocks Light");
         }
 
-        if(fire != null)
-        {
-            fire.Setup();
-        }
-
-        if(crop != null)
-        {
-            crop.Setup();
-        }
-
+        foreach(var trait in _traits)
+            trait.Setup();
     }
 
     public void SetSprite()
@@ -207,7 +214,7 @@ public class Thing
 
     public bool CanBeSeletected()
     {
-        return assignToFamily || factory != null || storage != null;
+        return assignToFamily || HasTrait<Factory>() || HasTrait<Storage>();
     }
 
     public void Destroy()
@@ -226,17 +233,8 @@ public class Thing
     
     public virtual void Update()
     {
-        if(agent != null)
-            agent.Update();
-        
-        if(factory != null)
-            factory.Update();
-
-        if(fire != null)
-            fire.Update();
-
-        if(crop != null)
-            crop.Update();
+        foreach(var trait in _traits)
+            trait.Update();
         
         var label = "";
         if(resource)
@@ -250,14 +248,8 @@ public class Thing
 
     public void DrawGizmos()
     {
-        if(agent != null)
-            agent.DrawGizmos();
-
-        if(factory != null)
-            factory.DrawGizmos();
-
-        if(crop != null)
-            crop.DrawGizmos();
+        foreach(var trait in _traits)
+            trait.DrawGizmos();
 
 #if UNITY_EDITOR
                

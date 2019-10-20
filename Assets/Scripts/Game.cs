@@ -141,8 +141,8 @@ public class Game : MonoBehaviour
             if(thingType == TypeOfThing.None)
                 continue;
             var thing = Create(thingType);
-            if(thing.agent != null)
-                thing.agent.PauseAgent();
+            if(thing.GetTrait<Agent>() != null)
+                thing.GetTrait<Agent>().PauseAgent();
             AllThings.Add(thing);
         }
 
@@ -563,7 +563,7 @@ public class Game : MonoBehaviour
                 thing.playerBuiltFloor = true;
                 thing.buildOn = false;
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.crop = new Crop(this, thing, 360, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" });
+                thing.AddTrait(new Crop(this, thing, 360, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" }));
             break;
             case TypeOfThing.CabbageCropBlueprint:
                 thing.name = "cabbage";
@@ -736,8 +736,8 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.fixedToGrid = true;
                 thing.assignToFamily = true;
-                thing.factory = new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Iron });
-                thing.fire = new Fire(this, thing, true);
+                thing.AddTrait(new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Iron }));
+                thing.AddTrait(new Fire(this, thing, true));
             break;
 
             case TypeOfThing.WorkbenchBlueprint:
@@ -753,7 +753,7 @@ public class Game : MonoBehaviour
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.fixedToGrid = true;
                 thing.assignToFamily = true;
-                thing.factory = new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe });
+                thing.AddTrait(new Factory(this, thing, new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe }));
             break;
             case TypeOfThing.Axe:
                 thing.name = "axe";
@@ -774,7 +774,7 @@ public class Game : MonoBehaviour
                 thing.description = "A storage container used to store resources";
                 thing.sprite = "colored_200";
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.storage = new Storage(this);
+                thing.AddTrait(new Storage(this));
                 thing.fixedToGrid = true;
                 break;
             case TypeOfThing.StorageBlueprint:
@@ -789,7 +789,7 @@ public class Game : MonoBehaviour
                 thing.description = "A fire to keep villagers warm";
                 thing.sprite = "colored_334";
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.fire = new Fire(this, thing);
+                thing.AddTrait(new Fire(this, thing));
                 break;
             case TypeOfThing.FireBlueprint:
                 thing.name = "fire";
@@ -807,21 +807,21 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_24";
                 thing.color = new Color(235/255f, 155/255f, 200/255f);
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.inventory = new Inventory(thing);
-                thing.agent = new Villager(this, thing);
+                thing.AddTrait(new Inventory(thing));
+                thing.AddTrait(new Villager(this, thing));
             break;
             case TypeOfThing.Hen:
                 thing.name = "Chicken";
                 thing.sprite = "colored_transparent_249";
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.agent = new Animal(this, thing);
+                thing.AddTrait(new Animal(this, thing));
             break;
             case TypeOfThing.Rooster:
                 thing.name = "Cockerl";
                 thing.sprite = "colored_transparent_249";
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.color = Color.red;
-                thing.agent = new Animal(this, thing);
+                thing.AddTrait(new Animal(this, thing));
             break;
             case TypeOfThing.Chick:
                 thing.name = "Chick";
@@ -829,7 +829,7 @@ public class Game : MonoBehaviour
                 thing.sprite = "colored_transparent_248";
                 thing.color = Color.yellow;
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.agent = new Animal(this, thing);
+                thing.AddTrait(new Animal(this, thing));
             break;
 
             /*
@@ -921,8 +921,6 @@ public class Game : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.V))
         {
-            //FindObjectOfType<VillageManager>().CreateNewVillager();
-
             AddThing(Create(TypeOfThing.Villager, 
                 Mathf.FloorToInt(MapSize.x / 2), 
                 UnityEngine.Random.Range(0, MapSize.y)));

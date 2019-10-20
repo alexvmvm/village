@@ -55,7 +55,7 @@ namespace Tests
             while(timeToWait > 0)
             {
                 timeToWait -= Time.deltaTime;
-                if(villager.agent.CurentAction != null && villager.agent.CurentAction is RequestResidence)
+                if(villager.GetTrait<Agent>().CurentAction != null && villager.GetTrait<Agent>().CurentAction is RequestResidence)
                 {
                     Assert.Pass();
                 }
@@ -92,7 +92,7 @@ namespace Tests
             while(timeToWait > 0)
             {
                 timeToWait -= Time.deltaTime;
-                if(villager.agent.CurentAction != null && villager.agent.CurentAction is Idle)
+                if(villager.GetTrait<Agent>().CurentAction != null && villager.GetTrait<Agent>().CurentAction is Idle)
                 {
                     Assert.Pass();
                 }
@@ -142,7 +142,7 @@ namespace Tests
             while(timeToWait > 0)
             {
                 timeToWait -= Time.deltaTime;
-                if(villager.agent.CurentAction != null && !(villager.agent.CurentAction is Idle))
+                if(villager.GetTrait<Agent>().CurentAction != null && !(villager.GetTrait<Agent>().CurentAction is Idle))
                 {
                     Assert.Fail("Villager attempted to get something that was not possible to reach");
                 }
@@ -192,7 +192,7 @@ namespace Tests
             while(timeToWait > 0)
             {
                 timeToWait -= Time.deltaTime;
-                if(villager.agent.CurentAction != null && !(villager.agent.CurentAction is GetResourceFromRawResource))
+                if(villager.GetTrait<Agent>().CurentAction != null && !(villager.GetTrait<Agent>().CurentAction is GetResourceFromRawResource))
                 {
                     Assert.Pass();
                     yield break;

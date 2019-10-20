@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory 
+public class Inventory : ITrait
 {
     public Thing Holding { get { return _holding; } }
     private Thing _parent;
@@ -18,8 +18,8 @@ public class Inventory
     {
         _holding = thing;
 
-        if(_holding.agent != null)
-            _holding.agent.PauseAgent();
+        if(_holding.GetTrait<Agent>() != null)
+            _holding.GetTrait<Agent>().PauseAgent();
 
         _holding.transform.SetParent(_parent.transform);
         _holding.transform.localPosition = Vector3.up;
@@ -54,4 +54,18 @@ public class Inventory
         return IsHoldingSomething() && (IsHolding(TypeOfThing.Hoe) || IsHolding(TypeOfThing.Axe));
     }
 
+    public void Setup()
+    {
+
+    }
+
+    public void Update()
+    {
+      
+    }
+
+    public void DrawGizmos()
+    {
+
+    }
 }

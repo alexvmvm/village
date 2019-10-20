@@ -2,18 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fire 
+public class Fire : ITrait
 {   
     private Thing _thing;
     private Game _game;
     private GameObject _light;
     private bool _lightWithFactory;
+    private Factory _factory;
 
     public Fire(Game game, Thing thing, bool lightWithFactory = false)
     {
         _thing = thing;
         _game = game;
         _lightWithFactory = lightWithFactory;
+        _factory = thing.GetTrait<Factory>();
+    }
+
+    public void DrawGizmos()
+    {
+        
     }
 
     public void Setup()
@@ -27,7 +34,7 @@ public class Fire
     {
         if(_lightWithFactory)
         {
-            _light.SetActive(_thing.factory.IsProducing());
+            _light.SetActive(_factory.IsProducing());
         }
         else
         {

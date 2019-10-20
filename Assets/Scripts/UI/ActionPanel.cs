@@ -31,7 +31,7 @@ public class ActionPanel : MonoBehaviour
             });
         }
 
-        if(thing.factory != null)
+        if(thing.HasTrait<Factory>())
         {
             FactoryButton.gameObject.SetActive(true);
             FactoryButton.onClick.RemoveAllListeners();
@@ -40,7 +40,7 @@ public class ActionPanel : MonoBehaviour
             });
         }
 
-        if(thing.storage != null)
+        if(thing.HasTrait<Storage>())
         {
             StorageButton.gameObject.SetActive(true);
             StorageButton.onClick.RemoveAllListeners();

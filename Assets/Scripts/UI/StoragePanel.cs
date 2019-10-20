@@ -21,9 +21,9 @@ public class StoragePanel : MonoBehaviour
             toggle.onValueChanged.RemoveAllListeners();
             toggle.onValueChanged.AddListener((value) => {
                 if(value) 
-                    thing.storage.Allow(item.type);
+                    thing.GetTrait<Storage>().Allow(item.type);
                 else
-                    thing.storage.Disallow(item.type);
+                    thing.GetTrait<Storage>().Disallow(item.type);
             });
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class Factory 
+public class Factory : ITrait
 {
     public TypeOfThing[] Produces { get { return _produces; } }
     private Game _game;
@@ -29,6 +29,10 @@ public class Factory
         {
             _queued[type] = 0;
         }
+    }
+
+    public void Setup()
+    {
     }
 
     public void AddThingToProduce(TypeOfThing thingToProduce)
