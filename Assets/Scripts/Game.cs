@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
+using System.Collections;
 
 public enum TypeOfThing 
 {
@@ -166,7 +167,14 @@ public class Game : MonoBehaviour
         _director = new Director(this);
     }
 
-    void Start()
+    IEnumerator Start()
+    {
+        yield return null;
+        
+        _zoneGraph.Start();
+    }
+
+    public void RandomMap()
     {
         for(var x = 0; x < MapSize.x; x++)
         {
@@ -250,7 +258,6 @@ public class Game : MonoBehaviour
             CreateAndAddThing(TypeOfThing.Rooster, x, y);
         }
 
-        _zoneGraph.Start();
     }
 
     public GameObject InstantiateObj()

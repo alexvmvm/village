@@ -252,14 +252,19 @@ public class Thing
     {
         return new ThingSave
         {
+            id = id,
+            position = transform.position,
+            type = type,
             hitpoints = hitpoints,
             ownedBy = ownedBy
         };
     }
 
-    public void FromSaveObj(string id, ThingSave save)
+    public void FromSaveObj(ThingSave save)
     {
-        this.id = id;
+        this.id = save.id;
+        this.transform.position = save.position;
+        this.type = save.type;
         this.hitpoints = save.hitpoints;
         this.ownedBy = save.ownedBy;
     }

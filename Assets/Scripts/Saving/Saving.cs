@@ -18,9 +18,44 @@ public class Saving : MonoBehaviour
 
     private MemoryStream _memoryStream;
     private XmlWriter _writer;
+    private string _currentSavePath;
+
+    void Start()
+    {
+        var saveFile = PlayerPrefs.GetString("SaveFilePath");
+        if(!string.IsNullOrEmpty(saveFile))
+        {
+            var newGame = PlayerPrefs.GetInt("NewGame");
+            if(newGame == 1)
+            {
+                Game.RandomMap();
+                SaveFile(saveFile);
+            }
+
+            _currentSavePath = saveFile;
+            LoadFile(saveFile);
+           
+            Debug.Log($"Loading {saveFile}.");
+        }
+        else
+        {
+            Game.RandomMap();
+            Debug.Log($"No save file found, generating random map.");
+        }
+    }
 
     [BitStrap.Button]
     public void Save()
+    {
+        SaveFile(SavePath);
+    }
+
+    public void SaveCurrentGame()
+    {
+        SaveFile(_currentSavePath);
+    }
+
+    public void SaveFile(string path)
     {
         _memoryStream = new MemoryStream();
 
@@ -62,8 +97,13 @@ public class Saving : MonoBehaviour
     [BitStrap.Button]
     public void Load()
     {
+        LoadFile(SavePath);
+    }
+
+    public void LoadFile(string path)
+    {
         var document = new XmlDocument();
-        document.Load(SavePath);
+        document.Load(path);
 
         foreach(var thing in Game.Things.ToArray())
         {
@@ -92,28 +132,11 @@ public class Saving : MonoBehaviour
             thing.transform.position = new Vector3(x, y, z);
 
             var saveObj = (ThingSave)serializer.Deserialize(ms);
-            thing.FromSaveObj(id, saveObj);
+            thing.FromSaveObj(saveObj);
 
             Game.AddThing(thing);
             
         }
-
-
-        // var nodes = document.SelectNodes("//entity[@id='" + id + "']");
-        // if (nodes.Count > 1)
-        //     throw new Exception(string.Format("Multiple elements found with the same id: {0}", id));
-        // if (nodes.Count == 0)
-        //     return default(T);
-
-        // var node = nodes[0];
-        // var serializer = new XmlSerializer(typeof(T));
-        // var ms = new MemoryStream();
-        // var sw = new StreamWriter(ms);
-        // sw.Write(node.InnerXml);
-        // sw.Flush();
-        // ms.Position = 0;
-        // return (T)serializer.Deserialize(ms);
-
     }
 
     [BitStrap.Button]
