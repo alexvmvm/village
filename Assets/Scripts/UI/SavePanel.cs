@@ -13,9 +13,9 @@ public class SavePanel : MonoBehaviour
 
     public void Save()
     {
-        if(_saving != null)
-        {
-            _saving.SaveCurrentGame();
-        }
+        // if(_saving != null)
+        // {
+        //     _saving.SaveCurrentGame();
+        // }
     }
 }

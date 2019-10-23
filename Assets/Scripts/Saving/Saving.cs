@@ -10,145 +10,15 @@ using System;
 public class Saving : MonoBehaviour
 {
     public Game Game;
-    public string SaveName;
-    public string SavePath { get { return $"{SaveFiles.SaveDirectory}/{SaveName}.xml"; } }
-
-    public static bool IsInMacOS { get { return UnityEngine.SystemInfo.operatingSystem.IndexOf("MacOS") != -1; } }
-    public static bool IsInWinOS { get { return UnityEngine.SystemInfo.operatingSystem.IndexOf("Windows") != -1; } }
-
-    private MemoryStream _memoryStream;
-    private XmlWriter _writer;
-    private string _currentSavePath;
+  
 
     void Start()
     {
-        var saveFile = PlayerPrefs.GetString("SaveFilePath");
-        if(!string.IsNullOrEmpty(saveFile))
-        {
-            var newGame = PlayerPrefs.GetInt("NewGame");
-            if(newGame == 1)
-            {
-                Game.RandomMap();
-                SaveFile(saveFile);
-            }
-
-            _currentSavePath = saveFile;
-            LoadFile(saveFile);
-           
-            Debug.Log($"Loading {saveFile}.");
-        }
-        else
-        {
-            Game.RandomMap();
-            Debug.Log($"No save file found, generating random map.");
-        }
+        StartCoroutine(LoadSave());
     }
 
-    [BitStrap.Button]
-    public void Save()
+    IEnumerator LoadSave()
     {
-        SaveFile(SavePath);
-    }
-
-    public void SaveCurrentGame()
-    {
-        SaveFile(_currentSavePath);
-    }
-
-    public void SaveFile(string path)
-    {
-        _memoryStream = new MemoryStream();
-
-        var settings = new XmlWriterSettings()
-        {
-            Indent = true,
-            OmitXmlDeclaration = true
-        };
-
-        _writer = XmlWriter.Create(_memoryStream, settings);
-        _writer.WriteRaw("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-        _writer.WriteStartElement("entities");
-
-        foreach(var thing in Game.Things)
-        {
-            var serializer = new XmlSerializer(typeof(ThingSave));
-            var emptyNs = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
-
-            // write entity with id..
-            _writer.WriteStartElement("entity");
-            _writer.WriteAttributeString("id", thing.id);
-            _writer.WriteAttributeString("type", thing.type.ToString());
-            _writer.WriteAttributeString("x", thing.transform.position.x.ToString());
-            _writer.WriteAttributeString("y", thing.transform.position.y.ToString());
-            _writer.WriteAttributeString("z", thing.transform.position.z.ToString());
-            serializer.Serialize(_writer, thing.ToSaveObj(), emptyNs);
-            _writer.WriteEndElement();
-        }
-
-        _writer.WriteFullEndElement();
-		_writer.Flush();
-		_memoryStream.Flush();
-		_memoryStream.Seek(0, SeekOrigin.Begin);
-		using (var fileStream = File.Create(SavePath))
-			_memoryStream.WriteTo(fileStream);
-
-    }
-
-    [BitStrap.Button]
-    public void Load()
-    {
-        LoadFile(SavePath);
-    }
-
-    public void LoadFile(string path)
-    {
-        var document = new XmlDocument();
-        document.Load(path);
-
-        foreach(var thing in Game.Things.ToArray())
-        {
-            Game.RemoveThing(thing);
-        }
-
-        var nodes = document.SelectNodes("/entities/entity");
-
-        foreach(XmlNode node in nodes)
-        {
-            var serializer = new XmlSerializer(typeof(ThingSave));
-            var ms = new MemoryStream();
-            var sw = new StreamWriter(ms);
-            sw.Write(node.InnerXml);
-            sw.Flush();
-            ms.Position = 0;
-
-            var id = node.Attributes["id"].Value;
-            var type = node.Attributes["type"].Value;
-            var x = float.Parse(node.Attributes["x"].Value);
-            var y = float.Parse(node.Attributes["y"].Value);
-            var z = float.Parse(node.Attributes["z"].Value);
-
-            var typeOfThing = (TypeOfThing)Enum.Parse(typeof(TypeOfThing), type);
-            var thing = Game.Create(typeOfThing);
-            thing.transform.position = new Vector3(x, y, z);
-
-            var saveObj = (ThingSave)serializer.Deserialize(ms);
-            thing.FromSaveObj(saveObj);
-
-            Game.AddThing(thing);
-            
-        }
-    }
-
-    [BitStrap.Button]
-    public void OpenDirectory()
-    {
-        if (IsInWinOS)
-            System.Diagnostics.Process.Start ("explorer.exe", SaveFiles.SaveDirectory.Replace (@"/", @"\"));
-        else if (IsInMacOS) 
-        {
-            System.Diagnostics.Process.Start("open", SaveFiles.SaveDirectory);
-            Debug.Log (Application.persistentDataPath);
-        }
-            
+        yield return SaveFiles.LoadCurrentSaveGame(Game);
     }
 }

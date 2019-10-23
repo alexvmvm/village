@@ -52,7 +52,7 @@ public class LoadingPanel : MonoBehaviour
         
         Load.onClick.RemoveAllListeners();
         Load.onClick.AddListener(() => {
-            LoadSave(saveFile.FilePath);
+            SaveFiles.LoadSave(saveFile);
         });
 
         Delete.onClick.RemoveAllListeners();

@@ -905,16 +905,13 @@ public class Game : MonoBehaviour
             (WorldTime.SecondsInADay/2);
     }
 
-    /*
-        Debug
-    */
-    // public void AddJobToAllFactories()
-    // {
-    //     foreach(var thing in Things.Where(t => t.factory != null))
-    //     {
-    //         thing.factory.RequestJob();
-    //     }
-    // }
+    public void Clear()
+    {
+        foreach(var thing in Things.ToArray())
+        {
+            RemoveThing(thing);
+        }
+    }
 
     void Update()
     {

@@ -13,11 +13,8 @@ public class NewGamePanel : MonoBehaviour
     {
         if(!string.IsNullOrEmpty(InputField.text) && !SaveFiles.SaveExists(InputField.text))
         {
-            SaveFiles.CreateSave(InputField.text);
-            var saveFile = SaveFiles.GetSaveFile(InputField.text);
-            PlayerPrefs.SetString("SaveFilePath", saveFile.FilePath);
-            PlayerPrefs.SetInt("NewGame", 1);
-            SceneManager.LoadScene("main");
+            var saveFile = SaveFiles.CreateNewSave(InputField.text);
+            SaveFiles.LoadSave(saveFile);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.IO;
 using UnityEngine;
 using System.Xml;
 using System.Xml.Serialization;
+using UnityEngine.SceneManagement;
 
 public class SaveFile
 {
@@ -18,6 +19,9 @@ public class SaveFile
 
 public class SaveFiles
 {
+    public static SaveFile SelectedSave { get { return _saveFile; } }
+    private static SaveFile _saveFile;
+
     public static string SaveDirectory 
     {
         get 
@@ -29,20 +33,31 @@ public class SaveFiles
         }
     }
 
+    public static void LoadSave(SaveFile save)
+    {
+        _saveFile = save;
+        SceneManager.LoadScene("main");
+    }
+
     public static IEnumerable<SaveFile> GetSaves()
     {
         return Directory
             .GetFiles(SaveDirectory)
             .Where(f => Path.GetExtension(f) == ".xml")
-            .Select(f => new SaveFile
-            {
-                FileName = Path.GetFileName(f),
-                Created = File.GetCreationTime(f),
-                Modified = File.GetLastWriteTime(f),
-                FilePath = Path.Combine(SaveDirectory, Path.GetFileName(f))
-            })
+            .Select(SaveFileFromFilePath)
             .OrderByDescending(s => s.Created)
             .ToArray();
+    }
+
+    static SaveFile SaveFileFromFilePath(string filePath)
+    {
+        return new SaveFile
+        {
+            FileName = Path.GetFileName(filePath),
+            Created = File.GetCreationTime(filePath),
+            Modified = File.GetLastWriteTime(filePath),
+            FilePath = Path.Combine(SaveDirectory, Path.GetFileName(filePath))
+        };
     }
 
     public static SaveFile GetSaveFile(string name)
@@ -55,9 +70,13 @@ public class SaveFiles
         return GetSaveFile(saveName) != null;
     }
 
-    public static void CreateSave(string saveName)
+    public static SaveFile CreateNewSave(string saveName)
     {
-        File.Create($"{SaveDirectory}/{saveName}.xml");
+        var savePath = $"{SaveDirectory}/{saveName}.xml";
+        var saveFile = SaveFileFromFilePath(savePath);
+        SaveThings(new List<Thing>(), saveFile);
+        _saveFile = saveFile;
+        return saveFile;
     }
 
     public static void DeleteSave(SaveFile save)
@@ -118,18 +137,39 @@ public class SaveFiles
 		memoryStream.Seek(0, SeekOrigin.Begin);
 		using (var fileStream = File.Create(saveFile.FilePath))
 			memoryStream.WriteTo(fileStream);
+
+        writer.Close();
+        memoryStream.Close();
     }
 
     public static IEnumerator LoadGame(Game game, SaveFile save)
     {
         // clear game
-        foreach(var thing in game.Things.ToArray())
+        game.Clear();
+
+        // load game
+        var objs = SaveFiles.LoadThingSaves(save);
+        foreach(var obj in objs)
         {
-            game.RemoveThing(thing);
+            var thing = game.Create(obj.type);
+            thing.FromSaveObj(obj);
+            game.AddThing(thing);
+            yield return null;
+        }
+    }
+
+    public static IEnumerator LoadCurrentSaveGame(Game game)
+    {
+        if(_saveFile == null)
+        {
+            throw new Exception("Save file not set");
         }
 
-        // load game`
-        var objs = SaveFiles.LoadThingSaves(save);
+        // clear game
+        game.Clear();
+
+        // load game
+        var objs = SaveFiles.LoadThingSaves(_saveFile);
         foreach(var obj in objs)
         {
             var thing = game.Create(obj.type);
