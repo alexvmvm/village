@@ -273,7 +273,6 @@ public class Game : MonoBehaviour
         return AddThing(Create(type, x, y));
     }
 
-
     /*
         Pathfinding
     */
