@@ -141,7 +141,7 @@ public class Thing
         this.spriteRenderer.sortingOrder = sortingOrder;
         this.spriteRenderer.color = color;
         this.transform.localScale = scale;
-        this.transform.rotation = game.GetSpriteRotation(spriteName);
+        this.transform.rotation = Assets.GetSpriteRotation(spriteName);
     }
 
     public void RefreshSprite()

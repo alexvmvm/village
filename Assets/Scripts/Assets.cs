@@ -9,6 +9,7 @@ public class Assets
     private static Dictionary<string, Sprite> _sprites;
     private static Dictionary<string, AudioClip> _audioClips;
     private static Dictionary<string, Material> _materials;
+    private static Dictionary<string, GameObject> _prefabs;
 
     public static Sprite GetSprite(string name)
     {
@@ -32,6 +33,14 @@ public class Assets
         return _sprites[spriteName];
     }
 
+    public static Quaternion GetSpriteRotation(string name)
+    {
+        if(!name.Contains("!"))
+            return Quaternion.identity;
+        var rotation = int.Parse(name.Substring(name.IndexOf('!') + 1));
+        return Quaternion.Euler(0, 0, rotation);
+    }
+
     public static AudioClip GetAudioClip(string name)
     {
         if(_audioClips == null)
@@ -44,6 +53,20 @@ public class Assets
             _audioClips[name] = Resources.Load<AudioClip>($"Music/{name}");
 
         return _audioClips[name];
+    }
+
+    public static GameObject GetPrefab(string name)
+    {
+        if(_prefabs == null)
+            _prefabs = new Dictionary<string, GameObject>();
+
+        if(string.IsNullOrEmpty(name))
+            throw new System.Exception("GameObject name is null");
+
+        if(!_prefabs.ContainsKey(name))
+            _prefabs[name] = Resources.Load<GameObject>($"Prefabs/{name}");
+
+        return _prefabs[name];
     }
 
      public static Material GetMaterial(string name)

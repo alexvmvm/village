@@ -3,8 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
-using Things;
-
 
 public delegate void ThingAdded(Thing thing);
 public delegate void ThingRemoved(Thing thing);
@@ -13,7 +11,6 @@ public class Game : MonoBehaviour
 {
     public ZoneGraph ZoneGraph { get { return _zoneGraph; } }
     public Vector2Int MapSize = Vector2Int.one * 10;
-    public GameObject ChildObj;
     public AstarPath AstarPath;
     public Thing[,] Grid;
     public List<Thing> Things;
@@ -162,7 +159,7 @@ public class Game : MonoBehaviour
 
     public GameObject InstantiateObj()
     {
-        var obj = Instantiate(ChildObj);
+        var obj = Instantiate(Assets.GetPrefab("Thing"));
         obj.transform.SetParent(transform);
         obj.SetActive(true);
         return obj;
@@ -171,15 +168,6 @@ public class Game : MonoBehaviour
     /*
         Sprites
     */
-
-    public Quaternion GetSpriteRotation(string name)
-    {
-        if(!name.Contains("!"))
-            return Quaternion.identity;
-        var rotation = int.Parse(name.Substring(name.IndexOf('!') + 1));
-        return Quaternion.Euler(0, 0, rotation);
-    }
-
     
     public Thing GetThingNotInScene(TypeOfThing type)
     {
