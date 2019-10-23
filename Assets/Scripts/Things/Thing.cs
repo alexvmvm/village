@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Things;
 
 public class Thing
 {   
@@ -136,7 +137,7 @@ public class Thing
     public void SetSprite()
     {
         var spriteName = tileRule != null ? tileRule.GetSprite(GetGridPositions()) : sprite;
-        this.spriteRenderer.sprite = game.GetSprite(spriteName);
+        this.spriteRenderer.sprite = Assets.GetSprite(spriteName);
         this.spriteRenderer.sortingOrder = sortingOrder;
         this.spriteRenderer.color = color;
         this.transform.localScale = scale;

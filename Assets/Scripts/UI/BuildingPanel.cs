@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +37,7 @@ public class BuildingPanel : MonoBehaviour
             obj.SetActive(true);
 
             var thingToBuild = Game.AllThings.Where(t => t.type == thing.construction.BuildType).FirstOrDefault();
-            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Game.GetSprite(thingToBuild.sprite);
+            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thingToBuild.sprite);
 
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();

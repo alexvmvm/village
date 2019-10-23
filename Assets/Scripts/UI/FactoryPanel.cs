@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Things;
 
 public class FactoryPanel : MonoBehaviour
 {
@@ -36,7 +36,7 @@ public class FactoryPanel : MonoBehaviour
             });
 
             lineItem.Name.text = lineItemThing.name.ToUppercaseFirst();
-            lineItem.Image.sprite = Game.GetSprite(lineItemThing.sprite);
+            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.sprite);
             lineItem.Number.text = $"{factory.GetQueuedCount(type)}";
 
             lineItem.Increase.onClick.RemoveAllListeners();
@@ -68,7 +68,7 @@ public class FactoryPanel : MonoBehaviour
             var lineItemThing = Game.GetThingNotInScene(required);
             lineItem.Name.text = lineItemThing.name.ToUppercaseFirst();
             lineItem.Amount.text = "x1";
-            lineItem.Image.sprite = Game.GetSprite(lineItemThing.sprite);
+            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.sprite);
             obj.SetActive(true);
         }
 

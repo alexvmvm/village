@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ManualPlacementPanel : MonoBehaviour
@@ -25,7 +21,7 @@ public class ManualPlacementPanel : MonoBehaviour
             obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();
             obj.SetActive(true);
 
-            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Game.GetSprite(thing.sprite);
+            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thing.sprite);
 
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();

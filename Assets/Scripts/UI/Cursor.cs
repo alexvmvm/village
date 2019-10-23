@@ -30,7 +30,7 @@ public class GameCursor
         _crosshairCursor = _game.InstantiateObj().transform;
 
         _spriteRenderer = _crosshairCursor.gameObject.GetComponent<SpriteRenderer>();
-        _spriteRenderer.sprite = _game.GetSprite("crosshair025");
+        _spriteRenderer.sprite = Assets.GetSprite("crosshair025");
         _spriteRenderer.sortingOrder = (int)SortingOrders.UI;
         
         _cursorMeshObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Cursor Mesh"));

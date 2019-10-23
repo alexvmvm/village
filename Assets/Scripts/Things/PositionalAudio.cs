@@ -21,7 +21,7 @@ public class PositionalAudio
     {
         _group = group;
         _game = game;
-        _audioClip = _game.GetAudioClip(audio);
+        _audioClip = Assets.GetAudioClip(audio);
         
         var obj = _game.InstantiateObj();
         obj.name = "positionalAudio_" + group;
