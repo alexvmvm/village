@@ -84,7 +84,6 @@ public class Game : MonoBehaviour
 {
     public ZoneGraph ZoneGraph { get { return _zoneGraph; } }
     public Vector2Int MapSize = Vector2Int.one * 10;
-    // public ObjectPooler ObjectPooler;
     public GameObject ChildObj;
     public AstarPath AstarPath;
     public Thing[,] Grid;
