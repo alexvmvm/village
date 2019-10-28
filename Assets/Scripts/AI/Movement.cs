@@ -28,10 +28,12 @@ public class Movement : MonoBehaviour
     private List<GraphNode> _nodes;
     private float _maxSpeed;
     private List<Vector3> _waypoints;
+    private Session _session;
     private Game _game;
     void Awake()
     {
-        _game = FindObjectOfType<Game>();
+        _session = FindObjectOfType<Session>();
+        _game = _session.Game;
 
         _aiPath = GetComponent<AIPath>();
         _aiPath.orientation = OrientationMode.YAxisForward;
@@ -49,8 +51,6 @@ public class Movement : MonoBehaviour
         _seeker.traversableTags &= ~(1 << _game.TagFromString("foliage"));
         _seeker.traversableTags &= ~(1 << _game.TagFromString("blocking"));
         
-
-
         _nodes = new List<GraphNode>();
         _maxSpeed = _aiPath.maxSpeed;
         _waypoints = new List<Vector3>();
@@ -101,7 +101,7 @@ public class Movement : MonoBehaviour
 
     public bool IsPathPossible(Vector3 position)
     {          
-        return _game.ZoneGraph.IsPathPossible(transform.position, position);
+        return _session.ZoneGraph.IsPathPossible(transform.position, position);
     }
     
     public void MoveTo(Vector3 position)

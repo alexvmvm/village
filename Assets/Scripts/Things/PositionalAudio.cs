@@ -23,7 +23,7 @@ public class PositionalAudio
         _game = game;
         _audioClip = Assets.GetAudioClip(audio);
         
-        var obj = _game.InstantiateObj();
+        var obj = _game.GetGameObject();
         obj.name = "positionalAudio_" + group;
         _audioSource = obj.AddComponent<AudioSource>();
         _audioSource.clip = _audioClip;

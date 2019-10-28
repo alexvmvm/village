@@ -11,12 +11,17 @@ public enum TimeOfDay
 
 public class Clock : MonoBehaviour
 {
-    public Game Game;
     public Transform ClockFace;
     public Color Day;
     public Color Night;
 
     private float _rotationalSpeed;
+    private Game _game;
+
+    void Start()
+    {
+        _game = FindObjectOfType<Session>().Game;
+    }
 
     public void SetTimeScale(float timeScale)
     {
@@ -26,7 +31,7 @@ public class Clock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var normTime = Game.WorldTime.NormalizedTimeOfDay;
+        var normTime = _game.WorldTime.NormalizedTimeOfDay;
 
         // rotate clock
         var rotation = normTime * 360;

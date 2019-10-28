@@ -4,7 +4,12 @@ using UnityEngine.UI;
 public class ManualPlacementPanel : MonoBehaviour
 {
     public ObjectPooler ButtonPooler;
-    public Game Game;
+    private Session _session;
+
+    void Awake()
+    {
+        _session = FindObjectOfType<Session>();
+    }
 
     void Start()
     {
@@ -15,7 +20,7 @@ public class ManualPlacementPanel : MonoBehaviour
     {
          ButtonPooler.DeactivateAll();
         
-        foreach(var thing in Game.AllThings)
+        foreach(var thing in _session.Game.AllThings)
         {
             var obj = ButtonPooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();
@@ -26,7 +31,7 @@ public class ManualPlacementPanel : MonoBehaviour
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => {
-                Game.CurrentType = thing.type;
+                _session.Cursor.CurrentType = thing.type;
             });
         }
     }

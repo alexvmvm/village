@@ -15,12 +15,11 @@ public class VillageManager : MonoBehaviour
 {
     public VillagerArrivedPanel VillagerArrivedPanel;
     public ObjectPooler FamilyPanels;
-
     private Game _game;
 
     void Awake()
     {
-        _game = FindObjectOfType<Game>();
+        _game = FindObjectOfType<Session>().Game;
     }
 
     void OnEnable()

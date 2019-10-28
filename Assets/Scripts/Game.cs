@@ -7,32 +7,42 @@ using Pathfinding;
 public delegate void ThingAdded(Thing thing);
 public delegate void ThingRemoved(Thing thing);
 
-public class Game : MonoBehaviour
+public class Game 
 {
-    public ZoneGraph ZoneGraph { get { return _zoneGraph; } }
-    public Vector2Int MapSize = Vector2Int.one * 10;
-    public AstarPath AstarPath;
-    public Thing[,] Grid;
-    public List<Thing> Things;
+    public Vector2Int MapSize { get { return _size; } }
+    public WorldTime WorldTime { get { return _worldTime; } }
+    public List<Thing> Things { get { return _things; } }
     public List<Thing> AllThings;
-    public TypeOfThing? CurrentType;
-    public WorldTime WorldTime;
     public ThingAdded OnThingAdded;
     public ThingRemoved OnThingRemoved;
-    private GameCursor _cursor;
     private List<PositionalAudio> _positionalAudio;
     private Director _director;
-    private ZoneGraph _zoneGraph;
+    private Func<GameObject> _getGameObject;
+    private Thing[,] _grid;
+    private List<Thing> _things;
+    private WorldTime _worldTime;
+    private Vector2Int _size = Vector2Int.one * 10;
+    private AstarPath _aStarPath;
 
-    void Awake()
+    public Game(AstarPath aStarPath, Vector2Int size, Func<GameObject> getGameObject)
     {
-        // zone graph
-        _zoneGraph = new ZoneGraph(this);
+        _aStarPath = aStarPath;
+        _size = size;
+        _getGameObject = getGameObject;
+        _things = new List<Thing>();
+        _grid = new Thing[_size.x, _size.y];
+        _worldTime = new WorldTime(360, 5, 23);
+        _director = new Director(this);
+        _positionalAudio = new List<PositionalAudio>()
+        {
+            new PositionalAudio(this, "river", "running_water"),
+            new PositionalAudio(this, "trees", "birds")
+        };
+    }
 
-        // create array of things
-        Things = new List<Thing>();
-        
-        // setup all things
+    public void Start()
+    {
+             // setup all things
         AllThings = new List<Thing>();
 
         foreach(TypeOfThing thingType in Enum.GetValues(typeof(TypeOfThing)))
@@ -45,37 +55,14 @@ public class Game : MonoBehaviour
             AllThings.Add(thing);
         }
 
-        // cursor
-        _cursor = new GameCursor(this);
-
-        Grid = new Thing[MapSize.x, MapSize.y];
-
-        // time 
-        WorldTime = new WorldTime(360, 5, 23);
-
-        // positional audio
-        _positionalAudio = new List<PositionalAudio>()
-        {
-            new PositionalAudio(this, "river", "running_water"),
-            new PositionalAudio(this, "trees", "birds")
-        };
-
-        // director ai
-        _director = new Director(this);
-    }
-
-    void Start()
-    {        
         RandomMap();
-
-        _zoneGraph.Start();
     }
 
     public void RandomMap()
     {
-        for(var x = 0; x < MapSize.x; x++)
+        for(var x = 0; x < _size.x; x++)
         {
-            for(var y = 0; y < MapSize.y; y++)
+            for(var y = 0; y < _size.y; y++)
             {
 
                 var noise = Mathf.PerlinNoise(x * 0.1f, y * 0.1f);
@@ -106,16 +93,16 @@ public class Game : MonoBehaviour
             }
         }
 
-        for(var y = 0; y < MapSize.y; y++)
+        for(var y = 0; y < _size.y; y++)
         {
-            var x = Mathf.FloorToInt(MapSize.x / 2);
+            var x = Mathf.FloorToInt(_size.x / 2);
             CreateAndAddThing(TypeOfThing.Path, x, y);
         }
-
+    
         var rand = 0;
-        for(var y = 0; y < MapSize.y; y++)
+        for(var y = 0; y < _size.y; y++)
         {
-            var x = MapSize.x - 3;
+            var x = _size.x - 3;
             rand = UnityEngine.Random.Range(0, 4);
             AddThing(Create(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, x - 1, y));
             AddThing(Create(TypeOfThing.Stream, x, y));
@@ -125,44 +112,41 @@ public class Game : MonoBehaviour
 
         for(var i = 0; i < 20; i++)
         {
-            var x = UnityEngine.Random.Range(0, MapSize.x);
-            var y = UnityEngine.Random.Range(0, MapSize.y);
+            var x = UnityEngine.Random.Range(0, _size.x);
+            var y = UnityEngine.Random.Range(0, _size.y);
 
             CreateAndAddThing(TypeOfThing.FallenWood, x, y);
         }
 
         for(var i = 0; i < 4; i++) 
         {
-            var x = UnityEngine.Random.Range(0, MapSize.x);
-            var y = UnityEngine.Random.Range(0, MapSize.y);
+            var x = UnityEngine.Random.Range(0, _size.x);
+            var y = UnityEngine.Random.Range(0, _size.y);
 
             CreateAndAddThing(TypeOfThing.Hen, x, y);
         }
 
         for(var i = 0; i < 10; i++) 
         {
-            var x = UnityEngine.Random.Range(0, MapSize.x);
-            var y = UnityEngine.Random.Range(0, MapSize.y);
+            var x = UnityEngine.Random.Range(0, _size.x);
+            var y = UnityEngine.Random.Range(0, _size.y);
 
             CreateAndAddThing(TypeOfThing.Chick, x, y);
         }
 
         for(var i = 0; i < 1; i++) 
         {
-            var x = UnityEngine.Random.Range(0, MapSize.x);
-            var y = UnityEngine.Random.Range(0, MapSize.y);
+            var x = UnityEngine.Random.Range(0, _size.x);
+            var y = UnityEngine.Random.Range(0, _size.y);
 
             CreateAndAddThing(TypeOfThing.Rooster, x, y);
         }
 
     }
 
-    public GameObject InstantiateObj()
+    public GameObject GetGameObject()
     {
-        var obj = Instantiate(Assets.GetPrefab("Thing"));
-        obj.transform.SetParent(transform);
-        obj.SetActive(true);
-        return obj;
+        return _getGameObject();
     }
 
     /*
@@ -181,14 +165,14 @@ public class Game : MonoBehaviour
 
     public bool IsOnGrid(int x, int y)
     {
-        return x >= 0 && x < MapSize.x && y >= 0 && y < MapSize.y;
+        return x >= 0 && x < _size.x && y >= 0 && y < _size.y;
     }
 
     public Thing GetThingOnGrid(int x, int y)
     {
-        if(x >= 0 && x < MapSize.x && y >= 0 && y < MapSize.y)
+        if(x >= 0 && x < _size.x && y >= 0 && y < _size.y)
         {
-            return Grid[x, y];
+            return _grid[x, y];
         }
 
         return null;
@@ -209,7 +193,7 @@ public class Game : MonoBehaviour
                     RemoveThing(existing);
                 }
 
-                Grid[thing.gridPosition.x, thing.gridPosition.y] = thing;
+                _grid[thing.gridPosition.x, thing.gridPosition.y] = thing;
 
                 Things.Add(thing);
                 thing.Setup();
@@ -244,7 +228,7 @@ public class Game : MonoBehaviour
 
         if(thing.fixedToGrid)
         {
-            Grid[thing.gridPosition.x, thing.gridPosition.y] = null;
+            _grid[thing.gridPosition.x, thing.gridPosition.y] = null;
         }
 
         thing.Destroy();
@@ -261,7 +245,7 @@ public class Game : MonoBehaviour
 
     public Thing Create(TypeOfThing thingType, int x, int y)
     {
-        var obj = InstantiateObj();
+        var obj = _getGameObject();
         obj.transform.position = new Vector3(x, y, 0);
         obj.transform.name = thingType.ToString();
          
@@ -278,7 +262,7 @@ public class Game : MonoBehaviour
     */
     public int TagFromString(string tag)
     {
-        return System.Array.IndexOf(AstarPath.GetTagNames(), tag);
+        return System.Array.IndexOf(_aStarPath.GetTagNames(), tag);
     }
 
     public void UpdateAstarPath(Vector2Int position, string pathTag, bool walkable)
@@ -292,7 +276,7 @@ public class Game : MonoBehaviour
             modifyTag = true
         };
 
-        AstarPath.UpdateGraphs(graphupdate);
+        _aStarPath.UpdateGraphs(graphupdate);
     }
 
     /*
@@ -319,14 +303,11 @@ public class Game : MonoBehaviour
         }
     }
 
-    void Update()
+    public void Update()
     {
-        _cursor.Update();
         _director.Update();
 
         WorldTime.Update();
-
-        _zoneGraph.Update();
 
         for(var i = 0; i < Things.Count; i++) 
         {
@@ -341,8 +322,8 @@ public class Game : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.V))
         {
             AddThing(Create(TypeOfThing.Villager, 
-                Mathf.FloorToInt(MapSize.x / 2), 
-                UnityEngine.Random.Range(0, MapSize.y)));
+                Mathf.FloorToInt(_size.x / 2), 
+                UnityEngine.Random.Range(0, _size.y)));
         }
 
         if(Input.GetKeyDown(KeyCode.O))
@@ -368,9 +349,6 @@ public class Game : MonoBehaviour
     {
         if(!Application.isPlaying)
             return;
-
-        _cursor.DrawGizmos();
-        _zoneGraph.DrawGizmos();
 
         for(var i = 0; i < Things.Count; i++) 
         {

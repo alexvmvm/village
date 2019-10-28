@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class BuildingPanel : MonoBehaviour
 {
-    public Game Game;
     public ObjectPooler GroupPooler;
     public ObjectPooler ButtonPooler;
+    private Session _session;
     
     void Awake()
     {
+        _session = FindObjectOfType<Session>();
+
         GroupPooler.DeactivateAll();
         foreach(ConstructionGroup group in Enum.GetValues(typeof(ConstructionGroup)))
         {
@@ -30,19 +32,19 @@ public class BuildingPanel : MonoBehaviour
     {
         ButtonPooler.DeactivateAll();
         
-        foreach(var thing in Game.AllThings.Where(t => t.construction != null && t.construction.Group == group))
+        foreach(var thing in _session.Game.AllThings.Where(t => t.construction != null && t.construction.Group == group))
         {
             var obj = ButtonPooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();
             obj.SetActive(true);
 
-            var thingToBuild = Game.AllThings.Where(t => t.type == thing.construction.BuildType).FirstOrDefault();
+            var thingToBuild = _session.Game.AllThings.Where(t => t.type == thing.construction.BuildType).FirstOrDefault();
             obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thingToBuild.sprite);
 
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => {
-                Game.CurrentType = thing.type;
+                _session.Cursor.CurrentType = thing.type;
             });
         }
     }

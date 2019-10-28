@@ -79,7 +79,11 @@ public class ZoneGraph
         }
         
         if(_regionsToRemove.Count == 0)
+        {
+            Profiler.EndSample();
             return;
+        }
+          
 
         foreach(var region in _regionsToRemove)
         {

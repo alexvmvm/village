@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameCursor 
 {
+    public TypeOfThing? CurrentType;
     private Game _game;
     private Transform _crosshairCursor;
     private SpriteRenderer _spriteRenderer;
@@ -27,14 +28,13 @@ public class GameCursor
     public GameCursor(Game game)
     {
         _game = game;
-        _crosshairCursor = _game.InstantiateObj().transform;
+        _crosshairCursor = _game.GetGameObject().transform;
 
         _spriteRenderer = _crosshairCursor.gameObject.GetComponent<SpriteRenderer>();
         _spriteRenderer.sprite = Assets.GetSprite("crosshair025");
         _spriteRenderer.sortingOrder = (int)SortingOrders.UI;
         
         _cursorMeshObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Cursor Mesh"));
-        _cursorMeshObj.transform.SetParent(_game.transform);
         _cursorMeshObj.transform.position = new Vector3(0, 0, -2);
 
         _meshFromPoints = _cursorMeshObj.AddComponent<MeshFromPoints>();
@@ -66,7 +66,7 @@ public class GameCursor
                 if(_currentToBuild.construction != null && !_currentToBuild.construction.IsPlaceableAt(x, y))
                     continue;
 
-                _game.AddThing(_game.Create(_game.CurrentType.Value, x, y));       
+                _game.AddThing(_game.Create(CurrentType.Value, x, y));       
             }
         }
         
@@ -114,13 +114,13 @@ public class GameCursor
 
         // setup example thing on _current from 
         // selected type on game
-        if(!_game.CurrentType.HasValue && _currentToBuild != null)
+        if(!CurrentType.HasValue && _currentToBuild != null)
         {
             _currentToBuild = null;
         }
-        else if(_game.CurrentType.HasValue && (_currentToBuild == null || _currentToBuild.type != _game.CurrentType.Value))
+        else if(CurrentType.HasValue && (_currentToBuild == null || _currentToBuild.type != CurrentType.Value))
         {   
-            _currentToBuild = _game.Create(_game.CurrentType.Value);
+            _currentToBuild = _game.Create(CurrentType.Value);
         }
 
         // update cursor position to mouse position
@@ -200,7 +200,7 @@ public class GameCursor
         // tile
         if(Input.GetKeyDown(KeyCode.Mouse1))
         {
-            _game.CurrentType = null;
+            CurrentType = null;
             _fixCursorPosition = false;
             _actionPanel.Clear();
         }
