@@ -38,7 +38,7 @@ public class Thing
     */
     public bool resource;
     public TypeOfThing produces;
-    public TypeOfThing requiredToGet;
+        public TypeOfThing requiredToGet;
     
     /*
         Audio
