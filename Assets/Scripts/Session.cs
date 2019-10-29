@@ -32,6 +32,19 @@ public class Session : MonoBehaviour
         return obj;
     }
 
+    [BitStrap.Button]
+    public void Save()
+    {
+        SaveFiles.SaveGame(_game, @"C:\Users\Alex\AppData\LocalLow\Unity\save.xml");
+    }
+
+    [BitStrap.Button]
+    public void Load()
+    {
+        var saveObject = SaveFiles.LoadGame(@"C:\Users\Alex\AppData\LocalLow\Unity\save.xml");
+        _game.FromSaveObj(saveObject);
+    }
+
     void Update()
     {
         _game.Update();

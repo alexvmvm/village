@@ -142,22 +142,6 @@ public class SaveFiles
         memoryStream.Close();
     }
 
-    public static IEnumerator LoadGame(Game game, SaveFile save)
-    {
-        // clear game
-        game.Clear();
-
-        // load game
-        var objs = SaveFiles.LoadThingSaves(save);
-        foreach(var obj in objs)
-        {
-            var thing = game.Create(obj.type);
-            thing.FromSaveObj(obj);
-            game.AddThing(thing);
-            yield return null;
-        }
-    }
-
     public static IEnumerator LoadCurrentSaveGame(Game game)
     {
         if(_saveFile == null)
@@ -179,10 +163,39 @@ public class SaveFiles
         }
     }
 
-    public static IEnumerator SaveGame(Game game, SaveFile save)
+    public static void SaveGame(Game game, string path)
     {
-        SaveThings(game.Things, save);
-        yield return null;
+        var memoryStream = new MemoryStream();
+        var settings = new XmlWriterSettings()
+        {
+            Indent = true,
+            OmitXmlDeclaration = true
+        };
+        var writer = XmlWriter.Create(memoryStream, settings);
+        var serializer = new XmlSerializer(typeof(GameSave));
+        var emptyNs = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+        serializer.Serialize(writer, game.ToSaveObj(), emptyNs);
+		writer.Flush();
+		memoryStream.Flush();
+		memoryStream.Seek(0, SeekOrigin.Begin);
+		using (var fileStream = File.Create(path))
+			memoryStream.WriteTo(fileStream);
+
+        writer.Close();
+        memoryStream.Close();
+    }
+
+    public static GameSave LoadGame(string path)
+    {
+        var document = new XmlDocument();
+        document.Load(path);
+
+        var serializer = new XmlSerializer(typeof(GameSave));
+        var reader = new StreamReader(path);
+        var obj = (GameSave)serializer.Deserialize(reader);            
+        reader.Close();
+
+        return obj;
     }
 
 }

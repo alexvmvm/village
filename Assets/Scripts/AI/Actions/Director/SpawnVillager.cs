@@ -28,8 +28,8 @@ public class SpawnVillager : GOAPAction
     public override bool Perform()
     {
         _game.CreateAndAddThing(TypeOfThing.Villager, 
-                Mathf.FloorToInt(_game.MapSize.x / 2), 
-                UnityEngine.Random.Range(0, _game.MapSize.y));
+                Mathf.FloorToInt(_game.Size.x / 2), 
+                UnityEngine.Random.Range(0, _game.Size.y));
 
         return true;
     }

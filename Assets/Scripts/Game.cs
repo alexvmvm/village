@@ -7,9 +7,9 @@ using Pathfinding;
 public delegate void ThingAdded(Thing thing);
 public delegate void ThingRemoved(Thing thing);
 
-public class Game 
+public class Game : ISave<GameSave>
 {
-    public Vector2Int MapSize { get { return _size; } }
+    public Vector2Int Size { get { return _size; } }
     public WorldTime WorldTime { get { return _worldTime; } }
     public List<Thing> Things { get { return _things; } }
     public List<Thing> AllThings;
@@ -361,5 +361,28 @@ public class Game
         }
     }
 
-    #endif
+    public GameSave ToSaveObj()
+    {
+        return new GameSave()
+        {
+            Size = Size,
+            Things = Things.Select(t => t.ToSaveObj()).ToArray()
+        };
+    }
+
+    public void FromSaveObj(GameSave obj)
+    {
+          // clear game
+        Clear();
+
+        // load game
+        foreach(var thingSave in obj.Things)
+        {
+            var thing = Create(thingSave.type);
+            thing.FromSaveObj(thingSave);
+            AddThing(thing);
+        }
+    }
+
+#endif
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Things;
 
-public class Thing
+public class Thing : ISave<ThingSave>
 {   
     // properties    
     public string id;
