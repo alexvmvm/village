@@ -1,9 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public interface ISave<T> where T : new()
+namespace Village.Saving
 {
-    T ToSaveObj();
-    void FromSaveObj(T obj);
+    public interface ISave<T>
+    {
+        T ToSaveObj();
+
+        void FromSaveObj(T obj);
+    }
 }

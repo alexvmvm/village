@@ -2,9 +2,17 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class GameSave
+namespace Village.Saving
 {
-    public Vector2Int Size;
-    public ThingSave[] Things;
+    [Serializable]
+    public class GameSave
+    {
+        public Vector2Int Size;
+        public ThingSave[] Things;
+
+        public GameSave()
+        {
+
+        }
+    }
 }

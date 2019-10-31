@@ -5,10 +5,10 @@ using UnityEngine;
 using Pathfinding;
 using Village.Things;
 using Village.AI;
+using Village.Saving;
 
 namespace Village
 {
-
     public delegate void ThingAdded(Thing thing);
     public delegate void ThingRemoved(Thing thing);
 
@@ -347,24 +347,6 @@ namespace Village
                 }
             }
         }
-        
-        #if UNITY_EDITOR
-
-        void OnDrawGizmos()
-        {
-            if(!Application.isPlaying)
-                return;
-
-            for(var i = 0; i < Things.Count; i++) 
-            {
-                Things[i].DrawGizmos();
-            }
-
-            foreach(var positionalAudio in _positionalAudio)
-            {
-                positionalAudio.DrawGizmos();
-            }
-        }
 
         public GameSave ToSaveObj()
         {
@@ -386,6 +368,24 @@ namespace Village
                 var thing = Create(thingSave.type);
                 thing.FromSaveObj(thingSave);
                 AddThing(thing);
+            }
+        }
+        
+        #if UNITY_EDITOR
+
+        void OnDrawGizmos()
+        {
+            if(!Application.isPlaying)
+                return;
+
+            for(var i = 0; i < Things.Count; i++) 
+            {
+                Things[i].DrawGizmos();
+            }
+
+            foreach(var positionalAudio in _positionalAudio)
+            {
+                positionalAudio.DrawGizmos();
             }
         }
 
