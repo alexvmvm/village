@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Village.Things;
 
 public class BuildingPanel : MonoBehaviour
 {

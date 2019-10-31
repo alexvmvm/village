@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Profiling;
+using Village.Things;
+using Village;
 
 public class ZoneGraph 
 {

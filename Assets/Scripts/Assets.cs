@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Things;
+using Village.Things;
+using Village.AI;
+using Village;
 
 public class Assets 
 {

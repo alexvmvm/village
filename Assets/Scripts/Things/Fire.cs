@@ -1,45 +1,49 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Things;
 
-public class Fire : ITrait
-{   
-    private Thing _thing;
-    private Game _game;
-    private GameObject _light;
-    private bool _lightWithFactory;
-    private Factory _factory;
+namespace Village.Things
+{
 
-    public Fire(Game game, Thing thing, bool lightWithFactory = false)
+    public class Fire : ITrait
     {
-        _thing = thing;
-        _game = game;
-        _lightWithFactory = lightWithFactory;
-        _factory = thing.GetTrait<Factory>();
-    }
+        private Thing _thing;
+        private Game _game;
+        private GameObject _light;
+        private bool _lightWithFactory;
+        private Factory _factory;
 
-    public void DrawGizmos()
-    {
-        
-    }
-
-    public void Setup()
-    {
-        _light = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Fire Light"));
-        _light.transform.SetParent(_thing.transform);
-        _light.transform.localPosition = Vector3.zero;
-    }
-
-    public void Update()
-    {
-        if(_lightWithFactory)
+        public Fire(Game game, Thing thing, bool lightWithFactory = false)
         {
-            _light.SetActive(_factory.IsProducing());
+            _thing = thing;
+            _game = game;
+            _lightWithFactory = lightWithFactory;
+            _factory = thing.GetTrait<Factory>();
         }
-        else
+
+        public void DrawGizmos()
         {
-            _light.SetActive(_game.WorldTime.TimeOfDay == TimeOfDay.Night);
+
+        }
+
+        public void Setup()
+        {
+            _light = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Fire Light"));
+            _light.transform.SetParent(_thing.transform);
+            _light.transform.localPosition = Vector3.zero;
+        }
+
+        public void Update()
+        {
+            if (_lightWithFactory)
+            {
+                _light.SetActive(_factory.IsProducing());
+            }
+            else
+            {
+                _light.SetActive(_game.WorldTime.TimeOfDay == TimeOfDay.Night);
+            }
         }
     }
+
 }

@@ -1,36 +1,40 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Village.Things;
 
-public class Drop : GOAPAction
+namespace Village.AI 
 {
-    private Thing _thing;
-    private Inventory _inventory;
-
-    public Drop(Game game, Thing thing) : base(game)
+    public class Drop : GOAPAction
     {
-        _thing = thing;    
-        _inventory = _thing.GetTrait<Inventory>();
-    }
+        private Thing _thing;
+        private Inventory _inventory;
 
-    public override bool IsDone()
-    {
-        return !_inventory.IsHoldingSomething();
-    }
+        public Drop(Game game, Thing thing) : base(game)
+        {
+            _thing = thing;    
+            _inventory = _thing.GetTrait<Inventory>();
+        }
 
-    public override bool IsPossibleToPerform()
-    {
-        return _inventory != null;
-    }
+        public override bool IsDone()
+        {
+            return !_inventory.IsHoldingSomething();
+        }
 
-    public override bool Perform()
-    {
-        _inventory.Drop();
-        return true;
-    }
+        public override bool IsPossibleToPerform()
+        {
+            return _inventory != null;
+        }
 
-    public override void Reset()
-    {
-        
+        public override bool Perform()
+        {
+            _inventory.Drop();
+            return true;
+        }
+
+        public override void Reset()
+        {
+            
+        }
     }
 }

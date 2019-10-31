@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using Village.Things;
+using Village.AI;
+using Village;
 
 public enum VillagerEvent
 {

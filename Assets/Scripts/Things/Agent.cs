@@ -4,156 +4,160 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Profiling;
 
-public enum AgentState
+namespace Village.AI
 {
-    Planning,
-    Picking,
-    Performing,
-    Completed,
-    Paused
-}
-
-public abstract class Agent : ITrait
-{
-    public DateTime Created { get { return _created; } }
-    public GOAPAction CurentAction { get { return _current; } }
-    protected Game _game;
-    private NormalPlanner _planner;
-    private HashSet<GOAPAction> _available;
-    private Queue<GOAPAction> _actions;
-    private List<GOAPAction> _useable;
-    protected GOAPAction _current;
-    private AgentState _state;
-    private DateTime _created;
-
-    public Agent(Game game)
+    public enum AgentState
     {
-        _game = game;    
-        _planner = new NormalPlanner();
-        _available = new HashSet<GOAPAction>();
-        _actions = new Queue<GOAPAction>();
-        _useable = new List<GOAPAction>();
-
-        _created = DateTime.Now;
+        Planning,
+        Picking,
+        Performing,
+        Completed,
+        Paused
     }
 
-    public virtual void Setup()
+    public abstract class Agent : ITrait
     {
-        
-    }
+        public DateTime Created { get { return _created; } }
+        public GOAPAction CurentAction { get { return _current; } }
+        protected Game _game;
+        private NormalPlanner _planner;
+        private HashSet<GOAPAction> _available;
+        private Queue<GOAPAction> _actions;
+        private List<GOAPAction> _useable;
+        protected GOAPAction _current;
+        private AgentState _state;
+        private DateTime _created;
 
-    public void AddAction(GOAPAction action)
-    {
-        _available.Add(action);
-    }
-
-    public abstract void ActionCompleted(GOAPAction action);
-
-    public abstract Dictionary<string, object> GetWorldState();
-    public abstract Dictionary<string, object> GetGoal();
-
-    bool Plan(Dictionary<string, object> world, Dictionary<string, object> goal, Queue<GOAPAction> plan)
-    {
-
-        // Reset actions
-        foreach (var action in _available)
+        public Agent(Game game)
         {
-            action.Reset();
+            _game = game;    
+            _planner = new NormalPlanner();
+            _available = new HashSet<GOAPAction>();
+            _actions = new Queue<GOAPAction>();
+            _useable = new List<GOAPAction>();
+
+            _created = DateTime.Now;
         }
 
-        _useable.Clear();
-        foreach (var action in _available)
+        public virtual void Setup()
         {
-            if (action.IsPossibleToPerform())
+            
+        }
+
+        public void AddAction(GOAPAction action)
+        {
+            _available.Add(action);
+        }
+
+        public abstract void ActionCompleted(GOAPAction action);
+
+        public abstract Dictionary<string, object> GetWorldState();
+        public abstract Dictionary<string, object> GetGoal();
+
+        bool Plan(Dictionary<string, object> world, Dictionary<string, object> goal, Queue<GOAPAction> plan)
+        {
+
+            // Reset actions
+            foreach (var action in _available)
             {
-                _useable.Add(action);
-            }  
-        }
-
-        Profiler.BeginSample("Agent_BuildPlan");
-
-        // Build graph
-        _planner.BuildPlan(world, _useable, goal, _actions);
-
-        Profiler.EndSample();
-
-        if (_actions.Count == 0)
-        {
-            foreach (var action in _useable)
                 action.Reset();
-
-            return false;
-        }
-        else
-        {
-            foreach (var item in _useable)
-            {
-                if (!_actions.Contains(item))
-                {
-                    item.Reset();
-                }
             }
 
-            return true;
-        }
-    }
-
-    public virtual void PauseAgent()
-    {
-        _state = AgentState.Paused;
-    }
-
-    public virtual void UnPauseAgent()
-    {
-        _state = AgentState.Planning;
-    }
-
-    public virtual void Update()
-    {
-        switch(_state)
-        {
-            case AgentState.Planning:
+            _useable.Clear();
+            foreach (var action in _available)
             {
-                _actions.Clear();
-                if(Plan(GetWorldState(), GetGoal(), _actions))
-                    _state = AgentState.Picking;
-            }
-            break;
-            case AgentState.Picking:
-            {
-                if(_actions.Count() > 0)
+                if (action.IsPossibleToPerform())
                 {
-                    _current = _actions.Dequeue();
-                    _state = AgentState.Performing;
+                    _useable.Add(action);
                 }  
-                else
-                    _state = AgentState.Completed;
             }
-            break;
-            case AgentState.Performing:
+
+            Profiler.BeginSample("Agent_BuildPlan");
+
+            // Build graph
+            _planner.BuildPlan(world, _useable, goal, _actions);
+
+            Profiler.EndSample();
+
+            if (_actions.Count == 0)
             {
-                _current.Perform();
-                if(_current.IsDone())
+                foreach (var action in _useable)
+                    action.Reset();
+
+                return false;
+            }
+            else
+            {
+                foreach (var item in _useable)
                 {
-                    ActionCompleted(_current);
-                    _state = AgentState.Picking;
+                    if (!_actions.Contains(item))
+                    {
+                        item.Reset();
+                    }
                 }
-                    
+
+                return true;
             }
-            break;
-            case AgentState.Completed:
+        }
+
+        public virtual void PauseAgent()
+        {
+            _state = AgentState.Paused;
+        }
+
+        public virtual void UnPauseAgent()
+        {
+            _state = AgentState.Planning;
+        }
+
+        public virtual void Update()
+        {
+            switch(_state)
             {
-                _current = null;
-                _state = AgentState.Planning;
+                case AgentState.Planning:
+                {
+                    _actions.Clear();
+                    if(Plan(GetWorldState(), GetGoal(), _actions))
+                        _state = AgentState.Picking;
+                }
+                break;
+                case AgentState.Picking:
+                {
+                    if(_actions.Count() > 0)
+                    {
+                        _current = _actions.Dequeue();
+                        _state = AgentState.Performing;
+                    }  
+                    else
+                        _state = AgentState.Completed;
+                }
+                break;
+                case AgentState.Performing:
+                {
+                    _current.Perform();
+                    if(_current.IsDone())
+                    {
+                        ActionCompleted(_current);
+                        _state = AgentState.Picking;
+                    }
+                        
+                }
+                break;
+                case AgentState.Completed:
+                {
+                    _current = null;
+                    _state = AgentState.Planning;
+                }
+                break;
+                case AgentState.Paused:
+                break;
             }
-            break;
-            case AgentState.Paused:
-            break;
+        }
+
+        public virtual void DrawGizmos()
+        {
+            
         }
     }
 
-    public virtual void DrawGizmos()
-    {
-        
-    }
 }

@@ -2,61 +2,66 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Things;
+using Village.Things;
 
-public class SubmitFactoryJob : MoveGOAPAction
+namespace Village.AI
 {
 
-    private Thing _thing;
-    private Movement _movement;
-    private Inventory _inventory;
-    private TypeOfThing _factoryType;
-    private TypeOfThing _output;
-    private bool _requiresAgentToMake;
-    private bool _submittedJob;
-
-    public SubmitFactoryJob(Game game, Thing thing, Movement movement, TypeOfThing factoryType, TypeOfThing output, bool requiresAgentToMake) : base(game, movement)
+    public class SubmitFactoryJob : MoveGOAPAction
     {
-        _thing = thing;
-        _movement = movement;
-        _factoryType = factoryType;
-        _inventory = _thing.GetTrait<Inventory>();
-        _output = output;
-        _requiresAgentToMake = requiresAgentToMake;
-    }
 
-    public override IEnumerable<Thing> GetThings()
-    {
-        return _game.Things
-            .Where(t => t.type == _factoryType && !t.GetTrait<Factory>().IsProducing() && t.GetTrait<Factory>().IsQueuedForProduction(_output))
-            .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
-    }
+        private Thing _thing;
+        private Movement _movement;
+        private Inventory _inventory;
+        private TypeOfThing _factoryType;
+        private TypeOfThing _output;
+        private bool _requiresAgentToMake;
+        private bool _submittedJob;
 
-    public override bool PerformAtTarget()
-    {
-        if(_inventory.IsHoldingSomething())
+        public SubmitFactoryJob(Game game, Thing thing, Movement movement, TypeOfThing factoryType, TypeOfThing output, bool requiresAgentToMake) : base(game, movement)
         {
-            _inventory.Holding.Destroy();
-            _inventory.Drop();
+            _thing = thing;
+            _movement = movement;
+            _factoryType = factoryType;
+            _inventory = _thing.GetTrait<Inventory>();
+            _output = output;
+            _requiresAgentToMake = requiresAgentToMake;
         }
 
-        if(!_submittedJob)
+        public override IEnumerable<Thing> GetThings()
         {
-            _target.GetTrait<Factory>().Craft(_output);
-            _submittedJob = true;
+            return _game.Things
+                .Where(t => t.type == _factoryType && !t.GetTrait<Factory>().IsProducing() && t.GetTrait<Factory>().IsQueuedForProduction(_output))
+                .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
         }
 
-        if(_requiresAgentToMake && _target.GetTrait<Factory>().IsProducing())
-            return false;
+        public override bool PerformAtTarget()
+        {
+            if (_inventory.IsHoldingSomething())
+            {
+                _inventory.Holding.Destroy();
+                _inventory.Drop();
+            }
+
+            if (!_submittedJob)
+            {
+                _target.GetTrait<Factory>().Craft(_output);
+                _submittedJob = true;
+            }
+
+            if (_requiresAgentToMake && _target.GetTrait<Factory>().IsProducing())
+                return false;
 
 
-        return true;
+            return true;
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+
+            _submittedJob = false;
+        }
     }
 
-    public override void Reset()
-    {
-        base.Reset();
-
-        _submittedJob = false;
-    }
 }

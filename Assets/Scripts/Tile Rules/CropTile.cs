@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CropTile : ITileRule
+namespace Village.Things
 {
-    private Thing _thing;
-    private Crop _crop;
-
-    public CropTile(Thing thing)
+    public class CropTile : ITileRule
     {
-        _thing = thing;
-        _crop = thing.GetTrait<Crop>();
-    }
+        private Thing _thing;
+        private Crop _crop;
 
-    public string GetSprite(Position position)
-    {
-        return _crop.GetSprite();
+        public CropTile(Thing thing)
+        {
+            _thing = thing;
+            _crop = thing.GetTrait<Crop>();
+        }
+
+        public string GetSprite(Position position)
+        {
+            return _crop.GetSprite();
+        }
     }
 }

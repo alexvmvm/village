@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Village.Things;
 
 public class InfoPanel : MonoBehaviour
 {

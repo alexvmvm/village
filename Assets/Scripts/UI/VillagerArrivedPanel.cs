@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
+using Village;
 
 public class VillagerArrivedPanel : MonoBehaviour
 {

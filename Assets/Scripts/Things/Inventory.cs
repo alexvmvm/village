@@ -1,71 +1,77 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Village.AI;
 
-public class Inventory : ITrait
+namespace Village.Things
 {
-    public Thing Holding { get { return _holding; } }
-    private Thing _parent;
 
-    private Thing _holding;
-
-    public Inventory(Thing parent)
+    public class Inventory : ITrait
     {
-        _parent = parent;
-    }
+        public Thing Holding { get { return _holding; } }
+        private Thing _parent;
 
-    public void HoldThing(Thing thing)
-    {
-        _holding = thing;
+        private Thing _holding;
 
-        if(_holding.GetTrait<Agent>() != null)
-            _holding.GetTrait<Agent>().PauseAgent();
-
-        _holding.transform.SetParent(_parent.transform);
-        _holding.transform.localPosition = Vector3.up;
-    }
-
-    public void Drop()
-    {
-        if(_holding != null)
+        public Inventory(Thing parent)
         {
-            _holding.transform.SetParent(null);
-            _holding = null;
+            _parent = parent;
+        }
+
+        public void HoldThing(Thing thing)
+        {
+            _holding = thing;
+
+            if (_holding.GetTrait<Agent>() != null)
+                _holding.GetTrait<Agent>().PauseAgent();
+
+            _holding.transform.SetParent(_parent.transform);
+            _holding.transform.localPosition = Vector3.up;
+        }
+
+        public void Drop()
+        {
+            if (_holding != null)
+            {
+                _holding.transform.SetParent(null);
+                _holding = null;
+            }
+        }
+
+        public bool IsHoldingSomething()
+        {
+            return _holding != null;
+        }
+
+        public bool IsHoldingSomethingToEat()
+        {
+            return _holding != null && _holding.edible;
+        }
+
+        public bool IsHolding(TypeOfThing type)
+        {
+            return _holding != null && _holding.type == type;
+        }
+
+        public bool IsHoldingTool()
+        {
+            return IsHoldingSomething() && (IsHolding(TypeOfThing.Hoe) || IsHolding(TypeOfThing.Axe));
+        }
+
+        public void Setup()
+        {
+
+        }
+
+        public void Update()
+        {
+
+        }
+
+        public void DrawGizmos()
+        {
+
         }
     }
 
-    public bool IsHoldingSomething()
-    {
-        return _holding != null;
-    }
-
-    public bool IsHoldingSomethingToEat()
-    {
-        return _holding != null && _holding.edible;
-    }
-
-    public bool IsHolding(TypeOfThing type)
-    {
-        return _holding != null && _holding.type == type;
-    }
-
-    public bool IsHoldingTool()
-    {
-        return IsHoldingSomething() && (IsHolding(TypeOfThing.Hoe) || IsHolding(TypeOfThing.Axe));
-    }
-
-    public void Setup()
-    {
-
-    }
-
-    public void Update()
-    {
-      
-    }
-
-    public void DrawGizmos()
-    {
-
-    }
 }

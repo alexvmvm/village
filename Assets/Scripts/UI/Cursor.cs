@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Village;
+using Village.Things;
 
 public class GameCursor 
 {

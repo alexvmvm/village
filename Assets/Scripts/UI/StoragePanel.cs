@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using Village.Things;
+using Village;
 
 public class StoragePanel : MonoBehaviour
 {

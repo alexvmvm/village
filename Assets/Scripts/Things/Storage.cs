@@ -2,38 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Storage : ITrait
+namespace Village.Things
 {
-    public Dictionary<TypeOfThing, bool> Allowed { get { return _allowed; } }
-    private Dictionary<TypeOfThing, bool> _allowed;
 
-    public Storage(Game game)
+    public class Storage : ITrait
     {
-        _allowed = new Dictionary<TypeOfThing, bool>();
+        public Dictionary<TypeOfThing, bool> Allowed { get { return _allowed; } }
+        private Dictionary<TypeOfThing, bool> _allowed;
+
+        public Storage(Game game)
+        {
+            _allowed = new Dictionary<TypeOfThing, bool>();
+        }
+
+        public void Setup()
+        {
+
+        }
+
+        public void Allow(TypeOfThing type)
+        {
+            _allowed[type] = true;
+        }
+
+        public void Disallow(TypeOfThing type)
+        {
+            _allowed[type] = false;
+        }
+
+        public void Update()
+        {
+
+        }
+
+        public void DrawGizmos()
+        {
+
+        }
+
     }
 
-    public void Setup()
-    {
-
-    }
-    
-    public void Allow(TypeOfThing type)
-    {
-        _allowed[type] = true;
-    }
-
-    public void Disallow(TypeOfThing type)
-    {
-        _allowed[type] = false;
-    }
-
-    public void Update()
-    {
-
-    }
-
-    public void DrawGizmos()
-    {
-        
-    }
 }

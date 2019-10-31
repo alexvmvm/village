@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Things;
+using Village.Things;
 
 public class ActionPanel : MonoBehaviour
 {

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Things;
+using Village;
+using Village.Things;
 
 public class FactoryPanel : MonoBehaviour
 {

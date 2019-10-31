@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Village;
+using Village.Things;
 
-namespace Things 
+namespace Village.Things 
 {
     public class Factory : ITrait
     {
