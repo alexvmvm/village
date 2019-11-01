@@ -54,7 +54,7 @@ namespace Village
             {
                 if(thingType == TypeOfThing.None)
                     continue;
-                var thing = Create(thingType);
+                var thing = Create(thingType, -10, -10);
                 if(thing.GetTrait<Agent>() != null)
                     thing.GetTrait<Agent>().PauseAgent();
                 AllThings.Add(thing);
