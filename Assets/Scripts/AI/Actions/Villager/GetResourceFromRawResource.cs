@@ -37,7 +37,7 @@ namespace Village.AI
 
         public override IEnumerable<Thing> GetThings()
         {
-            return _game.Things
+            return _game.QueryThings()
                 .Where(t => t.type == _type)
                 .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
         }

@@ -33,7 +33,7 @@ namespace Village.AI
         public override bool IsPossibleToPerform()
         {
 
-            _target = _game.Things
+            _target = _game.QueryThings()
                 .Where(t => t.construction != null && t.construction.Requires == _type)
                 .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position))
                 .FirstOrDefault();

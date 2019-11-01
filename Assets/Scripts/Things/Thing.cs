@@ -231,10 +231,9 @@ namespace Village.Things
             }
 
             if (_labelObj != null)
-                GameObject.Destroy(_labelObj);
+                GameObject.DestroyImmediate(_labelObj);
 
-            GameObject.Destroy(transform.gameObject);
-            game.Things.Remove(this);
+            GameObject.DestroyImmediate(transform.gameObject);
         }
 
         public virtual void Update()

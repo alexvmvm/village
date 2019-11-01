@@ -39,7 +39,7 @@ namespace Village.Things
 
         bool ConstructAtPosition(Vector2Int position)
         {
-            return _game.Things.Any(t => t.construction != null && t.gridPosition == position);
+            return _game.QueryThings().Any(t => t.construction != null && t.gridPosition == position);
         }
 
         public bool IsPlaceableAt(int x, int y)

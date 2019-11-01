@@ -33,7 +33,7 @@ public class VillageManager : MonoBehaviour
 
     public IEnumerable<IGrouping<string, Thing>> GetFamiliesByLastname()
     {
-        return _game.Things
+        return _game.QueryThings()
             .Where(t => t.type == TypeOfThing.Villager && t.HasTrait<Villager>())
             .GroupBy(t => t.GetTrait<Villager>().Lastname);
     }
@@ -65,7 +65,7 @@ public class VillageManager : MonoBehaviour
 
     public IEnumerable<string> GetDistinctSurnames()
     {
-        return _game.Things
+        return _game.QueryThings()
             .Where(t => t.type == TypeOfThing.Villager)
             .Select(t => t.GetTrait<Villager>())
             .Select(v => v.Lastname)

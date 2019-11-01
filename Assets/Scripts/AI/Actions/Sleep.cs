@@ -26,7 +26,7 @@ namespace Village.AI
 
         Thing FindBed()
         {
-            return _game.Things
+            return _game.QueryThings()
                 .Where(t => 
                     t.type == TypeOfThing.Bed || 
                     t.type == TypeOfThing.ForagedBed && 

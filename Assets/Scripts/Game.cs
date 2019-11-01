@@ -16,7 +16,6 @@ namespace Village
     {
         public Vector2Int Size { get { return _size; } }
         public WorldTime WorldTime { get { return _worldTime; } }
-        public List<Thing> Things { get { return _things; } }
         public List<Thing> AllThings;
         public ThingAdded OnThingAdded;
         public ThingRemoved OnThingRemoved;
@@ -184,6 +183,11 @@ namespace Village
         /*
             Things
         */
+        public IEnumerable<Thing> QueryThings()
+        {
+            return _things.Where(t => t.transform != null);
+        }
+
         public Thing AddThing(Thing thing)
         {
             if(thing.fixedToGrid)
@@ -198,7 +202,7 @@ namespace Village
 
                     _grid[thing.gridPosition.x, thing.gridPosition.y] = thing;
 
-                    Things.Add(thing);
+                    _things.Add(thing);
                     thing.Setup();
 
                     if(OnThingAdded != null)
@@ -207,7 +211,7 @@ namespace Village
             }
             else
             {
-                Things.Add(thing);
+                _things.Add(thing);
                 thing.Setup();
 
                 if(OnThingAdded != null)
@@ -232,13 +236,15 @@ namespace Village
             if(thing.fixedToGrid)
             {
                 _grid[thing.gridPosition.x, thing.gridPosition.y] = null;
-            }
+            }   
 
-            thing.Destroy();
-            Things.Remove(thing);
-
+            // make sure this is called before
+            // destroying the thing
             if(OnThingRemoved != null)
                 OnThingRemoved(thing);
+
+            _things.Remove(thing);
+            thing.Destroy();
         }
 
         public Thing Create(TypeOfThing thingType)
@@ -300,7 +306,7 @@ namespace Village
 
         public void Clear()
         {
-            foreach(var thing in Things.ToArray())
+            foreach(var thing in _things.ToArray())
             {
                 RemoveThing(thing);
             }
@@ -312,9 +318,9 @@ namespace Village
 
             WorldTime.Update();
 
-            for(var i = 0; i < Things.Count; i++) 
+            for(var i = 0; i < _things.Count; i++) 
             {
-                Things[i].Update();
+                _things[i].Update();
             }
 
             foreach(var positionalAudio in _positionalAudio)
@@ -331,13 +337,13 @@ namespace Village
 
             if(Input.GetKeyDown(KeyCode.O))
             {
-                var random = Things[UnityEngine.Random.Range(0, Things.Count)];
+                var random = _things[UnityEngine.Random.Range(0, _things.Count)];
                 RemoveThing(random);
             }
 
             if(Input.GetKeyDown(KeyCode.B))
             {
-                var toBuild = Things.Where(t => t.construction != null).ToArray();
+                var toBuild = _things.Where(t => t.construction != null).ToArray();
                 foreach(var thing in toBuild)
                 {
                     thing.construction.Construct();
@@ -351,7 +357,7 @@ namespace Village
             return new GameSave()
             {
                 Size = Size,
-                Things = Things.Select(t => t.ToSaveObj()).ToArray()
+                Things = _things.Select(t => t.ToSaveObj()).ToArray()
             };
         }
 
@@ -376,9 +382,9 @@ namespace Village
             if(!Application.isPlaying)
                 return;
 
-            for(var i = 0; i < Things.Count; i++) 
+            for(var i = 0; i < _things.Count; i++) 
             {
-                Things[i].DrawGizmos();
+                _things[i].DrawGizmos();
             }
 
             foreach(var positionalAudio in _positionalAudio)

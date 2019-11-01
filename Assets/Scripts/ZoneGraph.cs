@@ -109,7 +109,7 @@ public class ZoneGraph
         _newRegions.Clear();
 
 
-        foreach(var position in _game.Things.Where(t => t.fixedToGrid && t.floor).Select(t => t.gridPosition))
+        foreach(var position in _game.QueryThings().Where(t => t.fixedToGrid && t.floor).Select(t => t.gridPosition))
         {
             _queue.Enqueue(position);
         }

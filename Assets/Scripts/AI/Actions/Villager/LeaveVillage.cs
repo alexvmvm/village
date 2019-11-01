@@ -28,7 +28,7 @@ namespace Village.AI
 
         public override IEnumerable<Thing> GetThings()
         {
-            return _game.Things
+            return _game.QueryThings()
                 .Where(t => t.type == TypeOfThing.Path)
                 .OrderBy(t => t.transform.position.y);
         }
