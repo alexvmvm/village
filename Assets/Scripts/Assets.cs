@@ -87,6 +87,11 @@ public class Assets
 
     public static Thing Create(Game game, GameObject obj, TypeOfThing thingType, int x, int y)
     {
+        if(obj == null)
+        {
+            throw new System.Exception($"Unable to create ${thingType}, obj null");   
+        }
+        
         var thing = new Thing(thingType, obj.transform) { game = game };
 
         switch(thingType)
