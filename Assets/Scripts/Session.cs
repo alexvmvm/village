@@ -9,9 +9,7 @@ using Village.Saving;
 public class Session : MonoBehaviour
 {
     public AstarPath AstarPath;
-    public Text LoadingText;
-    public Text ErrorText;
-    public GameObject LoadingPanel;
+    public string SaveFileName;
 
     public Game Game { get { return _game; } }    
     private Game _game;
@@ -29,35 +27,37 @@ public class Session : MonoBehaviour
 
     void Start()
     {
-        _game.Start();
+        SetupNewGame();
+    }
 
-        if(SaveFiles.IsNewGame())
+    [BitStrap.Button]
+    public void SetupNewGame()
+    {
+        _game.Start();
+        _game.Generate();
+        _zoneGraph.Start();
+    }
+
+    [BitStrap.Button]
+    public void LoadGame()
+    {
+        var gameSave = SaveFiles.LoadGameFromName(SaveFileName);
+        if(gameSave != null)
         {
-            Debug.Log("New Game, generating...");
-            _game.Generate();
-            LoadingPanel.SetActive(false);
-        } 
+            _game.Clear();
+            _game.Start();
+            _game.FromSaveObj(gameSave);
+        }
         else
         {
-            Debug.Log("Loading from save...");
-
-            try 
-            {
-                _game.FromSaveObj(SaveFiles.GetCurrentSetGameSave());
-            } 
-            catch(Exception error) 
-            {
-                Debug.Log("Failed to load save");
-
-                LoadingText.text = "Failed to load save";
-                ErrorText.text = error.Message;
-                
-                SaveFiles.ClearSetSave();
-            }
-
+            Debug.Log($"Unable to find save: ${SaveFileName}");
         }
+    }
 
-        _zoneGraph.Start();
+    [BitStrap.Button]
+    public void SaveGame()
+    {
+        SaveFiles.SaveGameWithName(_game, SaveFileName);
     }
 
     GameObject CreateGameObject()
@@ -67,24 +67,45 @@ public class Session : MonoBehaviour
         return obj;
     }
 
-    [BitStrap.Button]
-    public void Save()
-    {
-        SaveFiles.SaveGame(_game, @"C:\Users\Alex\AppData\LocalLow\Unity\save.xml");
-    }
-
-    [BitStrap.Button]
-    public void Load()
-    {
-        var saveObject = SaveFiles.LoadGame(@"C:\Users\Alex\AppData\LocalLow\Unity\save.xml");
-        _game.FromSaveObj(saveObject);
-    }
-
     void Update()
     {
         _game.Update();
         _zoneGraph.Update();
         _cursor.Update();
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public static bool IsInMacOS
+    {
+        get
+        {
+            return UnityEngine.SystemInfo.operatingSystem.IndexOf("MacOS") != -1;
+        }
+    }
+
+    public static bool IsInWinOS
+    {
+        get
+        {
+            return UnityEngine.SystemInfo.operatingSystem.IndexOf("Windows") != -1;
+        }
+    }
+
+    [BitStrap.Button]
+    public void OpenDirectory()
+    {
+        if (IsInWinOS)
+            System.Diagnostics.Process.Start ("explorer.exe", Application.persistentDataPath.Replace (@"/", @"\"));
+        else if (IsInMacOS) 
+        {
+            System.Diagnostics.Process.Start("open", Application.persistentDataPath);
+            Debug.Log (Application.persistentDataPath);
+        }
+            
     }
 
     void OnDrawGizmos()
