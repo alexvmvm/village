@@ -223,18 +223,18 @@ namespace Village.Things
             return assignToFamily || HasTrait<Factory>() || HasTrait<Storage>();
         }
 
-        public void Destroy()
-        {
-            if (!string.IsNullOrEmpty(pathTag))
-            {
-                game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
-            }
+        // public void Destroy()
+        // {
+        //     if (!string.IsNullOrEmpty(pathTag))
+        //     {
+        //         game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
+        //     }
 
-            if (_labelObj != null)
-                GameObject.DestroyImmediate(_labelObj);
+        //     if (_labelObj != null)
+        //         GameObject.DestroyImmediate(_labelObj);
 
-            GameObject.DestroyImmediate(transform.gameObject);
-        }
+        //     GameObject.DestroyImmediate(transform.gameObject);
+        // }
 
         public virtual void Update()
         {

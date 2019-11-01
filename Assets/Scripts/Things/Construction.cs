@@ -58,7 +58,7 @@ namespace Village.Things
         {
             var thing = _game.Create(_builds, _thing.gridPosition.x, _thing.gridPosition.y);
             _game.AddThing(thing);
-            _thing.Destroy();
+            _game.Destroy(_thing);
         }
 
         public static string GetGroupSprite(ConstructionGroup group)

@@ -39,7 +39,7 @@ namespace Village.AI
         {
             if (_inventory.IsHoldingSomething())
             {
-                _inventory.Holding.Destroy();
+                _game.Destroy(_inventory.Holding);
                 _inventory.Drop();
             }
 

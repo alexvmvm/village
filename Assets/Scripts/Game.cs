@@ -24,6 +24,7 @@ namespace Village
         private Func<GameObject> _getGameObject;
         private Thing[,] _grid;
         private List<Thing> _things;
+        private List<Thing> _destroyed;
         private WorldTime _worldTime;
         private Vector2Int _size = Vector2Int.one * 10;
         private AstarPath _aStarPath;
@@ -34,6 +35,7 @@ namespace Village
             _size = size;
             _getGameObject = getGameObject;
             _things = new List<Thing>();
+            _destroyed = new List<Thing>();
             _grid = new Thing[_size.x, _size.y];
             _worldTime = new WorldTime(360, 5, 23);
             _director = new Director(this);
@@ -228,7 +230,7 @@ namespace Village
             return thing;
         }
 
-        public void RemoveThing(Thing thing)
+        void RemoveThing(Thing thing)
         {
             if(thing == null)
                 return;
@@ -244,7 +246,9 @@ namespace Village
                 OnThingRemoved(thing);
 
             _things.Remove(thing);
-            thing.Destroy();
+
+            if(thing.transform != null)
+                GameObject.DestroyImmediate(thing.transform.gameObject);
         }
 
         public Thing Create(TypeOfThing thingType)
@@ -264,6 +268,12 @@ namespace Village
         public Thing CreateAndAddThing(TypeOfThing type, int x, int y)
         {
             return AddThing(Create(type, x, y));
+        }
+
+        public void Destroy(Thing thing)
+        {
+            _things.Remove(thing);
+            _destroyed.Add(thing);
         }
 
         /*
@@ -347,8 +357,13 @@ namespace Village
                 foreach(var thing in toBuild)
                 {
                     thing.construction.Construct();
-                    thing.Destroy();
+                    Destroy(thing);
                 }
+            }
+
+            foreach(var thing in _destroyed.ToArray())
+            {
+                RemoveThing(thing);
             }
         }
 

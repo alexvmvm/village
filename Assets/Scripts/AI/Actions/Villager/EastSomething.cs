@@ -27,7 +27,7 @@ namespace Village.AI
 
         public override bool Perform()
         {
-            _inventory.Holding.Destroy();
+            _game.Destroy(_inventory.Holding);
             _inventory.Drop();
 
             return true;
