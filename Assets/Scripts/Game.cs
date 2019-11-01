@@ -47,7 +47,7 @@ namespace Village
 
         public void Start()
         {
-                // setup all things
+            // setup all things
             AllThings = new List<Thing>();
 
             foreach(TypeOfThing thingType in Enum.GetValues(typeof(TypeOfThing)))
@@ -59,11 +59,9 @@ namespace Village
                     thing.GetTrait<Agent>().PauseAgent();
                 AllThings.Add(thing);
             }
-
-            RandomMap();
         }
 
-        public void RandomMap()
+        public void Generate()
         {
             for(var x = 0; x < _size.x; x++)
             {

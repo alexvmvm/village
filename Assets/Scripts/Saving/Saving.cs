@@ -8,13 +8,13 @@ public class Saving : MonoBehaviour
     public Game Game;
   
 
-    void Start()
-    {
-        StartCoroutine(LoadSave());
-    }
+    // void Start()
+    // {
+    //     StartCoroutine(LoadSave());
+    // }
 
-    IEnumerator LoadSave()
-    {
-        yield return SaveFiles.LoadCurrentSaveGame(Game);
-    }
+    // IEnumerator LoadSave()
+    // {
+    //     yield return SaveFiles.LoadCurrentSaveGame(Game);
+    // }
 }

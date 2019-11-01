@@ -35,12 +35,12 @@ public class LoadingPanel : MonoBehaviour
 
             loadingLineItem.Load.onClick.RemoveAllListeners();
             loadingLineItem.Load.onClick.AddListener(() => {
-                Debug.Log("Load");
+                LoadSave(save);
             });
 
             loadingLineItem.Delete.onClick.RemoveAllListeners();
             loadingLineItem.Delete.onClick.AddListener(() => {
-                Debug.Log("Delete");
+                DeleteSave(save);
             });
 
             obj.SetActive(true);
@@ -63,11 +63,9 @@ public class LoadingPanel : MonoBehaviour
         // });
     }
 
-    void LoadSave(string saveFilePath)
+    void LoadSave(SaveFile saveFile)
     {
-        PlayerPrefs.SetString("SaveFilePath", saveFilePath);
-        PlayerPrefs.SetInt("NewGame", 0);
-        SceneManager.LoadScene("main");
+        SaveFiles.SetSaveAndLoad(saveFile.FileNameWithoutExt, false);
     }
 
     void DeleteSave(SaveFile save)

@@ -1,12 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Village;
 using Village.Saving;
 
 public class Session : MonoBehaviour
 {
     public AstarPath AstarPath;
+    public Text LoadingText;
+    public Text ErrorText;
+    public GameObject LoadingPanel;
+
     public Game Game { get { return _game; } }    
     private Game _game;
     public GameCursor Cursor { get { return _cursor; } }
@@ -24,6 +30,33 @@ public class Session : MonoBehaviour
     void Start()
     {
         _game.Start();
+
+        if(SaveFiles.IsNewGame())
+        {
+            Debug.Log("New Game, generating...");
+            _game.Generate();
+            LoadingPanel.SetActive(false);
+        } 
+        else
+        {
+            Debug.Log("Loading from save...");
+
+            try 
+            {
+                _game.FromSaveObj(SaveFiles.GetCurrentSetGameSave());
+            } 
+            catch(Exception error) 
+            {
+                Debug.Log("Failed to load save");
+
+                LoadingText.text = "Failed to load save";
+                ErrorText.text = error.Message;
+                
+                SaveFiles.ClearSetSave();
+            }
+
+        }
+
         _zoneGraph.Start();
     }
 

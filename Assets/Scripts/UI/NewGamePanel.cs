@@ -12,10 +12,15 @@ public class NewGamePanel : MonoBehaviour
 
     public void CreateGame()
     {
-        if(!string.IsNullOrEmpty(InputField.text) && !SaveFiles.SaveExists(InputField.text))
-        {
-            var saveFile = SaveFiles.CreateNewSave(InputField.text);
-            SaveFiles.LoadSave(saveFile);
+        InputField.gameObject.SetActive(false);
+        InputField.gameObject.SetActive(true);
+
+        var text = InputField.text;
+
+        if(!string.IsNullOrEmpty(text))
+        {   
+            SaveFiles.SetSaveAndLoad(InputField.text, true);
         }
+        
     }
 }
