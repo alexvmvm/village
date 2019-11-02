@@ -253,13 +253,16 @@ public class Assets
                 thing.construction = new Construction(game, thing, null, TypeOfThing.SoilFloor, ConstructionGroup.Farming, TypeOfThing.Hoe);
                 break;
             case TypeOfThing.CabbageCrop:
+            {
+                var crop = new Crop(game, thing, 360, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" });
                 thing.name = "cabbage";
                 thing.sprite = "colored_transparent_204";
-                thing.tileRule = new CropTile(thing);
                 thing.playerBuiltFloor = true;
                 thing.buildOn = false;
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.AddTrait(new Crop(game, thing, 360, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" }));
+                thing.AddTrait(crop);
+                thing.tileRule = new CropTile(thing, crop);
+            }
             break;
             case TypeOfThing.CabbageCropBlueprint:
                 thing.name = "cabbage";

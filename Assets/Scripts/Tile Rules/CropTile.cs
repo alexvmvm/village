@@ -9,10 +9,10 @@ namespace Village.Things
         private Thing _thing;
         private Crop _crop;
 
-        public CropTile(Thing thing)
+        public CropTile(Thing thing, Crop crop)
         {
             _thing = thing;
-            _crop = thing.GetTrait<Crop>();
+            _crop = crop;
         }
 
         public string GetSprite(Position position)

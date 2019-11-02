@@ -8,14 +8,19 @@ using Village;
 
 public class StoragePanel : MonoBehaviour
 {
-    public Game Game;
     public ObjectPooler TogglePooler;
+    private Session _session;
+
+    void Awake()
+    {
+        _session = FindObjectOfType<Session>();
+    }
 
     public void Setup(Thing thing)
     {
         TogglePooler.DeactivateAll();
 
-        foreach(var item in Game.AllThings.Where(t => t.resource))
+        foreach(var item in _session.Game.AllThings.Where(t => t.resource))
         {
             var obj = TogglePooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = item.name.ToUppercaseFirst();
