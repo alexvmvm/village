@@ -81,7 +81,7 @@ namespace Village.Things
             this._traits = new List<ITrait>();
         }
 
-        public Vector2Int gridPosition
+        public Vector2Int position
         {
             get
             {
@@ -90,6 +90,8 @@ namespace Village.Things
                     Mathf.FloorToInt(transform.position.y));
             }
         }
+
+        public bool Exists { get { return transform != null; } }
 
         public void AddTrait(ITrait trait)
         {

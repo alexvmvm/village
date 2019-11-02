@@ -53,8 +53,8 @@ public class ZoneGraph
         if(!thing.fixedToGrid)
             return;
 
-        if(!_toCheck.Contains(thing.gridPosition))  
-            _toCheck.Add(thing.gridPosition);
+        if(!_toCheck.Contains(thing.position))  
+            _toCheck.Add(thing.position);
     }
 
     void ThingRemoved(Thing thing)
@@ -62,8 +62,8 @@ public class ZoneGraph
         if(!thing.fixedToGrid)
             return;
 
-         if(!_toCheck.Contains(thing.gridPosition))  
-            _toCheck.Add(thing.gridPosition);
+         if(!_toCheck.Contains(thing.position))  
+            _toCheck.Add(thing.position);
     }
     
     public void UpdateRegions()
@@ -109,7 +109,7 @@ public class ZoneGraph
         _newRegions.Clear();
 
 
-        foreach(var position in _game.QueryThings().Where(t => t.fixedToGrid && t.floor).Select(t => t.gridPosition))
+        foreach(var position in _game.QueryThings().Where(t => t.fixedToGrid && t.floor).Select(t => t.position))
         {
             _queue.Enqueue(position);
         }

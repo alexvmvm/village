@@ -44,8 +44,8 @@ namespace Village.AI
 
                 // damage existing resource
                 _target.hitpoints -= 10;
-                if (_target.hitpoints <= 0)
-                    _game.CreateAndAddThing(TypeOfThing.MudFloor, _target.gridPosition.x, _target.gridPosition.y);
+                if (_target.hitpoints <= 0 && _target.transform != null)
+                    _game.CreateAndAddThing(TypeOfThing.MudFloor, _target.position.x, _target.position.y);
             }
             else
             {

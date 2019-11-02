@@ -186,15 +186,15 @@ namespace Village
         {
             if(thing.fixedToGrid)
             {
-                if(IsOnGrid(thing.gridPosition.x, thing.gridPosition.y))
+                if(IsOnGrid(thing.position.x, thing.position.y))
                 {
-                    var existing = GetThingOnGrid(thing.gridPosition.x, thing.gridPosition.y);
+                    var existing = GetThingOnGrid(thing.position.x, thing.position.y);
                     if(existing != null)
                     {
                         RemoveThing(existing);
                     }
 
-                    _grid[thing.gridPosition.x, thing.gridPosition.y] = thing;
+                    _grid[thing.position.x, thing.position.y] = thing;
 
                     _things.Add(thing);
                     thing.Setup();
@@ -229,7 +229,7 @@ namespace Village
 
             if(thing.fixedToGrid && thing.transform != null)
             {
-                _grid[thing.gridPosition.x, thing.gridPosition.y] = null;
+                _grid[thing.position.x, thing.position.y] = null;
             }   
 
             // make sure this is called before

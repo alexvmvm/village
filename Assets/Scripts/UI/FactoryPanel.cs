@@ -7,11 +7,16 @@ using Village.Things;
 
 public class FactoryPanel : MonoBehaviour
 {
-    public Game Game;
     public ObjectPooler FactoryLineItem;
     public ObjectPooler CostPooler;
     public GameObject DetailsPanel;
     public Text DetailsDescription;
+    private Session _session;
+
+    void Awake()
+    {
+        _session = FindObjectOfType<Session>();
+    }
 
     public void Setup(Thing thing)
     {
@@ -21,7 +26,7 @@ public class FactoryPanel : MonoBehaviour
 
         foreach(var type in thing.GetTrait<Factory>().Produces)
         {
-            var lineItemThing = Game.Create(type, 0, 0);
+            var lineItemThing = _session.Game.Create(type, 0, 0);
             var obj = FactoryLineItem.GetPooledObject();
 
             var lineItem = obj.GetComponent<FactoryLineItem>();
@@ -66,7 +71,7 @@ public class FactoryPanel : MonoBehaviour
         {
             var obj = CostPooler.GetPooledObject();
             var lineItem = obj.GetComponent<CostLineItem>();
-            var lineItemThing = Game.GetThingNotInScene(required);
+            var lineItemThing = _session.Game.GetThingNotInScene(required);
             lineItem.Name.text = lineItemThing.name.ToUppercaseFirst();
             lineItem.Amount.text = "x1";
             lineItem.Image.sprite = Assets.GetSprite(lineItemThing.sprite);

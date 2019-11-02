@@ -39,7 +39,7 @@ namespace Village.Things
 
         bool ConstructAtPosition(Vector2Int position)
         {
-            return _game.QueryThings().Any(t => t.construction != null && t.gridPosition == position);
+            return _game.QueryThings().Any(t => t.construction != null && t.position == position);
         }
 
         public bool IsPlaceableAt(int x, int y)
@@ -47,7 +47,7 @@ namespace Village.Things
             var current = _game.GetThingOnGrid(x, y);
             if (current == null)
                 return false;
-            if (ConstructAtPosition(current.gridPosition))
+            if (ConstructAtPosition(current.position))
                 return false;
             if (_buildOn.HasValue && _buildOn != current.type)
                 return false;
@@ -56,9 +56,12 @@ namespace Village.Things
 
         public void Construct()
         {
-            var thing = _game.Create(_builds, _thing.gridPosition.x, _thing.gridPosition.y);
-            _game.AddThing(thing);
-            _game.Destroy(_thing);
+            if(_thing.Exists)
+            {
+                var thing = _game.Create(_builds, _thing.position.x, _thing.position.y);
+                _game.AddThing(thing);
+                _game.Destroy(_thing);
+            }
         }
 
         public static string GetGroupSprite(ConstructionGroup group)
