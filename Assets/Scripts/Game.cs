@@ -21,21 +21,17 @@ namespace Village
         public ThingRemoved OnThingRemoved;
         private List<PositionalAudio> _positionalAudio;
         private Director _director;
-        private Func<GameObject> _getGameObject;
         private Thing[,] _grid;
         private List<Thing> _things;
-        private List<Thing> _destroyed;
         private WorldTime _worldTime;
         private Vector2Int _size = Vector2Int.one * 10;
         private AstarPath _aStarPath;
 
-        public Game(AstarPath aStarPath, Vector2Int size, Func<GameObject> getGameObject)
+        public Game(AstarPath aStarPath, Vector2Int size)
         {
             _aStarPath = aStarPath;
             _size = size;
-            _getGameObject = getGameObject;
             _things = new List<Thing>();
-            _destroyed = new List<Thing>();
             _grid = new Thing[_size.x, _size.y];
             _worldTime = new WorldTime(360, 5, 23);
             _director = new Director(this);
@@ -44,13 +40,14 @@ namespace Village
                 new PositionalAudio(this, "river", "running_water"),
                 new PositionalAudio(this, "trees", "birds")
             };
+
+            // setup all things
+            AllThings = new List<Thing>();
+
         }
 
         public void Start()
         {
-            // setup all things
-            AllThings = new List<Thing>();
-
             foreach(TypeOfThing thingType in Enum.GetValues(typeof(TypeOfThing)))
             {
                 if(thingType == TypeOfThing.None)
@@ -148,11 +145,6 @@ namespace Village
 
         }
 
-        public GameObject GetGameObject()
-        {
-            return _getGameObject();
-        }
-
         /*
             Sprites
         */
@@ -235,7 +227,7 @@ namespace Village
             if(thing == null)
                 return;
 
-            if(thing.fixedToGrid)
+            if(thing.fixedToGrid && thing.transform != null)
             {
                 _grid[thing.gridPosition.x, thing.gridPosition.y] = null;
             }   
@@ -247,8 +239,7 @@ namespace Village
 
             _things.Remove(thing);
 
-            if(thing.transform != null)
-                GameObject.DestroyImmediate(thing.transform.gameObject);
+            thing.Destroy();
         }
 
         public Thing Create(TypeOfThing thingType)
@@ -257,12 +248,8 @@ namespace Village
         }
 
         public Thing Create(TypeOfThing thingType, int x, int y)
-        {
-            var obj = _getGameObject();
-            obj.transform.position = new Vector3(x, y, 0);
-            obj.transform.name = thingType.ToString();
-            
-            return Assets.Create(this, obj, thingType, x, y);
+        { 
+            return Assets.Create(this, thingType, x, y);
         }
 
         public Thing CreateAndAddThing(TypeOfThing type, int x, int y)
@@ -272,8 +259,7 @@ namespace Village
 
         public void Destroy(Thing thing)
         {
-            _things.Remove(thing);
-            _destroyed.Add(thing);
+            RemoveThing(thing);
         }
 
         /*
@@ -359,11 +345,6 @@ namespace Village
                     thing.construction.Construct();
                     Destroy(thing);
                 }
-            }
-
-            foreach(var thing in _destroyed.ToArray())
-            {
-                RemoveThing(thing);
             }
         }
 

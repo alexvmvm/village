@@ -30,17 +30,17 @@ public class GameCursor
     public GameCursor(Game game)
     {
         _game = game;
-        _crosshairCursor = _game.GetGameObject().transform;
+        _crosshairCursor = new GameObject("cursor").transform;
 
-        _spriteRenderer = _crosshairCursor.gameObject.GetComponent<SpriteRenderer>();
+        _spriteRenderer = _crosshairCursor.gameObject.AddComponent<SpriteRenderer>();
         _spriteRenderer.sprite = Assets.GetSprite("crosshair025");
         _spriteRenderer.sortingOrder = (int)SortingOrders.UI;
         
         _cursorMeshObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Cursor Mesh"));
         _cursorMeshObj.transform.position = new Vector3(0, 0, -2);
 
-        _meshFromPoints = _cursorMeshObj.AddComponent<MeshFromPoints>();
-        _meshRenderer = _cursorMeshObj.AddComponent<MeshRenderer>();
+        _meshFromPoints = _cursorMeshObj.GetComponent<MeshFromPoints>();
+        _meshRenderer = _cursorMeshObj.GetComponent<MeshRenderer>();
         _cursorMeshObj.SetActive(false);
 
         _infoPanel = MonoBehaviour.FindObjectOfType<InfoPanel>();

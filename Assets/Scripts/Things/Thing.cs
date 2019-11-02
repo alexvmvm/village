@@ -20,6 +20,7 @@ namespace Village.Things
         public Game game;
         public int hitpoints = 100;
         public Transform transform;
+        public GameObject gameObject;
         public SpriteRenderer spriteRenderer;
         public Color color = Color.white;
         public Vector3 scale = Vector3.one;
@@ -66,12 +67,15 @@ namespace Village.Things
 
         private List<ITrait> _traits;
 
-        public Thing(TypeOfThing type, Transform transform)
+        public Thing(TypeOfThing type, Game game)
         {
+            this.game = game;
+            this.gameObject= new GameObject(type.ToString());
+            this.transform = this.gameObject.transform;
+
             this.id = Guid.NewGuid().ToString();
             this.type = type;
-            this.transform = transform;
-            this.spriteRenderer = transform.GetComponent<SpriteRenderer>();
+            this.spriteRenderer = this.gameObject.AddComponent<SpriteRenderer>();
             this.produces = type;
             this.requiredToGet = TypeOfThing.None;
             this._traits = new List<ITrait>();
@@ -207,34 +211,23 @@ namespace Village.Things
             return position;
         }
 
-        public Thing[] GetNeighboursOnGrid()
-        {
-            return new Thing[]
-            {
-            game.GetThingOnGrid(gridPosition + Vector2Int.up),
-            game.GetThingOnGrid(gridPosition + Vector2Int.down),
-            game.GetThingOnGrid(gridPosition + Vector2Int.left),
-            game.GetThingOnGrid(gridPosition + Vector2Int.right)
-            };
-        }
-
         public bool CanBeSeletected()
         {
             return assignToFamily || HasTrait<Factory>() || HasTrait<Storage>();
         }
 
-        // public void Destroy()
-        // {
-        //     if (!string.IsNullOrEmpty(pathTag))
-        //     {
-        //         game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
-        //     }
+        public void Destroy()
+        {
+            if (!string.IsNullOrEmpty(pathTag))
+            {
+                game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
+            }
 
-        //     if (_labelObj != null)
-        //         GameObject.DestroyImmediate(_labelObj);
+            if (_labelObj != null)
+                GameObject.Destroy(_labelObj);
 
-        //     GameObject.DestroyImmediate(transform.gameObject);
-        // }
+            GameObject.Destroy(transform.gameObject);
+        }
 
         public virtual void Update()
         {

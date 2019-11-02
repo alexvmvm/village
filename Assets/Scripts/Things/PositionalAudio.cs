@@ -25,7 +25,7 @@ namespace Village.Things
             _game = game;
             _audioClip = Assets.GetAudioClip(audio);
 
-            var obj = _game.GetGameObject();
+            var obj = new GameObject("positonal_audio");
             obj.name = "positionalAudio_" + group;
             _audioSource = obj.AddComponent<AudioSource>();
             _audioSource.clip = _audioClip;

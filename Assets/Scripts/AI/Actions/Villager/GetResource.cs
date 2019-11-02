@@ -37,7 +37,7 @@ namespace Village.AI
             if (_target.fixedToGrid)
             {
      
-                var resource = _game.CreateAndAddThing(_target.produces, 0, 0);
+                var resource = _game.Create(_target.produces, 0, 0);
                 resource.hitpoints = Mathf.Min(10, _target.hitpoints);
                 resource.ownedBy = _villager.Fullname;
                 _inventory.HoldThing(resource);
@@ -55,6 +55,15 @@ namespace Village.AI
 
             return true;
         }
+
+        public override void Reset()
+        {
+            base.Reset();
+
+            _target = null;
+        }
     }
+
+    
 
 }

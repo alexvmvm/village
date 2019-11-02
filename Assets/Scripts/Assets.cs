@@ -85,14 +85,10 @@ public class Assets
         return _materials[name];
     }
 
-    public static Thing Create(Game game, GameObject obj, TypeOfThing thingType, int x, int y)
+    public static Thing Create(Game game, TypeOfThing thingType, int x, int y)
     {
-        if(obj == null)
-        {
-            throw new System.Exception($"Unable to create ${thingType}, obj null");   
-        }
-        
-        var thing = new Thing(thingType, obj.transform) { game = game };
+        var thing = new Thing(thingType, game);
+        thing.transform.position = new Vector3(x, y, 0);
 
         switch(thingType)
         {

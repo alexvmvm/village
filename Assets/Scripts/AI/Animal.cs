@@ -14,7 +14,7 @@ namespace Village.AI
         public Animal(Game game, Thing thing) : base(game, thing)
         {
             _thing = thing;
-            _movement = _thing.transform.gameObject.AddComponent<Movement>();
+            _movement = _thing.gameObject.AddComponent<Movement>();
 
             _goal = new Dictionary<string, object>();
             _world = new Dictionary<string, object>();

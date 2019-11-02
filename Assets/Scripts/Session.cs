@@ -20,7 +20,7 @@ public class Session : MonoBehaviour
 
     public void Awake()
     {
-        _game = new Game(AstarPath, new Vector2Int(50, 50), CreateGameObject);
+        _game = new Game(AstarPath, new Vector2Int(50, 50));
         _zoneGraph = new ZoneGraph(_game);
         _cursor = new GameCursor(_game);
     }
@@ -58,13 +58,6 @@ public class Session : MonoBehaviour
     public void SaveGame()
     {
         SaveFiles.SaveGameWithName(_game, SaveFileName);
-    }
-
-    GameObject CreateGameObject()
-    {
-        var obj = MonoBehaviour.Instantiate(Assets.GetPrefab("Thing"));
-        obj.SetActive(true);
-        return obj;
     }
 
     void Update()
