@@ -84,7 +84,7 @@ namespace Village
                     }
                     else if(noise3 > 0.85f)
                     {
-                        CreateAndAddThing(TypeOfThing.Mushroom, x, y);
+                        CreateAndAddThing(TypeOfThing.MushroomGrowing, x, y);
                     }
                     else
                     {

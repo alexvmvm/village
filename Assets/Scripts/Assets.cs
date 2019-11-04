@@ -151,12 +151,21 @@ public class Assets
                 thing.resource = true;
                 thing.hitpoints = 20;
                 break;
-            case TypeOfThing.Mushroom:
+             case TypeOfThing.MushroomGrowing:
                 thing.name = "mushroom";
                 thing.sprite = "colored_71";
                 thing.fixedToGrid = true;
                 thing.edible = true;
                 thing.resource = true;
+                thing.produces = TypeOfThing.Mushroom;
+                thing.hitpoints = 1;
+                break;
+            case TypeOfThing.Mushroom:
+                thing.name = "mushroom";
+                thing.sprite = "colored_71";
+                thing.edible = true;
+                thing.resource = true;
+                thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.hitpoints = 1;
                 break;
             case TypeOfThing.Wood:
@@ -473,7 +482,7 @@ public class Assets
                 thing.description = "A storage container used to store resources";
                 thing.sprite = "colored_200";
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.AddTrait(new Storage(game));
+                thing.AddTrait(new Storage(game, thing));
                 thing.fixedToGrid = true;
                 break;
             case TypeOfThing.StorageBlueprint:

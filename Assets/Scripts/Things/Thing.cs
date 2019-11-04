@@ -218,6 +218,11 @@ namespace Village.Things
             return assignToFamily || HasTrait<Factory>() || HasTrait<Storage>();
         }
 
+        public bool IsInStorage()
+        {
+            return transform.parent != null;
+        }
+
         public void Destroy()
         {
             if (!string.IsNullOrEmpty(pathTag))

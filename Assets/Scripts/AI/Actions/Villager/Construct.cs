@@ -43,6 +43,9 @@ namespace Village.AI
 
         public override bool Perform()
         {
+            if(!_target.Exists)
+                return false;
+
             if (!_started)
             {
                 _movement.CancelCurrentPath();

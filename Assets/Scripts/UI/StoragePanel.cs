@@ -26,6 +26,7 @@ public class StoragePanel : MonoBehaviour
             obj.GetComponentInChildren<Text>().text = item.name.ToUppercaseFirst();
             var toggle = obj.GetComponentInChildren<Toggle>();
             toggle.onValueChanged.RemoveAllListeners();
+            toggle.isOn = false;
             toggle.onValueChanged.AddListener((value) => {
                 if(value) 
                     thing.GetTrait<Storage>().Allow(item.type);

@@ -29,13 +29,17 @@ namespace Village.Things
             _holding.transform.localPosition = Vector3.up;
         }
 
-        public void Drop()
+        public Thing Drop()
         {
             if (_holding != null)
             {
+                var thing = _holding;
                 _holding.transform.SetParent(null);
                 _holding = null;
+                return thing;
             }
+
+            return null;
         }
 
         public bool IsHoldingSomething()

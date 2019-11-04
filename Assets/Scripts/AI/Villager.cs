@@ -34,6 +34,7 @@ namespace Village.AI
         {
             _thing = thing;
             _movement = _thing.transform.gameObject.AddComponent<Movement>();
+            _inventory = _thing.GetTrait<Inventory>();
 
             _needs = new Needs(game);
 
@@ -46,7 +47,7 @@ namespace Village.AI
             _world = new Dictionary<string, object>();
 
             _villagerManager = MonoBehaviour.FindObjectOfType<VillageManager>();
-
+            
 
 
             /*
@@ -125,7 +126,7 @@ namespace Village.AI
                 Effects = { { "hasThing", TypeOfThing.Stone }, { "hasFullInventory", true } }
             });
 
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Mushroom, this)
+            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.MushroomGrowing, this)
             {
                 Preconditions = { { "hasFullInventory", false } },
                 Effects = { { "hasThing", TypeOfThing.Mushroom }, { "hasFullInventory", true }, { "hasEdibleThing", true } }
@@ -234,6 +235,21 @@ namespace Village.AI
                 Effects = { { "isWorking", true } }
             });
 
+            /*
+                Storage
+            */
+
+            AddAction(new GetResourceToMoveToStorage(_game, thing, _movement, TypeOfThing.CabbageSeed, this)
+            {
+                Preconditions = { { "hasFullInventory", false } },
+                Effects = { { "hasThing", TypeOfThing.CabbageSeed }, { "hasThingForStorage", true } }
+            });
+
+            AddAction(new FillStorage(_game, _movement, this, _inventory, TypeOfThing.CabbageSeed)
+            {
+                Preconditions = { { "hasThing", TypeOfThing.CabbageSeed }, { "hasThingForStorage", true } },
+                Effects = { { "isWorking", true }, }
+            });
 
             /*
                 Construction
@@ -278,8 +294,6 @@ namespace Village.AI
         public override void Setup()
         {
             base.Setup();
-
-            _inventory = _thing.GetTrait<Inventory>();
         }
 
         public override Dictionary<string, object> GetGoal()

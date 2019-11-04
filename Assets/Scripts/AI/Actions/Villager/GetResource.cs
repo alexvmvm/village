@@ -6,14 +6,13 @@ using Village.Things;
 
 namespace Village.AI
 {
-
     public class GetResource : MoveGOAPAction
     {
         private Thing _thing;
-        private Movement _movement;
-        private TypeOfThing _type;
+        protected Movement _movement;
+        protected TypeOfThing _type;
         private Inventory _inventory;
-        private Villager _villager;
+        protected Villager _villager;
 
         public GetResource(Game game, Thing thing, Movement movement, TypeOfThing type, Villager villager) : base(game, movement)
         {
@@ -37,7 +36,7 @@ namespace Village.AI
             if (_target.fixedToGrid)
             {
      
-                var resource = _game.Create(_target.produces, 0, 0);
+                var resource = _game.CreateAndAddThing(_target.produces, 0, 0);
                 resource.hitpoints = Mathf.Min(10, _target.hitpoints);
                 resource.ownedBy = _villager.Fullname;
                 _inventory.HoldThing(resource);
