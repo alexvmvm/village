@@ -54,26 +54,11 @@ namespace Village.AI
                 Misc
             */
 
-            // AddAction(new RequestResidence(_game, _thing) {
-            //     Preconditions   = { { "hasRequestedResidence", false } },
-            //     Effects         = { { "hasRequestedResidence", true } },
-            // });
-
-            // AddAction(new LeaveVillage(_game, _movement, _thing, this) {
-            //     Preconditions   = { { "hasLeftVillage", false } },
-            //     Effects         = { { "hasLeftVillage", true } },
-            // });
-
             AddAction(new Drop(_game, _thing)
             {
                 Preconditions = { { "hasFullInventory", true } },
                 Effects = { { "hasFullInventory", false } },
             });
-
-            // AddAction(new SleepAtHome(_game, _thing, _movement, this) {
-            //     Preconditions   = { { "isSleeping", false }, { "hasFullInventory", false }, { "hasHome", true } },
-            //     Effects         = { { "isSleeping", true } },
-            // });
 
             AddAction(new Sleep(_game, _thing, _movement, this, _needs)
             {
@@ -91,14 +76,6 @@ namespace Village.AI
                 Effects = { { "isWorking", true } },
                 Cost = 99999 // last resort
             });
-
-            /*
-                Farming
-            */
-            // AddAction(new FillCoop(_game, _movement, this, thing.inventory) {
-            //     Preconditions   = { { "hasChicken", true } },
-            //     Effects         = { { "isWorking", true }, { "hasChicken", false } }
-            // });
 
             /*
                 Survival
@@ -119,137 +96,88 @@ namespace Village.AI
             /*
                 Resources
             */
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Rock, this)
+            var resources = new TypeOfThing[] 
             {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Stone }, { "hasFullInventory", true } }
-            });
+                TypeOfThing.Rock,
+                TypeOfThing.Stone,
+                TypeOfThing.MushroomGrowing,
+                TypeOfThing.Mushroom,
+                TypeOfThing.Tree,
+                TypeOfThing.FallenWood,
+                TypeOfThing.Wood,
+                TypeOfThing.Clay,
+                TypeOfThing.Ore,
+                TypeOfThing.Iron,
+                TypeOfThing.CabbageSeed,
+                TypeOfThing.Axe,
+                TypeOfThing.Hoe
+            };
 
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.MushroomGrowing, this)
+            foreach(var resource in resources)
             {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Mushroom }, { "hasFullInventory", true }, { "hasEdibleThing", true } }
-            });
+                var example = _game.Create(resource);
+                var effects = new Dictionary<string, object>();
+                effects.Add("hasThing", example.produces);
+                effects.Add("hasFullInventory", true);
+                if(example.edible) 
+                    effects.Add("hasEdibleThing", true);
+                AddAction(new GetResource(_game, thing, _movement, resource, this)
+                {
+                    Preconditions = { { "hasFullInventory", false } },
+                    Effects = effects
+                });
+            }
 
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Tree, this)
+            var factoryJobs = new List<Tuple<TypeOfThing, TypeOfThing, TypeOfThing>>()
             {
-                Preconditions = { { "hasThing", TypeOfThing.Axe } },
-                Effects = { { "hasThing", TypeOfThing.Wood }, { "hasFullInventory", true }, }
-            });
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.FallenWood, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Wood }, { "hasFullInventory", true } }
-            });
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Wood, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Wood }, { "hasFullInventory", true } }
-            });
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Clay, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Clay }, { "hasFullInventory", true } }
-            });
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Ore, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Ore }, { "hasFullInventory", true } }
-            });
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Iron, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Iron }, { "hasFullInventory", true } }
-            });
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Stone, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Stone }, { "hasFullInventory", true } }
-            });
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.CabbageSeed, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.CabbageSeed }, { "hasFullInventory", true } }
-            });
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Axe, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Axe }, { "hasFullInventory", true } }
-            });
-
-            AddAction(new GetResource(_game, thing, _movement, TypeOfThing.Hoe, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.Hoe }, { "hasFullInventory", true } }
-            });
+                Tuple.Create(TypeOfThing.ClayForge, TypeOfThing.Ore, TypeOfThing.Iron),
+                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Axe),
+                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Hoe)
+            };
 
             /*
-                Factories
+                Factory Job
             */
 
-            // AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Ore, thing.inventory) {
-            //     Preconditions   = { { "hasThing", TypeOfThing.Ore } },
-            //     Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
-            //     Cost = 10
-            // });
-
-            // AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Iron, thing.inventory) {
-            //     Preconditions   = { { "hasThing", TypeOfThing.Iron } },
-            //     Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
-            //     Cost = 10
-            // });
-
-            // AddAction(new FillFactoryHopper(_game, _movement, TypeOfThing.Wood, thing.inventory) {
-            //     Preconditions   = { { "hasThing", TypeOfThing.Wood } },
-            //     Effects         = { { "hasFullInventory", false }, { "isWorking", true } },
-            //     Cost = 10
-            // });
-
-
-
-            AddAction(new SubmitFactoryJob(_game, thing, _movement, TypeOfThing.ClayForge, TypeOfThing.Iron, false)
+            foreach(var job in factoryJobs)
             {
-                Preconditions = { { "hasThing", TypeOfThing.Ore } },
-                Effects = { { "hasThing", TypeOfThing.Iron }, { "isWorking", true } },
-                Cost = 1
-            });
+                var factory = job.Item1;
+                var requires = job.Item2;
+                var produces = job.Item3;
 
-            AddAction(new SubmitFactoryJob(_game, thing, _movement, TypeOfThing.Workbench, TypeOfThing.Axe, true)
-            {
-                Preconditions = { { "hasThing", TypeOfThing.Iron } },
-                Effects = { { "isWorking", true } }
-            });
+                var preconditions = new Dictionary<string, object>
+                {
+                    { "hasThing", requires }
+                };
 
-            AddAction(new SubmitFactoryJob(_game, thing, _movement, TypeOfThing.Workbench, TypeOfThing.Hoe, true)
-            {
-                Preconditions = { { "hasThing", TypeOfThing.Iron } },
-                Effects = { { "isWorking", true } }
-            });
+                var effects = new Dictionary<string, object>
+                {
+                    { "hasThing", produces },
+                    { "isWorking", true }
+                };
 
-            /*
+                AddAction(new SubmitFactoryJob(_game, thing, _movement, factory, produces, false)
+                {
+                    Preconditions = preconditions,
+                    Effects = effects,
+                    Cost = 1
+                });
+            }
+
+
+            /*  
                 Storage
             */
 
-            AddAction(new GetResourceToMoveToStorage(_game, thing, _movement, TypeOfThing.CabbageSeed, this)
-            {
-                Preconditions = { { "hasFullInventory", false } },
-                Effects = { { "hasThing", TypeOfThing.CabbageSeed }, { "hasThingForStorage", true } }
-            });
+            // foreach(var resource in resources)
+            // {
+            //     AddAction(new GetResourceToMoveToStorage(_game, thing, _movement, resource, this)
+            //     {
+            //         Preconditions = { { "hasFullInventory", false } },
+            //         Effects = { { "hasThing", resource }, { "hasThingForStorage", true } }
+            //     });
+            // }
 
-            AddAction(new FillStorage(_game, _movement, this, _inventory, TypeOfThing.CabbageSeed)
-            {
-                Preconditions = { { "hasThing", TypeOfThing.CabbageSeed }, { "hasThingForStorage", true } },
-                Effects = { { "isWorking", true }, }
-            });
 
             /*
                 Construction

@@ -107,7 +107,9 @@ public class Session : MonoBehaviour
     {
         if(_cursor != null)
             _cursor.DrawGizmos();
-        if(_zoneGraph != null)
-            _zoneGraph.DrawGizmos();
+        // if(_zoneGraph != null)
+        //     _zoneGraph.DrawGizmos();
+        if(_game != null)
+            _game.DrawGizmos();
     }
 }

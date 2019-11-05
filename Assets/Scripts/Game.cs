@@ -26,6 +26,7 @@ namespace Village
         private WorldTime _worldTime;
         private Vector2Int _size = Vector2Int.one * 10;
         private AstarPath _aStarPath;
+        private RegionManager _regionManager;
 
         public Game(AstarPath aStarPath, Vector2Int size)
         {
@@ -43,6 +44,8 @@ namespace Village
 
             // setup all things
             _all = new List<Thing>();
+
+            _regionManager = new RegionManager(this);
 
         }
 
@@ -318,6 +321,7 @@ namespace Village
         public void Update()
         {
             _director.Update();
+            _regionManager.Update();
 
             WorldTime.Update();
 
@@ -380,7 +384,7 @@ namespace Village
         
         #if UNITY_EDITOR
 
-        void OnDrawGizmos()
+        public void DrawGizmos()
         {
             if(!Application.isPlaying)
                 return;
@@ -394,6 +398,8 @@ namespace Village
             {
                 positionalAudio.DrawGizmos();
             }
+
+            _regionManager.DrawGizmos();
         }
 
     #endif

@@ -30,8 +30,8 @@ namespace Village.Things
         public ITileRule tileRule;
         public int positionalGroup;
         public bool floor;
+        public bool blocksPath;
         public bool playerBuiltFloor;
-        public bool wall;
         public bool blocksLight;
         public bool buildOn;
         public bool pipe;

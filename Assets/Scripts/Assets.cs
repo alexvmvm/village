@@ -326,6 +326,7 @@ public class Assets
                 thing.pipe = true;
                 thing.blocksLight = true;
                 thing.pathTag = "blocking";
+                thing.blocksPath = true;
             break;
             case TypeOfThing.ForagedWallBlueprint:
                 thing.name = "Foraged Wall";
@@ -377,6 +378,7 @@ public class Assets
                 thing.pathTag = "blocking";
                 thing.blocksLight = true;
                 thing.pipe = true;
+                thing.blocksPath = true;
             break;
             case TypeOfThing.StoneWallBlueprint:
                 thing.name = "Stone";
