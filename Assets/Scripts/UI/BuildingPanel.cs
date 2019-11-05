@@ -27,7 +27,7 @@ public class BuildingPanel : MonoBehaviour
                 SetupGroupButtons(group);
             });
         }
-    }
+    }   
 
     public void SetupGroupButtons(ConstructionGroup group)
     {

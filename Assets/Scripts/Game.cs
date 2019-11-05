@@ -48,6 +48,8 @@ namespace Village
 
         public void Start()
         {
+            AllThings.Clear();
+            
             foreach(TypeOfThing thingType in Enum.GetValues(typeof(TypeOfThing)))
             {
                 if(thingType == TypeOfThing.None)
