@@ -20,7 +20,7 @@ public class ManualPlacementPanel : MonoBehaviour
     {
          ButtonPooler.DeactivateAll();
         
-        foreach(var thing in _session.Game.AllThings)
+        foreach(var thing in _session.Game.QueryThingsNotInScene())
         {
             var obj = ButtonPooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();

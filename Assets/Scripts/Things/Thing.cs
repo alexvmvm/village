@@ -19,6 +19,7 @@ namespace Village.Things
         public string ownedBy;
         public Game game;
         public int hitpoints = 100;
+        public TypeOfThing type;
         public Transform transform;
         public GameObject gameObject;
         public SpriteRenderer spriteRenderer;
@@ -27,8 +28,7 @@ namespace Village.Things
         public int sortingOrder;
         public bool fixedToGrid;
         public ITileRule tileRule;
-        public int group;
-        public TypeOfThing type;
+        public int positionalGroup;
         public bool floor;
         public bool playerBuiltFloor;
         public bool wall;
@@ -36,6 +36,12 @@ namespace Village.Things
         public bool buildOn;
         public bool pipe;
         public bool edible;
+
+        /* 
+            Storage
+        */
+        public bool storeable;
+        public string storeGroup;
 
         /*
             Get Thing
@@ -194,7 +200,7 @@ namespace Village.Things
                         continue;
 
                     var thing = game.GetThingOnGrid(x, y);
-                    if (thing != null && thing.group == group)
+                    if (thing != null && thing.positionalGroup == positionalGroup)
                     {
                         var vector = new Vector2Int(x - px, y - py);
                         if (vector == Vector2Int.up)

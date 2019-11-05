@@ -33,13 +33,13 @@ public class BuildingPanel : MonoBehaviour
     {
         ButtonPooler.DeactivateAll();
         
-        foreach(var thing in _session.Game.AllThings.Where(t => t.construction != null && t.construction.Group == group))
+        foreach(var thing in _session.Game.QueryThingsNotInScene().Where(t => t.construction != null && t.construction.Group == group))
         {
             var obj = ButtonPooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();
             obj.SetActive(true);
 
-            var thingToBuild = _session.Game.AllThings.Where(t => t.type == thing.construction.BuildType).FirstOrDefault();
+            var thingToBuild = _session.Game.QueryThingsNotInScene().Where(t => t.type == thing.construction.BuildType).FirstOrDefault();
             obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thingToBuild.sprite);
 
             var button = obj.GetComponentInChildren<Button>();

@@ -16,7 +16,7 @@ namespace Village
     {
         public Vector2Int Size { get { return _size; } }
         public WorldTime WorldTime { get { return _worldTime; } }
-        public List<Thing> AllThings;
+        private List<Thing> _all;
         public ThingAdded OnThingAdded;
         public ThingRemoved OnThingRemoved;
         private List<PositionalAudio> _positionalAudio;
@@ -42,22 +42,22 @@ namespace Village
             };
 
             // setup all things
-            AllThings = new List<Thing>();
+            _all = new List<Thing>();
 
         }
 
         public void Start()
         {
-            AllThings.Clear();
+            _all.Clear();
             
             foreach(TypeOfThing thingType in Enum.GetValues(typeof(TypeOfThing)))
             {
                 if(thingType == TypeOfThing.None)
                     continue;
                 var thing = Create(thingType, -10, -10);
-                if(thing.GetTrait<Agent>() != null)
+                if(thing.HasTrait<Agent>())
                     thing.GetTrait<Agent>().PauseAgent();
-                AllThings.Add(thing);
+                _all.Add(thing);
             }
         }
 
@@ -153,7 +153,7 @@ namespace Village
         
         public Thing GetThingNotInScene(TypeOfThing type)
         {
-            return AllThings.Where(t => t.type == type).FirstOrDefault();
+            return _all.Where(t => t.type == type).FirstOrDefault();
         }
 
         public Thing GetThingOnGrid(Vector2Int position)
@@ -182,6 +182,11 @@ namespace Village
         public IEnumerable<Thing> QueryThings()
         {
             return _things.Where(t => t.transform != null);
+        }
+
+        public IEnumerable<Thing> QueryThingsNotInScene()
+        {
+            return _all;
         }
 
         public Thing AddThing(Thing thing)

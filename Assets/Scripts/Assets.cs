@@ -111,7 +111,7 @@ public class Assets
                     "stream_2!180", "stream_2!90", "stream_2", "stream_2!270",
                     "stream_3", "stream_3!180", "stream_3!90", "stream_3!270",
                     "stream_4", "stream_1", "stream_1!90");
-                thing.group = 1;
+                thing.positionalGroup = 1;
                 thing.positionalAudioGroup = "river";
                 thing.pathTag = "blocking";
                 break;
@@ -125,7 +125,7 @@ public class Assets
                     "path_2!180", "path_2!90", "path_2", "path_2!270",
                     "path_3", "path_3!180", "path_3!90", "path_3!270",
                     "path_4", "path_1", "path_1!90");
-                thing.group = 1;
+                thing.positionalGroup = 1;
                 thing.floor = true;
                 break;
             case TypeOfThing.Tree:
@@ -214,6 +214,8 @@ public class Assets
                 thing.resource = true;
                 thing.floor = true;
                 thing.hitpoints = 5;
+                thing.storeable = true;
+                thing.storeGroup = "resource";
                 break;
             case TypeOfThing.Iron:
                 thing.name = "iron";
@@ -230,6 +232,8 @@ public class Assets
                 thing.resource = true;
                 thing.hitpoints = 10;
                 thing.sortingOrder = (int)SortingOrders.Objects;
+                thing.storeable = true;
+                thing.storeGroup = "seeds";
                 break;
             case TypeOfThing.MudFloor:
                 thing.name = "mud floor";
@@ -469,6 +473,8 @@ public class Assets
                 thing.sprite = "colored_transparent_937";
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Iron };
+                thing.storeable = true;
+                thing.storeGroup = "tool";
                 break;
             case TypeOfThing.Hoe:
                 thing.name = "hoe";
@@ -476,6 +482,8 @@ public class Assets
                 thing.sprite = "colored_transparent_770";
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Iron };
+                thing.storeable = true;
+                thing.storeGroup = "tool";
                 break;
             case TypeOfThing.Storage:
                 thing.name = "storage";
