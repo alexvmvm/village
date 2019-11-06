@@ -103,7 +103,7 @@ namespace Village.AI
 
         public bool IsPathPossible(Vector3 position)
         {
-            return _session.ZoneGraph.IsPathPossible(transform.position, position);
+            return _session.Game.IsPathPossible(transform.position.ToVector2IntFloor(), position.ToVector2IntFloor());
         }
 
         public void MoveTo(Vector3 position)

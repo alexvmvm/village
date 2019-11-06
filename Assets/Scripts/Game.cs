@@ -123,6 +123,8 @@ namespace Village
 
                 CreateAndAddThing(TypeOfThing.FallenWood, x, y);
             }
+            
+            return;
 
             for(var i = 0; i < 4; i++) 
             {
@@ -292,6 +294,16 @@ namespace Village
             };
 
             _aStarPath.UpdateGraphs(graphupdate);
+        }
+
+        public bool IsFloorForRegion(Vector2Int position)
+        {
+            return GetThingOnGrid(position) != null && !GetThingOnGrid(position).blocksPath;
+        }
+
+        public bool IsPathPossible(Vector2Int start, Vector2Int end)
+        {
+            return _regionManager.IsPathPossbile(start, end);
         }
 
         /*

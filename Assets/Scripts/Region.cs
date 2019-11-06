@@ -8,14 +8,75 @@ using Village.Things;
     - search quickly for objects in the scene
 */
 
+public struct Edge
+{
+    public int x0;
+    public int y0;
+    public int x1;
+    public int y1;
+    public int overlap;
+
+    public Edge(int x0, int y0, int x1, int y1, int overlap)
+    {
+        this.x0 = x0;
+        this.y0 = y0;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.overlap = overlap;
+    }
+
+    public bool Overlap(Edge edge)
+    {
+        return 
+            (this.x0 <= edge.x1 && this.x1 >= edge.x0) &&
+            (this.y0 <= edge.y1 && this.y1 >= edge.y0) &&
+            (this.overlap & edge.overlap) > 0;
+    }
+
+    bool IsBitSet(int b, int pos)
+    {
+    return (b & (1 << pos)) != 0;
+    }
+
+    public void DrawGizmos()
+    {
+        var bitPosition = 0;
+        for(var x = x0; x <= x1; x++)
+        {
+            for(var y = y0; y <= y1; y++)
+            {
+                if(!IsBitSet(this.overlap, bitPosition))
+                {
+                    bitPosition++;
+                    continue;
+                }
+                    
+                Gizmos.color = new Color(0, 1, 0, 0.4f);
+                Gizmos.DrawCube(new Vector3(x, y), Vector3.one);
+                bitPosition++;
+            }
+        }
+    }
+}
+
 public class SubRegion
 {
+    public Edge Right { get { return _right; } }
+    public Edge Left { get { return _left; } }
+    public Edge Up { get { return _up; } }
+    public Edge Down { get { return _down; } }
+    public Vector2Int Min { get { return _min; } }
+    private Edge _right;
+    private Edge _left;
+    private Edge _up;
+    private Edge _down;
+
     public HashSet<Vector2Int> Positions { get { return _positions; } }
     private HashSet<Vector2Int> _positions;
     private Game _game;
     private Vector2Int _min;
     private Vector2Int _max;
-
+    
     public SubRegion(Game game, IEnumerable<Vector2Int> positions)
     {
         _game = game;
@@ -37,20 +98,58 @@ public class SubRegion
                 _min.y = p.y;
         }
 
-        
+        {
+            var x = _max.x + 1;
+            var mask = 0;
+            for(var y = _min.y; y <= _max.y; y++)
+            {
+                var bitPosition = y - _min.y;
+                var bit = positions.Contains(new Vector2Int(x - 1, y)) && _game.IsFloorForRegion(new Vector2Int(x, y)) ? 1 : 0;
+                mask |= bit << bitPosition;
+            }
 
-        // _right += $"{_min.y}";    
-        // for(var y = _min.y; y <= _max.y; y++)
-        // {
-        //     var x = _max.x + 1;
-        //     var position = new Vector2Int(x, y);
-        //     _right += $"{(IsFloorForRegion(position) ? 1 : 0)}";
-        // }
-    }
+            _right = new Edge(x, _min.y, x, _max.y, mask);
+        }
 
-    bool IsFloorForRegion(Vector2Int position)
-    {
-        return _game.GetThingOnGrid(position) != null && !_game.GetThingOnGrid(position).blocksPath;
+        {
+            var x = _min.x;
+            var mask = 0;
+            for(var y = _min.y; y <= _max.y; y++)
+            {
+                var bitPosition = y - _min.y;
+                var bit = positions.Contains(new Vector2Int(x, y)) && _game.IsFloorForRegion(new Vector2Int(x, y))  ? 1 : 0;
+                mask |= bit << bitPosition;
+            }
+            
+            _left = new Edge(x, _min.y, x, _max.y, mask);
+        }
+
+
+        {
+            var y = _max.y + 1;
+            var mask = 0;
+            for(var x = _min.x; x <= _max.x; x++)
+            {
+                var bitPosition = x - _min.x;
+                var bit = positions.Contains(new Vector2Int(x, y - 1)) && _game.IsFloorForRegion(new Vector2Int(x, y))  ? 1 : 0;
+                mask |= bit << bitPosition;
+            }
+            
+            _up = new Edge(_min.x, y, _max.x, y, mask);
+        }
+
+        {
+            var y = _min.y;
+            var mask = 0;
+            for(var x = _min.x; x <= _max.x; x++)
+            {
+                var bitPosition = x - _min.x;
+                var bit = positions.Contains(new Vector2Int(x, y)) && _game.IsFloorForRegion(new Vector2Int(x, y))  ? 1 : 0;
+                mask |= bit << bitPosition;
+            }
+            
+            _down = new Edge(_min.x, y, _max.x, y, mask);
+        }
     }
 
     public bool Contains(Vector2Int position)
@@ -62,8 +161,9 @@ public class SubRegion
     {
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition).ToVector2IntFloor();
         var mouseOver = _positions.Contains(mousePosition);
-        Gizmos.color = mouseOver ? new Color(0, 1, 0, 0.4f) : new Color(0, 0, 1, 0.4f);   
+        // Gizmos.color = mouseOver ? new Color(0, 1, 0, 0.6f) : new Color(0, 0, 1, 0.4f);   
         
+        Gizmos.color = new Color(0, 0, 1, 0.4f);
         foreach(var p in Positions)
         {
             Gizmos.DrawCube(p.ToVector3(), Vector3.one);
@@ -72,18 +172,17 @@ public class SubRegion
         if(!mouseOver)
             return;
 
-        Gizmos.color = new Color(0, 1, 1, 0.4f);
-        for(var y = _min.y; y <= _max.y; y++)
-        {
-            var x = _max.x + 1;
-            Gizmos.DrawCube(new Vector3(x, y), Vector3.one);
-        }
-        
+        _left.DrawGizmos();
+        _right.DrawGizmos();
+        _up.DrawGizmos();
+        _down.DrawGizmos();
     }
 }
 
 public class Region
 {
+    public List<SubRegion> SubRegions { get { return _regions; } }
+    public Vector2Int Min { get { return _min; } }
     private Vector2Int _min;
     private Vector2Int _max;
     private RectInt _rect;
@@ -91,7 +190,7 @@ public class Region
     private List<SubRegion> _regions;
     private HashSet<Vector2Int> _seen;
     private Queue<Vector2Int> _queue;
-    private bool _dirty;
+    private Dictionary<Vector2Int, SubRegion> _subRegionMap;
 
     public Region(Game game, Vector2Int min, Vector2Int max)
     {
@@ -102,19 +201,16 @@ public class Region
         _regions = new List<SubRegion>();
         _seen = new HashSet<Vector2Int>();
         _queue = new Queue<Vector2Int>();
-
-        _game.OnThingAdded += OnThingAdded;
-        _game.OnThingRemoved += OnThingRemoved;
+        _subRegionMap = new Dictionary<Vector2Int, SubRegion>();
     }
 
-    public void Search()
+    public void Refresh()
     {
-        Debug.Log($"Redrawing {_rect.ToString()}");
-
         _regions.Clear();
 
         _queue.Clear();
         _seen.Clear();
+        _subRegionMap.Clear();
 
         _queue.Enqueue(_min);
 
@@ -130,7 +226,15 @@ public class Region
                 {
                     var region = CreateRegion(current);
                     if(region != null)
+                    {
                         _regions.Add(region);
+
+                        foreach(var position in region.Positions)
+                        {
+                            _subRegionMap.Add(position, region);
+                        }
+                    }
+                        
                 }
                 else
                 {
@@ -140,14 +244,18 @@ public class Region
             }  
         }
     }
+    
+    public SubRegion GetSubRegionAtPosition(Vector2Int position)
+    {
+        return _subRegionMap.ContainsKey(position) ? _subRegionMap[position] : null;
+    }
 
     bool IsFloorForRegion(Vector2Int position)
     {
         return 
             _rect.Contains(position) && 
             _game.IsOnGrid(position.x, position.y) &&
-            _game.GetThingOnGrid(position) != null && 
-            !_game.GetThingOnGrid(position).blocksPath;
+            _game.IsFloorForRegion(position);
     }
 
     SubRegion CreateRegion(Vector2Int position)
@@ -178,27 +286,6 @@ public class Region
         }
 
         return positions.Count > 0 ? new SubRegion(_game, positions) : null;      
-    }
-
-    void OnThingAdded(Thing thing)
-    {
-        if(_rect.Contains(thing.position))
-            _dirty = true;
-    }
-
-    void OnThingRemoved(Thing thing)
-    {
-        if(_rect.Contains(thing.position))
-            _dirty = true;
-    }
-
-    public void Update()
-    {
-        if(_dirty)
-        {
-            Search();
-            _dirty = false;
-        }
     }
 
     public void DrawGizmos()

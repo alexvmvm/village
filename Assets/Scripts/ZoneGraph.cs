@@ -270,32 +270,32 @@ public class ZoneGraph
         return _regions.First(r => r.Contains(position) || r.AdjacentTo(position));
     }
 
-    public bool IsPathPossible(Vector3 start, Vector3 end)
-    {
-        Profiler.BeginSample("ZoneGraph_IsPathPossible");
+    // public bool IsPathPossible(Vector3 start, Vector3 end)
+    // {
+    //     Profiler.BeginSample("ZoneGraph_IsPathPossible");
 
-        var startVec2Int = start.ToVector2IntFloor();
-        var endVec2Int = end.ToVector2IntFloor();
+    //     var startVec2Int = start.ToVector2IntFloor();
+    //     var endVec2Int = end.ToVector2IntFloor();
 
-        if(!IsRegionAtPoint(startVec2Int) || !(IsRegionAtPoint(endVec2Int)))
-        {
-            Profiler.EndSample();
-            return false;
-        }
+    //     if(!IsRegionAtPoint(startVec2Int) || !(IsRegionAtPoint(endVec2Int)))
+    //     {
+    //         Profiler.EndSample();
+    //         return false;
+    //     }
 
-        var a = FindRegionAtPosition(startVec2Int);
-        var b = FindRegionAtPosition(endVec2Int);
+    //     var a = FindRegionAtPosition(startVec2Int);
+    //     var b = FindRegionAtPosition(endVec2Int);
 
-        if(a.Equals(b))
-        {
-            Profiler.EndSample();
-            return true;
-        }
+    //     if(a.Equals(b))
+    //     {
+    //         Profiler.EndSample();
+    //         return true;
+    //     }
 
-        Profiler.EndSample();
+    //     Profiler.EndSample();
 
-        return _graph.IsPathBetweenNodes(_graph.GetNodeByValue(a), _graph.GetNodeByValue(b));
-    }
+    //     return _graph.IsPathBetweenNodes(_graph.GetNodeByValue(a), _graph.GetNodeByValue(b));
+    // }
 
     public void Update()
     {
