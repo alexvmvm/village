@@ -394,8 +394,6 @@ namespace Village
             }
         }
         
-        #if UNITY_EDITOR
-
         public void DrawGizmos()
         {
             if(!Application.isPlaying)
@@ -414,7 +412,6 @@ namespace Village
             _regionManager.DrawGizmos();
         }
 
-    #endif
     }
 
 }
