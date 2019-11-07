@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -123,11 +124,31 @@ public class RegionManager
         if(startSubRegion == null || endSubRegion == null)
             return false;
 
-        if(startSubRegion.Equals(endSubRegion))
-            return true;
-
-        return _graph.IsPathBetweenNodes(_graph.GetNodeByValue(startSubRegion), _graph.GetNodeByValue(endSubRegion));
+        return _graph.IsPathBetweenNodes(startSubRegion, endSubRegion);
     }
+
+    public Thing IsPathPossbileToThing(Vector2Int start, TypeOfThing type, Func<Thing, bool> filter)
+    {
+        var startRegion = GetRegionAtPosition(ToRegionPosition(start));
+
+        if(startRegion == null)
+            return null;
+
+        var startSubRegion = startRegion.GetSubRegionAtPosition(start);
+       
+        if(startSubRegion == null)
+            return null;
+
+        var subRegion = _graph.IsPathToNodes(startSubRegion, (region) => region.HasTypeOfThing(type) && region.GetThings(type).Any(filter));
+
+        if(subRegion != null)
+        {
+            return subRegion.GetThings(type).FirstOrDefault(filter);
+        }
+
+        return null;
+    }
+    
 
     /*
         Game Events

@@ -241,9 +241,20 @@ public class Graph<T> : IEnumerable<T>
         throw new NotImplementedException();
     }
 
+    public bool IsPathBetweenNodes(T start, T end)
+    {
+        return IsPathBetweenNodes(GetNodeByValue(start), GetNodeByValue(end));
+    }
+
     public bool IsPathBetweenNodes(GraphNode<T> start, GraphNode<T> end)
     {
         Profiler.BeginSample("Graph_IsPathBetweenNodes");
+
+        if(start.Equals(end))
+        {
+            Profiler.EndSample();
+            return true;
+        }
 
         _seen.Clear();
         _queue.Clear();
@@ -277,6 +288,53 @@ public class Graph<T> : IEnumerable<T>
 
         Profiler.EndSample();
         return false;
+    }
+
+    public T IsPathToNodes(T startRegion, Func<T, bool> filter)
+    {   
+        Profiler.BeginSample("Graph_IsPathToNodes");
+
+        var start = GetNodeByValue(startRegion);
+
+        if(filter(start.Value))
+        {
+            Profiler.EndSample();
+            return start.Value;
+        }
+
+        _seen.Clear();
+        _queue.Clear();
+
+        _queue.Enqueue(start);
+
+        while (_queue.Count > 0) 
+        {
+            var vertex = _queue.Dequeue();
+
+            if(_seen.Contains(vertex))
+                continue;
+
+            _seen.Add(vertex);
+
+            if(filter(vertex.Value))
+            {
+                Profiler.EndSample();
+                return vertex.Value;
+            }
+
+            Profiler.BeginSample("Graph_IsPathToNodes_GetNeighbours");    
+
+            foreach(GraphNode<T> neighbor in vertex.Neighbors) 
+            {
+                _queue.Enqueue(neighbor);
+            }
+
+            Profiler.EndSample();
+        }
+
+        Profiler.EndSample();
+
+        return default(T);
     }
 
     // public IEnumerable<T> ShortestPathToVertex(T start, T end, Func<T, bool> filter) 

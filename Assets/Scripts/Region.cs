@@ -149,6 +149,11 @@ public class SubRegion
         return _things.ContainsKey(type) && _things[type].Count() > 0;
     }
 
+    public List<Thing> GetThings(TypeOfThing type)
+    {
+        return _things[type];
+    }
+
     /*
         Edges
     */
