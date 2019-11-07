@@ -108,7 +108,7 @@ public class RegionManager
 
         return null;
     }
-
+    
     public bool IsPathPossbile(Vector2Int start, Vector2Int end)
     {
         var startRegion = GetRegionAtPosition(ToRegionPosition(start));
@@ -118,19 +118,6 @@ public class RegionManager
             return false;
 
         var startSubRegion = startRegion.GetSubRegionAtPosition(start);
-
-        // // seach nearby if current position is 
-        // // not a sub region.
-        // if(startSubRegion == null)
-        // {
-        //     foreach(var n in _neighbours)
-        //     {
-        //         startSubRegion = startRegion.GetSubRegionAtPosition(start + n);
-        //         if(startSubRegion != null)
-        //             break;
-        //     }
-        // }
-
         var endSubRegion = endRegion.GetSubRegionAtPosition(end);
         
         if(startSubRegion == null || endSubRegion == null)
@@ -225,6 +212,7 @@ public class RegionManager
             // remove subregions from graph
             foreach(var subRegion in current.SubRegions)
             {
+                subRegion.RemoveListeners();
                 _graph.Remove(subRegion);
                 RemoveEdgesForSubRegion(subRegion);
             }
@@ -234,6 +222,7 @@ public class RegionManager
             // add subregions to graph
             foreach(var subRegion in current.SubRegions)
             {
+                subRegion.AddListeners();
                 _graph.AddNode(subRegion);
                 AddEdgesForSubRegion(subRegion);
             }

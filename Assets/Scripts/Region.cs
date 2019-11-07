@@ -53,13 +53,13 @@ public class SubRegion
     private List<Edge> _bottom;
     private List<Edge> _left;
     private List<Edge> _right;
-
     public HashSet<Vector2Int> Positions { get { return _positions; } }
     private HashSet<Vector2Int> _positions;
     private Game _game;
     private Region _region;
     private Vector2Int _min;
     private Vector2Int _max;
+    private Dictionary<TypeOfThing, List<Thing>> _things;
     
     public SubRegion(Game game, IEnumerable<Vector2Int> positions)
     {
@@ -70,6 +70,16 @@ public class SubRegion
         _bottom = new List<Edge>();
         _left = new List<Edge>();
         _right = new List<Edge>();
+        
+        _things = new Dictionary<TypeOfThing, List<Thing>>();
+
+        foreach(var p in _positions)
+        {
+            var thing = _game.GetThingOnGrid(p);
+            if(thing != null && !_things.ContainsKey(thing.type))
+                _things[thing.type] = new List<Thing>();
+            _things[thing.type].Add(thing);
+        }
 
         _max = positions.ElementAt(0);
         _min = positions.ElementAt(0);
@@ -92,6 +102,56 @@ public class SubRegion
         PopulateRightEdges();
         PopulateLeftEdges();
     }
+
+    public void AddListeners()
+    {
+        _game.OnThingAdded += OnThingAdded;
+        _game.OnThingRemoved += OnThingRemoved;
+    }
+
+    public void RemoveListeners()
+    {
+        _game.OnThingAdded -= OnThingAdded;
+        _game.OnThingRemoved -= OnThingRemoved;
+    }
+
+    void OnThingAdded(Thing thing)
+    {
+        if(!thing.fixedToGrid || !_positions.Contains(thing.position))
+            return;
+
+        if(!_things.ContainsKey(thing.type))
+            _things[thing.type] = new List<Thing>();
+
+        if(!_things[thing.type].Contains(thing))
+            _things[thing.type].Add(thing);
+        
+    }
+
+    void OnThingRemoved(Thing thing)
+    {
+        if(!thing.fixedToGrid || !_positions.Contains(thing.position) || !_things.ContainsKey(thing.type))
+            return;
+
+        if(_things[thing.type].Contains(thing))
+            _things[thing.type].Remove(thing);
+
+        if(_things[thing.type].Count == 0)
+            _things.Remove(thing.type);
+    }
+
+    /*
+        Querying
+    */
+
+    public bool HasTypeOfThing(TypeOfThing type)
+    {
+        return _things.ContainsKey(type) && _things[type].Count() > 0;
+    }
+
+    /*
+        Edges
+    */
 
     public void PopulateTopEdges()
     {
@@ -177,11 +237,6 @@ public class SubRegion
         }
     }
 
-    public bool Contains(Vector2Int position)
-    {
-        return _positions.Contains(position);
-    }
-
     public void DrawGizmos()
     {
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition).ToVector2IntFloor();
@@ -215,6 +270,24 @@ public class SubRegion
         {
             edge.DrawGizmos();
         }
+#if UNITY_EDITOR
+
+            var style = new GUIStyle();
+            style.fontSize = 15;
+            style.normal.textColor = Color.white;
+
+            var label = "";
+
+            foreach(var kv in _things)
+            {
+                label += $"{kv.Key}: {kv.Value.Count}\n";
+            }
+
+            // current actions
+            UnityEditor.Handles.Label(Min.ToVector3(), label, style);
+
+#endif
+        
     }
 }
 
