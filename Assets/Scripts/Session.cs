@@ -15,13 +15,10 @@ public class Session : MonoBehaviour
     private Game _game;
     public GameCursor Cursor { get { return _cursor; } }
     private GameCursor _cursor;
-    public ZoneGraph ZoneGraph { get { return _zoneGraph; } }    
-    private ZoneGraph _zoneGraph;
 
     public void Awake()
     {
         _game = new Game(AstarPath, new Vector2Int(50, 50));
-        _zoneGraph = new ZoneGraph(_game);
         _cursor = new GameCursor(_game);
     }
 
@@ -37,7 +34,6 @@ public class Session : MonoBehaviour
     {
         _game.Start();
         _game.Generate();
-        _zoneGraph.Start();
     }
 
     [BitStrap.Button]
@@ -65,7 +61,6 @@ public class Session : MonoBehaviour
     void Update()
     {
         _game.Update();
-        _zoneGraph.Update();
         _cursor.Update();
     }
 
