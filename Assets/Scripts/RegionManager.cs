@@ -13,6 +13,12 @@ public class RegionManager
     private Queue<Region> _update;
     private Queue<Region> _connections;
     private Graph<SubRegion> _graph;
+
+    private Dictionary<Edge, SubRegion> _top;
+    private Dictionary<Edge, SubRegion> _bottom;
+    private Dictionary<Edge, SubRegion> _left;
+    private Dictionary<Edge, SubRegion> _right;
+
     private static Vector2Int[] _neighbours = new Vector2Int[]
     {
         Vector2Int.up,
@@ -28,7 +34,12 @@ public class RegionManager
         _update = new Queue<Region>();
         _graph = new Graph<SubRegion>();
         _connections = new Queue<Region>();
-    
+
+        _top = new Dictionary<Edge, SubRegion>();
+        _bottom = new Dictionary<Edge, SubRegion>();
+        _left = new Dictionary<Edge, SubRegion>();
+        _right = new Dictionary<Edge, SubRegion>();
+
         _game = game;
         _game.OnThingAdded += OnThingAdded;
         _game.OnThingRemoved += OnThingRemoved;
@@ -189,14 +200,38 @@ public class RegionManager
 
             // remove subregions from graph
             foreach(var subRegion in current.SubRegions)
+            {
                 _graph.Remove(subRegion);
+
+                foreach(var topEdge in subRegion.Top)
+                    _top.Remove(topEdge);
+                foreach(var bottomEdge in subRegion.Bottom)
+                    _bottom.Remove(bottomEdge);
+                foreach(var leftEdge in subRegion.Left)
+                    _left.Remove(leftEdge);
+                foreach(var rightEdge in subRegion.Right)
+                    _right.Remove(rightEdge);
+            }
+                
 
 
             current.Refresh();
             
             // add subregions to graph
             foreach(var subRegion in current.SubRegions)
+            {
                 _graph.AddNode(subRegion);
+
+                foreach(var topEdge in subRegion.Top)
+                    _top.Add(topEdge, subRegion);
+                foreach(var bottomEdge in subRegion.Bottom)
+                    _bottom.Add(bottomEdge, subRegion);
+                foreach(var leftEdge in subRegion.Left)
+                    _left.Add(leftEdge, subRegion);
+                foreach(var rightEdge in subRegion.Right)
+                    _right.Add(rightEdge, subRegion);
+            }
+                
             
             if(!_connections.Contains(current))
                 _connections.Enqueue(current);
@@ -205,132 +240,105 @@ public class RegionManager
         while(_connections.Count > 0)
         {
             var current = _connections.Dequeue();
-            var gridPosition = ToRegionPosition(current.Min);
 
-            var upPosition = gridPosition.Up();
-            var downPosition = gridPosition.Down();
-            var leftPosition = gridPosition.Left();
-            var rightPosition = gridPosition.Right();
-
-            var up = RegionExists(upPosition) ? GetRegionAtPosition(gridPosition.Up()) : null;
-            var down = RegionExists(downPosition) ? GetRegionAtPosition(gridPosition.Down()) : null;
-            var left = RegionExists(leftPosition) ? GetRegionAtPosition(gridPosition.Left()) : null;
-            var right = RegionExists(rightPosition) ? GetRegionAtPosition(gridPosition.Right()) : null;
-            
             foreach(var subRegion in current.SubRegions)
             {
-                // local
-                {
-                    var connectedUp = current.SubRegions.FirstOrDefault(s => s.Down.Overlap(subRegion.Up));
-                    if(connectedUp != null)
-                        _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedUp), 0);
-                    
-                    var connectedDown = current.SubRegions.FirstOrDefault(s => s.Up.Overlap(subRegion.Down));
-                    if(connectedDown != null)
-                        _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedDown), 0);
-                    
-                    var connectedLeft = current.SubRegions.FirstOrDefault(s => s.Right.Overlap(subRegion.Left));
-                    if(connectedLeft != null)
-                        _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedLeft), 0);
-                    
-                    var connectedRight = current.SubRegions.FirstOrDefault(s => s.Left.Overlap(subRegion.Right));
-                    if(connectedRight != null)
-                        _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedRight), 0);
-                }
+                var node = _graph.GetNodeByValue(subRegion);
                 
-
-                // neighbours
+                foreach(var topEdge in subRegion.Top)
                 {
-                    if(up != null)
-                    {
-                        var connectedUp = up.SubRegions.FirstOrDefault(s => s.Down.Overlap(subRegion.Up));
-                        if(connectedUp != null)
-                            _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedUp), 0);
-                    }
+                    if(_bottom.ContainsKey(topEdge))
+                        _graph.AddUndirectedEdge(node, _graph.GetNodeByValue(_bottom[topEdge]), 0);
+                }
 
-                    if(down != null)
-                    {
-                        var connectedDown = down.SubRegions.FirstOrDefault(s => s.Up.Overlap(subRegion.Down));
-                        if(connectedDown != null)
-                            _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedDown), 0);
-                    }
-                    
-                    if(left != null)
-                    {
-                        var connectedLeft = left.SubRegions.FirstOrDefault(s => s.Right.Overlap(subRegion.Left));
-                        if(connectedLeft != null)
-                            _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedLeft), 0);
-                    }
-                    
-                    if(right != null)
-                    {
-                        var connectedRight = right.SubRegions.FirstOrDefault(s => s.Left.Overlap(subRegion.Right));
-                        if(connectedRight != null)
-                            _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedRight), 0);
-                    }
+                foreach(var bottomEdge in subRegion.Bottom)
+                {
+                    if(_top.ContainsKey(bottomEdge))
+                        _graph.AddUndirectedEdge(node, _graph.GetNodeByValue(_top[bottomEdge]), 0);
+                }
+
+                foreach(var leftEdge in subRegion.Left)
+                {
+                    if(_right.ContainsKey(leftEdge))
+                        _graph.AddUndirectedEdge(node, _graph.GetNodeByValue(_right[leftEdge]), 0);
+                }
+
+                foreach(var rightEdge in subRegion.Right)
+                {
+                    if(_left.ContainsKey(rightEdge))
+                        _graph.AddUndirectedEdge(node, _graph.GetNodeByValue(_left[rightEdge]), 0);
                 }
             }
 
-            // 1. loop sub regions
-            // 2. find connected sub regions
+            // var gridPosition = ToRegionPosition(current.Min);
 
-            // get all surrounding sub regions
-            // foreach(var n in _neighbours)
+            // var upPosition = gridPosition.Up();
+            // var downPosition = gridPosition.Down();
+            // var leftPosition = gridPosition.Left();
+            // var rightPosition = gridPosition.Right();
+
+            // var up = RegionExists(upPosition) ? GetRegionAtPosition(gridPosition.Up()) : null;
+            // var down = RegionExists(downPosition) ? GetRegionAtPosition(gridPosition.Down()) : null;
+            // var left = RegionExists(leftPosition) ? GetRegionAtPosition(gridPosition.Left()) : null;
+            // var right = RegionExists(rightPosition) ? GetRegionAtPosition(gridPosition.Right()) : null;
+            
+            // foreach(var subRegion in current.SubRegions)
             // {
-            //     var neighbour = gridPosition + n;
-            //     if(!RegionExists(neighbour))
-            //         continue;
-            //     var region = GetRegionAtPosition(neighbour);
-                
-            //     foreach(var subRegion in current.SubRegions)
+            //     // local
             //     {
-            //         var connected = new SubRegion[]
-            //         {
-            //             region.SubRegions.FirstOrDefault(r => r.Up.Overlap(subRegion.Down)),
-            //             region.SubRegions.FirstOrDefault(r => r.Down.Overlap(subRegion.Up)),
-            //             region.SubRegions.FirstOrDefault(r => r.Right.Overlap(subRegion.Left)),
-            //             region.SubRegions.FirstOrDefault(r => r.Left.Overlap(subRegion.Right)),
-            //         };
+            //         var connectedUp = current.SubRegions.FirstOrDefault(s => s.Down.Overlap(subRegion.Up));
+            //         if(connectedUp != null)
+            //             _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedUp), 0);
+                    
+            //         var connectedDown = current.SubRegions.FirstOrDefault(s => s.Up.Overlap(subRegion.Down));
+            //         if(connectedDown != null)
+            //             _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedDown), 0);
+                    
+            //         var connectedLeft = current.SubRegions.FirstOrDefault(s => s.Right.Overlap(subRegion.Left));
+            //         if(connectedLeft != null)
+            //             _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedLeft), 0);
+                    
+            //         var connectedRight = current.SubRegions.FirstOrDefault(s => s.Left.Overlap(subRegion.Right));
+            //         if(connectedRight != null)
+            //             _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedRight), 0);
+            //     }
+                
 
-            //         foreach(var connectedRegion in connected)
+            //     // neighbours
+            //     {
+            //         if(up != null)
             //         {
-            //             if(connectedRegion != null)
-            //                 _graph.AddUndirectedEdge(_graph.GetNodeByValue(connectedRegion), _graph.GetNodeByValue(subRegion), 0);
+            //             var connectedUp = up.SubRegions.FirstOrDefault(s => s.Down.Overlap(subRegion.Up));
+            //             if(connectedUp != null)
+            //                 _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedUp), 0);
             //         }
 
+            //         if(down != null)
+            //         {
+            //             var connectedDown = down.SubRegions.FirstOrDefault(s => s.Up.Overlap(subRegion.Down));
+            //             if(connectedDown != null)
+            //                 _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedDown), 0);
+            //         }
+                    
+            //         if(left != null)
+            //         {
+            //             var connectedLeft = left.SubRegions.FirstOrDefault(s => s.Right.Overlap(subRegion.Left));
+            //             if(connectedLeft != null)
+            //                 _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedLeft), 0);
+            //         }
+                    
+            //         if(right != null)
+            //         {
+            //             var connectedRight = right.SubRegions.FirstOrDefault(s => s.Left.Overlap(subRegion.Right));
+            //             if(connectedRight != null)
+            //                 _graph.AddUndirectedEdge(_graph.GetNodeByValue(subRegion), _graph.GetNodeByValue(connectedRight), 0);
+            //         }
             //     }
-
-
             // }
+
             
         }
 
-        // var allConnections = _connections.ToArray();
-        // while(_connections.Count > 0)   
-        // {
-        //     var current = _connections.Dequeue();
-        //     var gridPosition = ToRegionPosition(current.Min);
-
-        //     var surrounding = GetSubRegionsSurrounding(gridPosition);
-
-        //     foreach(var subRegion in current.SubRegions)
-        //     {
-        //          var connected = new SubRegion[] 
-        //         {
-        //             surrounding.FirstOrDefault(r => r.Up.Overlap(subRegion.Down)),
-        //             surrounding.FirstOrDefault(r => r.Down.Overlap(subRegion.Up)),
-        //             surrounding.FirstOrDefault(r => r.Right.Overlap(subRegion.Left)),
-        //             surrounding.FirstOrDefault(r => r.Left.Overlap(subRegion.Right))
-        //         };
-
-        //         foreach(var region in connected)
-        //         {
-        //             if(region != null)
-        //                 _graph.AddUndirectedEdge(_graph.GetNodeByValue(region), _graph.GetNodeByValue(subRegion), 0);
-        //         }
-        //     }
-
-        // }
 
     }
 

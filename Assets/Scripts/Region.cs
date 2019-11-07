@@ -14,46 +14,28 @@ public struct Edge
     public int y0;
     public int x1;
     public int y1;
-    public int overlap;
 
-    public Edge(int x0, int y0, int x1, int y1, int overlap)
+    public Edge(int x0, int y0, int x1, int y1)
     {
         this.x0 = x0;
         this.y0 = y0;
         this.x1 = x1;
         this.y1 = y1;
-        this.overlap = overlap;
     }
 
-    public bool Overlap(Edge edge)
+    public override int GetHashCode()
     {
-        return 
-            (this.x0 <= edge.x1 && this.x1 >= edge.x0) &&
-            (this.y0 <= edge.y1 && this.y1 >= edge.y0) &&
-            (this.overlap & edge.overlap) > 0;
-    }
-
-    bool IsBitSet(int b, int pos)
-    {
-    return (b & (1 << pos)) != 0;
+        return $"{x0}-{y0}-{x1}-{y1}".GetHashCode();
     }
 
     public void DrawGizmos()
     {
-        var bitPosition = 0;
         for(var x = x0; x <= x1; x++)
         {
             for(var y = y0; y <= y1; y++)
-            {
-                if(!IsBitSet(this.overlap, bitPosition))
-                {
-                    bitPosition++;
-                    continue;
-                }
-                    
+            {            
                 Gizmos.color = new Color(0, 1, 0, 0.4f);
                 Gizmos.DrawCube(new Vector3(x, y), Vector3.one);
-                bitPosition++;
             }
         }
     }
@@ -61,19 +43,21 @@ public struct Edge
 
 public class SubRegion
 {
-    public Edge Right { get { return _right; } }
-    public Edge Left { get { return _left; } }
-    public Edge Up { get { return _up; } }
-    public Edge Down { get { return _down; } }
+    public List<Edge> Top { get { return _top; } }
+    public List<Edge> Bottom { get { return _bottom; } }
+    public List<Edge> Left { get { return _left; } }
+    public List<Edge> Right { get { return _right; } }
     public Vector2Int Min { get { return _min; } }
-    private Edge _right;
-    private Edge _left;
-    private Edge _up;
-    private Edge _down;
+
+    private List<Edge> _top;
+    private List<Edge> _bottom;
+    private List<Edge> _left;
+    private List<Edge> _right;
 
     public HashSet<Vector2Int> Positions { get { return _positions; } }
     private HashSet<Vector2Int> _positions;
     private Game _game;
+    private Region _region;
     private Vector2Int _min;
     private Vector2Int _max;
     
@@ -81,6 +65,11 @@ public class SubRegion
     {
         _game = game;
         _positions = new HashSet<Vector2Int>(positions);
+
+        _top = new List<Edge>();
+        _bottom = new List<Edge>();
+        _left = new List<Edge>();
+        _right = new List<Edge>();
 
         _max = positions.ElementAt(0);
         _min = positions.ElementAt(0);
@@ -98,57 +87,93 @@ public class SubRegion
                 _min.y = p.y;
         }
 
-        {
-            var x = _max.x + 1;
-            var mask = 0;
-            for(var y = _min.y; y <= _max.y; y++)
-            {
-                var bitPosition = y - _min.y;
-                var bit = positions.Contains(new Vector2Int(x - 1, y)) && _game.IsFloorForRegion(new Vector2Int(x, y)) ? 1 : 0;
-                mask |= bit << bitPosition;
-            }
+        PopulateTopEdges();
+        PopulateBottomEdges();
+        PopulateRightEdges();
+        PopulateLeftEdges();
+    }
 
-            _right = new Edge(x, _min.y, x, _max.y, mask);
-        }
-
+    public void PopulateTopEdges()
+    {
+        var y = _max.y + 1;
+        int? startX = null;
+        for(var x = _min.x; x <= _max.x; x++)
         {
-            var x = _min.x;
-            var mask = 0;
-            for(var y = _min.y; y <= _max.y; y++)
+            var validPoint = _positions.Contains(new Vector2Int(x, y - 1)) && _game.IsFloorForRegion(new Vector2Int(x, y)); 
+            if(validPoint && !startX.HasValue)
             {
-                var bitPosition = y - _min.y;
-                var bit = positions.Contains(new Vector2Int(x, y)) && _game.IsFloorForRegion(new Vector2Int(x, y))  ? 1 : 0;
-                mask |= bit << bitPosition;
+                startX = x;
             }
             
-            _left = new Edge(x, _min.y, x, _max.y, mask);
-        }
-
-
-        {
-            var y = _max.y + 1;
-            var mask = 0;
-            for(var x = _min.x; x <= _max.x; x++)
+            if(startX.HasValue && (!validPoint || x == _max.x))
             {
-                var bitPosition = x - _min.x;
-                var bit = positions.Contains(new Vector2Int(x, y - 1)) && _game.IsFloorForRegion(new Vector2Int(x, y))  ? 1 : 0;
-                mask |= bit << bitPosition;
+                var endX = x == _max.x && validPoint ? x : x - 1;
+                _top.Add(new Edge(startX.Value, y, endX, y));
+                startX = null;
+            }
+        }
+    }
+
+    public void PopulateBottomEdges()
+    {
+        var y = _min.y;
+        int? startX = null;
+        for(var x = _min.x; x <= _max.x; x++)
+        {
+            var validPoint = _positions.Contains(new Vector2Int(x, y)) && _game.IsFloorForRegion(new Vector2Int(x, y)); 
+            if(validPoint && !startX.HasValue)
+            {
+                startX = x;
             }
             
-            _up = new Edge(_min.x, y, _max.x, y, mask);
-        }
-
-        {
-            var y = _min.y;
-            var mask = 0;
-            for(var x = _min.x; x <= _max.x; x++)
+            if(startX.HasValue && (!validPoint || x == _max.x))
             {
-                var bitPosition = x - _min.x;
-                var bit = positions.Contains(new Vector2Int(x, y)) && _game.IsFloorForRegion(new Vector2Int(x, y))  ? 1 : 0;
-                mask |= bit << bitPosition;
+                var endX = x == _max.x && validPoint ? x : x - 1;
+                _bottom.Add(new Edge(startX.Value, y, endX, y));
+                startX = null;
+            }
+        }
+    }
+
+    public void PopulateRightEdges()
+    {
+        var x = _max.x + 1;
+        int? startY = null;
+        for(var y = _min.y; y <= _max.y; y++)
+        {
+            var validPoint = _positions.Contains(new Vector2Int(x - 1, y)) && _game.IsFloorForRegion(new Vector2Int(x, y)); 
+            if(validPoint && !startY.HasValue)
+            {
+                startY = y;
             }
             
-            _down = new Edge(_min.x, y, _max.x, y, mask);
+            if(startY.HasValue && (!validPoint || y == _max.y))
+            {
+                var endY = y == _max.y && validPoint ? y : y - 1;
+                _right.Add(new Edge(x, startY.Value, x, endY));
+                startY = null;
+            }
+        }
+    }
+
+    public void PopulateLeftEdges()
+    {
+        var x = _min.x;
+        int? startY = null;
+        for(var y = _min.y; y <= _max.y; y++)
+        {
+            var validPoint = _positions.Contains(new Vector2Int(x, y)) && _game.IsFloorForRegion(new Vector2Int(x - 1, y)); 
+            if(validPoint && !startY.HasValue)
+            {
+                startY = y;
+            }
+            
+            if(startY.HasValue && (!validPoint || y == _max.y))
+            {
+                var endY = y == _max.y && validPoint ? y : y - 1;
+                _left.Add(new Edge(x, startY.Value, x, endY));
+                startY = null;
+            }
         }
     }
 
@@ -161,7 +186,6 @@ public class SubRegion
     {
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition).ToVector2IntFloor();
         var mouseOver = _positions.Contains(mousePosition);
-        // Gizmos.color = mouseOver ? new Color(0, 1, 0, 0.6f) : new Color(0, 0, 1, 0.4f);   
         
         Gizmos.color = new Color(0, 0, 1, 0.4f);
         foreach(var p in Positions)
@@ -172,10 +196,25 @@ public class SubRegion
         if(!mouseOver)
             return;
 
-        _left.DrawGizmos();
-        _right.DrawGizmos();
-        _up.DrawGizmos();
-        _down.DrawGizmos();
+        foreach(var edge in _top)
+        {
+            edge.DrawGizmos();
+        }
+
+        foreach(var edge in _bottom)
+        {
+            edge.DrawGizmos();
+        }
+
+        foreach(var edge in _left)
+        {
+            edge.DrawGizmos();
+        }
+
+        foreach(var edge in _right)
+        {
+            edge.DrawGizmos();
+        }
     }
 }
 
