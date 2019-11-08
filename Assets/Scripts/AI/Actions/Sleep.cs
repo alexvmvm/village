@@ -28,8 +28,8 @@ namespace Village.AI
         {
             return _game.QueryThings()
                 .Where(t => 
-                    t.type == TypeOfThing.Bed || 
-                    t.type == TypeOfThing.ForagedBed && 
+                    t.Config.TypeOfThing == TypeOfThing.Bed || 
+                    t.Config.TypeOfThing == TypeOfThing.ForagedBed && 
                     (t.ownedBy == _villager.Fullname || string.IsNullOrEmpty(t.ownedBy)))
                 .OrderByDescending(t => t.ownedBy == _villager.Fullname)
                 .FirstOrDefault();

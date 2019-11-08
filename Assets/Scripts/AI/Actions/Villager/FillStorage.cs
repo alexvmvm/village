@@ -26,16 +26,16 @@ public class FillStorage : MoveGOAPAction
     {
         return _game.QueryThings()
             .Where(
-                t => t.type == TypeOfThing.Storage && 
-                !t.GetTrait<Storage>().IsFull() && 
-                t.GetTrait<Storage>().IsAllowing(_type))
+                t => t.Config.TypeOfThing == TypeOfThing.Storage && 
+                !t.Storage.IsFull() && 
+                t.Storage.IsAllowing(_type))
             .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
     }
 
     public override bool PerformAtTarget()
     {
         var item = _inventory.Drop();
-        var remainder = _target.GetTrait<Storage>().Add(item);
+        var remainder = _target.Storage.Add(item);
 
         if(remainder != null)
         {

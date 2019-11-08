@@ -158,7 +158,7 @@ namespace Village
         
         public Thing GetThingNotInScene(TypeOfThing type)
         {
-            return _all.Where(t => t.type == type).FirstOrDefault();
+            return _all.Where(t => t.Config.TypeOfThing == type).FirstOrDefault();
         }
 
         public Thing GetThingOnGrid(Vector2Int position)
@@ -224,7 +224,7 @@ namespace Village
                         OnThingAdded(thing);
             }
 
-            switch(thing.type)
+            switch(thing.Config.TypeOfThing)
             {
                 case TypeOfThing.Villager:
                     EventManager.TriggerEvent(Constants.VILLAGER_ARRIVED);

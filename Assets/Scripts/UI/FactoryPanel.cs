@@ -20,11 +20,11 @@ public class FactoryPanel : MonoBehaviour
 
     public void Setup(Thing thing)
     {
-        var factory = thing.GetTrait<Factory>();
+        var factory = thing.Factory;
 
         FactoryLineItem.DeactivateAll();
 
-        foreach(var type in thing.GetTrait<Factory>().Produces)
+        foreach(var type in thing.Factory.Produces)
         {
             var lineItemThing = _session.Game.Create(type, 0, 0);
             var obj = FactoryLineItem.GetPooledObject();
@@ -42,7 +42,7 @@ public class FactoryPanel : MonoBehaviour
             });
 
             lineItem.Name.text = lineItemThing.name.ToUppercaseFirst();
-            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.sprite);
+            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.Config.Sprite);
             lineItem.Number.text = $"{factory.GetQueuedCount(type)}";
 
             lineItem.Increase.onClick.RemoveAllListeners();
@@ -67,19 +67,19 @@ public class FactoryPanel : MonoBehaviour
     {
         CostPooler.DeactivateAll();
 
-        foreach(var required in thing.requiredToCraft)
+        foreach(var required in thing.Config.RequiredToCraft)
         {
             var obj = CostPooler.GetPooledObject();
             var lineItem = obj.GetComponent<CostLineItem>();
             var lineItemThing = _session.Game.GetThingNotInScene(required);
             lineItem.Name.text = lineItemThing.name.ToUppercaseFirst();
             lineItem.Amount.text = "x1";
-            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.sprite);
+            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.Config.Sprite);
             obj.SetActive(true);
         }
 
 
-        DetailsDescription.text = thing.description;
+        DetailsDescription.text = thing.Config.Description;
 
         DetailsPanel.gameObject.SetActive(true);
     }

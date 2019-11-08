@@ -139,7 +139,7 @@ public class Assets
                 // thing.pathTag = "foliage";
                 thing.resource = true;
                 thing.produces = TypeOfThing.Wood;
-                thing.hitpoints = 20;
+                thing.Hitpoints = 20;
                 break;
             case TypeOfThing.BerryBush:
                 thing.name = "apple tree";
@@ -149,7 +149,7 @@ public class Assets
                 thing.floor = true;
                 thing.edible = true;
                 thing.resource = true;
-                thing.hitpoints = 20;
+                thing.Hitpoints = 20;
                 break;
              case TypeOfThing.MushroomGrowing:
                 thing.name = "mushroom";
@@ -158,7 +158,7 @@ public class Assets
                 thing.edible = true;
                 thing.resource = true;
                 thing.produces = TypeOfThing.Mushroom;
-                thing.hitpoints = 1;
+                thing.Hitpoints = 1;
                 break;
             case TypeOfThing.Mushroom:
                 thing.name = "mushroom";
@@ -166,7 +166,7 @@ public class Assets
                 thing.edible = true;
                 thing.resource = true;
                 thing.sortingOrder = (int)SortingOrders.Objects;
-                thing.hitpoints = 1;
+                thing.Hitpoints = 1;
                 break;
             case TypeOfThing.Wood:
                 thing.name = "Wood";
@@ -180,7 +180,7 @@ public class Assets
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.resource = true;
                 thing.produces = TypeOfThing.Wood;
-                thing.hitpoints = 5;
+                thing.Hitpoints = 5;
                 thing.fixedToGrid = true;
             break;
             case TypeOfThing.Rock:
@@ -191,7 +191,7 @@ public class Assets
                 thing.floor = true;
                 thing.resource = true;
                 thing.produces = TypeOfThing.Stone;
-                thing.hitpoints = 20;
+                thing.Hitpoints = 20;
                 break;
             case TypeOfThing.Stone:
                 thing.name = "stone";
@@ -205,7 +205,7 @@ public class Assets
                 thing.fixedToGrid = true;
                 thing.resource = true;
                 thing.floor = true;
-                thing.hitpoints = 10;
+                thing.Hitpoints = 10;
                 break;
             case TypeOfThing.Ore:
                 thing.name = "ore";
@@ -213,7 +213,7 @@ public class Assets
                 thing.fixedToGrid = true;
                 thing.resource = true;
                 thing.floor = true;
-                thing.hitpoints = 5;
+                thing.Hitpoints = 5;
                 thing.storeable = true;
                 thing.storeGroup = "resource";
                 break;
@@ -222,7 +222,7 @@ public class Assets
                 thing.description = "A resource used to build tools and machinery.";
                 thing.sprite = "colored_transparent_721";
                 thing.resource = true;
-                thing.hitpoints = 1;
+                thing.Hitpoints = 1;
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.requiredToCraft = new TypeOfThing[] { TypeOfThing.Ore };
                 break;
@@ -230,7 +230,7 @@ public class Assets
                 thing.name = "cabbage seed";
                 thing.sprite = "colored_transparent_817";
                 thing.resource = true;
-                thing.hitpoints = 10;
+                thing.Hitpoints = 10;
                 thing.sortingOrder = (int)SortingOrders.Objects;
                 thing.storeable = true;
                 thing.storeGroup = "seeds";

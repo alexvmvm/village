@@ -15,7 +15,7 @@ namespace Village.AI
 
         int VillagerCount()
         {
-            return _game.QueryThings().Count(t => t.type == TypeOfThing.Villager);
+            return _game.QueryThings().Count(t => t.Config.TypeOfThing == TypeOfThing.Villager);
         }
 
         public override bool IsDone()

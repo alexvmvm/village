@@ -13,7 +13,7 @@ namespace Village.AI
         public Drop(Game game, Thing thing) : base(game)
         {
             _thing = thing;    
-            _inventory = _thing.GetTrait<Inventory>();
+            _inventory = _thing.Inventory;
         }
 
         public override bool IsDone()

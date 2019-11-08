@@ -15,6 +15,6 @@ public class InfoPanel : MonoBehaviour
             return;
 
         Name.text = thing.name.ToUppercaseFirst();
-        Hitpoints.text = string.Format("{0}/{1}", thing.hitpoints, 100);
+        Hitpoints.text = string.Format("{0}/{1}", thing.Hitpoints, 100);
     }
 }

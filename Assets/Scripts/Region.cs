@@ -76,9 +76,9 @@ public class SubRegion
         foreach(var p in _positions)
         {
             var thing = _game.GetThingOnGrid(p);
-            if(thing != null && !_things.ContainsKey(thing.type))
-                _things[thing.type] = new List<Thing>();
-            _things[thing.type].Add(thing);
+            if(thing != null && !_things.ContainsKey(thing.Config.TypeOfThing))
+                _things[thing.Config.TypeOfThing] = new List<Thing>();
+            _things[thing.Config.TypeOfThing].Add(thing);
         }
 
         _max = positions.ElementAt(0);
@@ -120,24 +120,24 @@ public class SubRegion
         if(!thing.fixedToGrid || !_positions.Contains(thing.position))
             return;
 
-        if(!_things.ContainsKey(thing.type))
-            _things[thing.type] = new List<Thing>();
+        if(!_things.ContainsKey(thing.Config.TypeOfThing))
+            _things[thing.Config.TypeOfThing] = new List<Thing>();
 
-        if(!_things[thing.type].Contains(thing))
-            _things[thing.type].Add(thing);
+        if(!_things[thing.Config.TypeOfThing].Contains(thing))
+            _things[thing.Config.TypeOfThing].Add(thing);
         
     }
 
     void OnThingRemoved(Thing thing)
     {
-        if(!thing.fixedToGrid || !_positions.Contains(thing.position) || !_things.ContainsKey(thing.type))
+        if(!thing.fixedToGrid || !_positions.Contains(thing.position) || !_things.ContainsKey(thing.Config.TypeOfThing))
             return;
 
-        if(_things[thing.type].Contains(thing))
-            _things[thing.type].Remove(thing);
+        if(_things[thing.Config.TypeOfThing].Contains(thing))
+            _things[thing.Config.TypeOfThing].Remove(thing);
 
-        if(_things[thing.type].Count == 0)
-            _things.Remove(thing.type);
+        if(_things[thing.Config.TypeOfThing].Count == 0)
+            _things.Remove(thing.Config.TypeOfThing);
     }
 
     /*

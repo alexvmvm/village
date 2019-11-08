@@ -33,7 +33,7 @@
 //         {
 //             var game = _game.GetComponent<Game>();
 
-//             foreach(var chicken in game.Things.Where(t => t.type == TypeOfThing.Hen).ToArray())
+//             foreach(var chicken in game.Things.Where(t => t.Config.TypeOfThing == TypeOfThing.Hen).ToArray())
 //             {
 //                 chicken.Destroy();
 //                 game.RemoveThing(chicken);
@@ -53,7 +53,7 @@
 //             yield return null;
 
 //             var count = 0;
-//             foreach(var chicken in game.Things.Where(t => t.type == TypeOfThing.Hen).ToArray())
+//             foreach(var chicken in game.Things.Where(t => t.Config.TypeOfThing == TypeOfThing.Hen).ToArray())
 //             {
 //                 Assert.IsNotNull(chicken);
 //                 Assert.IsNotNull(chicken.GetTrait<Agent>());
@@ -72,7 +72,7 @@
 //         {
 //             var game = _game.GetComponent<Game>();
 
-//             foreach(var villager in game.Things.Where(t => t.type == TypeOfThing.Villager).ToArray())
+//             foreach(var villager in game.Things.Where(t => t.Config.TypeOfThing == TypeOfThing.Villager).ToArray())
 //             {
 //                 villager.Destroy();
 //                 game.RemoveThing(villager);
@@ -91,7 +91,7 @@
 //             yield return null;
 
 //             var count = 0;
-//             foreach(var villager in game.Things.Where(t => t.type == TypeOfThing.Villager).ToArray())
+//             foreach(var villager in game.Things.Where(t => t.Config.TypeOfThing == TypeOfThing.Villager).ToArray())
 //             {
 //                 Assert.IsNotNull(villager);
 //                 Assert.IsNotNull(villager.GetTrait<Agent>());

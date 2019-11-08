@@ -14,7 +14,7 @@ namespace Village.Things
         private Thing _thing;
         private List<Thing> _stored;
         private int _max;
-        private int _currentStoredCount { get { return _stored.Sum(t => t.hitpoints); } }
+        private int _currentStoredCount { get { return _stored.Sum(t => t.Hitpoints); } }
         
         public Storage(Game game, Thing thing)
         {
@@ -32,21 +32,21 @@ namespace Village.Things
 
         public Thing Add(Thing thing)
         {
-            var total = _currentStoredCount + thing.hitpoints;
+            var total = _currentStoredCount + thing.Hitpoints;
             var difference = total - _max;
             
             Thing remainder = null;
             if(difference > 0)
             {
-                remainder = _game.CreateAndAddThing(thing.type, 0, 0);
+                remainder = _game.CreateAndAddThing(thing.Config.TypeOfThing, 0, 0);
                 remainder.hitpoints = difference;
-                thing.hitpoints = _max - _currentStoredCount;
+                thing.Hitpoints = _max - _currentStoredCount;
             }
 
-            if(_stored.Any(t => t.type == thing.type))
+            if(_stored.Any(t => t.Config.TypeOfThing == thing.Config.TypeOfThing))
             {
-                var totalInStorage = _stored.Where(t => t.type == thing.type).Sum(t => t.hitpoints);
-                var toRemove = _stored.Where(t => t.type == thing.type).ToList();
+                var totalInStorage = _stored.Where(t => t.Config.TypeOfThing == thing.Config.TypeOfThing).Sum(t => t.hitpoints);
+                var toRemove = _stored.Where(t => t.Config.TypeOfThing == thing.Config.TypeOfThing).ToList();
                 
                 foreach(var remove in toRemove)
                 {
@@ -54,7 +54,7 @@ namespace Village.Things
                     _game.Destroy(remove);
                 }
 
-                thing.hitpoints += totalInStorage;
+                thing.Hitpoints += totalInStorage;
             }
 
             _stored.Add(thing);

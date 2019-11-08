@@ -20,7 +20,7 @@
 //     public override IEnumerable<Thing> GetThings()
 //     {
 //         return _game.Things
-//             .Where(t => t.type == TypeOfThing.ChickenCoop && t.belongsToFamily == _villager.Lastname && !t.coop.IsSetup())
+//             .Where(t => t.Config.TypeOfThing == TypeOfThing.ChickenCoop && t.belongsToFamily == _villager.Lastname && !t.coop.IsSetup())
 //             .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
 //     }
 

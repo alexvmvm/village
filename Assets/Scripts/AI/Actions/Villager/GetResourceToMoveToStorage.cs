@@ -17,7 +17,7 @@ namespace Village.AI
         {
             return _game.QueryThings()
                 .Where(t => 
-                    t.type == _type && 
+                    t.Config.TypeOfThing == _type && 
                     (string.IsNullOrEmpty(t.ownedBy) || t.ownedBy == _villager.Fullname) &&
                     !t.IsInStorage())
                 .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));

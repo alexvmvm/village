@@ -30,7 +30,7 @@ public class StoragePanel : MonoBehaviour
             var storageGroup = obj.GetComponent<StorageGroup>();
             storageGroup.Heading.text = group.Key.ToUppercaseFirst();
             storageGroup.GroupToggle.onValueChanged.RemoveAllListeners();
-            storageGroup.GroupToggle.isOn = group.Any(t => storage.IsAllowing(t.type));
+            storageGroup.GroupToggle.isOn = group.Any(t => storage.IsAllowing(t.Config.TypeOfThing));
             storageGroup.GroupToggle.onValueChanged.AddListener((value) => {
                 foreach(var toggle in storageGroup.gameObject.GetComponentsInChildren<Toggle>())
                     toggle.isOn = value;
@@ -45,7 +45,7 @@ public class StoragePanel : MonoBehaviour
 
                 var toggle = toggleObj.GetComponentInChildren<Toggle>();
                 toggle.onValueChanged.RemoveAllListeners();
-                toggle.isOn = storage.IsAllowing(thing.type);
+                toggle.isOn = storage.IsAllowing(thing.Config.TypeOfThing);
                 toggle.onValueChanged.AddListener((value) => {
                     if(value)
                         thing.GetTrait<Storage>().Allow(groupThing.type);

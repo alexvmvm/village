@@ -31,7 +31,7 @@ namespace Village.AI
         public override IEnumerable<Thing> GetThings()
         {
             return _game.QueryThings()
-                .Where(t => t.type == _factoryType && !t.GetTrait<Factory>().IsProducing() && t.GetTrait<Factory>().IsQueuedForProduction(_output))
+                .Where(t => t.Config.TypeOfThing == _factoryType && !t.GetTrait<Factory>().IsProducing() && t.GetTrait<Factory>().IsQueuedForProduction(_output))
                 .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
         }
 

@@ -31,7 +31,7 @@ public class ManualPlacementPanel : MonoBehaviour
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => {
-                _session.Cursor.CurrentType = thing.type;
+                _session.Cursor.CurrentType = thing.Config.TypeOfThing;
             });
         }
     }

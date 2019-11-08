@@ -65,7 +65,7 @@ public class GameCursor
         {
             for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
             {
-                if(_currentToBuild.construction != null && !_currentToBuild.construction.IsPlaceableAt(x, y))
+                if(_currentToBuild.Construction != null && !_currentToBuild.Construction.IsPlaceableAt(x, y))
                     continue;
 
                 _game.AddThing(_game.Create(CurrentType.Value, x, y));       
@@ -84,7 +84,7 @@ public class GameCursor
         {
             for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
             {
-                var valid = _currentToBuild.construction != null && !_currentToBuild.construction.IsPlaceableAt(x, y) ?
+                var valid = _currentToBuild.Construction != null && !_currentToBuild.Construction.IsPlaceableAt(x, y) ?
                     _invalidUV : _validUV;
 
                 list.Add(new Quad {
@@ -120,7 +120,7 @@ public class GameCursor
         {
             _currentToBuild = null;
         }
-        else if(CurrentType.HasValue && (_currentToBuild == null || _currentToBuild.type != CurrentType.Value))
+        else if(CurrentType.HasValue && (_currentToBuild == null || _currentToBuild.Config.TypeOfThing != CurrentType.Value))
         {   
             _currentToBuild = _game.Create(CurrentType.Value);
         }
@@ -168,7 +168,7 @@ public class GameCursor
         {
             _move = _crosshairCursor.transform.position;
 
-            if(_currentToBuild != null && _currentToBuild.pipe)
+            if(_currentToBuild != null && _currentToBuild.Config.Pipe)
             {   
                 if (_max.x - _min.x > _max.y - _min.y)
                 {

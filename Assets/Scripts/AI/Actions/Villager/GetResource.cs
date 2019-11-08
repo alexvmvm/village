@@ -26,7 +26,7 @@ namespace Village.AI
         public override IEnumerable<Thing> GetThings()
         {
             return _game.QueryThings()
-                .Where(t => t.type == _type && (string.IsNullOrEmpty(t.ownedBy) || t.ownedBy == _villager.Fullname))
+                .Where(t => t.Config.TypeOfThing == _type && (string.IsNullOrEmpty(t.ownedBy) || t.ownedBy == _villager.Fullname))
                 .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
         }
 

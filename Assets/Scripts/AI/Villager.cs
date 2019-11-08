@@ -34,7 +34,7 @@ namespace Village.AI
         {
             _thing = thing;
             _movement = _thing.transform.gameObject.AddComponent<Movement>();
-            _inventory = _thing.GetTrait<Inventory>();
+            _inventory = _thing.Inventory;
 
             _needs = new Needs(game);
 
@@ -117,9 +117,9 @@ namespace Village.AI
             {
                 var example = _game.Create(resource);
                 var effects = new Dictionary<string, object>();
-                effects.Add("hasThing", example.produces);
+                effects.Add("hasThing", example.Config.Produces);
                 effects.Add("hasFullInventory", true);
-                if(example.edible) 
+                if(example.Config.Edible) 
                     effects.Add("hasEdibleThing", true);
                 AddAction(new GetResource(_game, thing, _movement, resource, this)
                 {
@@ -242,7 +242,7 @@ namespace Village.AI
             */
 
             _world["hasThing"] = _inventory.IsHoldingSomething() ?
-                _inventory.Holding.type : TypeOfThing.None;
+                _inventory.Holding.Config.TypeOfThing : TypeOfThing.None;
 
             _world["hasEdibleThing"] =
                 _inventory.IsHoldingSomething() &&

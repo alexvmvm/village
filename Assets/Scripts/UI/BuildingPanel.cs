@@ -39,13 +39,13 @@ public class BuildingPanel : MonoBehaviour
             obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();
             obj.SetActive(true);
 
-            var thingToBuild = _session.Game.QueryThingsNotInScene().Where(t => t.type == thing.construction.BuildType).FirstOrDefault();
+            var thingToBuild = _session.Game.QueryThingsNotInScene().Where(t => t.Config.TypeOfThing == thing.construction.BuildType).FirstOrDefault();
             obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thingToBuild.sprite);
 
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => {
-                _session.Cursor.CurrentType = thing.type;
+                _session.Cursor.CurrentType = thing.Config.TypeOfThing;
             });
         }
     }

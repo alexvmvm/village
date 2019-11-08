@@ -6,115 +6,169 @@ using Village.Saving;
 
 namespace Village.Things
 {
-
-    public class Thing : ISave<ThingSave>
+    public class Thing : MonoBehaviour, ISave<ThingSave>
     {
+        public class ThingConfig
+        {
+            public string Sprite;
+            public string Name;
+            public String Description;
+            public int Hitpoints;
+            public TypeOfThing TypeOfThing;
+            public Color Color;
+            public Vector3 Scale;
+            public int SortingOrder;
+            public bool FixedToGrid;
+            public ITileRule TileRule;
+            public int GridGroup;
+            public bool Floor;
+            public bool PathBlocking;
+            public bool LightBlocking;
+            public bool BuildSite;
+            public bool Pipe;
+            public bool Edible;
+            public bool Storeable;
+            public string StoreGroup;
+            public bool Resource;
+            public TypeOfThing Produces;
+            public string PositionalAudioGroup;
+            public string PathTag;
+            public bool Walkable;
+            public TypeOfThing[] RequiredToCraft;
+            public bool Inventory;
+            public bool Fire;
+            public ConstructionConfig Construction;
+            public FactoryConfig Factory;
+            public StorageConfig Storage;
+        }
+
+        public class ConstructionConfig {}
+        public class FactoryConfig {}
+        public class StorageConfig {}
+
+        public ThingConfig Config { get; protected set; }
+        public SpriteRenderer SpriteRenderer { get; protected set; }
+        public int Hitpoints { get; set; }
+        // public Vector3 Position { get { return transform.position; } }
+        public Factory Factory { get; protected set; }
+        public Storage Storage { get; protected set; }
+        public Inventory Inventory { get; protected set; }
+        public Construction Construction { get; protected set; }
+
+        void Awake()
+        {
+            SpriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        }
+        
+        void Start()
+        {
+            RefreshSprite();
+
+            if (!string.IsNullOrEmpty(Config.PathTag))
+            {
+                game.UpdateAstarPath(transform.position.ToVector2IntFloor(), Config.PathTag, Config.Walkable);
+            }
+
+
+            if (Config.LightBlocking)
+            {
+                transform.gameObject.AddComponent<BoxCollider2D>();
+                transform.gameObject.layer = LayerMask.NameToLayer("Blocks Light");
+            }
+
+            foreach (var trait in _traits)
+                trait.Setup();
+        }
+
+        public void Setup(ThingConfig config)
+        {
+            Config = config;
+            Hitpoints = config.Hitpoints;
+        }
+
         // properties    
         public string id;
-        public string sprite;
-        public string name;
-        public string description;
+        //public string sprite;
+        //public string name;
+        //public string description;
         public string belongsToFamily;
         public bool assignToFamily;
         public string ownedBy;
         public Game game;
-        public int hitpoints = 100;
-        public TypeOfThing type;
-        public Transform transform;
-        public GameObject gameObject;
-        public SpriteRenderer spriteRenderer;
-        public Color color = Color.white;
-        public Vector3 scale = Vector3.one;
-        public int sortingOrder;
-        public bool fixedToGrid;
-        public ITileRule tileRule;
-        public int positionalGroup;
-        public bool floor;
-        public bool blocksPath;
-        public bool playerBuiltFloor;
-        public bool blocksLight;
-        public bool buildOn;
-        public bool pipe;
-        public bool edible;
+        //public int hitpoints = 100;
+        //public TypeOfThing type;
+        //public Transform transform;
+        //public GameObject gameObject;
+        //public SpriteRenderer spriteRenderer;
+        //public Color color = Color.white;
+        //public Vector3 scale = Vector3.one;
+        //public int sortingOrder;
+        //public bool fixedToGrid;
+        //public ITileRule tileRule;
+        //public int positionalGroup;
+        //public bool floor;
+        //public bool blocksPath;
+        //ublic bool playerBuiltFloor;
+        //public bool blocksLight;
+        //public bool buildOn;
+        //public bool pipe;
+        //public bool edible;
 
-        /* 
-            Storage
-        */
-        public bool storeable;
-        public string storeGroup;
+        // public bool storeable;
+        // public string storeGroup;
+        // public bool resource;
+        // public TypeOfThing produces;
+        // public TypeOfThing requiredToGet;
 
-        /*
-            Get Thing
-        */
-        public bool resource;
-        public TypeOfThing produces;
-        public TypeOfThing requiredToGet;
-
-        /*
-            Audio
-        */
-        public string positionalAudioGroup;
-        public string pathTag;
-        public bool walkable = true;
-        public Construction construction;
-
-        /*
-            Show Label
-        */
-        public bool showLabel;
+        // public string positionalAudioGroup;
+        // public string pathTag;
+        // public bool walkable = true;
+        //public Construction construction;
         private TextMesh _textMesh;
         private GameObject _labelObj;
-
-        /*
-            Crafting
-        */
-        public TypeOfThing[] requiredToCraft;
-
+        //public TypeOfThing[] requiredToCraft;
         private List<ITrait> _traits;
 
-        public Thing(TypeOfThing type, Game game)
-        {
-            this.game = game;
-            this.gameObject= new GameObject(type.ToString());
-            this.transform = this.gameObject.transform;
+        // public Thing(TypeOfThing type, Game game)
+        // {
+        //     this.game = game;
 
-            this.id = Guid.NewGuid().ToString();
-            this.type = type;
-            this.spriteRenderer = this.gameObject.AddComponent<SpriteRenderer>();
-            this.produces = type;
-            this.requiredToGet = TypeOfThing.None;
-            this._traits = new List<ITrait>();
-        }
+        //     this.id = Guid.NewGuid().ToString();
+        //     this.type = type;
+        //     this.spriteRenderer = this.gameObject.AddComponent<SpriteRenderer>();
+        //     this.produces = type;
+        //     // this._traits = new List<ITrait>();
+        // }
 
-        public Vector2Int position
-        {
-            get
-            {
-                return new Vector2Int(
-                    Mathf.FloorToInt(transform.position.x),
-                    Mathf.FloorToInt(transform.position.y));
-            }
-        }
+        // public Vector2Int position
+        // {
+        //     get
+        //     {
+        //         return new Vector2Int(
+        //             Mathf.FloorToInt(transform.position.x),
+        //             Mathf.FloorToInt(transform.position.y));
+        //     }
+        // }
 
-        public bool Exists { get { return transform != null; } }
+        //public bool Exists { get { return transform != null; } }
 
         /*
             Traits
         */
-        public void AddTrait(ITrait trait)
-        {
-            _traits.Add(trait);
-        }
+        // public void AddTrait(ITrait trait)
+        // {
+        //     _traits.Add(trait);
+        // }
 
-        public T GetTrait<T>() where T : ITrait
-        {
-            return (T)_traits.Where(t => typeof(T) == t.GetType()).FirstOrDefault();
-        }
+        // public T GetTrait<T>() where T : ITrait
+        // {
+        //     return (T)_traits.Where(t => typeof(T) == t.GetType()).FirstOrDefault();
+        // }
 
-        public bool HasTrait<T>() where T : ITrait
-        {
-            return GetTrait<T>() != null;
-        }   
+        // public bool HasTrait<T>() where T : ITrait
+        // {
+        //     return GetTrait<T>() != null;
+        // }   
 
         /*
             Label
@@ -133,33 +187,13 @@ namespace Village.Things
             _textMesh.text = label;
         }
 
-        public void Setup()
-        {
-            RefreshSprite();
-
-            if (!string.IsNullOrEmpty(pathTag))
-            {
-                game.UpdateAstarPath(transform.position.ToVector2IntFloor(), pathTag, walkable);
-            }
-
-
-            if (blocksLight)
-            {
-                transform.gameObject.AddComponent<BoxCollider2D>();
-                transform.gameObject.layer = LayerMask.NameToLayer("Blocks Light");
-            }
-
-            foreach (var trait in _traits)
-                trait.Setup();
-        }
-
         public void SetSprite()
         {
-            var spriteName = tileRule != null ? tileRule.GetSprite(GetGridPositions()) : sprite;
-            this.spriteRenderer.sprite = Assets.GetSprite(spriteName);
-            this.spriteRenderer.sortingOrder = sortingOrder;
-            this.spriteRenderer.color = color;
-            this.transform.localScale = scale;
+            var spriteName = Config.TileRule != null ? Config.TileRule.GetSprite(GetGridPositions()) : Config.Sprite;
+            this.SpriteRenderer.sprite = Assets.GetSprite(spriteName);
+            this.SpriteRenderer.sortingOrder = Config.SortingOrder;
+            this.SpriteRenderer.color = Config.Color;
+            this.transform.localScale = Config.Scale;
             this.transform.rotation = Assets.GetSpriteRotation(spriteName);
         }
 
@@ -167,7 +201,7 @@ namespace Village.Things
         {
             SetSprite();
 
-            if (!fixedToGrid)
+            if (!Config.FixedToGrid)
                 return;
 
             var px = Mathf.FloorToInt(transform.position.x);
@@ -204,7 +238,7 @@ namespace Village.Things
                         continue;
 
                     var thing = game.GetThingOnGrid(x, y);
-                    if (thing != null && thing.positionalGroup == positionalGroup)
+                    if (thing != null && thing.Config.GridGroup == Config.GridGroup)
                     {
                         var vector = new Vector2Int(x - px, y - py);
                         if (vector == Vector2Int.up)
@@ -225,7 +259,7 @@ namespace Village.Things
 
         public bool CanBeSeletected()
         {
-            return assignToFamily || HasTrait<Factory>() || HasTrait<Storage>();
+            return assignToFamily || Config.Factory != null || Config.Storage != null;
         }
 
         public bool IsInStorage()
@@ -235,7 +269,7 @@ namespace Village.Things
 
         public void Destroy()
         {
-            if (!string.IsNullOrEmpty(pathTag))
+            if (!string.IsNullOrEmpty(Config.PathTag))
             {
                 game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
             }
@@ -252,8 +286,8 @@ namespace Village.Things
                 trait.Update();
 
             var label = "";
-            if (resource)
-                label += $"x{hitpoints}\n";
+            if (Config.Resource)
+                label += $"x{Hitpoints}\n";
             if (!string.IsNullOrEmpty(ownedBy))
                 label += $"owner: {ownedBy}\n";
 
@@ -267,8 +301,8 @@ namespace Village.Things
             {
                 id = id,
                 position = transform.position,
-                type = type,
-                hitpoints = hitpoints,
+                type = Config.TypeOfThing,
+                hitpoints = Config.Hitpoints,
                 ownedBy = ownedBy
             };
         }
@@ -277,8 +311,8 @@ namespace Village.Things
         {
             this.id = save.id;
             this.transform.position = save.position;
-            this.type = save.type;
-            this.hitpoints = save.hitpoints;
+            this.Config.TypeOfThing = save.type;
+            this.Hitpoints = save.hitpoints;
             this.ownedBy = save.ownedBy;
         }
 
@@ -299,8 +333,6 @@ namespace Village.Things
                 var position = transform.position + Vector3.up;
                 UnityEditor.Handles.Label(position, belongsToFamily, style);
             }
-
-
 #endif
         }
     }
