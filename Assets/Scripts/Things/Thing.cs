@@ -62,7 +62,6 @@ namespace Village.Things
             Show Label
         */
         public bool showLabel;
-
         private TextMesh _textMesh;
         private GameObject _labelObj;
 
@@ -99,11 +98,13 @@ namespace Village.Things
 
         public bool Exists { get { return transform != null; } }
 
+        /*
+            Traits
+        */
         public void AddTrait(ITrait trait)
         {
             _traits.Add(trait);
         }
-
 
         public T GetTrait<T>() where T : ITrait
         {
@@ -113,8 +114,11 @@ namespace Village.Things
         public bool HasTrait<T>() where T : ITrait
         {
             return GetTrait<T>() != null;
-        }
+        }   
 
+        /*
+            Label
+        */
         public void SetLabel(string label)
         {
             if (_labelObj == null)

@@ -27,7 +27,7 @@ namespace Village.AI.V2
         protected override void Move(GoapAction nextAction)
         {
 
-        }
+        }    
     }
 }
 
