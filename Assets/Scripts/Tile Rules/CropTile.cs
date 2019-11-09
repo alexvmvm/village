@@ -6,12 +6,10 @@ namespace Village.Things
 {
     public class CropTile : ITileRule
     {
-        private Thing _thing;
         private Crop _crop;
 
-        public CropTile(Thing thing, Crop crop)
+        public CropTile(Crop crop)
         {
-            _thing = thing;
             _crop = crop;
         }
 

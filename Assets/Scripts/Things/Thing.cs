@@ -8,6 +8,13 @@ namespace Village.Things
 {
     public class Thing : MonoBehaviour, ISave<ThingSave>
     {
+        public enum AgentConfig
+        {
+            None,
+            Villager,
+            Animal
+        }
+
         public class ThingConfig
         {
             public string Sprite;
@@ -38,9 +45,11 @@ namespace Village.Things
             public bool AssignToFamily;
             public bool Inventory;
             public bool Fire;
+            public bool Storage;
             public ConstructionConfig Construction;
             public FactoryConfig Factory;
-            public StorageConfig Storage;
+            public CropConfig Crop;
+            public AgentConfig Agent;
         }
 
         public class ConstructionConfig 
@@ -64,8 +73,27 @@ namespace Village.Things
             }
         }
 
-        public class FactoryConfig {}
-        public class StorageConfig {}
+        public class FactoryConfig 
+        {
+            public TypeOfThing[] Produces { get; protected set; }
+
+            public FactoryConfig(TypeOfThing[] produces)
+            {
+                Produces = produces;
+            }
+        }
+
+        public class CropConfig
+        {
+            public float TimeToGrow { get; protected set; }
+            public string[] Sprites { get; protected set; }
+
+            public CropConfig(float timeToGrow, string[] sprites)
+            {
+                TimeToGrow = timeToGrow;
+                Sprites = sprites;
+            }
+        }
 
         public ThingConfig Config { get; protected set; }
         public SpriteRenderer SpriteRenderer { get; protected set; }
@@ -97,8 +125,8 @@ namespace Village.Things
                 transform.gameObject.layer = LayerMask.NameToLayer("Blocks Light");
             }
 
-            foreach (var trait in _traits)
-                trait.Setup();
+            // foreach (var trait in _traits)
+            //     trait.Setup();
         }
 
         public void Setup(ThingConfig config)
@@ -148,7 +176,7 @@ namespace Village.Things
         private TextMesh _textMesh;
         private GameObject _labelObj;
         //public TypeOfThing[] requiredToCraft;
-        private List<ITrait> _traits;
+        //private List<ITrait> _traits;
 
         // public Thing(TypeOfThing type, Game game)
         // {
@@ -280,7 +308,7 @@ namespace Village.Things
 
         public bool CanBeSeletected()
         {
-            return assignToFamily || Config.Factory != null || Config.Storage != null;
+            return Config.AssignToFamily || Config.Factory != null || Config.Storage;
         }
 
         public bool IsInStorage()
@@ -303,9 +331,6 @@ namespace Village.Things
 
         public virtual void Update()
         {
-            foreach (var trait in _traits)
-                trait.Update();
-
             var label = "";
             if (Config.Resource)
                 label += $"x{Hitpoints}\n";
@@ -339,9 +364,6 @@ namespace Village.Things
 
         public void DrawGizmos()
         {
-            foreach (var trait in _traits)
-                trait.DrawGizmos();
-
 #if UNITY_EDITOR
 
             if (!string.IsNullOrEmpty(belongsToFamily))

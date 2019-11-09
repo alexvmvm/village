@@ -85,7 +85,7 @@ public class Assets
         return _materials[name];
     }
 
-    public static Thing.ThingConfig Create(TypeOfThing thingType)
+    public static Thing.ThingConfig CreateThingConfig(TypeOfThing thingType)
     {
         var thing = new Thing.ThingConfig();  
         switch(thingType)
@@ -260,13 +260,11 @@ public class Assets
                 break;
             case TypeOfThing.CabbageCrop:
             {
-                var crop = new Crop(game, thing, 360, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" });
                 thing.Name = "cabbage";
                 thing.Sprite = "colored_transparent_204";
                 thing.BuildSite = false;
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.AddTrait(crop);
-                thing.TileRule = new CropTile(thing, crop);
+                thing.Crop = new Thing.CropConfig(360, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" });
             }
             break;
             case TypeOfThing.CabbageCropBlueprint:
@@ -437,8 +435,8 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.FixedToGrid = true;
                 thing.AssignToFamily = true;
-                thing.AddTrait(new Factory(game, thing, new TypeOfThing[] { TypeOfThing.Iron }));
-                thing.AddTrait(new Fire(game, thing, true));
+                thing.Factory = new Thing.FactoryConfig(new TypeOfThing[] { TypeOfThing.Iron });
+                thing.Fire = true;
             break;
 
             case TypeOfThing.WorkbenchBlueprint:
@@ -454,7 +452,7 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.FixedToGrid = true;
                 thing.AssignToFamily = true;
-                thing.AddTrait(new Factory(game, thing, new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe }));
+                thing.Factory = new Thing.FactoryConfig(new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe });
             break;
             case TypeOfThing.Axe:
                 thing.Name = "axe";
@@ -479,7 +477,7 @@ public class Assets
                 thing.Description = "A storage container used to store resources";
                 thing.Sprite = "colored_200";
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.AddTrait(new Storage(game, thing));
+                thing.Storage = true;
                 thing.FixedToGrid = true;
                 break;
             case TypeOfThing.StorageBlueprint:
@@ -487,14 +485,14 @@ public class Assets
                 thing.Sprite = "colored_transparent_855";
                 thing.Floor = true;
                 thing.SortingOrder = (int)SortingOrders.Blueprints;
-                thing.Construction = new Construction(game, thing, null, TypeOfThing.Storage, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.Storage, ConstructionGroup.Furniture, TypeOfThing.Wood);
             break;
             case TypeOfThing.Fire:
                 thing.Name = "fire";
                 thing.Description = "A fire to keep villagers warm";
                 thing.Sprite = "colored_334";
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.AddTrait(new Fire(game, thing));
+                thing.Fire = true;
                 break;
             case TypeOfThing.FireBlueprint:
                 thing.Name = "fire";
@@ -512,21 +510,21 @@ public class Assets
                 thing.Sprite = "colored_transparent_24";
                 thing.Color = new Color(235/255f, 155/255f, 200/255f);
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.AddTrait(new Inventory(thing));
-                thing.AddTrait(new Villager(game, thing));
+                thing.Inventory = true;
+                thing.Agent = Thing.AgentConfig.Villager;
             break;
             case TypeOfThing.Hen:
                 thing.Name = "Chicken";
                 thing.Sprite = "colored_transparent_249";
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.AddTrait(new Animal(game, thing));
+                thing.Agent = Thing.AgentConfig.Animal;
             break;
             case TypeOfThing.Rooster:
                 thing.Name = "Cockerl";
                 thing.Sprite = "colored_transparent_249";
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Color = Color.red;
-                thing.AddTrait(new Animal(game, thing));
+                thing.Agent = Thing.AgentConfig.Animal;
             break;
             case TypeOfThing.Chick:
                 thing.Name = "Chick";
@@ -534,9 +532,19 @@ public class Assets
                 thing.Sprite = "colored_transparent_248";
                 thing.Color = Color.yellow;
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.AddTrait(new Animal(game, thing));
+                thing.Agent = Thing.AgentConfig.Animal;
             break;
         }
+        return thing;
+    }
+
+    public static Thing Create(TypeOfThing typeOfThing)
+    {
+        var id = Guid.NewGuid().ToString();
+        var config = CreateThingConfig(typeOfThing);
+        var gameObject = new GameObject($"{typeOfThing}_{id}";
+        var thing = gameObject.AddComponent<Thing>();
+        thing.id = id;
         return thing;
     }
 
