@@ -16,6 +16,7 @@ namespace Village
     {
         public Vector2Int Size { get { return _size; } }
         public WorldTime WorldTime { get { return _worldTime; } }
+        public List<Thing.ThingConfig> ThingConfigs { get; private set; }
         private List<Thing> _all;
         public ThingAdded OnThingAdded;
         public ThingRemoved OnThingRemoved;
@@ -46,6 +47,8 @@ namespace Village
             _all = new List<Thing>();
 
             _regionManager = new RegionManager(this);
+            
+            
 
         }
 
@@ -156,11 +159,6 @@ namespace Village
             Sprites
         */
         
-        public Thing GetThingNotInScene(TypeOfThing type)
-        {
-            return _all.Where(t => t.Config.TypeOfThing == type).FirstOrDefault();
-        }
-
         public Thing GetThingOnGrid(Vector2Int position)
         {
             return GetThingOnGrid(position.x, position.y);
@@ -187,11 +185,6 @@ namespace Village
         public IEnumerable<Thing> QueryThings()
         {
             return _things.Where(t => t.transform != null);
-        }
-
-        public IEnumerable<Thing> QueryThingsNotInScene()
-        {
-            return _all;
         }
 
         public Thing AddThing(Thing thing)
@@ -260,7 +253,7 @@ namespace Village
 
         public Thing Create(TypeOfThing thingType, int x, int y)
         { 
-            return Assets.Create(this, thingType, x, y);
+            return Assets.Create(thingType, x, y);
         }
 
         public Thing CreateAndAddThing(TypeOfThing type, int x, int y)

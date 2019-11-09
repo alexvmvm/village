@@ -538,12 +538,13 @@ public class Assets
         return thing;
     }
 
-    public static Thing Create(TypeOfThing typeOfThing)
+    public static Thing Create(TypeOfThing typeOfThing, int x, int y)
     {
         var id = Guid.NewGuid().ToString();
         var config = CreateThingConfig(typeOfThing);
         var gameObject = new GameObject($"{typeOfThing}_{id}");
         var thing = gameObject.AddComponent<Thing>();
+        thing.transform.position = new Vector3(x, y);
         thing.id = id;
         return thing;
     }

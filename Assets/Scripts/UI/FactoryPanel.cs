@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Village;
@@ -71,10 +72,10 @@ public class FactoryPanel : MonoBehaviour
         {
             var obj = CostPooler.GetPooledObject();
             var lineItem = obj.GetComponent<CostLineItem>();
-            var lineItemThing = _session.Game.GetThingNotInScene(required);
-            lineItem.Name.text = lineItemThing.name.ToUppercaseFirst();
+            var lineItemThing = _session.Game.ThingConfigs.FirstOrDefault(t => t.TypeOfThing == required);
+            lineItem.Name.text = lineItemThing.Name.ToUppercaseFirst();
             lineItem.Amount.text = "x1";
-            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.Config.Sprite);
+            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.Sprite);
             obj.SetActive(true);
         }
 

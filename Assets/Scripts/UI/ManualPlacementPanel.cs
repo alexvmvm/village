@@ -20,18 +20,18 @@ public class ManualPlacementPanel : MonoBehaviour
     {
          ButtonPooler.DeactivateAll();
         
-        foreach(var thing in _session.Game.QueryThingsNotInScene())
+        foreach(var thing in _session.Game.ThingConfigs)
         {
             var obj = ButtonPooler.GetPooledObject();
-            obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();
+            obj.GetComponentInChildren<Text>().text = thing.Name.ToUppercaseFirst();
             obj.SetActive(true);
 
-            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thing.Config.Sprite);
+            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thing.Sprite);
 
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => {
-                _session.Cursor.CurrentType = thing.Config.TypeOfThing;
+                _session.Cursor.CurrentType = thing.TypeOfThing;
             });
         }
     }

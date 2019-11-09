@@ -15,9 +15,9 @@ public class StoragePanel : MonoBehaviour
         _session = FindObjectOfType<Session>();
     }
 
-    IEnumerable<IGrouping<string, Thing>> GetStorableThings()
+    IEnumerable<IGrouping<string, Thing.ThingConfig>> GetStorableThings()
     {
-        return _session.Game.QueryThingsNotInScene().Where(t => t.Config.Storeable).GroupBy(t => t.Config.StoreGroup);
+        return _session.Game.ThingConfigs.Where(t => t.Storeable).GroupBy(t => t.StoreGroup);
     }
 
     public void Setup(Thing thing)
@@ -30,7 +30,7 @@ public class StoragePanel : MonoBehaviour
             var storageGroup = obj.GetComponent<StorageGroup>();
             storageGroup.Heading.text = group.Key.ToUppercaseFirst();
             storageGroup.GroupToggle.onValueChanged.RemoveAllListeners();
-            storageGroup.GroupToggle.isOn = group.Any(t => storage.IsAllowing(t.Config.TypeOfThing));
+            storageGroup.GroupToggle.isOn = group.Any(t => storage.IsAllowing(t.TypeOfThing));
             storageGroup.GroupToggle.onValueChanged.AddListener((value) => {
                 foreach(var toggle in storageGroup.gameObject.GetComponentsInChildren<Toggle>())
                     toggle.isOn = value;
@@ -40,7 +40,7 @@ public class StoragePanel : MonoBehaviour
             foreach(var groupThing in group)
             {
                 var toggleObj = storageGroup.TogglePooler.GetPooledObject();
-                toggleObj.GetComponentInChildren<Text>().text = groupThing.name.ToUppercaseFirst();
+                toggleObj.GetComponentInChildren<Text>().text = groupThing.Name.ToUppercaseFirst();
                 toggleObj.SetActive(true);
 
                 var toggle = toggleObj.GetComponentInChildren<Toggle>();
@@ -48,9 +48,9 @@ public class StoragePanel : MonoBehaviour
                 toggle.isOn = storage.IsAllowing(thing.Config.TypeOfThing);
                 toggle.onValueChanged.AddListener((value) => {
                     if(value)
-                        thing.Storage.Allow(groupThing.Config.TypeOfThing);
+                        thing.Storage.Allow(groupThing.TypeOfThing);
                     else
-                        thing.Storage.Disallow(groupThing.Config.TypeOfThing);
+                        thing.Storage.Disallow(groupThing.TypeOfThing);
                 });
             }
 

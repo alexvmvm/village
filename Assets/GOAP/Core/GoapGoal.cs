@@ -121,7 +121,7 @@ namespace SwordGC.AI.Goap
         public class Goals
         {
             public const string CONSTRUCT = "CONSTRUCT";
-            public const string STAY_ALIVE = "StayAlive";
+            public const string KILL_PLAYER = "KILL_PLAYER";
         }
     }
 }
