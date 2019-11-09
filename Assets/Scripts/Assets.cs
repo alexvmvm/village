@@ -546,6 +546,7 @@ public class Assets
         var thing = gameObject.AddComponent<Thing>();
         thing.transform.position = new Vector3(x, y);
         thing.id = id;
+        thing.Setup(config);
         return thing;
     }
 

@@ -12,9 +12,10 @@ namespace Village
     public delegate void ThingAdded(Thing thing);
     public delegate void ThingRemoved(Thing thing);
 
-    public class Game : ISave<GameSave>
+    public class Game : MonoBehaviour, ISave<GameSave>
     {
-        public Vector2Int Size { get { return _size; } }
+        public AstarPath AStarPath;
+        public Vector2Int Size = Vector2Int.one * 50;
         public WorldTime WorldTime { get { return _worldTime; } }
         public List<Thing.ThingConfig> ThingConfigs { get; private set; }
         private List<Thing> _all;
@@ -25,16 +26,12 @@ namespace Village
         private Thing[,] _grid;
         private List<Thing> _things;
         private WorldTime _worldTime;
-        private Vector2Int _size = Vector2Int.one * 10;
-        private AstarPath _aStarPath;
         private RegionManager _regionManager;
 
-        public Game(AstarPath aStarPath, Vector2Int size)
+        void Awake()
         {
-            _aStarPath = aStarPath;
-            _size = size;
             _things = new List<Thing>();
-            _grid = new Thing[_size.x, _size.y];
+            _grid = new Thing[Size.x, Size.y];
             _worldTime = new WorldTime(360, 5, 23);
             _director = new Director(this);
             _positionalAudio = new List<PositionalAudio>()
@@ -52,7 +49,7 @@ namespace Village
 
         }
 
-        public void Start()
+        void Start()
         {
             _all.Clear();
             
@@ -69,9 +66,9 @@ namespace Village
 
         public void Generate()
         {
-            for(var x = 0; x < _size.x; x++)
+            for(var x = 0; x < Size.x; x++)
             {
-                for(var y = 0; y < _size.y; y++)
+                for(var y = 0; y < Size.y; y++)
                 {
 
                     var noise = Mathf.PerlinNoise(x * 0.1f, y * 0.1f);
@@ -102,16 +99,16 @@ namespace Village
                 }
             }
 
-            for(var y = 0; y < _size.y; y++)
+            for(var y = 0; y < Size.y; y++)
             {
-                var x = Mathf.FloorToInt(_size.x / 2);
+                var x = Mathf.FloorToInt(Size.x / 2);
                 CreateAndAddThing(TypeOfThing.Path, x, y);
             }
         
             var rand = 0;
-            for(var y = 0; y < _size.y; y++)
+            for(var y = 0; y < Size.y; y++)
             {
-                var x = _size.x - 3;
+                var x = Size.x - 3;
                 rand = UnityEngine.Random.Range(0, 4);
                 AddThing(Create(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, x - 1, y));
                 AddThing(Create(TypeOfThing.Stream, x, y));
@@ -121,8 +118,8 @@ namespace Village
 
             for(var i = 0; i < 20; i++)
             {
-                var x = UnityEngine.Random.Range(0, _size.x);
-                var y = UnityEngine.Random.Range(0, _size.y);
+                var x = UnityEngine.Random.Range(0, Size.x);
+                var y = UnityEngine.Random.Range(0, Size.y);
 
                 CreateAndAddThing(TypeOfThing.FallenWood, x, y);
             }
@@ -131,24 +128,24 @@ namespace Village
 
             for(var i = 0; i < 4; i++) 
             {
-                var x = UnityEngine.Random.Range(0, _size.x);
-                var y = UnityEngine.Random.Range(0, _size.y);
+                var x = UnityEngine.Random.Range(0, Size.x);
+                var y = UnityEngine.Random.Range(0, Size.y);
 
                 CreateAndAddThing(TypeOfThing.Hen, x, y);
             }
 
             for(var i = 0; i < 10; i++) 
             {
-                var x = UnityEngine.Random.Range(0, _size.x);
-                var y = UnityEngine.Random.Range(0, _size.y);
+                var x = UnityEngine.Random.Range(0, Size.x);
+                var y = UnityEngine.Random.Range(0, Size.y);
 
                 CreateAndAddThing(TypeOfThing.Chick, x, y);
             }
 
             for(var i = 0; i < 1; i++) 
             {
-                var x = UnityEngine.Random.Range(0, _size.x);
-                var y = UnityEngine.Random.Range(0, _size.y);
+                var x = UnityEngine.Random.Range(0, Size.x);
+                var y = UnityEngine.Random.Range(0, Size.y);
 
                 CreateAndAddThing(TypeOfThing.Rooster, x, y);
             }
@@ -166,12 +163,12 @@ namespace Village
 
         public bool IsOnGrid(int x, int y)
         {
-            return x >= 0 && x < _size.x && y >= 0 && y < _size.y;
+            return x >= 0 && x < Size.x && y >= 0 && y < Size.y;
         }
 
         public Thing GetThingOnGrid(int x, int y)
         {
-            if(x >= 0 && x < _size.x && y >= 0 && y < _size.y)
+            if(x >= 0 && x < Size.x && y >= 0 && y < Size.y)
             {
                 return _grid[x, y];
             }
@@ -271,7 +268,7 @@ namespace Village
         */
         public int TagFromString(string tag)
         {
-            return System.Array.IndexOf(_aStarPath.GetTagNames(), tag);
+            return System.Array.IndexOf(AStarPath.GetTagNames(), tag);
         }
 
         public void UpdateAstarPath(Vector2Int position, string pathTag, bool walkable)
@@ -285,7 +282,7 @@ namespace Village
                 modifyTag = true
             };
 
-            _aStarPath.UpdateGraphs(graphupdate);
+            AStarPath.UpdateGraphs(graphupdate);
         }
 
         public bool IsFloorForRegion(Vector2Int position)
@@ -342,8 +339,8 @@ namespace Village
             if(Input.GetKeyDown(KeyCode.V))
             {
                 AddThing(Create(TypeOfThing.Villager, 
-                    Mathf.FloorToInt(_size.x / 2), 
-                    UnityEngine.Random.Range(0, _size.y)));
+                    Mathf.FloorToInt(Size.x / 2), 
+                    UnityEngine.Random.Range(0, Size.y)));
             }
 
             if(Input.GetKeyDown(KeyCode.O))

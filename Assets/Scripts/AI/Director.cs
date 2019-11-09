@@ -15,11 +15,11 @@ namespace Village.AI
             _goal = new Dictionary<string, object>();
             _world = new Dictionary<string, object>();
 
-            AddAction(new SpawnVillager(game)
-            {
-                Preconditions = { { "isWorking", false } },
-                Effects = { { "isWorking", true } }
-            });
+            // AddAction(new SpawnVillager(game)
+            // {
+            //     Preconditions = { { "isWorking", false } },
+            //     Effects = { { "isWorking", true } }
+            // });
         }
 
         public override void ActionCompleted(GOAPAction action)

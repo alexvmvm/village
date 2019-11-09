@@ -11,15 +11,13 @@ public class Session : MonoBehaviour
     public AstarPath AstarPath;
     public string SaveFileName;
 
-    public Game Game { get { return _game; } }    
-    private Game _game;
+    public Game Game;
     public GameCursor Cursor { get { return _cursor; } }
     private GameCursor _cursor;
 
     public void Awake()
     {
-        _game = new Game(AstarPath, new Vector2Int(50, 50));
-        _cursor = new GameCursor(_game);
+        _cursor = new GameCursor(Game);
     }
 
     void Start()
@@ -32,8 +30,7 @@ public class Session : MonoBehaviour
     [BitStrap.Button]
     public void SetupNewGame()
     {
-        _game.Start();
-        _game.Generate();
+        Game.Generate();
     }
 
     [BitStrap.Button]
@@ -42,9 +39,8 @@ public class Session : MonoBehaviour
         var gameSave = SaveFiles.LoadGameFromName(SaveFileName);
         if(gameSave != null)
         {
-            _game.Clear();
-            _game.Start();
-            _game.FromSaveObj(gameSave);
+            Game.Clear();
+            Game.FromSaveObj(gameSave);
         }
         else
         {
@@ -55,12 +51,12 @@ public class Session : MonoBehaviour
     [BitStrap.Button]
     public void SaveGame()
     {
-        SaveFiles.SaveGameWithName(_game, SaveFileName);
+        SaveFiles.SaveGameWithName(Game, SaveFileName);
     }
 
     void Update()
     {
-        _game.Update();
+        Game.Update();
         _cursor.Update();
     }
 
@@ -102,7 +98,7 @@ public class Session : MonoBehaviour
     {
         if(_cursor != null)
             _cursor.DrawGizmos();
-        if(_game != null)
-            _game.DrawGizmos();
+        if(Game != null)
+            Game.DrawGizmos();
     }
 }

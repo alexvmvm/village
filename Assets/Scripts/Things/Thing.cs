@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Village.Saving;
 using SwordGC.AI.Goap;
 
@@ -21,10 +19,10 @@ namespace Village.Things
             public string Sprite;
             public string Name;
             public String Description;
-            public int Hitpoints;
+            public int Hitpoints = 100;
             public TypeOfThing TypeOfThing;
-            public Color Color;
-            public Vector3 Scale;
+            public Color Color = Color.white;
+            public Vector3 Scale = Vector3.one;
             public int SortingOrder;
             public bool FixedToGrid;
             public ITileRule TileRule;
@@ -109,15 +107,19 @@ namespace Village.Things
         void Awake()
         {
             SpriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+            Game = FindObjectOfType<Game>();
         }
         
-        void Start()
+        public void Setup(ThingConfig config)
         {
+            Config = config;
+            Hitpoints = config.Hitpoints;
+
             RefreshSprite();
 
             if (!string.IsNullOrEmpty(Config.PathTag))
             {
-                game.UpdateAstarPath(transform.position.ToVector2IntFloor(), Config.PathTag, Config.Walkable);
+                Game.UpdateAstarPath(transform.position.ToVector2IntFloor(), Config.PathTag, Config.Walkable);
             }
 
 
@@ -126,100 +128,14 @@ namespace Village.Things
                 transform.gameObject.AddComponent<BoxCollider2D>();
                 transform.gameObject.layer = LayerMask.NameToLayer("Blocks Light");
             }
-
-            // foreach (var trait in _traits)
-            //     trait.Setup();
         }
 
-        public void Setup(ThingConfig config)
-        {
-            Config = config;
-            Hitpoints = config.Hitpoints;
-        }
-
-        // properties    
         public string id;
-        //public string sprite;
-        //public string name;
-        //public string description;
         public string belongsToFamily;
-        // public bool assignToFamily;
         public string ownedBy;
-        public Game game;
-        //public int hitpoints = 100;
-        //public TypeOfThing type;
-        //public Transform transform;
-        //public GameObject gameObject;
-        //public SpriteRenderer spriteRenderer;
-        //public Color color = Color.white;
-        //public Vector3 scale = Vector3.one;
-        //public int sortingOrder;
-        //public bool fixedToGrid;
-        //public ITileRule tileRule;
-        //public int positionalGroup;
-        //public bool floor;
-        //public bool blocksPath;
-        //ublic bool playerBuiltFloor;
-        //public bool blocksLight;
-        //public bool buildOn;
-        //public bool pipe;
-        //public bool edible;
-
-        // public bool storeable;
-        // public string storeGroup;
-        // public bool resource;
-        // public TypeOfThing produces;
-        // public TypeOfThing requiredToGet;
-
-        // public string positionalAudioGroup;
-        // public string pathTag;
-        // public bool walkable = true;
-        //public Construction construction;
+        public Game Game;
         private TextMesh _textMesh;
         private GameObject _labelObj;
-        //public TypeOfThing[] requiredToCraft;
-        //private List<ITrait> _traits;
-
-        // public Thing(TypeOfThing type, Game game)
-        // {
-        //     this.game = game;
-
-        //     this.id = Guid.NewGuid().ToString();
-        //     this.type = type;
-        //     this.spriteRenderer = this.gameObject.AddComponent<SpriteRenderer>();
-        //     this.produces = type;
-        //     // this._traits = new List<ITrait>();
-        // }
-
-        // public Vector2Int position
-        // {
-        //     get
-        //     {
-        //         return new Vector2Int(
-        //             Mathf.FloorToInt(transform.position.x),
-        //             Mathf.FloorToInt(transform.position.y));
-        //     }
-        // }
-
-        //public bool Exists { get { return transform != null; } }
-
-        /*
-            Traits
-        */
-        // public void AddTrait(ITrait trait)
-        // {
-        //     _traits.Add(trait);
-        // }
-
-        // public T GetTrait<T>() where T : ITrait
-        // {
-        //     return (T)_traits.Where(t => typeof(T) == t.GetType()).FirstOrDefault();
-        // }
-
-        // public bool HasTrait<T>() where T : ITrait
-        // {
-        //     return GetTrait<T>() != null;
-        // }   
 
         /*
             Label
@@ -265,7 +181,7 @@ namespace Village.Things
                     if (x == px && y == py)
                         continue;
 
-                    var thing = game.GetThingOnGrid(x, y);
+                    var thing = Game.GetThingOnGrid(x, y);
                     if (thing != null)
                     {
                         thing.SetSprite();
@@ -288,7 +204,7 @@ namespace Village.Things
                     if (x == px && y == py)
                         continue;
 
-                    var thing = game.GetThingOnGrid(x, y);
+                    var thing = Game.GetThingOnGrid(x, y);
                     if (thing != null && thing.Config.GridGroup == Config.GridGroup)
                     {
                         var vector = new Vector2Int(x - px, y - py);
@@ -322,7 +238,7 @@ namespace Village.Things
         {
             if (!string.IsNullOrEmpty(Config.PathTag))
             {
-                game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
+                Game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
             }
 
             if (_labelObj != null)
