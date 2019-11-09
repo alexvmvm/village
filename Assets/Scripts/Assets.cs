@@ -85,6 +85,461 @@ public class Assets
         return _materials[name];
     }
 
+    public static Thing.ThingConfig Create(TypeOfThing thingType)
+    {
+        var thing = new Thing.ThingConfig();  
+        switch(thingType)
+        {
+            case TypeOfThing.Grass:
+                thing.Name = "grass";
+                thing.Sprite = "colored_5";
+                thing.FixedToGrid = true;
+                thing.TileRule = new RandomTiles("colored_5", "colored_6", "colored_7");
+                thing.Floor = true;
+                thing.PathTag = "ground";
+                thing.BuildSite = true;
+                break;
+            case TypeOfThing.Stream:
+                thing.Name = "stream";
+                thing.Sprite = "stream_4";
+                thing.FixedToGrid = true;
+                thing.Pipe = true;
+                thing.TileRule = new TileRuleDefinition(
+                    "stream_5!180", "stream_5", "stream_5!270", "stream_5!90", 
+                    "stream_2!180", "stream_2!90", "stream_2", "stream_2!270",
+                    "stream_3", "stream_3!180", "stream_3!90", "stream_3!270",
+                    "stream_4", "stream_1", "stream_1!90");
+                thing.GridGroup = 1;
+                thing.PositionalAudioGroup = "river";
+                thing.PathTag = "blocking";
+                break;
+            case TypeOfThing.Path:
+                thing.Name = "path";
+                thing.Sprite = "path_4";
+                thing.FixedToGrid = true;
+                thing.Pipe = true;
+                thing.TileRule = new TileRuleDefinition(
+                    "path_5!180", "path_5", "path_5!270", "path_5!90", 
+                    "path_2!180", "path_2!90", "path_2", "path_2!270",
+                    "path_3", "path_3!180", "path_3!90", "path_3!270",
+                    "path_4", "path_1", "path_1!90");
+                thing.GridGroup = 1;
+                thing.Floor = true;
+                break;
+            case TypeOfThing.Tree:
+                thing.Name = "tree";
+                thing.Sprite = "tree_1";
+                thing.FixedToGrid = true;
+                thing.TileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
+                thing.PositionalAudioGroup = "trees";
+                thing.Floor = true;
+                thing.LightBlocking = true;
+                thing.Resource = true;
+                thing.Produces = TypeOfThing.Wood;
+                thing.Hitpoints = 20;
+                break;
+            case TypeOfThing.BerryBush:
+                thing.Name = "apple tree";
+                thing.Sprite = "colored_68";
+                thing.FixedToGrid = true;
+                thing.Floor = true;
+                thing.Edible = true;
+                thing.Resource = true;
+                thing.Hitpoints = 20;
+                break;
+             case TypeOfThing.MushroomGrowing:
+                thing.Name = "mushroom";
+                thing.Sprite = "colored_71";
+                thing.FixedToGrid = true;
+                thing.Edible = true;
+                thing.Resource = true;
+                thing.Produces = TypeOfThing.Mushroom;
+                thing.Hitpoints = 1;
+                break;
+            case TypeOfThing.Mushroom:
+                thing.Name = "mushroom";
+                thing.Sprite = "colored_71";
+                thing.Edible = true;
+                thing.Resource = true;
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.Hitpoints = 1;
+                break;
+            case TypeOfThing.Wood:
+                thing.Name = "Wood";
+                thing.Sprite = "colored_transparent_209";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.Resource = true;
+            break;
+            case TypeOfThing.FallenWood:
+                thing.Name = "Wood";
+                thing.Sprite = "colored_70";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.Resource = true;
+                thing.Produces = TypeOfThing.Wood;
+                thing.Hitpoints = 5;
+                thing.FixedToGrid = true;
+            break;
+            case TypeOfThing.Rock:
+                thing.Name = "rock";
+                thing.Sprite = "stone_1";
+                thing.FixedToGrid = true;
+                thing.Floor = true;
+                thing.Resource = true;
+                thing.Produces = TypeOfThing.Stone;
+                thing.Hitpoints = 20;
+                break;
+            case TypeOfThing.Stone:
+                thing.Name = "stone";
+                thing.Sprite = "colored_transparent_68";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.Resource = true;
+            break;
+            case TypeOfThing.Clay:
+                thing.Name = "clay";
+                thing.Sprite = "colored_1";
+                thing.FixedToGrid = true;
+                thing.Resource = true;
+                thing.Floor = true;
+                thing.Hitpoints = 10;
+                break;
+            case TypeOfThing.Ore:
+                thing.Name = "ore";
+                thing.Sprite = "colored_4";
+                thing.FixedToGrid = true;
+                thing.Resource = true;
+                thing.Floor = true;
+                thing.Hitpoints = 5;
+                thing.Storeable = true;
+                thing.StoreGroup = "resource";
+                break;
+            case TypeOfThing.Iron:
+                thing.Name = "iron";
+                thing.Description = "A resource used to build tools and machinery.";
+                thing.Sprite = "colored_transparent_721";
+                thing.Resource = true;
+                thing.Hitpoints = 1;
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.RequiredToCraft = new TypeOfThing[] { TypeOfThing.Ore };
+                break;
+            case TypeOfThing.CabbageSeed:
+                thing.Name = "cabbage seed";
+                thing.Sprite = "colored_transparent_817";
+                thing.Resource = true;
+                thing.Hitpoints = 10;
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.Storeable = true;
+                thing.StoreGroup = "seeds";
+                break;
+            case TypeOfThing.MudFloor:
+                thing.Name = "mud floor";
+                thing.Sprite = "colored_0";
+                thing.FixedToGrid = true;
+                thing.Floor = true;
+                thing.BuildSite = true;
+            break;
+            case TypeOfThing.MudFloorBlueprint:
+                thing.Name = "mud floor";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.MudFloor, ConstructionGroup.Floors, TypeOfThing.None);
+                break;
+            case TypeOfThing.SoilFloor:
+                thing.Name = "soil";
+                thing.Sprite = "colored_1";
+                thing.FixedToGrid = true;
+                thing.Floor = true;
+                thing.BuildSite = true;
+            break;
+            case TypeOfThing.SoilFloorBlueprint:
+                thing.Name = "soil";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.SoilFloor, ConstructionGroup.Farming, TypeOfThing.Hoe);
+                break;
+            case TypeOfThing.CabbageCrop:
+            {
+                var crop = new Crop(game, thing, 360, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" });
+                thing.Name = "cabbage";
+                thing.Sprite = "colored_transparent_204";
+                thing.BuildSite = false;
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.AddTrait(crop);
+                thing.TileRule = new CropTile(thing, crop);
+            }
+            break;
+            case TypeOfThing.CabbageCropBlueprint:
+                thing.Name = "cabbage";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(TypeOfThing.SoilFloor, TypeOfThing.CabbageCrop, ConstructionGroup.Farming, TypeOfThing.CabbageSeed);
+                break;
+            case TypeOfThing.WoodFloor:
+                thing.Name = "wood floor";
+                thing.Sprite = "colored_16";
+                thing.FixedToGrid = true;
+                thing.Floor = true;
+                thing.BuildSite = true;
+            break;
+            case TypeOfThing.WoodFloorBlueprint:
+                thing.Name = "Wood";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.WoodFloor, ConstructionGroup.Floors, TypeOfThing.Wood);
+                break;
+            case TypeOfThing.WoodWall:
+                thing.Name = "wood wall";
+                thing.Sprite = "colored_98";
+                thing.FixedToGrid = true;
+                thing.Pipe = true;
+                thing.PathTag = "blocking";
+                thing.TileRule = new TileRuleDefinition(
+                    "colored_98", "colored_98", "colored_98", "colored_98", 
+                    "colored_98", "colored_98", "colored_98", "colored_98",
+                    "colored_98", "colored_98", "colored_98", "colored_98",
+                    "colored_98", "colored_98", "colored_98");
+            break;
+            case TypeOfThing.WoodWallBlueprint:
+                thing.Name = "Wood";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.WoodWall, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.Pipe = true;
+                break;
+            case TypeOfThing.ForagedWall:
+                thing.Name = "Foraged wall";
+                thing.Sprite = "colored_70";
+                thing.FixedToGrid = true;
+                thing.Pipe = true;
+                thing.LightBlocking = true;
+                thing.PathTag = "blocking";
+                thing.PathBlocking = true;
+            break;
+            case TypeOfThing.ForagedWallBlueprint:
+                thing.Name = "Foraged Wall";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.ForagedWall, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.Pipe = true;
+                break;
+            case TypeOfThing.Fence:
+                thing.Name = "fence";
+                thing.Sprite = "colored_98";
+                thing.FixedToGrid = true;
+                thing.Pipe = true;
+                thing.PathTag = "blocking";
+                thing.TileRule = new TileRuleDefinition(
+                    "colored_98", "colored_98", "colored_98", "colored_98", 
+                    "colored_98", "colored_98", "colored_98", "colored_98",
+                    "colored_98", "colored_98", "colored_98", "colored_98",
+                    "colored_98", "colored_98", "colored_98");
+            break;
+            case TypeOfThing.FenceBlueprint:
+                thing.Name = "fence";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.Fence, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.Pipe = true;
+                break;
+            case TypeOfThing.StoneFloor:
+                thing.Name = "stone floor";
+                thing.Sprite = "colored_416";
+                thing.FixedToGrid = true;
+                thing.Floor = true;
+                thing.BuildSite = true;
+            break;
+            case TypeOfThing.StoneFloorBlueprint:
+                thing.Name = "Stone";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.StoneFloor, ConstructionGroup.Floors, TypeOfThing.Stone);
+                break;
+            case TypeOfThing.StoneWall:
+                thing.Name = "stone wall";
+                thing.Sprite = "colored_580";
+                thing.FixedToGrid = true;
+                thing.PathTag = "blocking";
+                thing.LightBlocking = true;
+                thing.Pipe = true;
+                thing.PathBlocking = true;
+            break;
+            case TypeOfThing.StoneWallBlueprint:
+                thing.Name = "Stone";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.StoneWall, ConstructionGroup.Walls, TypeOfThing.Stone);
+                thing.Pipe = true;
+                break;
+
+            /*
+                Furniture
+            */
+            case TypeOfThing.DoorBlueprint:
+                thing.Name = "Door";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.Door, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                break;
+            case TypeOfThing.Door:
+                thing.Name = "Door";
+                thing.Sprite = "colored_297";
+                thing.FixedToGrid = true;
+                thing.Floor = true;
+                break;
+            case TypeOfThing.ForagedBedBlueprint:
+                thing.Name = "Foraged Bed";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.ForagedBed, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                break;
+            
+            case TypeOfThing.ForagedBed:
+                thing.Name = "Foraged Bed";
+                thing.Sprite = "colored_204";
+                thing.FixedToGrid = true;
+                thing.Floor = true;
+                break;
+
+            case TypeOfThing.BedBlueprint:
+                thing.Name = "Bed";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.Bed, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                break;
+            
+            case TypeOfThing.Bed:
+                thing.Name = "Bed";
+                thing.Sprite = "colored_261";
+                thing.FixedToGrid = true;
+                thing.Floor = true;
+                break;
+              case TypeOfThing.ClayForgeBlueprint:
+                thing.Name = "Clay Forge";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.ClayForge, ConstructionGroup.Furniture, TypeOfThing.Clay);
+            break;
+            case TypeOfThing.ClayForge:
+                thing.Name = "Clay Forge";
+                thing.Sprite = "colored_680";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.FixedToGrid = true;
+                thing.AssignToFamily = true;
+                thing.AddTrait(new Factory(game, thing, new TypeOfThing[] { TypeOfThing.Iron }));
+                thing.AddTrait(new Fire(game, thing, true));
+            break;
+
+            case TypeOfThing.WorkbenchBlueprint:
+                thing.Name = "Workbench";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.Workbench, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
+            case TypeOfThing.Workbench:
+                thing.Name = "Workbench";
+                thing.Sprite = "colored_228";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.FixedToGrid = true;
+                thing.AssignToFamily = true;
+                thing.AddTrait(new Factory(game, thing, new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe }));
+            break;
+            case TypeOfThing.Axe:
+                thing.Name = "axe";
+                thing.Description = "A tool used to chop down trees.";
+                thing.Sprite = "colored_transparent_937";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.RequiredToCraft = new TypeOfThing[] { TypeOfThing.Iron };
+                thing.Storeable = true;
+                thing.StoreGroup = "tool";
+                break;
+            case TypeOfThing.Hoe:
+                thing.Name = "hoe";
+                thing.Description = "A tool used to till land for planting crops.";
+                thing.Sprite = "colored_transparent_770";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.RequiredToCraft = new TypeOfThing[] { TypeOfThing.Iron };
+                thing.Storeable = true;
+                thing.StoreGroup = "tool";
+                break;
+            case TypeOfThing.Storage:
+                thing.Name = "storage";
+                thing.Description = "A storage container used to store resources";
+                thing.Sprite = "colored_200";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.AddTrait(new Storage(game, thing));
+                thing.FixedToGrid = true;
+                break;
+            case TypeOfThing.StorageBlueprint:
+                thing.Name = "storage";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Construction(game, thing, null, TypeOfThing.Storage, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
+            case TypeOfThing.Fire:
+                thing.Name = "fire";
+                thing.Description = "A fire to keep villagers warm";
+                thing.Sprite = "colored_334";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.AddTrait(new Fire(game, thing));
+                break;
+            case TypeOfThing.FireBlueprint:
+                thing.Name = "fire";
+                thing.Sprite = "colored_transparent_855";
+                thing.Floor = true;
+                thing.SortingOrder = (int)SortingOrders.Blueprints;
+                thing.Construction = new Thing.ConstructionConfig(null, TypeOfThing.Fire, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
+
+            /*
+                Objects
+            */
+            case TypeOfThing.Villager:
+                thing.Name = "Villager";
+                thing.Sprite = "colored_transparent_24";
+                thing.Color = new Color(235/255f, 155/255f, 200/255f);
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.AddTrait(new Inventory(thing));
+                thing.AddTrait(new Villager(game, thing));
+            break;
+            case TypeOfThing.Hen:
+                thing.Name = "Chicken";
+                thing.Sprite = "colored_transparent_249";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.AddTrait(new Animal(game, thing));
+            break;
+            case TypeOfThing.Rooster:
+                thing.Name = "Cockerl";
+                thing.Sprite = "colored_transparent_249";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.Color = Color.red;
+                thing.AddTrait(new Animal(game, thing));
+            break;
+            case TypeOfThing.Chick:
+                thing.Name = "Chick";
+                thing.Scale = Vector3.one * 0.5f;
+                thing.Sprite = "colored_transparent_248";
+                thing.Color = Color.yellow;
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.AddTrait(new Animal(game, thing));
+            break;
+        }
+        return thing;
+    }
+
     public static Thing Create(Game game, TypeOfThing thingType, int x, int y)
     {
         var thing = new Thing(thingType, game);

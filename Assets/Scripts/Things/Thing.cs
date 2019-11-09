@@ -35,6 +35,7 @@ namespace Village.Things
             public string PathTag;
             public bool Walkable;
             public TypeOfThing[] RequiredToCraft;
+            public bool AssignToFamily;
             public bool Inventory;
             public bool Fire;
             public ConstructionConfig Construction;
@@ -42,7 +43,27 @@ namespace Village.Things
             public StorageConfig Storage;
         }
 
-        public class ConstructionConfig {}
+        public class ConstructionConfig 
+        {
+            public TypeOfThing? BuildOn { get; protected set; }
+            public TypeOfThing Builds { get; protected set; }
+            public ConstructionGroup Group { get; protected set; }
+            public TypeOfThing Requires { get; protected set; }
+
+            public ConstructionConfig(
+                TypeOfThing? buildOn,
+                TypeOfThing builds,
+                ConstructionGroup group,
+                TypeOfThing requires
+            )
+            {
+                BuildOn = buildOn;
+                builds = Builds;
+                group = Group;
+                requires = Requires;
+            }
+        }
+
         public class FactoryConfig {}
         public class StorageConfig {}
 
@@ -92,7 +113,7 @@ namespace Village.Things
         //public string name;
         //public string description;
         public string belongsToFamily;
-        public bool assignToFamily;
+        // public bool assignToFamily;
         public string ownedBy;
         public Game game;
         //public int hitpoints = 100;
