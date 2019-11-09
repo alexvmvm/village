@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Village.Saving;
+using SwordGC.AI.Goap;
 
 namespace Village.Things
 {
@@ -52,7 +53,7 @@ namespace Village.Things
             public AgentConfig Agent;
         }
 
-        public class ConstructionConfig 
+        public class ConstructionConfig
         {
             public TypeOfThing? BuildOn { get; protected set; }
             public TypeOfThing Builds { get; protected set; }
@@ -73,7 +74,7 @@ namespace Village.Things
             }
         }
 
-        public class FactoryConfig 
+        public class FactoryConfig
         {
             public TypeOfThing[] Produces { get; protected set; }
 
@@ -98,11 +99,12 @@ namespace Village.Things
         public ThingConfig Config { get; protected set; }
         public SpriteRenderer SpriteRenderer { get; protected set; }
         public int Hitpoints { get; set; }
-        // public Vector3 Position { get { return transform.position; } }
+        public Vector2Int Position { get { return transform.position.ToVector2IntFloor(); } }
         public Factory Factory { get; protected set; }
         public Storage Storage { get; protected set; }
         public Inventory Inventory { get; protected set; }
         public Construction Construction { get; protected set; }
+        public GoapAgent Agent { get; protected set; }
 
         void Awake()
         {
@@ -272,9 +274,9 @@ namespace Village.Things
             }
         }
 
-        public Position GetGridPositions()
+        public Positions GetGridPositions()
         {
-            var position = Position.None;
+            var position = Positions.None;
 
             var px = Mathf.FloorToInt(transform.position.x);
             var py = Mathf.FloorToInt(transform.position.y);
@@ -291,13 +293,13 @@ namespace Village.Things
                     {
                         var vector = new Vector2Int(x - px, y - py);
                         if (vector == Vector2Int.up)
-                            position = position | Position.Top;
+                            position = position | Positions.Top;
                         else if (vector == Vector2Int.down)
-                            position = position | Position.Bottom;
+                            position = position | Positions.Bottom;
                         else if (vector == Vector2Int.left)
-                            position = position | Position.Left;
+                            position = position | Positions.Left;
                         else if (vector == Vector2Int.right)
-                            position = position | Position.Right;
+                            position = position | Positions.Right;
                     }
 
                 }

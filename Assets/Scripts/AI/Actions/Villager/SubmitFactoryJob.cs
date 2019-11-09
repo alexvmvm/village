@@ -23,7 +23,7 @@ namespace Village.AI
             _thing = thing;
             _movement = movement;
             _factoryType = factoryType;
-            _inventory = _thing.GetTrait<Inventory>();
+            _inventory = _thing.Inventory;
             _output = output;
             _requiresAgentToMake = requiresAgentToMake;
         }
@@ -31,7 +31,7 @@ namespace Village.AI
         public override IEnumerable<Thing> GetThings()
         {
             return _game.QueryThings()
-                .Where(t => t.Config.TypeOfThing == _factoryType && !t.GetTrait<Factory>().IsProducing() && t.GetTrait<Factory>().IsQueuedForProduction(_output))
+                .Where(t => t.Config.TypeOfThing == _factoryType && !t.Factory.IsProducing() && t.Factory.IsQueuedForProduction(_output))
                 .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
         }
 
@@ -45,11 +45,11 @@ namespace Village.AI
 
             if (!_submittedJob)
             {
-                _target.GetTrait<Factory>().Craft(_output);
+                _target.Factory.Craft(_output);
                 _submittedJob = true;
             }
 
-            if (_requiresAgentToMake && _target.GetTrait<Factory>().IsProducing())
+            if (_requiresAgentToMake && _target.Factory.IsProducing())
                 return false;
 
 

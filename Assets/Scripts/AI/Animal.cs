@@ -69,7 +69,7 @@ namespace Village.AI
         {
             base.Update();
 
-            SetLabel($"{_thing.type.ToString()}\n{(CurentAction == null ? "" : CurentAction.ToString())}");
+            SetLabel($"{_thing.Config.TypeOfThing.ToString()}\n{(CurentAction == null ? "" : CurentAction.ToString())}");
         }
     }
 

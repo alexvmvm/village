@@ -26,7 +26,7 @@ public class ManualPlacementPanel : MonoBehaviour
             obj.GetComponentInChildren<Text>().text = thing.name.ToUppercaseFirst();
             obj.SetActive(true);
 
-            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thing.sprite);
+            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thing.Config.Sprite);
 
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();

@@ -11,7 +11,7 @@ public class RandomTiles : ITileRule
         _sprites = sprites;
     }
 
-    public string GetSprite(Position position)
+    public string GetSprite(Positions position)
     {
         return _sprites[Random.Range(0, _sprites.Length)];
     }

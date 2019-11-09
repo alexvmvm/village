@@ -117,7 +117,7 @@ public class SubRegion
 
     void OnThingAdded(Thing thing)
     {
-        if(!thing.fixedToGrid || !_positions.Contains(thing.position))
+        if(!thing.Config.FixedToGrid || !_positions.Contains(thing.Position))
             return;
 
         if(!_things.ContainsKey(thing.Config.TypeOfThing))
@@ -130,7 +130,7 @@ public class SubRegion
 
     void OnThingRemoved(Thing thing)
     {
-        if(!thing.fixedToGrid || !_positions.Contains(thing.position) || !_things.ContainsKey(thing.Config.TypeOfThing))
+        if(!thing.Config.FixedToGrid || !_positions.Contains(thing.Position) || !_things.ContainsKey(thing.Config.TypeOfThing))
             return;
 
         if(_things[thing.Config.TypeOfThing].Contains(thing))

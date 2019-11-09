@@ -497,6 +497,8 @@ namespace SwordGC.AI.Goap
         /// </summary>
         public class Effects
         {
+            public const string EMPTY_INVENTORY = "EMPTY_INVENTORY";
+            public const string HAS_THING = "HAS_THING";
             public const string KNOCKED_OUT_PLAYER = "IsKnockedOut";
             public const string HAS_OBJECT = "HasObject";
             public const string IS_GONER = "IsGoner";

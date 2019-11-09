@@ -11,9 +11,9 @@ namespace Village.AI
     {
         private Thing _thing;
         private VillageManager _villageManager;
-        private Villager _villager;
+        private Village.AI.V2.Villager _villager;
 
-        public LeaveVillage(Game game, Movement movement, Thing thing, Villager villager) : base(game, movement)
+        public LeaveVillage(Game game, Movement movement, Thing thing, Village.AI.V2.Villager villager) : base(game, movement)
         {
             _thing = thing;
             _villager = villager;

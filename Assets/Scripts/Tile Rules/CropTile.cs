@@ -13,7 +13,7 @@ namespace Village.Things
             _crop = crop;
         }
 
-        public string GetSprite(Position position)
+        public string GetSprite(Positions position)
         {
             return _crop.GetSprite();
         }

@@ -17,12 +17,12 @@ public class StoragePanel : MonoBehaviour
 
     IEnumerable<IGrouping<string, Thing>> GetStorableThings()
     {
-        return _session.Game.QueryThingsNotInScene().Where(t => t.storeable).GroupBy(t => t.storeGroup);
+        return _session.Game.QueryThingsNotInScene().Where(t => t.Config.Storeable).GroupBy(t => t.Config.StoreGroup);
     }
 
     public void Setup(Thing thing)
     {
-        var storage = thing.GetTrait<Storage>();
+        var storage = thing.Storage;
         StorageGroupPooler.DeactivateAll();
         foreach(var group in GetStorableThings())
         {
@@ -48,9 +48,9 @@ public class StoragePanel : MonoBehaviour
                 toggle.isOn = storage.IsAllowing(thing.Config.TypeOfThing);
                 toggle.onValueChanged.AddListener((value) => {
                     if(value)
-                        thing.GetTrait<Storage>().Allow(groupThing.type);
+                        thing.Storage.Allow(groupThing.Config.TypeOfThing);
                     else
-                        thing.GetTrait<Storage>().Disallow(groupThing.type);
+                        thing.Storage.Disallow(groupThing.Config.TypeOfThing);
                 });
             }
 

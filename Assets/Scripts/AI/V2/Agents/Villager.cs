@@ -7,9 +7,16 @@ namespace Village.AI.V2
 {
     public class Villager : GoapAgent
     {
+        public string Firstname { get; protected set; }
+        public string Lastname { get; protected set; }
+        public string Fullname { get { return Firstname + " " + Lastname; } }
+
         public override void Awake()
         {
             base.Awake();
+
+            Firstname = NameGenerator.GenerateFirstName();
+            Lastname = NameGenerator.GenerateLastName();
 
             goals.Add(GoapGoal.Goals.CONSTRUCT, new Construct());
 

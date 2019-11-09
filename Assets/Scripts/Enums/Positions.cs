@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Flags]
-public enum Position
+public enum Positions
 {
     None        = 0,
     Top         = 1,

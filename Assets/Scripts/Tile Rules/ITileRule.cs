@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ITileRule
 {
-    string GetSprite(Position position);
+    string GetSprite(Positions position);
 }

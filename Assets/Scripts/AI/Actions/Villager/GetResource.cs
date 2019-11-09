@@ -19,7 +19,7 @@ namespace Village.AI
             _thing = thing;
             _movement = movement;
             _type = type;
-            _inventory = _thing.GetTrait<Inventory>();
+            _inventory = _thing.Inventory;
             _villager = villager;
         }
 
@@ -32,17 +32,17 @@ namespace Village.AI
 
         public override bool PerformAtTarget()
         {
-            if (_target.fixedToGrid)
+            if (_target.Config.FixedToGrid)
             {
-                var resource = _game.CreateAndAddThing(_target.produces, 0, 0);
-                resource.hitpoints = Mathf.Min(10, _target.hitpoints);
+                var resource = _game.CreateAndAddThing(_target.Config.Produces, 0, 0);
+                resource.Hitpoints = Mathf.Min(10, _target.Hitpoints);
                 resource.ownedBy = _villager.Fullname;
                 _inventory.HoldThing(resource);
 
                 // damage existing resource
-                _target.hitpoints -= 10;
-                if (_target.hitpoints <= 0 && _target.transform != null)
-                    _game.CreateAndAddThing(TypeOfThing.MudFloor, _target.position.x, _target.position.y);
+                _target.Hitpoints -= 10;
+                if (_target.Hitpoints <= 0 && _target.transform != null)
+                    _game.CreateAndAddThing(TypeOfThing.MudFloor, _target.Position.x, _target.Position.y);
             }
             else
             {

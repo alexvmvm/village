@@ -22,7 +22,7 @@ namespace Village.AI
             _movement = movement;
             _type = type;
             _thing = thing;
-            _inventory = _thing.GetTrait<Inventory>();
+            _inventory = _thing.Inventory;
         }
 
         public override bool IsDone()
@@ -34,7 +34,7 @@ namespace Village.AI
         {
 
             _target = _game.QueryThings()   
-                .Where(t => t.construction != null && t.construction.Requires == _type)
+                .Where(t => t.Construction != null && t.Construction.Requires == _type)
                 .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position))
                 .FirstOrDefault();
 
@@ -43,9 +43,6 @@ namespace Village.AI
 
         public override bool Perform()
         {
-            if(!_target.Exists)
-                return false;
-
             if (!_started)
             {
                 _movement.CancelCurrentPath();
@@ -58,14 +55,14 @@ namespace Village.AI
 
             if (_movement.ReachedEndOfPath)
             {
-                _target.construction.Construct();
+                _target.Construction.Construct();
 
                 if (_inventory.IsHoldingSomething() && !_inventory.IsHoldingTool())
                 {
                     var resource = _inventory.Holding;
-                    resource.hitpoints -= 1;
+                    resource.Hitpoints -= 1;
 
-                    if (resource.hitpoints == 0)
+                    if (resource.Hitpoints == 0)
                     {
                         _inventory.Drop();
                         _game.Destroy(resource);
@@ -86,10 +83,10 @@ namespace Village.AI
 
         public override string ToString()
         {
-            if (_target == null || _target.construction == null)
+            if (_target == null || _target.Construction == null)
                 return base.ToString();
 
-            return $"Building {_target.construction.BuildType.ToString()}";
+            return $"Building {_target.Construction.BuildType.ToString()}";
         }
     }
 

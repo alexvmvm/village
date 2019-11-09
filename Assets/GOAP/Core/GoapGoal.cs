@@ -120,7 +120,7 @@ namespace SwordGC.AI.Goap
         /// </summary>
         public class Goals
         {
-            public const string KILL_PLAYER = "KillPlayer";
+            public const string CONSTRUCT = "CONSTRUCT";
             public const string STAY_ALIVE = "StayAlive";
         }
     }

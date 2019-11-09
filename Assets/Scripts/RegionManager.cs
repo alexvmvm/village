@@ -155,12 +155,12 @@ public class RegionManager
     */
     void OnThingAdded(Thing thing)
     {
-        FindRegionsToUpdate(ToRegionPosition(thing.position));
+        FindRegionsToUpdate(ToRegionPosition(thing.Position));
     }
 
     void OnThingRemoved(Thing thing)
     {
-        FindRegionsToUpdate(ToRegionPosition(thing.position));
+        FindRegionsToUpdate(ToRegionPosition(thing.Position));
     }
 
     void FindRegionsToUpdate(Vector2Int regionPosition)

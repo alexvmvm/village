@@ -23,7 +23,7 @@ public class ActionPanel : MonoBehaviour
         if(thing == null)
             return;
 
-        if(thing.assignToFamily)
+        if(thing.Config.AssignToFamily)
         {
             AssignFamily.gameObject.SetActive(true);
             AssignFamily.onClick.RemoveAllListeners();
@@ -32,7 +32,7 @@ public class ActionPanel : MonoBehaviour
             });
         }
 
-        if(thing.HasTrait<Factory>())
+        if(thing.Factory != null)
         {
             FactoryButton.gameObject.SetActive(true);
             FactoryButton.onClick.RemoveAllListeners();
@@ -41,7 +41,7 @@ public class ActionPanel : MonoBehaviour
             });
         }
 
-        if(thing.HasTrait<Storage>())
+        if(thing.Storage != null)
         {
             StorageButton.gameObject.SetActive(true);
             StorageButton.onClick.RemoveAllListeners();

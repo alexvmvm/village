@@ -39,13 +39,13 @@ namespace Village.Things
             if(difference > 0)
             {
                 remainder = _game.CreateAndAddThing(thing.Config.TypeOfThing, 0, 0);
-                remainder.hitpoints = difference;
+                remainder.Hitpoints = difference;
                 thing.Hitpoints = _max - _currentStoredCount;
             }
 
             if(_stored.Any(t => t.Config.TypeOfThing == thing.Config.TypeOfThing))
             {
-                var totalInStorage = _stored.Where(t => t.Config.TypeOfThing == thing.Config.TypeOfThing).Sum(t => t.hitpoints);
+                var totalInStorage = _stored.Where(t => t.Config.TypeOfThing == thing.Config.TypeOfThing).Sum(t => t.Hitpoints);
                 var toRemove = _stored.Where(t => t.Config.TypeOfThing == thing.Config.TypeOfThing).ToList();
                 
                 foreach(var remove in toRemove)

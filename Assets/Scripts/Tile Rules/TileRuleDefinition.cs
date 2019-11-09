@@ -32,41 +32,41 @@ public class TileRuleDefinition : ITileRule
         };
     }
 
-    private Position[] _positions = new Position[]
+    private Positions[] _positions = new Positions[]
     {
         // ends
-        Position.Top,
-        Position.Bottom,
-        Position.Left,
-        Position.Right,
+        Positions.Top,
+        Positions.Bottom,
+        Positions.Left,
+        Positions.Right,
 
         // corners
-        Position.Top | Position.Left,
-        Position.Top | Position.Right,
-        Position.Bottom | Position.Right,
-        Position.Bottom | Position.Left,
+        Positions.Top | Positions.Left,
+        Positions.Top | Positions.Right,
+        Positions.Bottom | Positions.Right,
+        Positions.Bottom | Positions.Left,
 
         // horizontal edgges
-        Position.Bottom | Position.Right | Position.Top,
-        Position.Bottom | Position.Left | Position.Top,
+        Positions.Bottom | Positions.Right | Positions.Top,
+        Positions.Bottom | Positions.Left | Positions.Top,
 
         // vertical edges
-        Position.Left | Position.Right | Position.Top,
-        Position.Left | Position.Right | Position.Bottom,
+        Positions.Left | Positions.Right | Positions.Top,
+        Positions.Left | Positions.Right | Positions.Bottom,
 
         // surrounded
-        Position.Bottom | Position.Top | Position.Right | Position.Left,
+        Positions.Bottom | Positions.Top | Positions.Right | Positions.Left,
 
         // horizontal
-        Position.Top | Position.Bottom,
+        Positions.Top | Positions.Bottom,
 
         // vertical
-        Position.Left | Position.Right,
+        Positions.Left | Positions.Right,
     };
 
    
 
-    public string GetSprite(Position position)
+    public string GetSprite(Positions position)
     {
 
         for(var i = 0; i < _positions.Length; i++) 

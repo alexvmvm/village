@@ -39,7 +39,7 @@ public class FillStorage : MoveGOAPAction
 
         if(remainder != null)
         {
-            _target.GetTrait<Storage>().Add(remainder);
+            _target.Storage.Add(remainder);
         }
 
         return true;

@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using Village.Things;
-using Village.AI;
 using Village;
+using Village.AI.V2;
+using Villager = Village.AI.V2.Villager;
 
 public enum VillagerEvent
 {
@@ -34,8 +35,8 @@ public class VillageManager : MonoBehaviour
     public IEnumerable<IGrouping<string, Thing>> GetFamiliesByLastname()
     {
         return _game.QueryThings()
-            .Where(t => t.Config.TypeOfThing == TypeOfThing.Villager && t.HasTrait<Villager>())
-            .GroupBy(t => t.GetTrait<Villager>().Lastname);
+            .Where(t => t.Config.TypeOfThing == TypeOfThing.Villager)
+            .GroupBy(t => (t.Agent as Villager).Lastname);
     }
 
     void UpdateFamilyPanels()
@@ -67,7 +68,7 @@ public class VillageManager : MonoBehaviour
     {
         return _game.QueryThings()
             .Where(t => t.Config.TypeOfThing == TypeOfThing.Villager)
-            .Select(t => t.GetTrait<Villager>())
+            .Select(t => t.Agent as Villager)
             .Select(v => v.Lastname)
             .Distinct();
     }

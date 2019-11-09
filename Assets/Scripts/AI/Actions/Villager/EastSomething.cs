@@ -12,7 +12,7 @@ namespace Village.AI
 
         public EastSomething(Game game, Thing thing) : base(game)
         {
-            _inventory = thing.GetTrait<Inventory>();
+            _inventory = thing.Inventory;
         }
 
         public override bool IsDone()
@@ -42,7 +42,7 @@ namespace Village.AI
         {
             if (_inventory.Holding == null)
                 return base.ToString();
-            return $"Eating {_inventory.Holding.type.ToString()}";
+            return $"Eating {_inventory.Holding.Config.TypeOfThing.ToString()}";
         }
     }
 

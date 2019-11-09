@@ -8,10 +8,8 @@ namespace Village.Things
 
     public class Inventory : ITrait
     {
-        public Thing Holding { get { return _holding; } }
+        public Thing Holding { get; private set; }
         private Thing _parent;
-
-        private Thing _holding;
 
         public Inventory(Thing parent)
         {
@@ -20,22 +18,22 @@ namespace Village.Things
 
         public void HoldThing(Thing thing)
         {
-            _holding = thing;
+            Holding = thing;
 
-            if (_holding.GetTrait<Agent>() != null)
-                _holding.GetTrait<Agent>().PauseAgent();
+            //if (_holding.Agent != null)
+            //    _holding.Agent.PauseAgent();
 
-            _holding.transform.SetParent(_parent.transform);
-            _holding.transform.localPosition = Vector3.up;
+            Holding.transform.SetParent(_parent.transform);
+            Holding.transform.localPosition = Vector3.up;
         }
 
         public Thing Drop()
         {
-            if (_holding != null)
+            if (Holding != null)
             {
-                var thing = _holding;
-                _holding.transform.SetParent(null);
-                _holding = null;
+                var thing = Holding;
+                Holding.transform.SetParent(null);
+                Holding = null;
                 return thing;
             }
 
@@ -44,17 +42,17 @@ namespace Village.Things
 
         public bool IsHoldingSomething()
         {
-            return _holding != null;
+            return Holding != null;
         }
 
         public bool IsHoldingSomethingToEat()
         {
-            return _holding != null && _holding.edible;
+            return Holding != null && Holding.Config.Edible;
         }
 
         public bool IsHolding(TypeOfThing type)
         {
-            return _holding != null && _holding.type == type;
+            return Holding != null && Holding.Config.TypeOfThing == type;
         }
 
         public bool IsHoldingTool()

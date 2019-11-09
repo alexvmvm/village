@@ -40,7 +40,7 @@ namespace Village.Things
         public void Update()
         {
             var closestToPlayer = _game.QueryThings()
-                .Where(t => t.positionalAudioGroup == _group)
+                .Where(t => t.Config.PositionalAudioGroup == _group)
                 .OrderBy(t => Vector3.Distance(t.transform.position, _playerWorldPosition))
                 .FirstOrDefault();
 
@@ -58,7 +58,7 @@ namespace Village.Things
 
             Gizmos.color = Color.green;
             var things = _game.QueryThings()
-                .Where(t => t.positionalAudioGroup == _group)
+                .Where(t => t.Config.PositionalAudioGroup == _group)
                 .OrderBy(t => Vector3.Distance(t.transform.position, _playerWorldPosition))
                 .ToArray();
 

@@ -58,8 +58,8 @@ namespace Village
                 if(thingType == TypeOfThing.None)
                     continue;
                 var thing = Create(thingType, -10, -10);
-                if(thing.HasTrait<Agent>())
-                    thing.GetTrait<Agent>().PauseAgent();
+                // if(thing.HasTrait<Agent>())
+                //     thing.GetTrait<Agent>().PauseAgent();
                 _all.Add(thing);
             }
         }
@@ -196,29 +196,28 @@ namespace Village
 
         public Thing AddThing(Thing thing)
         {
-            if(thing.fixedToGrid)
+            if(thing.Config.FixedToGrid)
             {
-                if(IsOnGrid(thing.position.x, thing.position.y))
+                if(IsOnGrid(thing.Position.x, thing.Position.y))
                 {
-                    var existing = GetThingOnGrid(thing.position.x, thing.position.y);
+                    var existing = GetThingOnGrid(thing.Position.x, thing.Position.y);
                     if(existing != null)
                     {
                         RemoveThing(existing);
                     }
 
-                    _grid[thing.position.x, thing.position.y] = thing;
+                    _grid[thing.Position.x, thing.Position.y] = thing;
 
                     _things.Add(thing);
-                    thing.Setup();
+                    //thing.Setup();
 
-                    if(OnThingAdded != null)
-                        OnThingAdded(thing);
+                    OnThingAdded?.Invoke(thing);
                 }
             }
             else
             {
                 _things.Add(thing);
-                thing.Setup();
+                //thing.Setup();
 
                 if(OnThingAdded != null)
                         OnThingAdded(thing);
@@ -239,9 +238,9 @@ namespace Village
             if(thing == null)
                 return;
 
-            if(thing.fixedToGrid && thing.transform != null)
+            if(thing.Config.FixedToGrid && thing.transform != null)
             {
-                _grid[thing.position.x, thing.position.y] = null;
+                _grid[thing.Position.x, thing.Position.y] = null;
             }   
 
             // make sure this is called before
@@ -298,7 +297,7 @@ namespace Village
 
         public bool IsFloorForRegion(Vector2Int position)
         {
-            return GetThingOnGrid(position) != null && !GetThingOnGrid(position).blocksPath;
+            return GetThingOnGrid(position) != null && !GetThingOnGrid(position).Config.PathBlocking;
         }
 
         public bool IsPathPossible(Vector2Int start, Vector2Int end)
@@ -362,10 +361,10 @@ namespace Village
 
             if(Input.GetKeyDown(KeyCode.B))
             {
-                var toBuild = _things.Where(t => t.construction != null).ToArray();
+                var toBuild = _things.Where(t => t.Construction != null).ToArray();
                 foreach(var thing in toBuild)
                 {
-                    thing.construction.Construct();
+                    thing.Construction.Construct();
                     Destroy(thing);
                 }
             }

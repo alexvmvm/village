@@ -18,7 +18,7 @@ namespace Village.Things
             _thing = thing;
             _game = game;
             _lightWithFactory = lightWithFactory;
-            _factory = thing.GetTrait<Factory>();
+            _factory = thing.Factory;
         }
 
         public void DrawGizmos()
