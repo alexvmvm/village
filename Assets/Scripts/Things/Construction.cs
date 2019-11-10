@@ -39,7 +39,7 @@ namespace Village.Things
 
         bool ConstructAtPosition(Vector2Int position)
         {
-            return _game.QueryThings().Any(t => t.Construction != null && t.Position == position);
+            return _game.QueryThings().Any(t => t.Config.TypeOfThing == TypeOfThing.Blueprint && t.Position == position);
         }
 
         public bool IsPlaceableAt(int x, int y)
@@ -61,20 +61,6 @@ namespace Village.Things
             _game.Destroy(_thing);
         }
 
-        public static string GetGroupSprite(ConstructionGroup group)
-        {
-            switch (group)
-            {
-                case ConstructionGroup.Floors:
-                    return "colored_transparent_15";
-                case ConstructionGroup.Objects:
-                    return "colored_transparent_15";
-                case ConstructionGroup.Walls:
-                    return "colored_transparent_15";
-            }
-
-            return "none";
-        }
     }
 
 }

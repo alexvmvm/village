@@ -11,6 +11,7 @@ namespace Village.Saving
         public Vector3 position;
         public string ownedBy;
         public int hitpoints;
+        public TypeOfThing builds;
 
         public ThingSave() {}
     }

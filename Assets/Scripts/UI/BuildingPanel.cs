@@ -2,17 +2,19 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Village;
 using Village.Things;
 
 public class BuildingPanel : MonoBehaviour
 {
     public ObjectPooler GroupPooler;
     public ObjectPooler ButtonPooler;
-    private Session _session;
-    
+    private Game _game;    
+    private GameCursor _cursor;
     void Awake()
     {
-        _session = FindObjectOfType<Session>();
+        _game = FindObjectOfType<Game>();
+        _cursor = FindObjectOfType<GameCursor>();
 
         GroupPooler.DeactivateAll();
         foreach(ConstructionGroup group in Enum.GetValues(typeof(ConstructionGroup)))
@@ -33,19 +35,20 @@ public class BuildingPanel : MonoBehaviour
     {
         ButtonPooler.DeactivateAll();
         
-        foreach(var thing in _session.Game.ThingConfigs.Where(t => t.Construction != null && t.Construction.Group == group))
+        var things = _game.ThingConfigs.Where(t => t.Construction != null && t.Construction.Group == group);
+
+        foreach(var thing in things)
         {
             var obj = ButtonPooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = thing.Name.ToUppercaseFirst();
             obj.SetActive(true);
 
-            var thingToBuild = _session.Game.ThingConfigs.Where(t => t.TypeOfThing == thing.Construction.Builds).FirstOrDefault();
-            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thingToBuild.Sprite);
+            obj.transform.GetComponentInChildrenExcludingParent<Image>().sprite = Assets.GetSprite(thing.Sprite);
 
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => {
-                _session.Cursor.CurrentType = thing.TypeOfThing;
+                _cursor.SetCursor(thing.TypeOfThing, true);
             });
         }
     }

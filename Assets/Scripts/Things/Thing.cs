@@ -2,6 +2,7 @@
 using System;
 using Village.Saving;
 using SwordGC.AI.Goap;
+using System.Linq;
 
 namespace Village.Things
 {
@@ -45,30 +46,32 @@ namespace Village.Things
             public bool Inventory;
             public bool Fire;
             public bool Storage;
-            public ConstructionConfig Construction;
             public FactoryConfig Factory;
             public CropConfig Crop;
             public AgentConfig Agent;
+            public ConstructionConfig Construction;
         }
+
+        // 1. constuction config defines how something can be constructed
+        // 2. 
 
         public class ConstructionConfig
         {
             public TypeOfThing? BuildOn { get; protected set; }
             public TypeOfThing Builds { get; protected set; }
+            public Thing.ThingConfig BuildsConfig { get; private set; }
             public ConstructionGroup Group { get; protected set; }
             public TypeOfThing Requires { get; protected set; }
 
             public ConstructionConfig(
                 TypeOfThing? buildOn,
-                TypeOfThing builds,
                 ConstructionGroup group,
                 TypeOfThing requires
             )
             {
                 BuildOn = buildOn;
-                builds = Builds;
-                group = Group;
-                requires = Requires;
+                Group = group;
+                Requires = requires;
             }
         }
 
@@ -101,8 +104,8 @@ namespace Village.Things
         public Factory Factory { get; protected set; }
         public Storage Storage { get; protected set; }
         public Inventory Inventory { get; protected set; }
-        public Construction Construction { get; protected set; }
         public GoapAgent Agent { get; protected set; }
+        public TypeOfThing Builds { get; protected set; }
 
         void Awake()
         {
@@ -136,6 +139,21 @@ namespace Village.Things
         public Game Game;
         private TextMesh _textMesh;
         private GameObject _labelObj;
+
+        /*
+            Construction
+        */
+        public void SetBuilds(TypeOfThing type)
+        {
+            Builds = type;
+        }
+
+        public void Construct()
+        {
+            var thing = Game.Create(Builds, Position.x, Position.y);
+            Game.AddThing(thing);
+            Game.Destroy(this);
+        }
 
         /*
             Label
@@ -267,7 +285,8 @@ namespace Village.Things
                 position = transform.position,
                 type = Config.TypeOfThing,
                 hitpoints = Config.Hitpoints,
-                ownedBy = ownedBy
+                ownedBy = ownedBy,
+                builds = Builds
             };
         }
 
@@ -278,6 +297,7 @@ namespace Village.Things
             this.Config.TypeOfThing = save.type;
             this.Hitpoints = save.hitpoints;
             this.ownedBy = save.ownedBy;
+            this.Builds = save.builds;
         }
 
         public void DrawGizmos()

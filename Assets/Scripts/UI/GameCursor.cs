@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Village;
 using Village.Things;
 
-public class GameCursor 
+public class GameCursor : MonoBehaviour
 {
-    public TypeOfThing? CurrentType;
+    public TypeOfThing? CurrentType { get; private set; }
+    public bool PlaceBlueprints { get; private set; }
     private Game _game;
     private Transform _crosshairCursor;
     private SpriteRenderer _spriteRenderer;
@@ -15,7 +15,7 @@ public class GameCursor
     private Vector3 _min { get { return Vector3.Min(_down, _move);  } }
     private Vector3 _max { get { return Vector3.Max(_down, _move) + Vector3.one;  } }
     private bool _mouseDown;
-    private Thing _currentToBuild;
+    private Thing.ThingConfig _currentToBuild;
     private GameObject _cursorMeshObj;
     private MeshFromPoints _meshFromPoints;
     private MeshRenderer _meshRenderer;
@@ -27,9 +27,9 @@ public class GameCursor
     private bool _fixCursorPosition;
     private ActionPanel _actionPanel;
     
-    public GameCursor(Game game)
+    void Awake()
     {
-        _game = game;
+        _game = FindObjectOfType<Game>();
         _crosshairCursor = new GameObject("cursor").transform;
 
         _spriteRenderer = _crosshairCursor.gameObject.AddComponent<SpriteRenderer>();
@@ -46,6 +46,12 @@ public class GameCursor
         _infoPanel = MonoBehaviour.FindObjectOfType<InfoPanel>();
         _actionPanel = MonoBehaviour.FindObjectOfType<ActionPanel>();
 
+    }
+
+    public void SetCursor(TypeOfThing type, bool placeBluerpints)
+    {
+        PlaceBlueprints = placeBluerpints;
+        CurrentType = type;
     }
 
     void MouseDown()
@@ -65,10 +71,19 @@ public class GameCursor
         {
             for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
             {
-                if(_currentToBuild.Construction != null && !_currentToBuild.Construction.IsPlaceableAt(x, y))
+                if(!_game.IsPlaceableAt(_currentToBuild, x, y))
                     continue;
 
-                _game.AddThing(_game.Create(CurrentType.Value, x, y));       
+                if(PlaceBlueprints)
+                {
+                    var blueprint = _game.CreateBlueprint(CurrentType.Value, x, y);
+                    _game.AddThing(blueprint);
+                }
+                else
+                {
+                    _game.CreateAndAddThing(CurrentType.Value, x, y);
+                }
+                
             }
         }
         
@@ -84,7 +99,7 @@ public class GameCursor
         {
             for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
             {
-                var valid = _currentToBuild.Construction != null && !_currentToBuild.Construction.IsPlaceableAt(x, y) ?
+                var valid = !_game.IsPlaceableAt(_currentToBuild, x, y) ?
                     _invalidUV : _validUV;
 
                 list.Add(new Quad {
@@ -98,7 +113,7 @@ public class GameCursor
         _meshFromPoints.Create(list.ToArray());
     }
 
-    public void Update()
+    void Update()
     {
         // if currently over another panel 
         // don't do anything
@@ -120,9 +135,9 @@ public class GameCursor
         {
             _currentToBuild = null;
         }
-        else if(CurrentType.HasValue && (_currentToBuild == null || _currentToBuild.Config.TypeOfThing != CurrentType.Value))
+        else if(CurrentType.HasValue && (_currentToBuild == null || _currentToBuild.TypeOfThing != CurrentType.Value))
         {   
-            _currentToBuild = _game.Create(CurrentType.Value);
+            _currentToBuild = Assets.CreateThingConfig(CurrentType.Value);
         }
 
         // update cursor position to mouse position
@@ -168,7 +183,7 @@ public class GameCursor
         {
             _move = _crosshairCursor.transform.position;
 
-            if(_currentToBuild != null && _currentToBuild.Config.Pipe)
+            if(_currentToBuild != null && _currentToBuild.Pipe)
             {   
                 if (_max.x - _min.x > _max.y - _min.y)
                 {

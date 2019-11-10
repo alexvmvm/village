@@ -46,7 +46,7 @@ namespace Village
             _regionManager = new RegionManager(this);
             
             
-
+            ThingConfigs = Assets.AllThingConfigs().ToList();
         }
 
         void Start()
@@ -264,6 +264,35 @@ namespace Village
         }
 
         /*
+            Construction
+        */
+
+        public bool IsPlaceableAt(Thing.ThingConfig config, int x, int y)
+        {
+            var current = GetThingOnGrid(x, y);
+            if (current == null)
+                return false;
+            if (ConstructAtPosition(current.Position))
+                return false;
+            if (config.Construction != null && config.Construction.BuildOn.HasValue && config.Construction.BuildOn != current.Config.TypeOfThing)
+                return false;
+            return current.Config.BuildSite;
+        }
+        
+        // todo: make this more performant
+        bool ConstructAtPosition( Vector2Int position)
+        {
+            return QueryThings().Any(t => t.Config.TypeOfThing == TypeOfThing.Blueprint && t.Position == position);
+        }
+
+        public Thing CreateBlueprint(TypeOfThing type, int x, int y)
+        {
+            var thing = Create(TypeOfThing.Blueprint, x, y);
+            thing.SetBuilds(type);
+            return thing;
+        }
+
+        /*
             Pathfinding
         */
         public int TagFromString(string tag)
@@ -351,11 +380,10 @@ namespace Village
 
             if(Input.GetKeyDown(KeyCode.B))
             {
-                var toBuild = _things.Where(t => t.Construction != null).ToArray();
+                var toBuild = _things.Where(t => t.Config.TypeOfThing == TypeOfThing.Blueprint).ToArray();
                 foreach(var thing in toBuild)
                 {
-                    thing.Construction.Construct();
-                    Destroy(thing);
+                    thing.Construct();
                 }
             }
         }
@@ -383,7 +411,7 @@ namespace Village
             }
         }
         
-        public void DrawGizmos()
+        public void OnDrawGizmos()
         {
             if(!Application.isPlaying)
                 return;

@@ -32,44 +32,44 @@ namespace Village.AI
 
         public override bool IsPossibleToPerform()
         {
+            return false;
+            // _target = _game.QueryThings()   
+            //     .Where(t => t.Construction != null && t.Construction.Requires == _type)
+            //     .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position))
+            //     .FirstOrDefault();
 
-            _target = _game.QueryThings()   
-                .Where(t => t.Construction != null && t.Construction.Requires == _type)
-                .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position))
-                .FirstOrDefault();
-
-            return _target != null && _movement.IsPathPossible(_target.transform.position);
+            // return _target != null && _movement.IsPathPossible(_target.transform.position);
         }
 
         public override bool Perform()
         {
-            if (!_started)
-            {
-                _movement.CancelCurrentPath();
-                _movement.MoveTo(_target.transform.position);
-                _started = true;
-            }
+            // if (!_started)
+            // {
+            //     _movement.CancelCurrentPath();
+            //     _movement.MoveTo(_target.transform.position);
+            //     _started = true;
+            // }
 
-            if (_movement.FailedToFollowPath)
-                return false;
+            // if (_movement.FailedToFollowPath)
+            //     return false;
 
-            if (_movement.ReachedEndOfPath)
-            {
-                _target.Construction.Construct();
+            // if (_movement.ReachedEndOfPath)
+            // {
+            //     _target.Construction.Construct();
 
-                if (_inventory.IsHoldingSomething() && !_inventory.IsHoldingTool())
-                {
-                    var resource = _inventory.Holding;
-                    resource.Hitpoints -= 1;
+            //     if (_inventory.IsHoldingSomething() && !_inventory.IsHoldingTool())
+            //     {
+            //         var resource = _inventory.Holding;
+            //         resource.Hitpoints -= 1;
 
-                    if (resource.Hitpoints == 0)
-                    {
-                        _inventory.Drop();
-                        _game.Destroy(resource);
-                    }
-                }
-                _isDone = true;
-            }
+            //         if (resource.Hitpoints == 0)
+            //         {
+            //             _inventory.Drop();
+            //             _game.Destroy(resource);
+            //         }
+            //     }
+            //     _isDone = true;
+            // }
 
 
             return true;
@@ -81,13 +81,13 @@ namespace Village.AI
             _isDone = false;
         }
 
-        public override string ToString()
-        {
-            if (_target == null || _target.Construction == null)
-                return base.ToString();
+        // public override string ToString()
+        // {
+        //     if (_target == null || _target.Construction == null)
+        //         return base.ToString();
 
-            return $"Building {_target.Construction.BuildType.ToString()}";
-        }
+        //     return $"Building {_target.Construction.BuildType.ToString()}";
+        // }
     }
 
 }

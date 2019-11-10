@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Village;
 
 public class ManualPlacementPanel : MonoBehaviour
 {
     public ObjectPooler ButtonPooler;
-    private Session _session;
+    private Game _game;
+    private GameCursor _cursor;
 
     void Awake()
     {
-        _session = FindObjectOfType<Session>();
+        _game = FindObjectOfType<Game>();
+        _cursor = FindObjectOfType<GameCursor>();
     }
 
     void Start()
@@ -20,7 +23,7 @@ public class ManualPlacementPanel : MonoBehaviour
     {
          ButtonPooler.DeactivateAll();
         
-        foreach(var thing in _session.Game.ThingConfigs)
+        foreach(var thing in _game.ThingConfigs)
         {
             var obj = ButtonPooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = thing.Name.ToUppercaseFirst();
@@ -31,7 +34,7 @@ public class ManualPlacementPanel : MonoBehaviour
             var button = obj.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => {
-                _session.Cursor.CurrentType = thing.TypeOfThing;
+                _cursor.SetCursor(thing.TypeOfThing, false);
             });
         }
     }

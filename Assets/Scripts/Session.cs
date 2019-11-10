@@ -12,13 +12,8 @@ public class Session : MonoBehaviour
     public string SaveFileName;
 
     public Game Game;
-    public GameCursor Cursor { get { return _cursor; } }
-    private GameCursor _cursor;
+    public GameCursor Cursor;
 
-    public void Awake()
-    {
-        _cursor = new GameCursor(Game);
-    }
 
     void Start()
     {
@@ -54,12 +49,6 @@ public class Session : MonoBehaviour
         SaveFiles.SaveGameWithName(Game, SaveFileName);
     }
 
-    void Update()
-    {
-        Game.Update();
-        _cursor.Update();
-    }
-
     public void Quit()
     {
         Application.Quit();
@@ -92,13 +81,5 @@ public class Session : MonoBehaviour
             Debug.Log (Application.persistentDataPath);
         }
             
-    }
-
-    void OnDrawGizmos()
-    {
-        if(_cursor != null)
-            _cursor.DrawGizmos();
-        if(Game != null)
-            Game.DrawGizmos();
     }
 }
