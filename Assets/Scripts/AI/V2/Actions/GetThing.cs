@@ -12,10 +12,9 @@ namespace Village.AI.V2
 
         public GetThing(GoapAgent agent, Thing thing, Game game, TypeOfThing type) : base(agent, thing, game)
         {
-            preconditions.Add(Effects.EMPTY_INVENTORY, true);
-            
+            //preconditions.Add(Effects.EMPTY_INVENTORY, true);
             preconditions.Add($"{Effects.HAS_THING}_{GetTargetType()}", true);
-            effects.Add($"{Effects.HAS_THING}_{GetTargetType()}", true);
+            // effects.Add($"{Effects.HAS_THING}_{GetTargetType()}", true);
 
             _type = type;
         }   

@@ -43,10 +43,11 @@ namespace Village.AI.V2
             transform.position = Vector2.MoveTowards(transform.position, nextAction.target.transform.position, Time.deltaTime);
         }    
 
-        void Update()
-        {
-            dataSet.SetData(GoapAction.Effects.EMPTY_INVENTORY, !_thing.Inventory.IsHoldingSomething());
-        }
+        // void Update()
+        // {
+        //     dataSet.SetData(GoapAction.Effects.EMPTY_INVENTORY, !_thing.Inventory.IsHoldingSomething());
+        //     dataSet.SetData($"{GoapAction.Effects.HAS_THING}_{TypeOfThing.FallenWood}", false);
+        // }
     }
 }
 
