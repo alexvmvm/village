@@ -3,6 +3,7 @@ using System;
 using Village.Saving;
 using SwordGC.AI.Goap;
 using System.Linq;
+using Village.AI.V2;
 
 namespace Village.Things
 {
@@ -104,7 +105,7 @@ namespace Village.Things
         public Factory Factory { get; protected set; }
         public Storage Storage { get; protected set; }
         public Inventory Inventory { get; protected set; }
-        public GoapAgent Agent { get; protected set; }
+        public GoapAgent Agent { get; private set; }
         public TypeOfThing Builds { get; protected set; }
 
         void Awake()
@@ -130,6 +131,15 @@ namespace Village.Things
             {
                 transform.gameObject.AddComponent<BoxCollider2D>();
                 transform.gameObject.layer = LayerMask.NameToLayer("Blocks Light");
+            }
+
+            switch(Config.Agent)
+            {
+                case AgentConfig.Villager:
+                Agent = gameObject.AddComponent<Villager>();
+                break;
+                case AgentConfig.Animal:
+                break;
             }
         }
 
