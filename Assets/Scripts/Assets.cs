@@ -305,7 +305,7 @@ public class Assets
                 thing.LightBlocking = true;
                 thing.PathTag = "blocking";
                 thing.PathBlocking = true;
-                thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.FallenWood);
             break;
             case TypeOfThing.Fence:
                 thing.Name = "fence";

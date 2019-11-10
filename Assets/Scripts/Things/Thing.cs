@@ -107,7 +107,8 @@ namespace Village.Things
         public Storage Storage { get; protected set; }
         public Inventory Inventory { get; protected set; }
         public GoapAgent Agent { get; private set; }
-        public TypeOfThing Builds { get; protected set; }
+        public TypeOfThing Builds { get; private set; }
+        public TypeOfThing Requires { get; private set; }
 
         void Awake()
         {
@@ -162,6 +163,7 @@ namespace Village.Things
         public void SetBuilds(TypeOfThing type)
         {
             Builds = type;
+            Requires = Assets.CreateThingConfig(type).Construction.Requires;
         }
 
         public void Construct()

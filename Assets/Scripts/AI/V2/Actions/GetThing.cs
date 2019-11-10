@@ -6,34 +6,36 @@ using Village.Things;
 
 namespace Village.AI.V2
 {
-    public class GetThing : MoveToThing
+    public class GetThing : GoapAction
     {
+        private Game _game;
+        private Thing _thing;
         private TypeOfThing _type;
+        private Thing _target;
 
-        public GetThing(GoapAgent agent, Thing thing, Game game, TypeOfThing type) : base(agent, thing, game)
+        public GetThing(GoapAgent agent, Thing thing, Game game, TypeOfThing type) : base(agent)
         {
-            //preconditions.Add(Effects.EMPTY_INVENTORY, true);
-            preconditions.Add($"{Effects.HAS_THING}_{GetTargetType()}", true);
-            // effects.Add($"{Effects.HAS_THING}_{GetTargetType()}", true);
-
+            preconditions.Add(Effects.EMPTY_INVENTORY, true);
+            effects.Add($"{Effects.HAS_THING}_{type}", true);
+            
+            _game = game;
+            _thing = thing;
             _type = type;
         }   
-        
-        public override void Perform() 
-        {
-            //agent.dataSet.SetData($"{Effects.HAS_THING}_{_type}", true);
-            
-            Debug.Log("PERFORM");
-        }
 
-        public override bool FilterThings(Thing thing)
+        protected override bool CheckProceduralPreconditions(DataSet data)
         {
+            _target = _game.IsPathPossibleToThing(_thing.Position, _type, (thing) => true);
+            if(_target == null)
+                return false;
+            target = _target.gameObject;
             return true;
         }
 
-        public override TypeOfThing GetTargetType()
+        public override void Perform() 
         {
-            return _type;
+            _thing.Inventory.Drop();
+            _thing.Inventory.HoldThing(_target);
         }
 
         public override GoapAction Clone()

@@ -27,7 +27,7 @@ namespace Village.AI.V2
 
             goals.Add(GoapGoal.Goals.CONSTRUCT, new Construct());
 
-            possibleActions.Add(new DropThing(this));
+            possibleActions.Add(new DropThing(this, _thing.Inventory));
 
             // get these things
             possibleActions.Add(new GetThing(this, _thing, _game, TypeOfThing.FallenWood));
@@ -43,11 +43,11 @@ namespace Village.AI.V2
             transform.position = Vector2.MoveTowards(transform.position, nextAction.target.transform.position, Time.deltaTime);
         }    
 
-        // void Update()
-        // {
-        //     dataSet.SetData(GoapAction.Effects.EMPTY_INVENTORY, !_thing.Inventory.IsHoldingSomething());
-        //     dataSet.SetData($"{GoapAction.Effects.HAS_THING}_{TypeOfThing.FallenWood}", false);
-        // }
+        void Update()
+        {
+            dataSet.SetData(GoapAction.Effects.EMPTY_INVENTORY, !_thing.Inventory.IsHoldingSomething());
+            dataSet.SetData($"{GoapAction.Effects.HAS_THING}_{TypeOfThing.FallenWood}", _thing.Inventory.IsHolding(TypeOfThing.FallenWood));
+        }
     }
 }
 
