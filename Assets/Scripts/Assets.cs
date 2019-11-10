@@ -256,6 +256,7 @@ public class Assets
             case TypeOfThing.Blueprint:
                 thing.Sprite = "colored_transparent_855";
                 thing.BuildSite = false;
+                thing.SortingOrder = 100;
             break;
             case TypeOfThing.SoilFloor:
                 thing.Name = "soil";

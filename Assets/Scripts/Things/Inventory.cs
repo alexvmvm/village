@@ -6,15 +6,9 @@ using Village.AI;
 namespace Village.Things
 {
 
-    public class Inventory : ITrait
+    public class Inventory : MonoBehaviour
     {
         public Thing Holding { get; private set; }
-        private Thing _parent;
-
-        public Inventory(Thing parent)
-        {
-            _parent = parent;
-        }
 
         public void HoldThing(Thing thing)
         {
@@ -23,7 +17,7 @@ namespace Village.Things
             //if (_holding.Agent != null)
             //    _holding.Agent.PauseAgent();
 
-            Holding.transform.SetParent(_parent.transform);
+            Holding.transform.SetParent(transform);
             Holding.transform.localPosition = Vector3.up;
         }
 
@@ -58,21 +52,6 @@ namespace Village.Things
         public bool IsHoldingTool()
         {
             return IsHoldingSomething() && (IsHolding(TypeOfThing.Hoe) || IsHolding(TypeOfThing.Axe));
-        }
-
-        public void Setup()
-        {
-
-        }
-
-        public void Update()
-        {
-
-        }
-
-        public void DrawGizmos()
-        {
-
         }
     }
 

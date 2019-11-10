@@ -499,11 +499,6 @@ namespace SwordGC.AI.Goap
         {
             public const string EMPTY_INVENTORY = "EMPTY_INVENTORY";
             public const string HAS_THING = "HAS_THING";
-            public const string KNOCKED_OUT_PLAYER = "IsKnockedOut";
-            public const string HAS_OBJECT = "HasObject";
-            public const string IS_GONER = "IsGoner";
-            public const string SAME_TEAM = "SameTeam";
-            public const string DASHED_AT = "DashedAt";
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Village.Things
             Animal
         }
 
+        [Serializable]    
         public class ThingConfig
         {
             public string Sprite;
@@ -53,9 +54,7 @@ namespace Village.Things
             public ConstructionConfig Construction;
         }
 
-        // 1. constuction config defines how something can be constructed
-        // 2. 
-
+        [Serializable]    
         public class ConstructionConfig
         {
             public TypeOfThing? BuildOn { get; protected set; }
@@ -76,6 +75,7 @@ namespace Village.Things
             }
         }
 
+        [Serializable]    
         public class FactoryConfig
         {
             public TypeOfThing[] Produces { get; protected set; }
@@ -86,6 +86,7 @@ namespace Village.Things
             }
         }
 
+        [Serializable]    
         public class CropConfig
         {
             public float TimeToGrow { get; protected set; }
@@ -97,7 +98,7 @@ namespace Village.Things
                 Sprites = sprites;
             }
         }
-
+        
         public ThingConfig Config { get; protected set; }
         public SpriteRenderer SpriteRenderer { get; protected set; }
         public int Hitpoints { get; set; }
@@ -129,8 +130,13 @@ namespace Village.Things
 
             if (Config.LightBlocking)
             {
-                transform.gameObject.AddComponent<BoxCollider2D>();
-                transform.gameObject.layer = LayerMask.NameToLayer("Blocks Light");
+                gameObject.AddComponent<BoxCollider2D>();
+                gameObject.layer = LayerMask.NameToLayer("Blocks Light");
+            }
+
+            if(Config.Inventory)
+            {
+                Inventory = gameObject.AddComponent<Inventory>();
             }
 
             switch(Config.Agent)

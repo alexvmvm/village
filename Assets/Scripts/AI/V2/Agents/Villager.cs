@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SwordGC.AI.Goap;
 using UnityEngine;
+using Village.Things;
 
 namespace Village.AI.V2
 {
@@ -11,9 +12,15 @@ namespace Village.AI.V2
         public string Lastname { get; protected set; }
         public string Fullname { get { return Firstname + " " + Lastname; } }
 
+        private Game _game;
+        private Thing _thing;
+
         public override void Awake()
         {
             base.Awake();
+
+            _game = FindObjectOfType<Game>();
+            _thing = GetComponent<Thing>();
 
             Firstname = NameGenerator.GenerateFirstName();
             Lastname = NameGenerator.GenerateLastName();
@@ -23,18 +30,23 @@ namespace Village.AI.V2
             possibleActions.Add(new DropThing(this));
 
             // get these things
-            possibleActions.Add(new GetThing(this, TypeOfThing.FallenWood));
-            possibleActions.Add(new GetThing(this, TypeOfThing.Mushroom));
+            possibleActions.Add(new GetThing(this, _thing, _game, TypeOfThing.FallenWood));
+            possibleActions.Add(new GetThing(this, _thing, _game, TypeOfThing.Mushroom));
 
             // construct these things that require the supplied building material
-            possibleActions.Add(new ConstructThing(this, TypeOfThing.FallenWood));
-            possibleActions.Add(new ConstructThing(this, TypeOfThing.Mushroom));
+            possibleActions.Add(new ConstructThing(this, _thing, _game, TypeOfThing.FallenWood));
+            possibleActions.Add(new ConstructThing(this, _thing, _game, TypeOfThing.Mushroom));
         }
 
         protected override void Move(GoapAction nextAction)
         {
-
+            transform.position = Vector2.MoveTowards(transform.position, nextAction.target.transform.position, Time.deltaTime);
         }    
+
+        void Update()
+        {
+            dataSet.SetData(GoapAction.Effects.EMPTY_INVENTORY, !_thing.Inventory.IsHoldingSomething());
+        }
     }
 }
 

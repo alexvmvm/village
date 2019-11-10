@@ -2,37 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SwordGC.AI.Goap;
+using Village.Things;
 
 namespace Village.AI.V2
 {
-    public class GetThing : GoapAction
+    public class GetThing : MoveToThing
     {
         private TypeOfThing _type;
 
-        public GetThing(GoapAgent agent, TypeOfThing type) : base(agent)
+        public GetThing(GoapAgent agent, Thing thing, Game game, TypeOfThing type) : base(agent, thing, game)
         {
             preconditions.Add(Effects.EMPTY_INVENTORY, true);
-            effects.Add($"{Effects.HAS_THING}_{type}", true);
-            cost = 10;
-            requiredRange = 1f;
+            
+            preconditions.Add($"{Effects.HAS_THING}_{GetTargetType()}", true);
+            effects.Add($"{Effects.HAS_THING}_{GetTargetType()}", true);
+
             _type = type;
+        }   
+        
+        public override void Perform() 
+        {
+            //agent.dataSet.SetData($"{Effects.HAS_THING}_{_type}", true);
+            
+            Debug.Log("PERFORM");
         }
 
-        protected override bool CheckProceduralPreconditions(DataSet data)
+        public override bool FilterThings(Thing thing)
         {
-            data.SetData(Effects.EMPTY_INVENTORY, true);
-
             return true;
         }
 
-        public override void Perform() 
+        public override TypeOfThing GetTargetType()
         {
-
+            return _type;
         }
 
         public override GoapAction Clone()
         {
-            return new GetThing(agent, _type);
+            return new GetThing(agent, _thing, _game, _type);
         }
     }
 }
