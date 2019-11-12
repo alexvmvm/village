@@ -21,7 +21,7 @@ public class Clock : MonoBehaviour
 
     void Start()
     {
-        _game = FindObjectOfType<Session>().Game;
+        _game = FindObjectOfType<Game>();
     }
 
     public void SetTimeScale(float timeScale)

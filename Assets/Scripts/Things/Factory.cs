@@ -7,7 +7,7 @@ using Village.Things;
 
 namespace Village.Things 
 {
-    public class Factory : ITrait
+    public class Factory : MonoBehaviour
     {
         public TypeOfThing[] Produces { get { return _produces; } }
         private Game _game;
@@ -18,25 +18,22 @@ namespace Village.Things
         private Dictionary<TypeOfThing, int> _queued;
         private TypeOfThing[] _produces;
 
-        public Factory(Game game, Thing thing, TypeOfThing[] produces)
+        void Awake()
         {
-            _game = game;
-            _thing = thing;
+            _game = FindObjectOfType<Game>();
+            _thing = GetComponent<Thing>();
             _jobs = new Queue<TypeOfThing>();
             _timeToProduce = 60f;
             _queued = new Dictionary<TypeOfThing, int>();
-            _produces = produces;
+        }
 
-
-
-            foreach(var type in produces)
+        public void Setup(Thing.FactoryConfig config)
+        {
+            _produces = config.Produces;
+            foreach(var type in _produces)
             {
                 _queued[type] = 0;
             }
-        }
-
-        public void Setup()
-        {
         }
 
         public void AddThingToProduce(TypeOfThing thingToProduce)

@@ -6426,7 +6426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ClockFace: {fileID: 378299115}
   Day: {r: 1, g: 1, b: 1, a: 0}
-  Night: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 0}
+  Night: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 0.48235294}
 --- !u!1 &739397902
 GameObject:
   m_ObjectHideFlags: 0
@@ -11123,7 +11123,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: -527.0354}
+  m_AnchoredPosition: {x: -0.000030517578, y: -527.33435}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1324053944
@@ -12138,7 +12138,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 473427271}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9750979
+  m_Size: 0.8086422
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

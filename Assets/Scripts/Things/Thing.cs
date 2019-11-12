@@ -113,9 +113,10 @@ namespace Village.Things
         public SpriteRenderer SpriteRenderer { get; protected set; }
         public int Hitpoints { get; set; }
         public Vector2Int Position { get { return transform.position.ToVector2IntFloor(); } }
-        public Factory Factory { get; protected set; }
-        public Storage Storage { get; protected set; }
-        public Inventory Inventory { get; protected set; }
+        public Factory Factory { get; private set; }
+        public Fire Fire { get; private set; }
+        public Storage Storage { get; private set; }
+        public Inventory Inventory { get; private set; }
         public GoapAgent Agent { get; private set; }
         public TypeOfThing Builds { get; private set; }
         public TypeOfThing Requires { get; private set; }
@@ -150,6 +151,16 @@ namespace Village.Things
             if(Config.Inventory)
             {
                 Inventory = gameObject.AddComponent<Inventory>();
+            }
+            
+            if(Config.Factory != null)
+            {
+                Factory = gameObject.AddComponent<Factory>();
+            }
+
+            if(Config.Fire)
+            {
+                Fire = gameObject.AddComponent<Fire>();
             }
 
             switch(Config.Agent)

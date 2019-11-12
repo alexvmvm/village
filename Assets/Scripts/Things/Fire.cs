@@ -5,37 +5,28 @@ using UnityEngine;
 namespace Village.Things
 {
 
-    public class Fire : ITrait
+    public class Fire : MonoBehaviour
     {
-        private Thing _thing;
         private Game _game;
         private GameObject _light;
-        private bool _lightWithFactory;
         private Factory _factory;
 
-        public Fire(Game game, Thing thing, bool lightWithFactory = false)
+        void Awake()
         {
-            _thing = thing;
-            _game = game;
-            _lightWithFactory = lightWithFactory;
-            _factory = thing.Factory;
+            _game = FindObjectOfType<Game>();
+            _factory = GetComponent<Factory>();
         }
 
-        public void DrawGizmos()
-        {
-
-        }
-
-        public void Setup()
+        void Start()
         {
             _light = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Fire Light"));
-            _light.transform.SetParent(_thing.transform);
+            _light.transform.SetParent(transform);
             _light.transform.localPosition = Vector3.zero;
         }
 
         public void Update()
         {
-            if (_lightWithFactory)
+            if (_factory != null)
             {
                 _light.SetActive(_factory.IsProducing());
             }
