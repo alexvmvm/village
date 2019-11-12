@@ -122,6 +122,7 @@ namespace SwordGC.AI.Goap
         {
             public const string CONSTRUCT = "CONSTRUCT";
             public const string KILL_PLAYER = "KILL_PLAYER";
+            public const string SPAWN_VILLAGERS = "SPAWN_VILLAGERS";
         }
     }
 }

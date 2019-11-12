@@ -18,7 +18,6 @@ namespace Village
         public Vector2Int Size = Vector2Int.one * 50;
         public WorldTime WorldTime { get { return _worldTime; } }
         public List<Thing.ThingConfig> ThingConfigs { get; private set; }
-        private List<Thing> _all;
         public ThingAdded OnThingAdded;
         public ThingRemoved OnThingRemoved;
         private List<PositionalAudio> _positionalAudio;
@@ -39,30 +38,12 @@ namespace Village
                 new PositionalAudio(this, "trees", "birds")
             };
 
-            // setup all things
-            _all = new List<Thing>();
-
             _regionManager = new RegionManager(this);
             
             _floor = new Dictionary<Vector2Int, Thing>();   
             _loose = new List<Thing>();         
             
             ThingConfigs = Assets.AllThingConfigs().ToList();
-        }
-
-        void Start()
-        {
-            _all.Clear();
-            
-            foreach(TypeOfThing thingType in Enum.GetValues(typeof(TypeOfThing)))
-            {
-                if(thingType == TypeOfThing.None)
-                    continue;
-                var thing = Create(thingType, -10, -10);
-                // if(thing.HasTrait<Agent>())
-                //     thing.GetTrait<Agent>().PauseAgent();
-                _all.Add(thing);
-            }
         }
 
         public void Generate()

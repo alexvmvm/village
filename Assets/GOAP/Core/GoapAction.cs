@@ -498,6 +498,7 @@ namespace SwordGC.AI.Goap
         {
             public const string EMPTY_INVENTORY = "EMPTY_INVENTORY";
             public const string HAS_THING = "HAS_THING";
+            public const string HAS_SPAWNED_VILLAGER = "HAS_SPAWNED_VILLAGER";
         }
     }
 }
