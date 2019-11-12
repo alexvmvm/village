@@ -18,7 +18,7 @@ namespace Tests
             var thing = game.Create(TypeOfThing.Grass, 10, 10);
             game.AddThing(thing);
 
-            Assert.IsNotNull(game.GetThingOnGrid(10, 10));
+            Assert.IsNotNull(game.GetThingOnFloor(Vector2Int.one * 10));
 
             Object.Destroy(obj);
         }

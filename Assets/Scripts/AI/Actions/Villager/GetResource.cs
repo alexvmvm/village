@@ -32,7 +32,7 @@ namespace Village.AI
 
         public override bool PerformAtTarget()
         {
-            if (_target.Config.FixedToGrid)
+            if (_target.Config.FixedToFloor)
             {
                 var resource = _game.CreateAndAddThing(_target.Config.Produces, 0, 0);
                 resource.Hitpoints = Mathf.Min(10, _target.Hitpoints);

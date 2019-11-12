@@ -75,10 +75,9 @@ public class SubRegion
 
         foreach(var p in _positions)
         {
-            var thing = _game.GetThingOnGrid(p);
-            if(thing != null && !_things.ContainsKey(thing.Config.TypeOfThing))
-                _things[thing.Config.TypeOfThing] = new List<Thing>();
-            _things[thing.Config.TypeOfThing].Add(thing);
+            AddThingToCache(_game.GetThingOnFloor(p));
+            foreach(var t in _game.QueryLooseThings().Where(t => IsInRegion(t.Position)))
+                AddThingToCache(t);
         }
 
         _max = positions.ElementAt(0);
@@ -103,21 +102,34 @@ public class SubRegion
         PopulateLeftEdges();
     }
 
+    public void AddThingToCache(Thing thing)
+    {
+        if(thing == null)
+            return;
+
+        if(!_things.ContainsKey(thing.Config.TypeOfThing))
+            _things[thing.Config.TypeOfThing] = new List<Thing>();
+        if(!_things[thing.Config.TypeOfThing].Contains(thing))
+            _things[thing.Config.TypeOfThing].Add(thing);
+    }
+
     public void AddListeners()
     {
         _game.OnThingAdded += OnThingAdded;
         _game.OnThingRemoved += OnThingRemoved;
+        Thing.OnThingMoved += OnThingMoved;
     }
 
     public void RemoveListeners()
     {
         _game.OnThingAdded -= OnThingAdded;
         _game.OnThingRemoved -= OnThingRemoved;
+        Thing.OnThingMoved -= OnThingMoved;
     }
 
     void OnThingAdded(Thing thing)
     {
-        if(!thing.Config.FixedToGrid || !_positions.Contains(thing.Position))
+        if(!IsInRegion(thing.Position))
             return;
 
         if(!_things.ContainsKey(thing.Config.TypeOfThing))
@@ -130,14 +142,32 @@ public class SubRegion
 
     void OnThingRemoved(Thing thing)
     {
-        if(!thing.Config.FixedToGrid || !_positions.Contains(thing.Position) || !_things.ContainsKey(thing.Config.TypeOfThing))
+        if(!IsInRegion(thing.Position) || !_things.ContainsKey(thing.Config.TypeOfThing))
             return;
 
         if(_things[thing.Config.TypeOfThing].Contains(thing))
             _things[thing.Config.TypeOfThing].Remove(thing);
+    }
 
-        if(_things[thing.Config.TypeOfThing].Count == 0)
-            _things.Remove(thing.Config.TypeOfThing);
+    void OnThingMoved(Thing thing, Vector2Int previous, Vector2Int current)
+    {
+        if(IsInRegion(previous) && !IsInRegion(current))
+        {
+            if(_things.ContainsKey(thing.Config.TypeOfThing) && _things[thing.Config.TypeOfThing].Contains(thing))
+                _things[thing.Config.TypeOfThing].Remove(thing);
+        }
+        else if(!IsInRegion(previous) && IsInRegion(current))
+        {
+            if(!_things.ContainsKey(thing.Config.TypeOfThing))
+                _things[thing.Config.TypeOfThing] = new List<Thing>();
+            if(!_things[thing.Config.TypeOfThing].Contains(thing))
+                _things[thing.Config.TypeOfThing].Add(thing);
+        }
+    }
+
+    public bool IsInRegion(Vector2Int position)
+    {
+        return _positions.Contains(position);
     }
 
     /*
@@ -275,6 +305,13 @@ public class SubRegion
         {
             edge.DrawGizmos();
         }
+
+        Gizmos.color = Color.green;
+        foreach(var p in _positions)
+        {
+            Gizmos.DrawWireSphere(p.ToVector3(), 0.2f);
+        }
+
 #if UNITY_EDITOR
 
             var style = new GUIStyle();
@@ -283,7 +320,7 @@ public class SubRegion
 
             var label = "";
 
-            foreach(var kv in _things)
+            foreach(var kv in _things.OrderBy(kv => kv.Key))
             {
                 label += $"{kv.Key}: {kv.Value.Count}\n";
             }
@@ -371,7 +408,7 @@ public class Region
     {
         return 
             _rect.Contains(position) && 
-            _game.IsOnGrid(position.x, position.y) &&
+            _game.IsInBounds(position) &&
             _game.IsFloorForRegion(position);
     }
 

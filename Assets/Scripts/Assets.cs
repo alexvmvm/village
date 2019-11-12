@@ -108,16 +108,15 @@ public class Assets
             case TypeOfThing.Grass:
                 thing.Name = "grass";
                 thing.Sprite = "colored_5";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.TileRule = new RandomTiles("colored_5", "colored_6", "colored_7");
                 thing.Floor = true;
-                thing.PathTag = "ground";
                 thing.BuildSite = true;
                 break;
             case TypeOfThing.Stream:
                 thing.Name = "stream";
                 thing.Sprite = "stream_4";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Pipe = true;
                 thing.TileRule = new TileRuleDefinition(
                     "stream_5!180", "stream_5", "stream_5!270", "stream_5!90", 
@@ -126,12 +125,12 @@ public class Assets
                     "stream_4", "stream_1", "stream_1!90");
                 thing.GridGroup = 1;
                 thing.PositionalAudioGroup = "river";
-                thing.PathTag = "blocking";
+                thing.PathTag = Movement.TAG_BLOCKING;
                 break;
             case TypeOfThing.Path:
                 thing.Name = "path";
                 thing.Sprite = "path_4";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Pipe = true;
                 thing.TileRule = new TileRuleDefinition(
                     "path_5!180", "path_5", "path_5!270", "path_5!90", 
@@ -144,11 +143,12 @@ public class Assets
             case TypeOfThing.Tree:
                 thing.Name = "tree";
                 thing.Sprite = "tree_1";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.TileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
                 thing.PositionalAudioGroup = "trees";
                 thing.Floor = true;
                 thing.LightBlocking = true;
+                thing.PathTag = Movement.TAG_AVOID;
                 thing.Resource = true;
                 thing.Produces = TypeOfThing.Wood;
                 thing.Hitpoints = 20;
@@ -156,7 +156,7 @@ public class Assets
             case TypeOfThing.BerryBush:
                 thing.Name = "apple tree";
                 thing.Sprite = "colored_68";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.Edible = true;
                 thing.Resource = true;
@@ -165,7 +165,7 @@ public class Assets
              case TypeOfThing.MushroomGrowing:
                 thing.Name = "mushroom";
                 thing.Sprite = "colored_71";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Edible = true;
                 thing.Resource = true;
                 thing.Produces = TypeOfThing.Mushroom;
@@ -192,12 +192,12 @@ public class Assets
                 thing.Resource = true;
                 thing.Produces = TypeOfThing.Wood;
                 thing.Hitpoints = 5;
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
             break;
             case TypeOfThing.Rock:
                 thing.Name = "rock";
                 thing.Sprite = "stone_1";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.Resource = true;
                 thing.Produces = TypeOfThing.Stone;
@@ -212,7 +212,7 @@ public class Assets
             case TypeOfThing.Clay:
                 thing.Name = "clay";
                 thing.Sprite = "colored_1";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Resource = true;
                 thing.Floor = true;
                 thing.Hitpoints = 10;
@@ -220,7 +220,7 @@ public class Assets
             case TypeOfThing.Ore:
                 thing.Name = "ore";
                 thing.Sprite = "colored_4";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Resource = true;
                 thing.Floor = true;
                 thing.Hitpoints = 5;
@@ -248,7 +248,7 @@ public class Assets
             case TypeOfThing.MudFloor:
                 thing.Name = "mud floor";
                 thing.Sprite = "colored_0";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Floors, TypeOfThing.None);
@@ -261,7 +261,7 @@ public class Assets
             case TypeOfThing.SoilFloor:
                 thing.Name = "soil";
                 thing.Sprite = "colored_1";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Farming, TypeOfThing.Hoe);
@@ -279,7 +279,7 @@ public class Assets
             case TypeOfThing.WoodFloor:
                 thing.Name = "wood floor";
                 thing.Sprite = "colored_16";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Floors, TypeOfThing.Wood);
@@ -287,9 +287,9 @@ public class Assets
             case TypeOfThing.WoodWall:
                 thing.Name = "wood wall";
                 thing.Sprite = "colored_98";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Pipe = true;
-                thing.PathTag = "blocking";
+                thing.PathTag = Movement.TAG_BLOCKING;
                 thing.TileRule = new TileRuleDefinition(
                     "colored_98", "colored_98", "colored_98", "colored_98", 
                     "colored_98", "colored_98", "colored_98", "colored_98",
@@ -300,19 +300,19 @@ public class Assets
             case TypeOfThing.ForagedWall:
                 thing.Name = "Foraged wall";
                 thing.Sprite = "colored_70";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Pipe = true;
                 thing.LightBlocking = true;
-                thing.PathTag = "blocking";
+                thing.PathTag = Movement.TAG_AVOID;
                 thing.PathBlocking = true;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.FallenWood);
             break;
             case TypeOfThing.Fence:
                 thing.Name = "fence";
                 thing.Sprite = "colored_98";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Pipe = true;
-                thing.PathTag = "blocking";
+                thing.PathTag = Movement.TAG_BLOCKING;
                 thing.TileRule = new TileRuleDefinition(
                     "colored_98", "colored_98", "colored_98", "colored_98", 
                     "colored_98", "colored_98", "colored_98", "colored_98",
@@ -323,7 +323,7 @@ public class Assets
             case TypeOfThing.StoneFloor:
                 thing.Name = "stone floor";
                 thing.Sprite = "colored_416";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Floors, TypeOfThing.Stone);
@@ -331,8 +331,8 @@ public class Assets
             case TypeOfThing.StoneWall:
                 thing.Name = "stone wall";
                 thing.Sprite = "colored_580";
-                thing.FixedToGrid = true;
-                thing.PathTag = "blocking";
+                thing.FixedToFloor = true;
+                thing.PathTag = Movement.TAG_BLOCKING;
                 thing.LightBlocking = true;
                 thing.Pipe = true;
                 thing.PathBlocking = true;
@@ -341,21 +341,21 @@ public class Assets
             case TypeOfThing.Door:
                 thing.Name = "Door";
                 thing.Sprite = "colored_297";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Floor = true;
                  thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
                 break;
             case TypeOfThing.ForagedBed:
                 thing.Name = "Foraged Bed";
                 thing.Sprite = "colored_204";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
                 break;
             case TypeOfThing.Bed:
                 thing.Name = "Bed";
                 thing.Sprite = "colored_261";
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
                 break;
@@ -363,7 +363,7 @@ public class Assets
                 thing.Name = "Clay Forge";
                 thing.Sprite = "colored_680";
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.AssignToFamily = true;
                 thing.Factory = new Thing.FactoryConfig(new TypeOfThing[] { TypeOfThing.Iron });
                 thing.Fire = true;
@@ -373,7 +373,7 @@ public class Assets
                 thing.Name = "Workbench";
                 thing.Sprite = "colored_228";
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.AssignToFamily = true;
                 thing.Factory = new Thing.FactoryConfig(new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe });
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
@@ -402,7 +402,7 @@ public class Assets
                 thing.Sprite = "colored_200";
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Storage = true;
-                thing.FixedToGrid = true;
+                thing.FixedToFloor = true;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
                 break;
             case TypeOfThing.Fire:

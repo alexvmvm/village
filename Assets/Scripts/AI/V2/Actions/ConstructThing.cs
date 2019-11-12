@@ -12,20 +12,40 @@ namespace Village.AI.V2
         private Thing _thing;
         private TypeOfThing _resource;
         private Thing _target;
+        private Inventory _inventory;
 
         public ConstructThing(GoapAgent agent, Thing thing, Game game, TypeOfThing resource) : base(agent)
         {
             preconditions.Add($"{Effects.HAS_THING}_{resource}", true);
+
             goal = GoapGoal.Goals.CONSTRUCT;
+            requiredRange = 1.2f;
+            removeWhenTargetless = true;
 
             _game = game;
             _thing = thing;
             _resource = resource;
+            _inventory = thing.Inventory;
         }   
 
         public override void Perform() 
         {
-            _target.Construct();
+            if(_target != null)
+            {
+                _target.Construct();
+
+                if (_inventory.IsHoldingSomething() && !_inventory.IsHoldingTool())
+                {
+                    var resource = _inventory.Holding;
+                    resource.Hitpoints -= 1;
+
+                    if (resource.Hitpoints == 0)
+                    {
+                        _inventory.Drop();
+                        _game.Destroy(resource);
+                    }
+                }
+            }
         }
 
         protected override bool CheckProceduralPreconditions(DataSet data)

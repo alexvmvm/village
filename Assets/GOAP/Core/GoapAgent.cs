@@ -176,6 +176,11 @@ namespace SwordGC.AI.Goap {
 
                 if (ActiveAction.target != null && ActiveActionInRange)
                 {
+                    if(state == STATE.MOVING)
+                    {
+                        MoveEnd(ActiveAction);
+                    }
+
                     state = STATE.ACTION;
                     ActiveAction.Perform();
                 }
@@ -444,6 +449,11 @@ namespace SwordGC.AI.Goap {
         /// </summary>
         /// <param name="nextAction"></param>
         protected virtual void Move (GoapAction nextAction)
+        {
+
+        }
+
+        protected virtual void MoveEnd(GoapAction nextAction)
         {
 
         }

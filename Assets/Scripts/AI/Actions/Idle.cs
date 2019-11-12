@@ -32,7 +32,7 @@ namespace Village.AI
 
             _target = _movement.transform.position + offset;
 
-            if (!_game.IsOnGrid((int)_target.x, (int)_target.y))
+            if (!_game.IsInBounds(_target.ToVector2IntFloor()))
                 return false;
 
             if (!_movement.IsPathPossible(_target))

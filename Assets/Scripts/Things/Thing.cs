@@ -5,10 +5,15 @@ using SwordGC.AI.Goap;
 using System.Linq;
 using Village.AI.V2;
 
+
 namespace Village.Things
 {
+    public delegate void ThingMoved(Thing thing, Vector2Int previous, Vector2Int current);
+
     public class Thing : MonoBehaviour, ISave<ThingSave>
     {
+        public static ThingMoved OnThingMoved;
+
         public enum AgentConfig
         {
             None,
@@ -27,7 +32,7 @@ namespace Village.Things
             public Color Color = Color.white;
             public Vector3 Scale = Vector3.one;
             public int SortingOrder;
-            public bool FixedToGrid;
+            public bool FixedToFloor;
             public ITileRule TileRule;
             public int GridGroup;
             public bool Floor;
@@ -52,6 +57,11 @@ namespace Village.Things
             public CropConfig Crop;
             public AgentConfig Agent;
             public ConstructionConfig Construction;
+
+            public ThingConfig()
+            {
+                Walkable = true;
+            }
         }
 
         [Serializable]    
@@ -109,6 +119,8 @@ namespace Village.Things
         public GoapAgent Agent { get; private set; }
         public TypeOfThing Builds { get; private set; }
         public TypeOfThing Requires { get; private set; }
+
+        private Vector2Int _previousPosition { get; set; }
 
         void Awake()
         {
@@ -204,7 +216,7 @@ namespace Village.Things
         {
             SetSprite();
 
-            if (!Config.FixedToGrid)
+            if (!Config.FixedToFloor)
                 return;
 
             var px = Mathf.FloorToInt(transform.position.x);
@@ -217,7 +229,8 @@ namespace Village.Things
                     if (x == px && y == py)
                         continue;
 
-                    var thing = Game.GetThingOnGrid(x, y);
+                    var position = new Vector2Int(x, y);
+                    var thing = Game.GetThingOnFloor(position);
                     if (thing != null)
                     {
                         thing.SetSprite();
@@ -240,7 +253,8 @@ namespace Village.Things
                     if (x == px && y == py)
                         continue;
 
-                    var thing = Game.GetThingOnGrid(x, y);
+                    var p = new Vector2Int(x, y);
+                    var thing = Game.GetThingOnFloor(p);
                     if (thing != null && thing.Config.GridGroup == Config.GridGroup)
                     {
                         var vector = new Vector2Int(x - px, y - py);
@@ -285,6 +299,13 @@ namespace Village.Things
 
         public virtual void Update()
         {
+            if(_previousPosition != Position)
+            {
+                if(OnThingMoved != null)
+                    OnThingMoved(this, _previousPosition, Position);
+                _previousPosition = Position;
+            }
+
             var label = "";
             if (Config.Resource)
                 label += $"x{Hitpoints}\n";

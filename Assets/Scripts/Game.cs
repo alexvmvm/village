@@ -23,15 +23,14 @@ namespace Village
         public ThingRemoved OnThingRemoved;
         private List<PositionalAudio> _positionalAudio;
         private Director _director;
-        private Thing[,] _grid;
         private List<Thing> _things;
         private WorldTime _worldTime;
         private RegionManager _regionManager;
-
+        private Dictionary<Vector2Int, Thing> _floor;
+        private List<Thing> _loose;
         void Awake()
         {
             _things = new List<Thing>();
-            _grid = new Thing[Size.x, Size.y];
             _worldTime = new WorldTime(360, 5, 23);
             _director = new Director(this);
             _positionalAudio = new List<PositionalAudio>()
@@ -45,6 +44,8 @@ namespace Village
 
             _regionManager = new RegionManager(this);
             
+            _floor = new Dictionary<Vector2Int, Thing>();   
+            _loose = new List<Thing>();         
             
             ThingConfigs = Assets.AllThingConfigs().ToList();
         }
@@ -152,28 +153,25 @@ namespace Village
 
         }
 
+
+
         /*
-            Sprites
+            Query
         */
-        
-        public Thing GetThingOnGrid(Vector2Int position)
+
+        public bool IsInBounds(Vector2Int position)
         {
-            return GetThingOnGrid(position.x, position.y);
+            return position.x >= 0 && position.x <= Size.x && position.y >= 0 && position.y <= Size.y;
         }
 
-        public bool IsOnGrid(int x, int y)
+        public bool IsThingOnFloor(Vector2Int position)
         {
-            return x >= 0 && x < Size.x && y >= 0 && y < Size.y;
+            return _floor.ContainsKey(position);
         }
 
-        public Thing GetThingOnGrid(int x, int y)
+        public Thing GetThingOnFloor(Vector2Int position)
         {
-            if(x >= 0 && x < Size.x && y >= 0 && y < Size.y)
-            {
-                return _grid[x, y];
-            }
-
-            return null;
+            return IsThingOnFloor(position) ? _floor[position] : null;
         }
 
         /*
@@ -181,37 +179,37 @@ namespace Village
         */
         public IEnumerable<Thing> QueryThings()
         {
-            return _things.Where(t => t.transform != null);
+            return _things;
+        }
+
+        public IEnumerable<Thing> QueryLooseThings()
+        {
+            return _loose;
         }
 
         public Thing AddThing(Thing thing)
         {
-            if(thing.Config.FixedToGrid)
+            if(thing.Config.FixedToFloor)
             {
-                if(IsOnGrid(thing.Position.x, thing.Position.y))
+                if(IsThingOnFloor(thing.Position))
                 {
-                    var existing = GetThingOnGrid(thing.Position.x, thing.Position.y);
+                    var existing = GetThingOnFloor(thing.Position);
                     if(existing != null)
                     {
                         RemoveThing(existing);
                     }
-
-                    _grid[thing.Position.x, thing.Position.y] = thing;
-
-                    _things.Add(thing);
-                    //thing.Setup();
-
-                    OnThingAdded?.Invoke(thing);
                 }
+
+                _floor[thing.Position] = thing;
+                _things.Add(thing);
             }
             else
             {
+                _loose.Add(thing);
                 _things.Add(thing);
-                //thing.Setup();
-
-                if(OnThingAdded != null)
-                        OnThingAdded(thing);
             }
+
+            OnThingAdded?.Invoke(thing);
 
             switch(thing.Config.TypeOfThing)
             {
@@ -228,10 +226,14 @@ namespace Village
             if(thing == null)
                 return;
 
-            if(thing.Config.FixedToGrid && thing.transform != null)
+            if(thing.Config.FixedToFloor)
             {
-                _grid[thing.Position.x, thing.Position.y] = null;
+                _floor.Remove(thing.Position);
             }   
+            else 
+            {
+                _loose.Remove(thing);
+            }
 
             // make sure this is called before
             // destroying the thing
@@ -267,9 +269,9 @@ namespace Village
             Construction
         */
 
-        public bool IsPlaceableAt(Thing.ThingConfig config, int x, int y)
+        public bool IsPlaceableAt(Thing.ThingConfig config, Vector2Int position)
         {
-            var current = GetThingOnGrid(x, y);
+            var current = GetThingOnFloor(position);
             if (current == null)
                 return false;
             if (ConstructAtPosition(current.Position))
@@ -316,7 +318,7 @@ namespace Village
 
         public bool IsFloorForRegion(Vector2Int position)
         {
-            return GetThingOnGrid(position) != null && !GetThingOnGrid(position).Config.PathBlocking;
+            return GetThingOnFloor(position) != null && !GetThingOnFloor(position).Config.PathBlocking;
         }
 
         public bool IsPathPossible(Vector2Int start, Vector2Int end)

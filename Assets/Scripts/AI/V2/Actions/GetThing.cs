@@ -11,16 +11,22 @@ namespace Village.AI.V2
         private Game _game;
         private Thing _thing;
         private TypeOfThing _type;
+        private TypeOfThing _produces;
         private Thing _target;
+        private Inventory _inventory;
 
-        public GetThing(GoapAgent agent, Thing thing, Game game, TypeOfThing type) : base(agent)
+        public GetThing(GoapAgent agent, Thing thing, Game game, TypeOfThing type, TypeOfThing produces) : base(agent)
         {
             preconditions.Add(Effects.EMPTY_INVENTORY, true);
-            effects.Add($"{Effects.HAS_THING}_{type}", true);
+            effects.Add($"{Effects.HAS_THING}_{produces}", true);
+            requiredRange = 1.2f;
+            removeWhenTargetless = true;
             
             _game = game;
             _thing = thing;
             _type = type;
+            _produces = produces;
+            _inventory = thing.Inventory;
         }   
 
         protected override bool CheckProceduralPreconditions(DataSet data)
@@ -34,13 +40,28 @@ namespace Village.AI.V2
 
         public override void Perform() 
         {
-            _thing.Inventory.Drop();
-            _thing.Inventory.HoldThing(_target);
+            if (_target.Config.FixedToFloor)
+            {
+                var resource = _game.CreateAndAddThing(_target.Config.Produces, 0, 0);
+                resource.Hitpoints = Mathf.Min(10, _target.Hitpoints);
+                //resource.ownedBy = _villager.Fullname;
+                _inventory.HoldThing(resource);
+
+                // damage existing resource
+                _target.Hitpoints -= 10;
+                if (_target.Hitpoints <= 0 && _target.transform != null)
+                    _game.CreateAndAddThing(TypeOfThing.MudFloor, _target.Position.x, _target.Position.y);
+            }
+            else
+            {
+                //_target.ownedBy = _villager.Fullname;
+                _inventory.HoldThing(_target);
+            }
         }
 
         public override GoapAction Clone()
         {
-            return new GetThing(agent, _thing, _game, _type);
+            return new GetThing(agent, _thing, _game, _type, _produces);
         }
     }
 }

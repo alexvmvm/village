@@ -135,9 +135,22 @@ public class RegionManager
             return null;
 
         var startSubRegion = startRegion.GetSubRegionAtPosition(start);
-       
+
+        // find sub region nearby if
+        // current location doesn't return
         if(startSubRegion == null)
-            return null;
+        {
+            foreach(var n in _neighbours)
+            {
+                startSubRegion = startRegion.GetSubRegionAtPosition(start + n);
+                if(startSubRegion != null)
+                    break;
+            }
+
+            if(startSubRegion == null)
+                return null;
+        }
+           
 
         var subRegion = _graph.IsPathToNodes(startSubRegion, (region) => region.HasTypeOfThing(type) && region.GetThings(type).Any(filter));
 
@@ -155,11 +168,17 @@ public class RegionManager
     */
     void OnThingAdded(Thing thing)
     {
+        if(!thing.Config.FixedToFloor)
+            return;
+
         FindRegionsToUpdate(ToRegionPosition(thing.Position));
     }
 
     void OnThingRemoved(Thing thing)
     {
+        if(!thing.Config.FixedToFloor)
+            return;
+            
         FindRegionsToUpdate(ToRegionPosition(thing.Position));
     }
 

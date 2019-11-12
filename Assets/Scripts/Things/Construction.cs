@@ -42,9 +42,9 @@ namespace Village.Things
             return _game.QueryThings().Any(t => t.Config.TypeOfThing == TypeOfThing.Blueprint && t.Position == position);
         }
 
-        public bool IsPlaceableAt(int x, int y)
+        public bool IsPlaceableAt(Vector2Int position)
         {
-            var current = _game.GetThingOnGrid(x, y);
+            var current = _game.GetThingOnFloor(position);
             if (current == null)
                 return false;
             if (ConstructAtPosition(current.Position))

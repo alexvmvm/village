@@ -71,7 +71,8 @@ public class GameCursor : MonoBehaviour
         {
             for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
             {
-                if(!_game.IsPlaceableAt(_currentToBuild, x, y))
+                var position = new Vector2Int(x, y);
+                if(!_game.IsPlaceableAt(_currentToBuild, position))
                     continue;
 
                 if(PlaceBlueprints)
@@ -99,7 +100,8 @@ public class GameCursor : MonoBehaviour
         {
             for(var y = Mathf.FloorToInt(_min.y); y < Mathf.FloorToInt(_max.y); y++)
             {
-                var valid = !_game.IsPlaceableAt(_currentToBuild, x, y) ?
+                var position = new Vector2Int(x, y);
+                var valid = !_game.IsPlaceableAt(_currentToBuild, position) ?
                     _invalidUV : _validUV;
 
                 list.Add(new Quad {
@@ -155,12 +157,17 @@ public class GameCursor : MonoBehaviour
         {
             _cursorPosition = position;
             _crosshairCursor.transform.position = position;
-            _mouseOverThing = _game.GetThingOnGrid(position.ToVector2IntFloor());
-            
-            if(_infoPanel != null)
-                _infoPanel.Setup(_mouseOverThing);
-            if(_actionPanel != null)
-                _actionPanel.Setup(_mouseOverThing);
+
+            var posVec2 = position.ToVector2IntFloor();
+
+            if(_game.IsThingOnFloor(posVec2))
+            {
+                _mouseOverThing = _game.GetThingOnFloor(posVec2);
+                if(_infoPanel != null)
+                    _infoPanel.Setup(_mouseOverThing);
+                if(_actionPanel != null)
+                    _actionPanel.Setup(_mouseOverThing);
+            }
         }
 
         // disable cursor mesh if no current selected

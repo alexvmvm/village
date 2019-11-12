@@ -32,6 +32,11 @@ namespace Village.AI
         private List<Vector3> _waypoints;
         private Session _session;
         private Game _game;
+
+        public const string TAG_BLOCKING = "TAG_BLOCKING";
+        public const string TAG_AVOID = "TAG_AVOID";
+        public const string TAG_GROUND = "TAG_GROUND";
+
         void Awake()
         {
             _session = FindObjectOfType<Session>();
@@ -43,20 +48,50 @@ namespace Village.AI
             _aiPath.gravity = Vector3.zero;
             _aiPath.maxSpeed = 2f;
             _aiPath.pickNextWaypointDist = 0.5f;
-            _aiPath.endReachedDistance = 0.8f;
+            _aiPath.endReachedDistance = 1f;
 
             _aStarPath = FindObjectOfType<AstarPath>();
 
             _seeker = GetComponent<Seeker>();
             _seeker.startEndModifier.exactStartPoint = StartEndModifier.Exactness.NodeConnection;
             _seeker.startEndModifier.exactEndPoint = StartEndModifier.Exactness.SnapToNode;
-            _seeker.traversableTags &= ~(1 << _game.TagFromString("foliage"));
-            _seeker.traversableTags &= ~(1 << _game.TagFromString("blocking"));
+
+            var tagPenalties = new int[32];
+            tagPenalties[1] = 10;
+            _seeker.tagPenalties = tagPenalties;
+
+            // set which are not traversable
+            //DisableTag(TAG_BLOCKING);
+            //DisableTag(TAG_FOILIAGE);
+
+
+            //_seeker.tagPenalties[TagFromString(TAG_BLOCKING)] = 9999;
+
+            // _seeker.traversableTags &= ~(1 << _game.TagFromString(TAG_FOILIAGE));
+            // _seeker.traversableTags &= ~(1 << _game.TagFromString(TAG_BLOCKING));
+
 
             _nodes = new List<GraphNode>();
             _maxSpeed = _aiPath.maxSpeed;
             _waypoints = new List<Vector3>();
 
+        }
+
+        
+        public int TagFromString(string tag)
+        {
+            return System.Array.IndexOf(_aStarPath.GetTagNames(), tag);
+        }
+
+        public void EnableTag(string tag)
+        {
+            _seeker.traversableTags |= (1 << TagFromString(tag));
+        }
+        
+
+        public void DisableTag(string tag)
+        {
+            _seeker.traversableTags &= ~(1 << TagFromString(tag));
         }
 
         void OnDisable()
@@ -106,8 +141,9 @@ namespace Village.AI
             return _session.Game.IsPathPossible(transform.position.ToVector2IntFloor(), position.ToVector2IntFloor());
         }
 
-        public void MoveTo(Vector3 position)
+        public void MoveTo(Vector3 position, float endReachDistance = 1f)
         {
+            _aiPath.endReachedDistance = endReachDistance;
             _reachedEndOfPath = false;
             StartCoroutine(MoveTo(position, (ok) =>
             {
@@ -124,38 +160,11 @@ namespace Village.AI
             yield return StartCoroutine(FollowPath(pathToTarget, callback));
         }
 
-        // IEnumerator MoveToClosest(IEnumerable<Vector3> positions, Action<bool> callback)
-        // {
-        //     // move to resource
-        //     var pathToTarget = _seeker.StartMultiTargetPath(transform.position, positions.ToArray(), false);
-        //     yield return StartCoroutine(FollowPath(pathToTarget, callback));
-        // }
-
-        // public IEnumerator FollowCurrentPath(Action<bool> callback)
-        // {
-        //     yield return StartCoroutine(MoveThroughWaypoints(_waypoints, callback));
-        // }
-
-        // IEnumerator MoveThroughWaypoints(IEnumerable<Vector3> waypoints, Action<bool> callback)
-        // {
-        //     var array = waypoints.ToArray();
-        //     for(var i = 0; i < array.Length; i++)
-        //     {
-        //         var pathCompleted = false;
-        //         yield return StartCoroutine(MoveTo(array[i], (ok) => pathCompleted = ok));
-        //         if(!pathCompleted)
-        //         {
-        //             callback(false);
-        //             yield break;
-        //         }
-        //     }
-        //     callback(true);
-        // }
-
         IEnumerator FollowPath(Path path, Action<bool> callback)
         {
             // move to resource
             yield return StartCoroutine(path.WaitForPath());
+
 
             // failed to get resource
             if (path.error)
@@ -163,7 +172,7 @@ namespace Village.AI
                 callback(false);
                 yield break;
             }
-
+            
             while (!_aiPath.reachedEndOfPath)
             {
                 if (FailedToFollowPath)

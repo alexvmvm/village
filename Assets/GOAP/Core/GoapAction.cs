@@ -331,10 +331,10 @@ namespace SwordGC.AI.Goap
         /// </summary>
         public virtual void UpdateTarget ()
         {
-            if (targetString == "")
-            {
-                targetString = agent.gameObject.name;
-            }
+            // if (targetString == "")
+            // {
+            //     targetString = agent.gameObject.name;
+            // }
             if (target == null) target = GameObject.Find(targetString);
             if (removeWhenTargetless && target == null) agent.RemoveAction(this);
         }
@@ -434,7 +434,6 @@ namespace SwordGC.AI.Goap
                     agent.StartCoroutine(BlockAction());
                 }
             }
-
         }
 
         /// <summary>
