@@ -77,12 +77,12 @@ public class GameCursor : MonoBehaviour
 
                 if(PlaceBlueprints)
                 {
-                    var blueprint = _game.CreateBlueprint(CurrentType.Value, x, y);
-                    _game.AddThing(blueprint);
+                    var blueprint = _game.CreateAtPosition(TypeOfThing.Blueprint, position);
+                    blueprint.SetBuilds(CurrentType.Value);
                 }
                 else
                 {
-                    _game.CreateAndAddThing(CurrentType.Value, x, y);
+                    _game.CreateAtPosition(CurrentType.Value, position);
                 }
                 
             }

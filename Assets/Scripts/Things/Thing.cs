@@ -188,9 +188,15 @@ namespace Village.Things
 
         public void Construct()
         {
-            var thing = Game.Create(Builds, Position.x, Position.y);
-            Game.AddThing(thing);
-            Game.Destroy(this);
+            if(Config.FixedToFloor)
+            {
+                var existing = Game.GetThingOnFloor(Position);
+                if(existing != null)
+                    Game.Remove(existing);
+            }
+
+            var thing = Game.CreateAtPosition(Builds, Position);
+            Game.Remove(this);
         }
 
         /*
@@ -292,17 +298,12 @@ namespace Village.Things
             return transform.parent != null;
         }
 
-        public void Destroy()
+        public void ResetPath()
         {
             if (!string.IsNullOrEmpty(Config.PathTag))
             {
                 Game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
             }
-
-            if (_labelObj != null)
-                GameObject.Destroy(_labelObj);
-
-            GameObject.Destroy(transform.gameObject);
         }
 
         public virtual void Update()

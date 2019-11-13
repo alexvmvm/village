@@ -38,7 +38,7 @@ namespace Village.Things
             Thing remainder = null;
             if(difference > 0)
             {
-                remainder = _game.CreateAndAddThing(thing.Config.TypeOfThing, 0, 0);
+                remainder = _game.CreateAtPosition(thing.Config.TypeOfThing, Vector2Int.zero);
                 remainder.Hitpoints = difference;
                 thing.Hitpoints = _max - _currentStoredCount;
             }
@@ -51,7 +51,7 @@ namespace Village.Things
                 foreach(var remove in toRemove)
                 {
                     _stored.Remove(remove);
-                    _game.Destroy(remove);
+                    _game.Remove(remove);
                 }
 
                 thing.Hitpoints += totalInStorage;

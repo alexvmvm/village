@@ -7,22 +7,31 @@ using Village.Things;
 namespace Village.AI
 {
 
-    public class Construct : GOAPAction
+    public class Construct : MoveGOAPAction
     {
         private Movement _movement;
-        private Thing _target;
         private bool _started;
         private bool _isDone;
-        private TypeOfThing _type;
+        private TypeOfThing _resource;
         private Thing _thing;
         private Inventory _inventory;
 
-        public Construct(Game game, Movement movement, TypeOfThing type, Thing thing) : base(game)
+        public Construct(Agent agent, Game game, Movement movement, TypeOfThing resource, Thing thing) : base(agent, game, movement)
         {
             _movement = movement;
-            _type = type;
+            _resource = resource;
             _thing = thing;
             _inventory = _thing.Inventory;
+        }
+
+        public override bool Filter(Thing thing)
+        {
+            return thing.Requires == _resource;
+        }
+
+        public override TypeOfThing GetThingType()
+        {
+            return TypeOfThing.Blueprint;
         }
 
         public override bool IsDone()
@@ -30,64 +39,36 @@ namespace Village.AI
             return _isDone;
         }
 
-        public override bool IsPossibleToPerform()
+
+        public override bool PerformAtTarget()
         {
-            return false;
-            // _target = _game.QueryThings()   
-            //     .Where(t => t.Construction != null && t.Construction.Requires == _type)
-            //     .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position))
-            //     .FirstOrDefault();
+            
+            if(_target == null)
+                return false;
 
-            // return _target != null && _movement.IsPathPossible(_target.transform.position);
-        }
+            if (_inventory.IsHoldingSomething() && !_inventory.IsHoldingTool())
+            {
+                var resource = _inventory.Holding;
+                resource.Hitpoints -= 1;
 
-        public override bool Perform()
-        {
-            // if (!_started)
-            // {
-            //     _movement.CancelCurrentPath();
-            //     _movement.MoveTo(_target.transform.position);
-            //     _started = true;
-            // }
+                if (resource.Hitpoints == 0)
+                {
+                    _inventory.Drop();
+                }
+            }
 
-            // if (_movement.FailedToFollowPath)
-            //     return false;
-
-            // if (_movement.ReachedEndOfPath)
-            // {
-            //     _target.Construction.Construct();
-
-            //     if (_inventory.IsHoldingSomething() && !_inventory.IsHoldingTool())
-            //     {
-            //         var resource = _inventory.Holding;
-            //         resource.Hitpoints -= 1;
-
-            //         if (resource.Hitpoints == 0)
-            //         {
-            //             _inventory.Drop();
-            //             _game.Destroy(resource);
-            //         }
-            //     }
-            //     _isDone = true;
-            // }
-
+            _target.Construct();
 
             return true;
         }
 
         public override void Reset()
         {
+            base.Reset();
+
             _started = false;
             _isDone = false;
         }
-
-        // public override string ToString()
-        // {
-        //     if (_target == null || _target.Construction == null)
-        //         return base.ToString();
-
-        //     return $"Building {_target.Construction.BuildType.ToString()}";
-        // }
     }
 
 }

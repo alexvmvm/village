@@ -9,7 +9,7 @@ namespace Village.AI
     public class SpawnVillager : GOAPAction
     {
 
-        public SpawnVillager(Game game) : base(game)
+        public SpawnVillager(Agent agent, Game game) : base(agent, game)
         {
         }
 
@@ -30,9 +30,10 @@ namespace Village.AI
 
         public override bool Perform()
         {
-            _game.CreateAndAddThing(TypeOfThing.Villager, 
-                    Mathf.FloorToInt(_game.Size.x / 2), 
+            var position = new Vector2Int(Mathf.FloorToInt(_game.Size.x / 2), 
                     UnityEngine.Random.Range(0, _game.Size.y));
+
+            _game.CreateAtPosition(TypeOfThing.Villager, position);
 
             return true;
         }

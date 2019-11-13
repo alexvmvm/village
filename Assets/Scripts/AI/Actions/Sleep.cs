@@ -15,7 +15,7 @@ namespace Village.AI
         private Villager _villager;
         private Needs _needs;
 
-        public Sleep(Game game, Thing thing, Movement movement, Villager villager, Needs needs) : base(game)
+        public Sleep(Agent agent, Game game, Thing thing, Movement movement, Villager villager, Needs needs) : base(agent, game)
         {
             _thing = thing;
             _movement = movement;

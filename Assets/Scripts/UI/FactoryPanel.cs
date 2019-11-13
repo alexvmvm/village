@@ -27,7 +27,7 @@ public class FactoryPanel : MonoBehaviour
 
         foreach(var type in thing.Factory.Produces)
         {
-            var lineItemThing = _session.Game.Create(type, 0, 0);
+            var lineItemThing = Assets.CreateThingConfig(type);
             var obj = FactoryLineItem.GetPooledObject();
 
             var lineItem = obj.GetComponent<FactoryLineItem>();
@@ -42,8 +42,8 @@ public class FactoryPanel : MonoBehaviour
                 OnMouseExit();
             });
 
-            lineItem.Name.text = lineItemThing.name.ToUppercaseFirst();
-            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.Config.Sprite);
+            lineItem.Name.text = lineItemThing.Name.ToUppercaseFirst();
+            lineItem.Image.sprite = Assets.GetSprite(lineItemThing.Sprite);
             lineItem.Number.text = $"{factory.GetQueuedCount(type)}";
 
             lineItem.Increase.onClick.RemoveAllListeners();
@@ -64,11 +64,11 @@ public class FactoryPanel : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    void OnMouseEnter(Thing thing)
+    void OnMouseEnter(Thing.ThingConfig thing)
     {
         CostPooler.DeactivateAll();
 
-        foreach(var required in thing.Config.RequiredToCraft)
+        foreach(var required in thing.RequiredToCraft)
         {
             var obj = CostPooler.GetPooledObject();
             var lineItem = obj.GetComponent<CostLineItem>();
@@ -80,7 +80,7 @@ public class FactoryPanel : MonoBehaviour
         }
 
 
-        DetailsDescription.text = thing.Config.Description;
+        DetailsDescription.text = thing.Description;
 
         DetailsPanel.gameObject.SetActive(true);
     }

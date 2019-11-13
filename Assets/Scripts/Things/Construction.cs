@@ -54,13 +54,6 @@ namespace Village.Things
             return current.Config.BuildSite;
         }
 
-        public void Construct()
-        {
-            var thing = _game.Create(_builds, _thing.Position.x, _thing.Position.y);
-            _game.AddThing(thing);
-            _game.Destroy(_thing);
-        }
-
     }
 
 }

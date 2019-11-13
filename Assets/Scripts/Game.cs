@@ -26,6 +26,7 @@ namespace Village
         private RegionManager _regionManager;
         private Dictionary<Vector2Int, Thing> _floor;
         private List<Thing> _loose;
+        private Queue<GameObject> _delete;
         void Awake()
         {
             _things = new List<Thing>();
@@ -40,6 +41,7 @@ namespace Village
             
             _floor = new Dictionary<Vector2Int, Thing>();   
             _loose = new List<Thing>();         
+            _delete = new Queue<GameObject>();
             
             ThingConfigs = Assets.AllThingConfigs().ToList();
         }
@@ -55,25 +57,27 @@ namespace Village
                     var noise2 = Mathf.PerlinNoise(x * 1234.1f, y * 1234.1f);
                     var noise3 = Mathf.PerlinNoise(x * 34343.1f, y * 34343.1f);
                     
+                    var position = new Vector2Int(x, y);
+
                     if(noise > 0.6f && noise < 0.65f)
                     {
-                        CreateAndAddThing(TypeOfThing.BerryBush, x, y);
+                        CreateAtPosition(TypeOfThing.BerryBush, position);
                     }
                     else if(noise > 0.65f)
                     {
-                        CreateAndAddThing(TypeOfThing.Tree, x, y);
+                        CreateAtPosition(TypeOfThing.Tree, position);
                     }
                     else if(noise2 > 0.8f)
                     {
-                        CreateAndAddThing(TypeOfThing.Rock, x, y);
+                        CreateAtPosition(TypeOfThing.Rock, position);
                     }
                     else if(noise3 > 0.85f)
                     {
-                        CreateAndAddThing(TypeOfThing.MushroomGrowing, x, y);
+                        CreateAtPosition(TypeOfThing.MushroomGrowing, position);
                     }
                     else
                     {
-                        CreateAndAddThing(TypeOfThing.Grass, x, y); 
+                        CreateAtPosition(TypeOfThing.Grass, position); 
                     }
                     
                 }
@@ -82,7 +86,8 @@ namespace Village
             for(var y = 0; y < Size.y; y++)
             {
                 var x = Mathf.FloorToInt(Size.x / 2);
-                CreateAndAddThing(TypeOfThing.Path, x, y);
+                var p = new Vector2Int(x, y);
+                CreateAtPosition(TypeOfThing.Path, p);
             }
         
             var rand = 0;
@@ -90,10 +95,11 @@ namespace Village
             {
                 var x = Size.x - 3;
                 rand = UnityEngine.Random.Range(0, 4);
-                AddThing(Create(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, x - 1, y));
-                AddThing(Create(TypeOfThing.Stream, x, y));
+                var p = new Vector2Int(x, y);
+                CreateAtPosition(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, p + Vector2Int.left);
+                CreateAtPosition(TypeOfThing.Stream, p);
                 rand = UnityEngine.Random.Range(0, 2);
-                AddThing(Create(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, x + 1, y));
+                CreateAtPosition(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, p + Vector2Int.right);
             }
 
             for(var i = 0; i < 20; i++)
@@ -101,7 +107,7 @@ namespace Village
                 var x = UnityEngine.Random.Range(0, Size.x);
                 var y = UnityEngine.Random.Range(0, Size.y);
 
-                CreateAndAddThing(TypeOfThing.FallenWood, x, y);
+                CreateAtPosition(TypeOfThing.FallenWood, new Vector2Int(x, y));
             }
             
             return;
@@ -111,7 +117,7 @@ namespace Village
                 var x = UnityEngine.Random.Range(0, Size.x);
                 var y = UnityEngine.Random.Range(0, Size.y);
 
-                CreateAndAddThing(TypeOfThing.Hen, x, y);
+                CreateAtPosition(TypeOfThing.Hen, new Vector2Int(x, y));
             }
 
             for(var i = 0; i < 10; i++) 
@@ -119,7 +125,7 @@ namespace Village
                 var x = UnityEngine.Random.Range(0, Size.x);
                 var y = UnityEngine.Random.Range(0, Size.y);
 
-                CreateAndAddThing(TypeOfThing.Chick, x, y);
+                CreateAtPosition(TypeOfThing.Chick, new Vector2Int(x, y));
             }
 
             for(var i = 0; i < 1; i++) 
@@ -127,7 +133,7 @@ namespace Village
                 var x = UnityEngine.Random.Range(0, Size.x);
                 var y = UnityEngine.Random.Range(0, Size.y);
 
-                CreateAndAddThing(TypeOfThing.Rooster, x, y);
+                CreateAtPosition(TypeOfThing.Rooster, new Vector2Int(x, y));
             }
 
         }
@@ -156,29 +162,13 @@ namespace Village
         /*
             Things
         */
-        public IEnumerable<Thing> QueryThings()
-        {
-            return _things;
-        }
 
-        public IEnumerable<Thing> QueryLooseThings()
+        public Thing CreateAtPosition(TypeOfThing thingType, Vector2Int position)
         {
-            return _loose;
-        }
+            var thing = Assets.Create(thingType, position.x, position.y);
 
-        public Thing AddThing(Thing thing)
-        {
             if(thing.Config.FixedToFloor)
             {
-                if(IsThingOnFloor(thing.Position))
-                {
-                    var existing = GetThingOnFloor(thing.Position);
-                    if(existing != null)
-                    {
-                        RemoveThing(existing);
-                    }
-                }
-
                 _floor[thing.Position] = thing;
                 _things.Add(thing);
             }
@@ -200,7 +190,7 @@ namespace Village
             return thing;
         }
 
-        void RemoveThing(Thing thing)
+        public void Remove(Thing thing)
         {
             if(thing == null)
                 return;
@@ -219,30 +209,25 @@ namespace Village
             if(OnThingRemoved != null)
                 OnThingRemoved(thing);
 
+            thing.ResetPath();
+
             _things.Remove(thing);
 
-            thing.Destroy();
+            _delete.Enqueue(thing.gameObject);
         }
 
-        public Thing Create(TypeOfThing thingType)
+
+        public IEnumerable<Thing> QueryThings()
         {
-            return Create(thingType, 0, 0);
+            return _things;
         }
 
-        public Thing Create(TypeOfThing thingType, int x, int y)
-        { 
-            return Assets.Create(thingType, x, y);
-        }
-
-        public Thing CreateAndAddThing(TypeOfThing type, int x, int y)
+        public IEnumerable<Thing> QueryLooseThings()
         {
-            return AddThing(Create(type, x, y));
+            return _loose;
         }
 
-        public void Destroy(Thing thing)
-        {
-            RemoveThing(thing);
-        }
+
 
         /*
             Construction
@@ -266,12 +251,12 @@ namespace Village
             return QueryThings().Any(t => t.Config.TypeOfThing == TypeOfThing.Blueprint && t.Position == position);
         }
 
-        public Thing CreateBlueprint(TypeOfThing type, int x, int y)
-        {
-            var thing = Create(TypeOfThing.Blueprint, x, y);
-            thing.SetBuilds(type);
-            return thing;
-        }
+        // public Thing CreateBlueprint(TypeOfThing type, int x, int y)
+        // {
+        //     var thing = Create(TypeOfThing.Blueprint, x, y);
+        //     thing.SetBuilds(type);
+        //     return thing;
+        // }
 
         /*
             Pathfinding
@@ -330,7 +315,7 @@ namespace Village
         {
             foreach(var thing in _things.ToArray())
             {
-                RemoveThing(thing);
+                Remove(thing);
             }
         }
 
@@ -352,15 +337,14 @@ namespace Village
 
             if(Input.GetKeyDown(KeyCode.V))
             {
-                AddThing(Create(TypeOfThing.Villager, 
-                    Mathf.FloorToInt(Size.x / 2), 
-                    UnityEngine.Random.Range(0, Size.y)));
+                var position = new Vector2Int(Mathf.FloorToInt(Size.x / 2), UnityEngine.Random.Range(0, Size.y));
+                CreateAtPosition(TypeOfThing.Villager, position);
             }
 
             if(Input.GetKeyDown(KeyCode.O))
             {
                 var random = _things[UnityEngine.Random.Range(0, _things.Count)];
-                RemoveThing(random);
+                Remove(random);
             }
 
             if(Input.GetKeyDown(KeyCode.B))
@@ -370,6 +354,14 @@ namespace Village
                 {
                     thing.Construct();
                 }
+            }
+        }
+
+        void LateUpdate()
+        {
+            while(_delete.Count > 0)
+            {
+                Destroy(_delete.Dequeue());
             }
         }
 
@@ -390,9 +382,8 @@ namespace Village
             // load game
             foreach(var thingSave in obj.Things)
             {
-                var thing = Create(thingSave.type);
+                var thing = CreateAtPosition(thingSave.type, Vector2Int.zero);
                 thing.FromSaveObj(thingSave);
-                AddThing(thing);
             }
         }
         

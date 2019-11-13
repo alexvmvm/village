@@ -129,7 +129,11 @@ namespace Village.AI
                 break;
                 case AgentState.Performing:
                 {
-                    _current.Perform();
+                    if(!_current.Perform())
+                    {
+                        _state = AgentState.Picking;
+                    }
+
                     if(_current.IsDone())
                     {
                         ActionCompleted(_current);

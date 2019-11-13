@@ -38,7 +38,7 @@ namespace Village.AI
 
         public override bool PerformAtTarget()
         {
-            _game.Destroy(_thing);
+            _game.Remove(_thing);
             return true;
         }
     }

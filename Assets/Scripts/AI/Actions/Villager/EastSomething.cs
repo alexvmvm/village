@@ -10,7 +10,7 @@ namespace Village.AI
     {
         private Inventory _inventory;
 
-        public EastSomething(Game game, Thing thing) : base(game)
+        public EastSomething(Agent agent, Game game, Thing thing) : base(agent, game)
         {
             _inventory = thing.Inventory;
         }
@@ -27,7 +27,7 @@ namespace Village.AI
 
         public override bool Perform()
         {
-            _game.Destroy(_inventory.Holding);
+            _game.Remove(_inventory.Holding);
             _inventory.Drop();
 
             return true;

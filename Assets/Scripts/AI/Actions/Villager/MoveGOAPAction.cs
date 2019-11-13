@@ -21,7 +21,7 @@ namespace Village.AI
 
         public virtual void BeforeStartMoving()
         {
-
+            
         }
 
         public abstract TypeOfThing GetThingType();
@@ -56,18 +56,21 @@ namespace Village.AI
 
             if (_movement.ReachedEndOfPath)
             {
-                if (!PerformAtTarget())
-                    return true;
+                if(!PerformAtTarget())
+                {
+                    return false;
+                }
 
                 _isDone = true;
+                 
             }
-
 
             return true;
         }
 
         public override void Reset()
         {
+            _target = null;
             _started = false;
             _isDone = false;
         }

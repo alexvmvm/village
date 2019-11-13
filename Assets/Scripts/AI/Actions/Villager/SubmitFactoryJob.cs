@@ -18,7 +18,7 @@ namespace Village.AI
         private bool _requiresAgentToMake;
         private bool _submittedJob;
 
-        public SubmitFactoryJob(Game game, Thing thing, Movement movement, TypeOfThing factoryType, TypeOfThing output, bool requiresAgentToMake) : base(game, movement)
+        public SubmitFactoryJob(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing factoryType, TypeOfThing output, bool requiresAgentToMake) : base(agent, game, movement)
         {
             _thing = thing;
             _movement = movement;
@@ -42,7 +42,7 @@ namespace Village.AI
         {
             if (_inventory.IsHoldingSomething())
             {
-                _game.Destroy(_inventory.Holding);
+                _game.Remove(_inventory.Holding);
                 _inventory.Drop();
             }
 

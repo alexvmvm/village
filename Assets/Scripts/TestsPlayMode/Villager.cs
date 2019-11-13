@@ -55,7 +55,7 @@
 //             while(timeToWait > 0)
 //             {
 //                 timeToWait -= Time.deltaTime;
-//                 if(villager.GetTrait<Agent>().CurentAction != null && villager.GetTrait<Agent>().CurentAction is RequestResidence)
+//                 if(villager.GetTrait<Agent>().CurentAction != null && villager.GetTrait<Agentp>().CurentAction is RequestResidence)
 //                 {
 //                     Assert.Pass();
 //                 }

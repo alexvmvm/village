@@ -58,13 +58,13 @@ namespace Village.AI
                 Misc
             */
 
-            AddAction(new Drop(_game, _thing)
+            AddAction(new Drop(this, _game, _thing)
             {
                 Preconditions = { { "hasFullInventory", true } },
                 Effects = { { "hasFullInventory", false } },
             });
 
-            AddAction(new Sleep(_game, _thing, _movement, this, _needs)
+            AddAction(new Sleep(this, _game, _thing, _movement, this, _needs)
             {
                 Preconditions = { { "isRested", false }, { "hasFullInventory", false } },
                 Effects = { { "isRested", true } },
@@ -74,7 +74,7 @@ namespace Village.AI
                 Idle
             */
 
-            AddAction(new Idle(_game, _movement)
+            AddAction(new Idle(this, _game, _movement)
             {
                 Preconditions = { { "isWorking", false }, { "hasFullInventory", false } },
                 Effects = { { "isWorking", true } },
@@ -85,13 +85,13 @@ namespace Village.AI
                 Survival
             */
 
-            AddAction(new DrinkFromStream(_game, _movement)
+            AddAction(new DrinkFromStream(this, _game, _movement)
             {
                 Preconditions = { { "isThirsty", true } },
                 Effects = { { "isThirsty", false } }
             });
 
-            AddAction(new EastSomething(_game, _thing)
+            AddAction(new EastSomething(this, _game, _thing)
             {
                 Preconditions = { { "isHungry", true }, { "hasEdibleThing", true } },
                 Effects = { { "isHungry", false } }
@@ -119,13 +119,13 @@ namespace Village.AI
 
             foreach(var resource in resources)
             {
-                var example = _game.Create(resource);
+                var example = Assets.CreateThingConfig(resource);
                 var effects = new Dictionary<string, object>();
-                effects.Add("hasThing", example.Config.Produces);
+                effects.Add("hasThing", example.Produces);
                 effects.Add("hasFullInventory", true);
-                if(example.Config.Edible) 
+                if(example.Edible) 
                     effects.Add("hasEdibleThing", true);
-                AddAction(new GetResource(_game, _thing, _movement, resource, this)
+                AddAction(new GetResource(this, _game, _thing, _movement, resource, this)
                 {
                     Preconditions = { { "hasFullInventory", false } },
                     Effects = effects
@@ -160,7 +160,7 @@ namespace Village.AI
                     { "isWorking", true }
                 };
 
-                AddAction(new SubmitFactoryJob(_game, _thing, _movement, factory, produces, false)
+                AddAction(new SubmitFactoryJob(this, _game, _thing, _movement, factory, produces, false)
                 {
                     Preconditions = preconditions,
                     Effects = effects,
@@ -187,37 +187,37 @@ namespace Village.AI
                 Construction
             */
 
-            AddAction(new Construct(_game, _movement, TypeOfThing.Wood, _thing)
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.Wood, _thing)
             {
                 Preconditions = { { "hasThing", TypeOfThing.Wood } },
                 Effects = { { "isWorking", true }, }
             });
 
-            AddAction(new Construct(_game, _movement, TypeOfThing.Stone, _thing)
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.Stone, _thing)
             {
                 Preconditions = { { "hasThing", TypeOfThing.Stone } },
                 Effects = { { "isWorking", true }, }
             });
 
-            AddAction(new Construct(_game, _movement, TypeOfThing.Clay, _thing)
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.Clay, _thing)
             {
                 Preconditions = { { "hasThing", TypeOfThing.Clay } },
                 Effects = { { "isWorking", true }, }
             });
 
-            AddAction(new Construct(_game, _movement, TypeOfThing.Hoe, _thing)
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.Hoe, _thing)
             {
                 Preconditions = { { "hasThing", TypeOfThing.Hoe } },
                 Effects = { { "isWorking", true }, }
             });
 
-            AddAction(new Construct(_game, _movement, TypeOfThing.CabbageSeed, _thing)
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.CabbageSeed, _thing)
             {
                 Preconditions = { { "hasThing", TypeOfThing.CabbageSeed } },
                 Effects = { { "isWorking", true }, }
             });
 
-            AddAction(new Construct(_game, _movement, TypeOfThing.None, _thing)
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.None, _thing)
             {
                 Effects = { { "isWorking", true }, }
             });

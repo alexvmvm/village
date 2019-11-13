@@ -216,6 +216,7 @@ public class Assets
                 thing.Resource = true;
                 thing.Floor = true;
                 thing.Hitpoints = 10;
+                thing.Produces = TypeOfThing.Clay;
                 break;
             case TypeOfThing.Ore:
                 thing.Name = "ore";
@@ -305,7 +306,7 @@ public class Assets
                 thing.LightBlocking = true;
                 thing.PathTag = Movement.TAG_AVOID;
                 thing.PathBlocking = true;
-                thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.FallenWood);
+                thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.Wood);
             break;
             case TypeOfThing.Fence:
                 thing.Name = "fence";

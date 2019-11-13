@@ -14,7 +14,7 @@ namespace Village.AI
         private Inventory _inventory;
         protected Villager _villager;
 
-        public GetResource(Game game, Thing thing, Movement movement, TypeOfThing type, Villager villager) : base(game, movement)
+        public GetResource(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing type, Villager villager) : base(agent, game, movement)
         {
             _thing = thing;
             _movement = movement;
@@ -38,7 +38,7 @@ namespace Village.AI
         {
             if (_target.Config.FixedToFloor)
             {
-                var resource = _game.CreateAndAddThing(_target.Config.Produces, 0, 0);
+                var resource = _game.CreateAtPosition(_target.Config.Produces, Vector2Int.zero);
                 resource.Hitpoints = Mathf.Min(10, _target.Hitpoints);
                 resource.ownedBy = _villager.Fullname;
                 _inventory.HoldThing(resource);
@@ -46,7 +46,7 @@ namespace Village.AI
                 // damage existing resource
                 _target.Hitpoints -= 10;
                 if (_target.Hitpoints <= 0 && _target.transform != null)
-                    _game.CreateAndAddThing(TypeOfThing.MudFloor, _target.Position.x, _target.Position.y);
+                    _game.CreateAtPosition(TypeOfThing.MudFloor, _target.Position);
             }
             else
             {

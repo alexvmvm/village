@@ -82,8 +82,7 @@ namespace Village.Things
             else
             {
                 var item = _jobs.Dequeue();
-                var thing = _game.Create(item, _thing.Position.x, _thing.Position.y - 1);
-                _game.AddThing(thing);
+                var thing = _game.CreateAtPosition(item, _thing.Position + Vector2Int.down);
                 _timer = _timeToProduce;
             }
         }
