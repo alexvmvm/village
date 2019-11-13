@@ -137,7 +137,7 @@ public class Assets
                     "path_2!180", "path_2!90", "path_2", "path_2!270",
                     "path_3", "path_3!180", "path_3!90", "path_3!270",
                     "path_4", "path_1", "path_1!90");
-                thing.GridGroup = 1;
+                thing.GridGroup = 2;
                 thing.Floor = true;
                 break;
             case TypeOfThing.Tree:

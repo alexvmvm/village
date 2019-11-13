@@ -8,7 +8,7 @@ namespace Village.Saving
     {
         public string id;
         public TypeOfThing type;
-        public Vector3 position;
+        public Vector2Int position;
         public string ownedBy;
         public int hitpoints;
         public TypeOfThing builds;

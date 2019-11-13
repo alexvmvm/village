@@ -6,6 +6,7 @@ using Pathfinding;
 using Village.Things;
 using Village.AI;
 using Village.Saving;
+using UnityEngine.Profiling;
 
 namespace Village
 {
@@ -109,7 +110,7 @@ namespace Village
 
                 CreateAtPosition(TypeOfThing.FallenWood, new Vector2Int(x, y));
             }
-            
+
             return;
 
             for(var i = 0; i < 4; i++) 
@@ -321,14 +322,21 @@ namespace Village
 
         public void Update()
         {
+
+            Profiler.BeginSample("Game_Update_RegionManagerUpdate");   
             _regionManager.Update();
+            Profiler.EndSample();
 
+            Profiler.BeginSample("Game_Update_WorldTimeUpdate");   
             WorldTime.Update();
+            Profiler.EndSample();
 
+            Profiler.BeginSample("Game_Update_Things");   
             for(var i = 0; i < _things.Count; i++) 
             {
                 _things[i].Update();
             }
+            Profiler.EndSample();
 
             foreach(var positionalAudio in _positionalAudio)
             {
@@ -382,7 +390,7 @@ namespace Village
             // load game
             foreach(var thingSave in obj.Things)
             {
-                var thing = CreateAtPosition(thingSave.type, Vector2Int.zero);
+                var thing = CreateAtPosition(thingSave.type, thingSave.position);
                 thing.FromSaveObj(thingSave);
             }
         }

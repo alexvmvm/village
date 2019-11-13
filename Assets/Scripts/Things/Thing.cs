@@ -257,8 +257,8 @@ namespace Village.Things
         {
             var position = Positions.None;
 
-            var px = Mathf.FloorToInt(transform.position.x);
-            var py = Mathf.FloorToInt(transform.position.y);
+            var px = Position.x;
+            var py = Position.y;
 
             for (var x = px - 1; x <= px + 1; x++)
             {
@@ -330,7 +330,7 @@ namespace Village.Things
             return new ThingSave
             {
                 id = id,
-                position = transform.position,
+                position = transform.position.ToVector2IntFloor(),
                 type = Config.TypeOfThing,
                 hitpoints = Config.Hitpoints,
                 ownedBy = ownedBy,
@@ -341,7 +341,7 @@ namespace Village.Things
         public void FromSaveObj(ThingSave save)
         {
             this.id = save.id;
-            this.transform.position = save.position;
+            //this.transform.position = save.position.ToVector3();
             this.Config.TypeOfThing = save.type;
             this.Hitpoints = save.hitpoints;
             this.ownedBy = save.ownedBy;

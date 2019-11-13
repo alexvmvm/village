@@ -187,13 +187,18 @@ public class RegionManager
         if(RegionExists(regionPosition))
         {
             var current = GetRegionAtPosition(regionPosition);
-            _update.Enqueue(current);
+            if(!_update.Contains(current))
+                _update.Enqueue(current);
 
             foreach(var neighbour in _neighbours)
             {
                 var position = regionPosition + neighbour;
                 if(RegionExists(position))
-                    _update.Enqueue(GetRegionAtPosition(position));
+                {
+                    var region = GetRegionAtPosition(position);
+                    if(!_update.Contains(region))
+                        _update.Enqueue(region);
+                }
             }
         }
     }
@@ -244,6 +249,7 @@ public class RegionManager
         if(_update.Count == 0)
             return;
 
+        Debug.Log($"Running for {_update.Count} regions");
 
         while(_update.Count > 0)
         {
