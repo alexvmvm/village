@@ -5,8 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using Village.Things;
 using Village;
-using Village.AI.V2;
-using Villager = Village.AI.V2.Villager;
+using Village.AI;
 
 public enum VillagerEvent
 {
@@ -68,7 +67,7 @@ public class VillageManager : MonoBehaviour
     {
         return _game.QueryThings()
             .Where(t => t.Config.TypeOfThing == TypeOfThing.Villager)
-            .Select(t => t.Agent as Villager)
+            .Select(t => t.Agent as Village.AI.Villager)
             .Select(v => v.Lastname)
             .Distinct();
     }

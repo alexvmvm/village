@@ -23,11 +23,15 @@ namespace Village.AI
             _villager = villager;
         }
 
-        public override IEnumerable<Thing> GetThings()
+        
+        public override TypeOfThing GetThingType()
         {
-            return _game.QueryThings()
-                .Where(t => t.Config.TypeOfThing == _type && (string.IsNullOrEmpty(t.ownedBy) || t.ownedBy == _villager.Fullname))
-                .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
+            return _type;
+        }
+
+        public override bool Filter(Thing thing)
+        {
+            return true;
         }
 
         public override bool PerformAtTarget()
@@ -59,6 +63,7 @@ namespace Village.AI
 
             _target = null;
         }
+
     }
 
     

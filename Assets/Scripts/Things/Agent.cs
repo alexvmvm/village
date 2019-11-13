@@ -15,7 +15,7 @@ namespace Village.AI
         Paused
     }
 
-    public abstract class Agent : ITrait
+    public abstract class Agent : MonoBehaviour
     {
         public DateTime Created { get { return _created; } }
         public GOAPAction CurentAction { get { return _current; } }
@@ -28,20 +28,15 @@ namespace Village.AI
         private AgentState _state;
         private DateTime _created;
 
-        public Agent(Game game)
+        public virtual void Awake()
         {
-            _game = game;    
+            _game = FindObjectOfType<Game>();    
             _planner = new NormalPlanner();
             _available = new HashSet<GOAPAction>();
             _actions = new Queue<GOAPAction>();
             _useable = new List<GOAPAction>();
 
             _created = DateTime.Now;
-        }
-
-        public virtual void Setup()
-        {
-            
         }
 
         public void AddAction(GOAPAction action)

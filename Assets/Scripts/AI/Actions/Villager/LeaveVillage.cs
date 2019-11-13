@@ -11,9 +11,9 @@ namespace Village.AI
     {
         private Thing _thing;
         private VillageManager _villageManager;
-        private Village.AI.V2.Villager _villager;
+        private Villager _villager;
 
-        public LeaveVillage(Game game, Movement movement, Thing thing, Village.AI.V2.Villager villager) : base(game, movement)
+        public LeaveVillage(Agent agent, Game game, Movement movement, Thing thing, Villager villager) : base(agent, game, movement)
         {
             _thing = thing;
             _villager = villager;
@@ -26,11 +26,14 @@ namespace Village.AI
                 _villageManager.TriggerEvent(VillagerEvent.VillagerLeft, _villager);
         }
 
-        public override IEnumerable<Thing> GetThings()
+        public override bool Filter(Thing thing)
         {
-            return _game.QueryThings()
-                .Where(t => t.Config.TypeOfThing == TypeOfThing.Path)
-                .OrderBy(t => t.transform.position.y);
+            return true;
+        }
+
+        public override TypeOfThing GetThingType()
+        {
+            return TypeOfThing.Path;
         }
 
         public override bool PerformAtTarget()

@@ -28,11 +28,14 @@ namespace Village.AI
             _requiresAgentToMake = requiresAgentToMake;
         }
 
-        public override IEnumerable<Thing> GetThings()
+        public override bool Filter(Thing thing)
         {
-            return _game.QueryThings()
-                .Where(t => t.Config.TypeOfThing == _factoryType && !t.Factory.IsProducing() && t.Factory.IsQueuedForProduction(_output))
-                .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
+            return thing.Factory.IsProducing() && thing.Factory.IsQueuedForProduction(_output);
+        }
+
+        public override TypeOfThing GetThingType()
+        {
+            return TypeOfThing.ForagedWall;
         }
 
         public override bool PerformAtTarget()

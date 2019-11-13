@@ -21,7 +21,6 @@ namespace Village
         public ThingAdded OnThingAdded;
         public ThingRemoved OnThingRemoved;
         private List<PositionalAudio> _positionalAudio;
-        private Director _director;
         private List<Thing> _things;
         private WorldTime _worldTime;
         private RegionManager _regionManager;
@@ -31,7 +30,6 @@ namespace Village
         {
             _things = new List<Thing>();
             _worldTime = new WorldTime(360, 5, 23);
-            _director = new Director(this);
             _positionalAudio = new List<PositionalAudio>()
             {
                 new PositionalAudio(this, "river", "running_water"),
@@ -338,7 +336,6 @@ namespace Village
 
         public void Update()
         {
-            _director.Update();
             _regionManager.Update();
 
             WorldTime.Update();

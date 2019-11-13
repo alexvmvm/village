@@ -18,6 +18,7 @@ namespace Village.AI
         private Dictionary<string, object> _world;
         private VillageManager _villagerManager;
         private Movement _movement;
+        private Thing _thing;
         private Needs _needs;
         private Inventory _inventory;
 
@@ -30,13 +31,16 @@ namespace Village.AI
         private float _warmth;
         private float _rest;
 
-        public Villager(Game game, Thing thing) : base(game, thing)
+        public override void Awake()
         {
-            _thing = thing;
-            _movement = _thing.transform.gameObject.AddComponent<Movement>();
+            base.Awake();
+
+            _thing = GetComponent<Thing>();
+            
+            _movement = transform.gameObject.AddComponent<Movement>();
             _inventory = _thing.Inventory;
 
-            _needs = new Needs(game);
+            _needs = new Needs(_game);
 
             _firstname = NameGenerator.GenerateFirstName();
             _lastname = NameGenerator.GenerateLastName();
@@ -87,7 +91,7 @@ namespace Village.AI
                 Effects = { { "isThirsty", false } }
             });
 
-            AddAction(new EastSomething(_game, thing)
+            AddAction(new EastSomething(_game, _thing)
             {
                 Preconditions = { { "isHungry", true }, { "hasEdibleThing", true } },
                 Effects = { { "isHungry", false } }
@@ -121,7 +125,7 @@ namespace Village.AI
                 effects.Add("hasFullInventory", true);
                 if(example.Config.Edible) 
                     effects.Add("hasEdibleThing", true);
-                AddAction(new GetResource(_game, thing, _movement, resource, this)
+                AddAction(new GetResource(_game, _thing, _movement, resource, this)
                 {
                     Preconditions = { { "hasFullInventory", false } },
                     Effects = effects
@@ -156,7 +160,7 @@ namespace Village.AI
                     { "isWorking", true }
                 };
 
-                AddAction(new SubmitFactoryJob(_game, thing, _movement, factory, produces, false)
+                AddAction(new SubmitFactoryJob(_game, _thing, _movement, factory, produces, false)
                 {
                     Preconditions = preconditions,
                     Effects = effects,
@@ -217,11 +221,6 @@ namespace Village.AI
             {
                 Effects = { { "isWorking", true }, }
             });
-        }
-
-        public override void Setup()
-        {
-            base.Setup();
         }
 
         public override Dictionary<string, object> GetGoal()
@@ -319,7 +318,7 @@ namespace Village.AI
             SetLabel(label);
         }
 
-        public override void DrawGizmos()
+        void  OnDrawGizmos()
         {
 #if UNITY_EDITOR
 

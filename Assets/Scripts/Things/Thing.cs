@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using Village.Saving;
-using SwordGC.AI.Goap;
-using System.Linq;
-using Village.AI.V2;
-
+using Village.AI;
 
 namespace Village.Things
 {
@@ -117,7 +114,7 @@ namespace Village.Things
         public Fire Fire { get; private set; }
         public Storage Storage { get; private set; }
         public Inventory Inventory { get; private set; }
-        public GoapAgent Agent { get; private set; }
+        public Agent Agent { get; private set; }
         public TypeOfThing Builds { get; private set; }
         public TypeOfThing Requires { get; private set; }
 
@@ -166,7 +163,7 @@ namespace Village.Things
             switch(Config.Agent)
             {
                 case AgentConfig.Villager:
-                Agent = gameObject.AddComponent<Villager>();
+                Agent = gameObject.AddComponent<Village.AI.Villager>();
                 break;
                 case AgentConfig.Animal:
                 break;

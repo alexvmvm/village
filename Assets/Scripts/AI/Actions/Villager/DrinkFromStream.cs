@@ -11,16 +11,19 @@ namespace Village.AI
         private bool _started;
         private bool _isDone;
 
-        public DrinkFromStream(Game game, Movement movement) : base(game, movement)
+        public DrinkFromStream(Agent agent, Game game, Movement movement) : base(agent, game, movement)
         {
             _movement = movement;
         }
 
-        public override IEnumerable<Thing> GetThings()
+        public override bool Filter(Thing thing)
         {
-            return _game.QueryThings()
-                .Where(t => t.Config.TypeOfThing == TypeOfThing.Stream)
-                .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
+            return true;
+        }
+
+        public override TypeOfThing GetThingType()
+        {
+            return TypeOfThing.Stream;
         }
 
         public override bool PerformAtTarget()

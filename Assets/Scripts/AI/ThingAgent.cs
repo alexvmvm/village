@@ -8,19 +8,19 @@ namespace Village.AI
 
     public abstract class ThingAgent : Agent
     {
-        protected Thing _thing;
         private TextMesh _textMesh;
         private GameObject _labelObj;
 
-        public ThingAgent(Game game, Thing thing) : base(game)
+        public override void Awake()
         {
-            _thing = thing;
+            base.Awake();
+
 
             /*
                 Name Label 
             */
             _labelObj = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Label"));
-            _labelObj.transform.SetParent(_thing.transform);
+            _labelObj.transform.SetParent(transform);
             _labelObj.transform.localPosition = new Vector3(0, -0.8f, 0);
             _labelObj.GetComponentInChildren<MeshRenderer>().sortingOrder = (int)SortingOrders.Labels;
 

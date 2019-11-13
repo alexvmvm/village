@@ -14,16 +14,18 @@ namespace Village.AI
         private bool _started;
         private bool _isDone;
 
-        public MoveGOAPAction(Game game, Movement movement) : base(game)
+        public MoveGOAPAction(Agent agent, Game game, Movement movement) : base(agent, game)
         {
             _movement = movement;
         }
+
         public virtual void BeforeStartMoving()
         {
 
         }
 
-        public abstract IEnumerable<Thing> GetThings();
+        public abstract TypeOfThing GetThingType();
+        public abstract bool Filter(Thing thing);
 
         public abstract bool PerformAtTarget();
 
@@ -34,22 +36,8 @@ namespace Village.AI
 
         public override bool IsPossibleToPerform()
         {
-            var targets = GetThings();
-
-            foreach (var target in targets)
-            {
-                if (_movement.IsPathPossible(target.transform.position))
-                {
-                    _target = target;
-
-                    // set action cost based on distance
-                    Cost = Vector2.Distance(_target.transform.position, _movement.transform.position);
-
-                    return true;
-                }
-            }
-
-            return false;
+            _target = _game.IsPathPossibleToThing(_agent.transform.position.ToVector2IntFloor(), GetThingType(), Filter);
+            return _target != null;
         }
 
         public override bool Perform()

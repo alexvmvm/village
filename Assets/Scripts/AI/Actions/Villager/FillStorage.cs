@@ -22,14 +22,14 @@ public class FillStorage : MoveGOAPAction
         _type = type;
     }
 
-    public override IEnumerable<Thing> GetThings()
+    public override bool Filter(Thing thing)
     {
-        return _game.QueryThings()
-            .Where(
-                t => t.Config.TypeOfThing == TypeOfThing.Storage && 
-                !t.Storage.IsFull() && 
-                t.Storage.IsAllowing(_type))
-            .OrderBy(v => Vector2.Distance(v.transform.position, _movement.transform.position));
+        return thing.Storage.IsFull() && thing.Storage.IsAllowing(_type);
+    }
+
+    public override TypeOfThing GetThingType()
+    {
+        return TypeOfThing.Storage;
     }
 
     public override bool PerformAtTarget()

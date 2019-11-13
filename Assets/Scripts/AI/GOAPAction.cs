@@ -19,10 +19,12 @@ namespace Village.AI
         public float Cost = 1f;
 
         protected Game _game;
+        protected Agent _agent;
 
-        public GOAPAction(Game game)
+        public GOAPAction(Agent agent, Game game)
         {
             _game = game;
+            _agent = agent;
 
             Preconditions = new Dictionary<string, object>();
             Effects = new Dictionary<string, object>();
