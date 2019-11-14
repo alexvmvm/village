@@ -6,7 +6,7 @@ using Village.Things;
 
 namespace Village.AI
 {
-    public class GetResource : MoveGOAPAction
+    public class GetThing : MoveGOAPAction
     {
         private Thing _thing;
         protected Movement _movement;
@@ -14,7 +14,7 @@ namespace Village.AI
         private Inventory _inventory;
         protected Villager _villager;
 
-        public GetResource(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing resource, Villager villager) : base(agent, game, movement)
+        public GetThing(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing resource, Villager villager) : base(agent, game, movement)
         {
             _thing = thing;
             _movement = movement;

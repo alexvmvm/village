@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Village.Things
 {
 
-    public class Storage : ITrait
+    public class Storage : MonoBehaviour
     {
         public Dictionary<TypeOfThing, bool> Allowed { get { return _allowed; } }
         private Dictionary<TypeOfThing, bool> _allowed;
@@ -16,18 +16,13 @@ namespace Village.Things
         private int _max;
         private int _currentStoredCount { get { return _stored.Sum(t => t.Hitpoints); } }
         
-        public Storage(Game game, Thing thing)
+        void Awake()
         {
-            _game = game;
+            _game = FindObjectOfType<Game>();
             _allowed = new Dictionary<TypeOfThing, bool>();
-            _thing = thing;
+            _thing = GetComponent<Thing>();
             _stored = new List<Thing>();
             _max = 100;
-        }
-
-        public void Setup()
-        {
-
         }
 
         public Thing Add(Thing thing)

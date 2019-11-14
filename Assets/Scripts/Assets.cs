@@ -251,6 +251,8 @@ public class Assets
                 thing.Hitpoints = 1;
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.RequiredToCraft = new TypeOfThing[] { TypeOfThing.Ore };
+                thing.Produces = TypeOfThing.Iron;
+                thing.Storeable = true;
                 break;
             case TypeOfThing.CabbageSeed:
                 thing.Name = "cabbage seed";

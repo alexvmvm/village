@@ -56,6 +56,11 @@ namespace Village.Things
             public CropConfig Crop;
             public AgentConfig Agent;
             public ConstructionConfig Construction;
+
+            public ThingConfig()
+            {
+                Produces = TypeOfThing;
+            }
         }
 
         [Serializable]    
@@ -156,6 +161,11 @@ namespace Village.Things
             if(Config.Fire)
             {
                 Fire = gameObject.AddComponent<Fire>();
+            }
+
+            if(Config.Storage)
+            {
+                Storage = gameObject.AddComponent<Storage>();
             }
 
             switch(Config.Agent)
@@ -294,7 +304,7 @@ namespace Village.Things
 
         public bool IsInStorage()
         {
-            return transform.parent != null;
+            return transform.parent != null && transform.parent.GetComponent<Storage>() != null;
         }
 
         public void ResetPath()

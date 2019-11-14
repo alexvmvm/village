@@ -51,6 +51,7 @@ namespace Village.AI
             public const string HAS_FULL_INVENTORY = "HAS_FULL_INVENTORY";
             public const string HAS_EDIBLE_THING = "HAS_EDIBLE_THING";
             public const string HAS_THING = "HAS_THING";
+            public const string HAS_THING_FOR_STORAGE = "HAS_THING_FOR_STORAGE";
         }
     }
 }

@@ -88,27 +88,23 @@ namespace Village.AI
 
             foreach(var resource in resources)
             {
-                AddAction(new GetResource(this, _game, _thing, _movement, resource, this));
+                AddAction(new GetThing(this, _game, _thing, _movement, resource, this));
             }
-
-            var factoryJobs = new List<Tuple<TypeOfThing, TypeOfThing, TypeOfThing>>()
-            {
-                Tuple.Create(TypeOfThing.ClayForge, TypeOfThing.Ore, TypeOfThing.Iron),
-                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Axe),
-                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Hoe)
-            };
-
+        
             /*
                 Factory Job
             */
 
+            var factoryJobs = new List<Tuple<TypeOfThing, TypeOfThing, TypeOfThing, bool>>()
+            {
+                Tuple.Create(TypeOfThing.ClayForge, TypeOfThing.Ore, TypeOfThing.Iron, false),
+                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Axe, true),
+                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Hoe, true)
+            };
+
             foreach(var job in factoryJobs)
             {
-                var factory = job.Item1;
-                var requires = job.Item2;
-                var produces = job.Item3;
-
-                AddAction(new SubmitFactoryJob(this, _game, _thing, _movement, factory, requires, produces, false));
+                AddAction(new SubmitFactoryJob(this, _game, _thing, _movement, job.Item1, job.Item2, job.Item3, job.Item4));
             }
 
 
