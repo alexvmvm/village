@@ -324,14 +324,14 @@ namespace Village.Things
                 _previousPosition = Position;
             }
 
-            var label = "";
-            if (Config.Resource)
-                label += $"x{Hitpoints}\n";
-            if (!string.IsNullOrEmpty(ownedBy))
-                label += $"owner: {ownedBy}\n";
+            // var label = "";
+            // if (Config.Resource)
+            //     label += $"x{Hitpoints}\n";
+            // if (!string.IsNullOrEmpty(ownedBy))
+            //     label += $"owner: {ownedBy}\n";
 
-            if (!string.IsNullOrEmpty(label))
-                SetLabel(label);
+            // if (!string.IsNullOrEmpty(label))
+            //     SetLabel(label);
         }
 
         public ThingSave ToSaveObj()

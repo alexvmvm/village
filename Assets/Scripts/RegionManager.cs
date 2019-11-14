@@ -151,8 +151,9 @@ public class RegionManager
                 return null;
         }
            
-
+        Profiler.BeginSample("RegionManager_Graph_IsPathToNodes");
         var subRegion = _graph.IsPathToNodes(startSubRegion, (region) => region.HasTypeOfThing(type) && region.GetThings(type).Any(filter));
+        Profiler.EndSample();
 
         if(subRegion != null)
         {
@@ -249,11 +250,13 @@ public class RegionManager
         if(_update.Count == 0)
             return;
 
-        Debug.Log($"Running for {_update.Count} regions");
+        //Debug.Log($"Running for {_update.Count} regions");
 
         while(_update.Count > 0)
         {
             var current = _update.Dequeue();
+
+            Profiler.BeginSample("RegionManager_Update_RemoveSubRegion");
 
             // remove subregions from graph
             foreach(var subRegion in current.SubRegions)
@@ -262,9 +265,15 @@ public class RegionManager
                 _graph.Remove(subRegion);
                 RemoveEdgesForSubRegion(subRegion);
             }
-                
-            current.Refresh();
+
+            Profiler.EndSample();
             
+
+            Profiler.BeginSample("RegionManager_Update_RefreshRegion");
+            current.Refresh();
+            Profiler.EndSample();
+            
+            Profiler.BeginSample("RegionManager_Update_AddSubregion");
             // add subregions to graph
             foreach(var subRegion in current.SubRegions)
             {
@@ -272,11 +281,14 @@ public class RegionManager
                 _graph.AddNode(subRegion);
                 AddEdgesForSubRegion(subRegion);
             }
+            Profiler.EndSample();
                 
             
             if(!_connections.Contains(current))
                 _connections.Enqueue(current);
         }
+
+        Profiler.BeginSample("RegionManager_Update_SetupSubRegionGraph");
 
         while(_connections.Count > 0)
         {
@@ -311,6 +323,8 @@ public class RegionManager
                 }
             }
         }
+
+        Profiler.EndSample();
     }
 
 }

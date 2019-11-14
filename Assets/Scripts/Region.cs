@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using Village;
 using Village.Things;
+using System;
 
 /*
     - search quickly for objects in the scene
@@ -138,7 +139,7 @@ public class SubRegion
         if(!_things[thing.Config.TypeOfThing].Contains(thing))
             _things[thing.Config.TypeOfThing].Add(thing);
     }
-    
+
     void OnThingRemoved(Thing thing)
     {
         if(!IsInRegion(thing.Position) || !_things.ContainsKey(thing.Config.TypeOfThing))
@@ -172,7 +173,6 @@ public class SubRegion
     /*
         Querying
     */
-
 
     public bool HasTypeOfThing(TypeOfThing type)
     {
@@ -368,11 +368,15 @@ public class Region
 
         _queue.Enqueue(_min);
 
+        var current = new Vector2Int();
+
         for(var x = _min.x; x < _max.x; x++)
         {
             for(var y = _min.y; y < _max.y; y++)
             {
-                var current = new Vector2Int(x, y);
+                current.x = x;
+                current.y = y;
+                
                 if(_seen.Contains(current))
                     continue;
 
