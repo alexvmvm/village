@@ -95,10 +95,7 @@ public class Assets
 
     public static Thing.ThingConfig CreateThingConfig(TypeOfThing thingType)
     {
-        var thing = new Thing.ThingConfig
-        {
-            TypeOfThing = thingType
-        };  
+        var thing = new Thing.ThingConfig(thingType);
 
         switch(thingType)
         {
@@ -417,7 +414,6 @@ public class Assets
                 thing.Storeable = true;
                 thing.Tool = true;
                 thing.StoreGroup = "tool";
-                thing.Produces = TypeOfThing.Hoe;
                 break;
             case TypeOfThing.Storage:
                 thing.Name = "storage";

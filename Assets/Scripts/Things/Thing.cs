@@ -56,6 +56,12 @@ namespace Village.Things
             public CropConfig Crop;
             public AgentConfig Agent;
             public ConstructionConfig Construction;
+
+            public ThingConfig(TypeOfThing type)
+            {
+                TypeOfThing = type;
+                Produces = type;
+            }
         }
 
         [Serializable]    
