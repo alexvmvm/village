@@ -340,13 +340,6 @@ namespace Village
             WorldTime.Update();
             Profiler.EndSample();
 
-            Profiler.BeginSample("Game_Update_Things");   
-            for(var i = 0; i < _things.Count; i++) 
-            {
-                _things[i].Update();
-            }
-            Profiler.EndSample();
-
             foreach(var positionalAudio in _positionalAudio)
             {
                 positionalAudio.Update();

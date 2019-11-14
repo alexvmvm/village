@@ -58,8 +58,8 @@ namespace Village.AI
                 _submittedJob = true;
             }
 
-            if (_requiresAgentToMake && _target.Factory.IsProducing())
-                return false;
+            // if (_requiresAgentToMake && _target.Factory.IsProducing())
+            //     return false;
 
 
             return true;

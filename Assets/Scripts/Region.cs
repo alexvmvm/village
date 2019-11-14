@@ -137,9 +137,8 @@ public class SubRegion
 
         if(!_things[thing.Config.TypeOfThing].Contains(thing))
             _things[thing.Config.TypeOfThing].Add(thing);
-        
     }
-
+    
     void OnThingRemoved(Thing thing)
     {
         if(!IsInRegion(thing.Position) || !_things.ContainsKey(thing.Config.TypeOfThing))
@@ -174,11 +173,12 @@ public class SubRegion
         Querying
     */
 
+
     public bool HasTypeOfThing(TypeOfThing type)
     {
         return _things.ContainsKey(type) && _things[type].Count() > 0;
     }
-
+    
     public List<Thing> GetThings(TypeOfThing type)
     {
         return _things[type];
