@@ -22,9 +22,13 @@ namespace Village.AI
             _inventory = _thing.Inventory;
             _villager = villager;
 
-            var config = Assets.CreateThingConfig(_resource);
+            var config = Assets.CreateThingConfig(_resource);    
 
-            Preconditions.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, false);
+            if(config.RequiredToProduce != TypeOfThing.None)
+                Preconditions.Add(GOAPAction.Effect.HAS_THING, config.RequiredToProduce);
+            else
+                Preconditions.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, false);
+
             Effects.Add(GOAPAction.Effect.HAS_THING, config.Produces);
             Effects.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, true);
             Effects.Add(GOAPAction.Effect.HAS_EDIBLE_THING, config.Edible);

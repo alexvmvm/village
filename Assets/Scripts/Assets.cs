@@ -151,6 +151,7 @@ public class Assets
                 thing.PathTag = Movement.TAG_AVOID;
                 thing.Resource = true;
                 thing.Produces = TypeOfThing.Wood;
+                thing.RequiredToProduce = TypeOfThing.Axe;
                 thing.Hitpoints = 20;
                 break;
             case TypeOfThing.BerryBush:
@@ -386,6 +387,7 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.RequiredToCraft = new TypeOfThing[] { TypeOfThing.Iron };
                 thing.Storeable = true;
+                thing.Tool = true;
                 thing.StoreGroup = "tool";
                 break;
             case TypeOfThing.Hoe:
@@ -395,6 +397,7 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.RequiredToCraft = new TypeOfThing[] { TypeOfThing.Iron };
                 thing.Storeable = true;
+                thing.Tool = true;
                 thing.StoreGroup = "tool";
                 break;
             case TypeOfThing.Storage:

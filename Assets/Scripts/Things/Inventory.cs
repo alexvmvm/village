@@ -51,7 +51,7 @@ namespace Village.Things
 
         public bool IsHoldingTool()
         {
-            return IsHoldingSomething() && (IsHolding(TypeOfThing.Hoe) || IsHolding(TypeOfThing.Axe));
+            return IsHoldingSomething() && Holding.Config.Tool;
         }
     }
 

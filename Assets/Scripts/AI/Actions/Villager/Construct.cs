@@ -57,7 +57,7 @@ namespace Village.AI
 
                 if (resource.Hitpoints == 0)
                 {
-                    _inventory.Drop();
+                    _game.Remove(_inventory.Drop());
                 }
             }
 

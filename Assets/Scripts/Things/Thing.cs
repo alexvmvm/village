@@ -41,10 +41,12 @@ namespace Village.Things
             public bool Storeable;
             public string StoreGroup;
             public bool Resource;
+            public bool Tool;
             public TypeOfThing Produces;
+            public TypeOfThing RequiredToProduce = TypeOfThing.None;
             public string PositionalAudioGroup;
             public string PathTag;
-            public bool Walkable;
+            public bool Walkable = true;
             public TypeOfThing[] RequiredToCraft;
             public bool AssignToFamily;
             public bool Inventory;
@@ -54,11 +56,6 @@ namespace Village.Things
             public CropConfig Crop;
             public AgentConfig Agent;
             public ConstructionConfig Construction;
-
-            public ThingConfig()
-            {
-                Walkable = true;
-            }
         }
 
         [Serializable]    
