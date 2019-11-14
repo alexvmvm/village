@@ -40,6 +40,18 @@ namespace Village.AI
         {
             return this.GetType().ToString();
         }
+
+        public class Effect
+        {
+            public const string IS_WORKING = "IS_WORKING";
+            public const string IS_RESTED = "IS_RESTED";
+            public const string IS_THIRSTY = "IS_THIRSTY";
+            public const string IS_HUNGRY = "IS_HUNGRY";
+            public const string IS_WARM = "IS_WARM";
+            public const string HAS_FULL_INVENTORY = "HAS_FULL_INVENTORY";
+            public const string HAS_EDIBLE_THING = "HAS_EDIBLE_THING";
+            public const string HAS_THING = "HAS_THING";
+        }
     }
 }
 

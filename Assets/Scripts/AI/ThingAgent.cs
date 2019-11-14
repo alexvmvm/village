@@ -40,8 +40,8 @@ namespace Village.AI
         }
 
         public override abstract void ActionCompleted(GOAPAction action);
-        public override abstract Dictionary<string, object> GetWorldState();
-        public override abstract Dictionary<string, object> GetGoal();
+        public override abstract void GetWorldState(Dictionary<string, object> world);
+        public override abstract void GetGoalState(Dictionary<string, object> goal);
 
         public override void Update()
         {

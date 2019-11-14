@@ -27,6 +27,8 @@ namespace Village.AI
         protected GOAPAction _current;
         private AgentState _state;
         private DateTime _created;
+        private Dictionary<string, object> _world;
+        private Dictionary<string, object> _goal;
 
         public virtual void Awake()
         {
@@ -37,6 +39,9 @@ namespace Village.AI
             _useable = new List<GOAPAction>();
 
             _created = DateTime.Now;
+
+            _world = new Dictionary<string, object>();
+            _goal = new Dictionary<string, object>();
         }
 
         public void AddAction(GOAPAction action)
@@ -46,8 +51,8 @@ namespace Village.AI
 
         public abstract void ActionCompleted(GOAPAction action);
 
-        public abstract Dictionary<string, object> GetWorldState();
-        public abstract Dictionary<string, object> GetGoal();
+        public abstract void GetWorldState(Dictionary<string, object> world);
+        public abstract void GetGoalState(Dictionary<string, object> goal);
 
         bool Plan(Dictionary<string, object> world, Dictionary<string, object> goal, Queue<GOAPAction> plan)
         {
@@ -112,7 +117,9 @@ namespace Village.AI
                 case AgentState.Planning:
                 {
                     _actions.Clear();
-                    if(Plan(GetWorldState(), GetGoal(), _actions))
+                    GetWorldState(_world);
+                    GetGoalState(_goal);
+                    if(Plan(_world, _goal, _actions))
                         _state = AgentState.Picking;
                 }
                 break;

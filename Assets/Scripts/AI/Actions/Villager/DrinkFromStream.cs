@@ -14,6 +14,9 @@ namespace Village.AI
         public DrinkFromStream(Agent agent, Game game, Movement movement) : base(agent, game, movement)
         {
             _movement = movement;
+
+            Preconditions.Add(GOAPAction.Effect.IS_THIRSTY, true);
+            Effects.Add(GOAPAction.Effect.IS_THIRSTY, false);
         }
 
         public override bool Filter(Thing thing)

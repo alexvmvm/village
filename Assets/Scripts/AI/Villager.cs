@@ -14,8 +14,6 @@ namespace Village.AI
         private string _firstname;
         private string _lastname;
         private bool _requestedResidence;
-        private Dictionary<string, object> _goal;
-        private Dictionary<string, object> _world;
         private VillageManager _villagerManager;
         private Movement _movement;
         private Thing _thing;
@@ -47,9 +45,6 @@ namespace Village.AI
 
             _thing.name = string.Format("{0} {1}", _firstname, _lastname);
 
-            _goal = new Dictionary<string, object>();
-            _world = new Dictionary<string, object>();
-
             _villagerManager = MonoBehaviour.FindObjectOfType<VillageManager>();
             
 
@@ -58,44 +53,16 @@ namespace Village.AI
                 Misc
             */
 
-            AddAction(new Drop(this, _game, _thing)
-            {
-                Preconditions = { { "hasFullInventory", true } },
-                Effects = { { "hasFullInventory", false } },
-            });
-
-            AddAction(new Sleep(this, _game, _thing, _movement, this, _needs)
-            {
-                Preconditions = { { "isRested", false }, { "hasFullInventory", false } },
-                Effects = { { "isRested", true } },
-            });
-
-            /*
-                Idle
-            */
-
-            AddAction(new Idle(this, _game, _movement)
-            {
-                Preconditions = { { "isWorking", false }, { "hasFullInventory", false } },
-                Effects = { { "isWorking", true } },
-                Cost = 99999 // last resort
-            });
+            AddAction(new Drop(this, _game, _thing));
+            AddAction(new Sleep(this, _game, _thing, _movement, this, _needs));
+            AddAction(new Idle(this, _game, _movement));
 
             /*
                 Survival
             */
 
-            AddAction(new DrinkFromStream(this, _game, _movement)
-            {
-                Preconditions = { { "isThirsty", true } },
-                Effects = { { "isThirsty", false } }
-            });
-
-            AddAction(new EastSomething(this, _game, _thing)
-            {
-                Preconditions = { { "isHungry", true }, { "hasEdibleThing", true } },
-                Effects = { { "isHungry", false } }
-            });
+            AddAction(new DrinkFromStream(this, _game, _movement));
+            AddAction(new EastSomething(this, _game, _thing));
 
             /*
                 Resources
@@ -119,17 +86,7 @@ namespace Village.AI
 
             foreach(var resource in resources)
             {
-                var example = Assets.CreateThingConfig(resource);
-                var effects = new Dictionary<string, object>();
-                effects.Add("hasThing", example.Produces);
-                effects.Add("hasFullInventory", true);
-                if(example.Edible) 
-                    effects.Add("hasEdibleThing", true);
-                AddAction(new GetResource(this, _game, _thing, _movement, resource, this)
-                {
-                    Preconditions = { { "hasFullInventory", false } },
-                    Effects = effects
-                });
+                AddAction(new GetResource(this, _game, _thing, _movement, resource, this));
             }
 
             var factoryJobs = new List<Tuple<TypeOfThing, TypeOfThing, TypeOfThing>>()
@@ -149,23 +106,7 @@ namespace Village.AI
                 var requires = job.Item2;
                 var produces = job.Item3;
 
-                var preconditions = new Dictionary<string, object>
-                {
-                    { "hasThing", requires }
-                };
-
-                var effects = new Dictionary<string, object>
-                {
-                    { "hasThing", produces },
-                    { "isWorking", true }
-                };
-
-                AddAction(new SubmitFactoryJob(this, _game, _thing, _movement, factory, produces, false)
-                {
-                    Preconditions = preconditions,
-                    Effects = effects,
-                    Cost = 1
-                });
+                AddAction(new SubmitFactoryJob(this, _game, _thing, _movement, factory, requires, produces, false));
             }
 
 
@@ -187,80 +128,47 @@ namespace Village.AI
                 Construction
             */
 
-            AddAction(new Construct(this, _game, _movement, TypeOfThing.Wood, _thing)
-            {
-                Preconditions = { { "hasThing", TypeOfThing.Wood } },
-                Effects = { { "isWorking", true }, }
-            });
-
-            AddAction(new Construct(this, _game, _movement, TypeOfThing.Stone, _thing)
-            {
-                Preconditions = { { "hasThing", TypeOfThing.Stone } },
-                Effects = { { "isWorking", true }, }
-            });
-
-            AddAction(new Construct(this, _game, _movement, TypeOfThing.Clay, _thing)
-            {
-                Preconditions = { { "hasThing", TypeOfThing.Clay } },
-                Effects = { { "isWorking", true }, }
-            });
-
-            AddAction(new Construct(this, _game, _movement, TypeOfThing.Hoe, _thing)
-            {
-                Preconditions = { { "hasThing", TypeOfThing.Hoe } },
-                Effects = { { "isWorking", true }, }
-            });
-
-            AddAction(new Construct(this, _game, _movement, TypeOfThing.CabbageSeed, _thing)
-            {
-                Preconditions = { { "hasThing", TypeOfThing.CabbageSeed } },
-                Effects = { { "isWorking", true }, }
-            });
-
-            AddAction(new Construct(this, _game, _movement, TypeOfThing.None, _thing)
-            {
-                Effects = { { "isWorking", true }, }
-            });
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.Wood, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.Stone, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.Clay, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.Hoe, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.CabbageSeed, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.None, _thing));
         }
 
-        public override Dictionary<string, object> GetGoal()
+        public override void GetGoalState(Dictionary<string, object> goal)
         {
-            _goal["isWorking"] = true;
-            _goal["isHungry"] = false;
-            _goal["isRested"] = true;
-            _goal["isWarm"] = true;
-            _goal["isThirsty"] = false;
-
-            return _goal;
+            goal[GOAPAction.Effect.IS_WORKING] = true;
+            goal[GOAPAction.Effect.IS_HUNGRY] = false;
+            goal[GOAPAction.Effect.IS_RESTED] = true;
+            goal[GOAPAction.Effect.IS_WARM] = true;
+            goal[GOAPAction.Effect.IS_THIRSTY] = false;
         }
 
-        public override Dictionary<string, object> GetWorldState()
+        public override void GetWorldState(Dictionary<string, object> world)
         {
             /*
                 Resources
             */
 
-            _world["hasThing"] = _inventory.IsHoldingSomething() ?
+            world[GOAPAction.Effect.HAS_THING] = _inventory.IsHoldingSomething() ?
                 _inventory.Holding.Config.TypeOfThing : TypeOfThing.None;
 
-            _world["hasEdibleThing"] =
+            world[GOAPAction.Effect.HAS_EDIBLE_THING] =
                 _inventory.IsHoldingSomething() &&
                 _inventory.IsHoldingSomethingToEat();
 
-            _world["hasFullInventory"] = _inventory.IsHoldingSomething();
+            world[GOAPAction.Effect.HAS_FULL_INVENTORY] = _inventory.IsHoldingSomething();
 
             /*
                 Survival
             */
 
-            _world["isThirsty"] = _thirst < 0f;
-            _world["isHungry"] = _hunger < 0f;
-            _world["isRested"] = _rest > 0f;
-            _world["isWarm"] = !_needs.IsCold();
-            _world["isWorking"] = false;
-
-
-            return _world;
+            world[GOAPAction.Effect.IS_THIRSTY] = _thirst < 0f;
+            world[GOAPAction.Effect.IS_HUNGRY] = _hunger < 0f;
+            world[GOAPAction.Effect.IS_RESTED] = _rest > 0f;
+            world[GOAPAction.Effect.IS_WARM] = !_needs.IsCold();
+            world[GOAPAction.Effect.IS_WORKING] = false;
         }
 
         public override void ActionCompleted(GOAPAction action)

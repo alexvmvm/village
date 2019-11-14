@@ -16,6 +16,12 @@ namespace Village.AI
         public Idle(Agent agent, Game game, Movement movement) : base(agent, game)
         {
             _movement = movement;
+
+            Cost = 9999;
+
+            Preconditions.Add(GOAPAction.Effect.IS_WORKING, false);
+            Preconditions.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, false);
+            Effects.Add(GOAPAction.Effect.IS_WORKING, true);
         }
 
         public override bool IsDone()

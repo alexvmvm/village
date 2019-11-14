@@ -21,6 +21,10 @@ namespace Village.AI
             _movement = movement;
             _villager = villager;
             _needs = needs;
+
+            Preconditions.Add(GOAPAction.Effect.IS_RESTED, false);
+            Preconditions.Add(GOAPAction.Effect.HAS_THING, TypeOfThing.None);
+            Effects.Add(GOAPAction.Effect.IS_RESTED, true);
         }
 
 

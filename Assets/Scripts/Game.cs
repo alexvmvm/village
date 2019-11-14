@@ -28,6 +28,7 @@ namespace Village
         private Dictionary<Vector2Int, Thing> _floor;
         private List<Thing> _loose;
         private Queue<GameObject> _delete;
+
         void Awake()
         {
             _things = new List<Thing>();
@@ -111,8 +112,6 @@ namespace Village
                 CreateAtPosition(TypeOfThing.FallenWood, new Vector2Int(x, y));
             }
 
-            return;
-
             for(var i = 0; i < 4; i++) 
             {
                 var x = UnityEngine.Random.Range(0, Size.x);
@@ -187,6 +186,8 @@ namespace Village
                     EventManager.TriggerEvent(Constants.VILLAGER_ARRIVED);
                 break;
             }
+
+            thing.RefreshSprite();
 
             return thing;
         }

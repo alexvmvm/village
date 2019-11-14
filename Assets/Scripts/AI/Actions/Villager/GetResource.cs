@@ -10,23 +10,30 @@ namespace Village.AI
     {
         private Thing _thing;
         protected Movement _movement;
-        protected TypeOfThing _type;
+        protected TypeOfThing _resource;
         private Inventory _inventory;
         protected Villager _villager;
 
-        public GetResource(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing type, Villager villager) : base(agent, game, movement)
+        public GetResource(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing resource, Villager villager) : base(agent, game, movement)
         {
             _thing = thing;
             _movement = movement;
-            _type = type;
+            _resource = resource;
             _inventory = _thing.Inventory;
             _villager = villager;
+
+            var config = Assets.CreateThingConfig(_resource);
+
+            Preconditions.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, false);
+            Effects.Add(GOAPAction.Effect.HAS_THING, config.Produces);
+            Effects.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, true);
+            Effects.Add(GOAPAction.Effect.HAS_EDIBLE_THING, config.Edible);
         }
 
         
         public override TypeOfThing GetThingType()
         {
-            return _type;
+            return _resource;
         }
 
         public override bool Filter(Thing thing)

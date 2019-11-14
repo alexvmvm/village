@@ -11,6 +11,7 @@ namespace Village.AI
 
         public SpawnVillager(Agent agent, Game game) : base(agent, game)
         {
+            Effects.Add(GOAPAction.Effect.IS_WORKING, true);
         }
 
         int VillagerCount()

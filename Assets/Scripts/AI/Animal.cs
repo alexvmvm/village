@@ -4,73 +4,58 @@ using Village.Things;
 namespace Village.AI
 {
 
-    // public class Animal : ThingAgent
-    // {
-    //     public Thing Coop;
-    //     private Dictionary<string, object> _goal;
-    //     private Dictionary<string, object> _world;
-    //     private Movement _movement;
+    public class Animal : Agent
+    {
+        private Movement _movement;
+        private Thing _thing;
 
-    //     public Animal(Game game, Thing thing) : base(game, thing)
-    //     {
-    //         _thing = thing;
-    //         _movement = _thing.gameObject.AddComponent<Movement>();
+        public override void Awake()
+        {
+            base.Awake();
 
-    //         _goal = new Dictionary<string, object>();
-    //         _world = new Dictionary<string, object>();
+            _thing = GetComponent<Thing>();
+            _movement = _thing.gameObject.AddComponent<Movement>();
 
-    //         // AddAction(new IdleInCoop(_game, _movement, this) {
-    //         //     Effects         = { { "isIdle", false } },
-    //         //     Preconditions   = { { "isIdle", true },     { "isInCoop", true } }
-    //         // });
+            AddAction(new Idle(this, _game, _movement));
+        }
 
-    //         AddAction(new Idle(_game, _movement)
-    //         {
-    //             Effects = { { "isIdle", false } },
-    //             Preconditions = { { "isIdle", true } },
-    //             Cost = 10
-    //         });
-    //     }
+        public override void PauseAgent()
+        {
+            base.PauseAgent();
 
-    //     public override void PauseAgent()
-    //     {
-    //         base.PauseAgent();
+            _movement.CancelCurrentPath();
+            _movement.SetStopped(true);
+        }
 
-    //         _movement.CancelCurrentPath();
-    //         _movement.SetStopped(true);
-    //     }
+        public override void UnPauseAgent()
+        {
+            base.UnPauseAgent();
 
-    //     public override void UnPauseAgent()
-    //     {
-    //         base.UnPauseAgent();
+            _movement.SetStopped(false);
+        }
 
-    //         _movement.SetStopped(false);
-    //     }
+        public override void ActionCompleted(GOAPAction action)
+        {
 
-    //     public override void ActionCompleted(GOAPAction action)
-    //     {
+        }
 
-    //     }
+        public override void GetGoalState(Dictionary<string, object> goal)
+        {
+            goal[GOAPAction.Effect.IS_WORKING] = true;
+        }
 
-    //     public override Dictionary<string, object> GetGoal()
-    //     {
-    //         _goal["isIdle"] = false;
-    //         return _goal;
-    //     }
+        public override void GetWorldState(Dictionary<string, object> world)
+        {
+            world[GOAPAction.Effect.IS_WORKING]  = false;
+            world[GOAPAction.Effect.HAS_FULL_INVENTORY] = false;
+        }
 
-    //     public override Dictionary<string, object> GetWorldState()
-    //     {
-    //         _world["isIdle"] = true;
-    //         _world["isInCoop"] = Coop != null;
-    //         return _world;
-    //     }
+        public override void Update()
+        {
+            base.Update();
 
-    //     public override void Update()
-    //     {
-    //         base.Update();
-
-    //         SetLabel($"{_thing.Config.TypeOfThing.ToString()}\n{(CurentAction == null ? "" : CurentAction.ToString())}");
-    //     }
-    // }
+            //SetLabel($"{_thing.Config.TypeOfThing.ToString()}\n{(CurentAction == null ? "" : CurentAction.ToString())}");
+        }
+    }
 
 }

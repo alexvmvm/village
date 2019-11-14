@@ -22,6 +22,10 @@ namespace Village.AI
             _resource = resource;
             _thing = thing;
             _inventory = _thing.Inventory;
+
+            if(resource != TypeOfThing.None)
+                Preconditions.Add(GOAPAction.Effect.HAS_THING, resource);
+            Effects.Add(GOAPAction.Effect.IS_WORKING, true);
         }
 
         public override bool Filter(Thing thing)

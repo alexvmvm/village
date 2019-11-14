@@ -5,39 +5,30 @@ using UnityEngine;
 namespace Village.AI
 {
 
-    // public class Director : Agent
-    // {
-    //     private Dictionary<string, object> _goal;
-    //     private Dictionary<string, object> _world;
+    public class Director : Agent
+    {
 
-    //     public Director(Game game) : base(game)
-    //     {
-    //         _goal = new Dictionary<string, object>();
-    //         _world = new Dictionary<string, object>();
+        public override void Awake()
+        {
+            base.Awake();
 
-    //         // AddAction(new SpawnVillager(game)
-    //         // {
-    //         //     Preconditions = { { "isWorking", false } },
-    //         //     Effects = { { "isWorking", true } }
-    //         // });
-    //     }
+            AddAction(new SpawnVillager(this, _game));
+        }
 
-    //     public override void ActionCompleted(GOAPAction action)
-    //     {
+        public override void ActionCompleted(GOAPAction action)
+        {
 
-    //     }
+        }
 
-    //     public override Dictionary<string, object> GetGoal()
-    //     {
-    //         _goal["isWorking"] = true;
-    //         return _goal;
-    //     }
+        public override void GetGoalState(Dictionary<string, object>  goal)
+        {
+            goal[GOAPAction.Effect.IS_WORKING] = true;
+        }
 
-    //     public override Dictionary<string, object> GetWorldState()
-    //     {
-    //         _world["isWorking"] = false;
-    //         return _world;
-    //     }
-    // }
+        public override void GetWorldState(Dictionary<string, object> world)
+        {
+            world[GOAPAction.Effect.IS_WORKING] = false;
+        }
+    }
 
 }

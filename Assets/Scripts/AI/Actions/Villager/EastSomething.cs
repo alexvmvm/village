@@ -13,6 +13,10 @@ namespace Village.AI
         public EastSomething(Agent agent, Game game, Thing thing) : base(agent, game)
         {
             _inventory = thing.Inventory;
+
+            Preconditions.Add(GOAPAction.Effect.IS_HUNGRY, true);
+            Preconditions.Add(GOAPAction.Effect.HAS_EDIBLE_THING, true);
+            Effects.Add(GOAPAction.Effect.IS_HUNGRY, false);
         }
 
         public override bool IsDone()

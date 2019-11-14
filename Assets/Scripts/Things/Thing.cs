@@ -163,9 +163,10 @@ namespace Village.Things
             switch(Config.Agent)
             {
                 case AgentConfig.Villager:
-                Agent = gameObject.AddComponent<Village.AI.Villager>();
+                Agent = gameObject.AddComponent<Villager>();
                 break;
                 case AgentConfig.Animal:
+                Agent = gameObject.AddComponent<Animal>();
                 break;
             }
         }
