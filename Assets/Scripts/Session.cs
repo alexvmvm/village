@@ -25,16 +25,27 @@ public class Session : MonoBehaviour
     [BitStrap.Button]
     public void SetupNewGame()
     {
+        StartCoroutine(SetupGame());
+    }
+
+    IEnumerator SetupGame()
+    {
+        yield return StartCoroutine(Game.RemoveAll());
         Game.Generate();
     }
 
     [BitStrap.Button]
     public void LoadGame()
     {
+        StartCoroutine(LoadGameC());
+    }
+
+    IEnumerator LoadGameC()
+    {
         var gameSave = SaveFiles.LoadGameFromName(SaveFileName);
         if(gameSave != null)
         {
-            Game.Clear();
+            yield return StartCoroutine(Game.RemoveAll());
             Game.FromSaveObj(gameSave);
         }
         else

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using Pathfinding;
 using Village.Things;
@@ -218,6 +219,19 @@ namespace Village
             _delete.Enqueue(thing.gameObject);
         }
 
+        public IEnumerator RemoveAll()
+        {
+            foreach(var thing in _things.ToArray())
+            {
+                Remove(thing);
+            }
+            
+            while(_delete.Count > 0)
+                yield return null;
+
+            Debug.Log("All Removed");
+        }
+
 
         public IEnumerable<Thing> QueryThings()
         {
@@ -313,14 +327,6 @@ namespace Village
                 (WorldTime.SecondsInADay/2);
         }
 
-        public void Clear()
-        {
-            foreach(var thing in _things.ToArray())
-            {
-                Remove(thing);
-            }
-        }
-
         public void Update()
         {
 
@@ -385,9 +391,6 @@ namespace Village
 
         public void FromSaveObj(GameSave obj)
         {
-            // clear game
-            Clear();
-
             // load game
             foreach(var thingSave in obj.Things)
             {
