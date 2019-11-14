@@ -24,7 +24,6 @@ namespace Village.AI
             
         }
 
-        public abstract TypeOfThing GetThingType();
         public abstract bool Filter(Thing thing);
 
         public abstract bool PerformAtTarget();
@@ -36,7 +35,7 @@ namespace Village.AI
 
         public override bool IsPossibleToPerform()
         {
-            _target = _game.IsPathPossibleToThing(_agent.transform.position.ToVector2IntFloor(), GetThingType(), Filter);
+            _target = _game.IsPathPossibleToThing(_agent.transform.position.ToVector2IntFloor(), Filter);
             return _target != null;
         }
 

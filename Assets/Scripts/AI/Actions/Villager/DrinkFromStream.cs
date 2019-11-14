@@ -21,12 +21,7 @@ namespace Village.AI
 
         public override bool Filter(Thing thing)
         {
-            return true;
-        }
-
-        public override TypeOfThing GetThingType()
-        {
-            return TypeOfThing.Stream;
+            return thing.Config.TypeOfThing == TypeOfThing.Stream;
         }
 
         public override bool PerformAtTarget()

@@ -24,14 +24,13 @@ public class FillStorage : MoveGOAPAction
 
     public override bool Filter(Thing thing)
     {
-        return thing.Storage.IsFull() && thing.Storage.IsAllowing(_type);
+        return 
+            thing != null && 
+            thing.Config.TypeOfThing == TypeOfThing.Storage && 
+            thing.Storage.IsFull() && 
+            thing.Storage.IsAllowing(_type);
     }
-
-    public override TypeOfThing GetThingType()
-    {
-        return TypeOfThing.Storage;
-    }
-
+    
     public override bool PerformAtTarget()
     {
         var item = _inventory.Drop();

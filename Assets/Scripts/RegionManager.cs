@@ -127,7 +127,7 @@ public class RegionManager
         return _graph.IsPathBetweenNodes(startSubRegion, endSubRegion);
     }
 
-    public Thing IsPathPossbileToThing(Vector2Int start, TypeOfThing type, Func<Thing, bool> filter)
+    public Thing IsPathPossbileToThing(Vector2Int start, Func<Thing, bool> filter)
     {
         var startRegion = GetRegionAtPosition(ToRegionPosition(start));
 
@@ -152,12 +152,12 @@ public class RegionManager
         }
            
         Profiler.BeginSample("RegionManager_Graph_IsPathToNodes");
-        var subRegion = _graph.IsPathToNodes(startSubRegion, (region) => region.HasTypeOfThing(type) && region.GetThings(type).Any(filter));
+        var subRegion = _graph.IsPathToNodes(startSubRegion, (region) => region.HasThing(filter));
         Profiler.EndSample();
 
         if(subRegion != null)
         {
-            return subRegion.GetThings(type).FirstOrDefault(filter);
+            return subRegion.GetThing(filter);
         }
 
         return null;

@@ -34,15 +34,9 @@ namespace Village.AI
             Effects.Add(GOAPAction.Effect.HAS_EDIBLE_THING, config.Edible);
         }
 
-        
-        public override TypeOfThing GetThingType()
-        {
-            return _resource;
-        }
-
         public override bool Filter(Thing thing)
         {
-            return true;
+            return thing != null && thing.Config.TypeOfThing == _resource;
         }
 
         public override bool PerformAtTarget()

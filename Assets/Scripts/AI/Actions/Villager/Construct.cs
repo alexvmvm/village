@@ -30,12 +30,7 @@ namespace Village.AI
 
         public override bool Filter(Thing thing)
         {
-            return thing.Requires == _resource;
-        }
-
-        public override TypeOfThing GetThingType()
-        {
-            return TypeOfThing.Blueprint;
+            return thing != null && thing.Config.TypeOfThing == TypeOfThing.Blueprint && thing.Requires == _resource;
         }
 
         public override bool IsDone()

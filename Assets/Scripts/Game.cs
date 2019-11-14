@@ -308,9 +308,9 @@ namespace Village
             return _regionManager.IsPathPossbile(start, end);
         }
 
-        public Thing IsPathPossibleToThing(Vector2Int start, TypeOfThing type, Func<Thing, bool> filter)
+        public Thing IsPathPossibleToThing(Vector2Int start, Func<Thing, bool> filter)
         {
-            return _regionManager.IsPathPossbileToThing(start, type, filter);
+            return _regionManager.IsPathPossbileToThing(start, filter);
         }
 
         /*

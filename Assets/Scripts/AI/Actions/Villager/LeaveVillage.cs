@@ -28,12 +28,7 @@ namespace Village.AI
 
         public override bool Filter(Thing thing)
         {
-            return true;
-        }
-
-        public override TypeOfThing GetThingType()
-        {
-            return TypeOfThing.Path;
+            return thing.Config.TypeOfThing == TypeOfThing.Path;
         }
 
         public override bool PerformAtTarget()

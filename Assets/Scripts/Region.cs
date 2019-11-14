@@ -60,7 +60,8 @@ public class SubRegion
     private Region _region;
     private Vector2Int _min;
     private Vector2Int _max;
-    private Dictionary<TypeOfThing, List<Thing>> _things;
+    // private Dictionary<TypeOfThing, List<Thing>> _things;
+    private bool _dirty;
     
     public SubRegion(Game game, IEnumerable<Vector2Int> positions)
     {
@@ -72,14 +73,14 @@ public class SubRegion
         _left = new List<Edge>();
         _right = new List<Edge>();
         
-        _things = new Dictionary<TypeOfThing, List<Thing>>();
+        // _things = new Dictionary<TypeOfThing, List<Thing>>();
 
-        foreach(var p in _positions)
-        {
-            AddThingToCache(_game.GetThingOnFloor(p));
-            foreach(var t in _game.QueryLooseThings().Where(t => IsInRegion(t.Position)))
-                AddThingToCache(t);
-        }
+        // foreach(var p in _positions)
+        // {
+        //     AddThingToCache(_game.GetThingOnFloor(p));
+        //     foreach(var t in _game.QueryLooseThings().Where(t => IsInRegion(t.Position)))
+        //         AddThingToCache(t);
+        // }
 
         _max = positions.ElementAt(0);
         _min = positions.ElementAt(0);
@@ -101,6 +102,8 @@ public class SubRegion
         PopulateBottomEdges();
         PopulateRightEdges();
         PopulateLeftEdges();
+
+        UpdateCachedThings();
     }
 
     public void AddThingToCache(Thing thing)
@@ -108,10 +111,12 @@ public class SubRegion
         if(thing == null)
             return;
 
-        if(!_things.ContainsKey(thing.Config.TypeOfThing))
-            _things[thing.Config.TypeOfThing] = new List<Thing>();
-        if(!_things[thing.Config.TypeOfThing].Contains(thing))
-            _things[thing.Config.TypeOfThing].Add(thing);
+        _dirty = true;
+
+        // if(!_things.ContainsKey(thing.Config.TypeOfThing))
+        //     _things[thing.Config.TypeOfThing] = new List<Thing>();
+        // if(!_things[thing.Config.TypeOfThing].Contains(thing))
+        //     _things[thing.Config.TypeOfThing].Add(thing);
     }
 
     public void AddListeners()
@@ -133,35 +138,39 @@ public class SubRegion
         if(!IsInRegion(thing.Position))
             return;
 
-        if(!_things.ContainsKey(thing.Config.TypeOfThing))
-            _things[thing.Config.TypeOfThing] = new List<Thing>();
+        _dirty = true;
+        // if(!_things.ContainsKey(thing.Config.TypeOfThing))
+        //     _things[thing.Config.TypeOfThing] = new List<Thing>();
 
-        if(!_things[thing.Config.TypeOfThing].Contains(thing))
-            _things[thing.Config.TypeOfThing].Add(thing);
+        // if(!_things[thing.Config.TypeOfThing].Contains(thing))
+        //     _things[thing.Config.TypeOfThing].Add(thing);
     }
 
     void OnThingRemoved(Thing thing)
     {
-        if(!IsInRegion(thing.Position) || !_things.ContainsKey(thing.Config.TypeOfThing))
+        if(!IsInRegion(thing.Position)) // || !_things.ContainsKey(thing.Config.TypeOfThing))
             return;
 
-        if(_things[thing.Config.TypeOfThing].Contains(thing))
-            _things[thing.Config.TypeOfThing].Remove(thing);
+        _dirty = true;
+        // if(_things[thing.Config.TypeOfThing].Contains(thing))
+        //     _things[thing.Config.TypeOfThing].Remove(thing);
     }
 
     void OnThingMoved(Thing thing, Vector2Int previous, Vector2Int current)
     {
         if(IsInRegion(previous) && !IsInRegion(current))
         {
-            if(_things.ContainsKey(thing.Config.TypeOfThing) && _things[thing.Config.TypeOfThing].Contains(thing))
-                _things[thing.Config.TypeOfThing].Remove(thing);
+            _dirty = true;
+            // if(_things.ContainsKey(thing.Config.TypeOfThing) && _things[thing.Config.TypeOfThing].Contains(thing))
+            //     _things[thing.Config.TypeOfThing].Remove(thing);
         }
         else if(!IsInRegion(previous) && IsInRegion(current))
         {
-            if(!_things.ContainsKey(thing.Config.TypeOfThing))
-                _things[thing.Config.TypeOfThing] = new List<Thing>();
-            if(!_things[thing.Config.TypeOfThing].Contains(thing))
-                _things[thing.Config.TypeOfThing].Add(thing);
+            _dirty = true;
+            // if(!_things.ContainsKey(thing.Config.TypeOfThing))
+            //     _things[thing.Config.TypeOfThing] = new List<Thing>();
+            // if(!_things[thing.Config.TypeOfThing].Contains(thing))
+            //     _things[thing.Config.TypeOfThing].Add(thing);
         }
     }
 
@@ -173,16 +182,61 @@ public class SubRegion
     /*
         Querying
     */
-
-    public bool HasTypeOfThing(TypeOfThing type)
-    {
-        return _things.ContainsKey(type) && _things[type].Count() > 0;
-    }
     
-    public List<Thing> GetThings(TypeOfThing type)
+    void UpdateCachedThings()
     {
-        return _things[type];
+         _cachedList.Clear();
+
+        foreach(var p in _positions)
+        {
+            var floor = _game.GetThingOnFloor(p);
+            if(!_cachedList.Contains(floor))
+                _cachedList.Add(floor);
+
+            foreach(var t in _game.QueryLooseThings().Where(t => IsInRegion(t.Position)))
+            {
+                if(!_cachedList.Contains(t))
+                    _cachedList.Add(t);
+            }
+        }
     }
+
+    private List<Thing> _cachedList = new List<Thing>();
+    private List<Thing> CachedList
+    {
+        get
+        {
+            if(_dirty)
+            {
+                UpdateCachedThings();
+                _dirty = false;
+            }
+
+            return _cachedList;
+        }
+    }
+
+    // private bool _hasThingToStore;
+
+    // public bool HasTypeOfThing(TypeOfThing type)
+    // {
+    //     return CachedList.Any(t => t.Config.TypeOfThing == type);  //_things.ContainsKey(type) && _things[type].Count() > 0;
+    // }
+
+    public bool HasThing(Func<Thing, bool> filter)
+    {
+        return CachedList.Any(filter);
+    }
+
+    public Thing GetThing(Func<Thing, bool> filter)
+    {
+        return CachedList.Where(filter).First();
+    }
+
+    // public List<Thing> GetThings(TypeOfThing type)
+    // {
+    //     return CachedList.Where(t => t.Config.TypeOfThing == type).ToList();
+    // }
 
     /*
         Edges
@@ -320,9 +374,10 @@ public class SubRegion
 
             var label = "";
 
-            foreach(var kv in _things.OrderBy(kv => kv.Key))
+            var types = CachedList.Select(t => t.Config.TypeOfThing).Distinct();
+            foreach(var type in types)
             {
-                label += $"{kv.Key}: {kv.Value.Count}\n";
+                label += $"{type}: {CachedList.Count(t => t.Config.TypeOfThing == type)}\n";
             }
 
             // current actions
@@ -345,6 +400,7 @@ public class Region
     private HashSet<Vector2Int> _seen;
     private Queue<Vector2Int> _queue;
     private Dictionary<Vector2Int, SubRegion> _subRegionMap;
+    private List<Vector2Int> _positions;
 
     public Region(Game game, Vector2Int min, Vector2Int max)
     {
@@ -356,6 +412,7 @@ public class Region
         _seen = new HashSet<Vector2Int>();
         _queue = new Queue<Vector2Int>();
         _subRegionMap = new Dictionary<Vector2Int, SubRegion>();
+        _positions = new List<Vector2Int>();
     }
 
     public void Refresh()
@@ -376,7 +433,7 @@ public class Region
             {
                 current.x = x;
                 current.y = y;
-                
+
                 if(_seen.Contains(current))
                     continue;
 
@@ -420,7 +477,7 @@ public class Region
     {
         _queue.Enqueue(position);
 
-        var positions = new List<Vector2Int>();
+        _positions.Clear();
 
         while(_queue.Count > 0)
         {
@@ -433,7 +490,7 @@ public class Region
 
             if(IsFloorForRegion(current))
             {
-                positions.Add(current);
+                _positions.Add(current);
             }
 
             _queue.Enqueue(current.Up());
@@ -443,7 +500,7 @@ public class Region
 
         }
 
-        return positions.Count > 0 ? new SubRegion(_game, positions) : null;      
+        return _positions.Count > 0 ? new SubRegion(_game, _positions) : null;      
     }
 
     public void DrawGizmos()
