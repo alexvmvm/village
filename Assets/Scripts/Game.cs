@@ -99,10 +99,10 @@ namespace Village
                 var x = Size.x - 3;
                 rand = UnityEngine.Random.Range(0, 4);
                 var p = new Vector2Int(x, y);
-                CreateAtPosition(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, p + Vector2Int.left);
+                CreateAtPosition(rand == 0 ? TypeOfThing.OreFloor : TypeOfThing.ClayFloor, p + Vector2Int.left);
                 CreateAtPosition(TypeOfThing.Stream, p);
                 rand = UnityEngine.Random.Range(0, 2);
-                CreateAtPosition(rand == 0 ? TypeOfThing.Ore : TypeOfThing.Clay, p + Vector2Int.right);
+                CreateAtPosition(rand == 0 ? TypeOfThing.OreFloor : TypeOfThing.ClayFloor, p + Vector2Int.right);
             }
 
             for(var i = 0; i < 20; i++)

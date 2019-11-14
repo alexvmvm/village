@@ -150,6 +150,7 @@ namespace Village.Things
             if(Config.Factory != null)
             {
                 Factory = gameObject.AddComponent<Factory>();
+                Factory.Setup(Config.Factory);
             }
 
             if(Config.Fire)

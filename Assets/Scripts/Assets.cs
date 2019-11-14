@@ -210,24 +210,38 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Resource = true;
             break;
-            case TypeOfThing.Clay:
+            case TypeOfThing.ClayFloor:
                 thing.Name = "clay";
                 thing.Sprite = "colored_1";
                 thing.FixedToFloor = true;
-                thing.Resource = true;
                 thing.Floor = true;
                 thing.Hitpoints = 10;
                 thing.Produces = TypeOfThing.Clay;
                 break;
-            case TypeOfThing.Ore:
+            case TypeOfThing.Clay:
+                thing.Name = "clay";
+                thing.Sprite = "colored_1";
+                thing.Resource = true;
+                thing.Hitpoints = 10;
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                break;
+            case TypeOfThing.OreFloor:
                 thing.Name = "ore";
                 thing.Sprite = "colored_4";
                 thing.FixedToFloor = true;
                 thing.Resource = true;
                 thing.Floor = true;
                 thing.Hitpoints = 5;
+                thing.Produces = TypeOfThing.Ore;
+                break;
+            case TypeOfThing.Ore:
+                thing.Name = "ore";
+                thing.Sprite = "colored_4";
+                thing.Resource = true;
+                thing.Hitpoints = 5;
                 thing.Storeable = true;
                 thing.StoreGroup = "resource";
+                thing.SortingOrder = (int)SortingOrders.Objects;
                 break;
             case TypeOfThing.Iron:
                 thing.Name = "iron";

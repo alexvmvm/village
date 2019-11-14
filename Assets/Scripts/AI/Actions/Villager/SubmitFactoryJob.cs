@@ -36,12 +36,12 @@ namespace Village.AI
 
         public override bool Filter(Thing thing)
         {
-            return thing.Factory.IsProducing() && thing.Factory.IsQueuedForProduction(_output);
+            return !thing.Factory.IsProducing() && thing.Factory.IsQueuedForProduction(_output);
         }
 
         public override TypeOfThing GetThingType()
         {
-            return TypeOfThing.ForagedWall;
+            return _factoryType;
         }
 
         public override bool PerformAtTarget()
