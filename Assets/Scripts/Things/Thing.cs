@@ -56,11 +56,6 @@ namespace Village.Things
             public CropConfig Crop;
             public AgentConfig Agent;
             public ConstructionConfig Construction;
-
-            public ThingConfig()
-            {
-                Produces = TypeOfThing;
-            }
         }
 
         [Serializable]    
@@ -343,7 +338,8 @@ namespace Village.Things
                 type = Config.TypeOfThing,
                 hitpoints = Config.Hitpoints,
                 ownedBy = ownedBy,
-                builds = Builds
+                builds = Builds,
+                requires = Requires
             };
         }
 
@@ -355,6 +351,7 @@ namespace Village.Things
             this.Hitpoints = save.hitpoints;
             this.ownedBy = save.ownedBy;
             this.Builds = save.builds;
+            this.Requires = save.requires;
         }
 
         public void DrawGizmos()

@@ -69,6 +69,11 @@ namespace Village.Things
         {
             return _jobs.Count > 0;
         }
+
+        public TypeOfThing CurrentlyProducing()
+        {
+            return IsProducing() ? _jobs.Peek() : TypeOfThing.None;
+        }
         
         public void Update()
         {

@@ -12,6 +12,7 @@ namespace Village.Saving
         public string ownedBy;
         public int hitpoints;
         public TypeOfThing builds;
+        public TypeOfThing requires;
 
         public ThingSave() {}
     }

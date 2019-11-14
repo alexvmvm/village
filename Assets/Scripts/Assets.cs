@@ -272,6 +272,7 @@ public class Assets
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Floors, TypeOfThing.None);
             break;
             case TypeOfThing.Blueprint:
+                thing.Name = "blueprint";
                 thing.Sprite = "colored_transparent_855";
                 thing.BuildSite = false;
                 thing.SortingOrder = 100;
@@ -282,6 +283,7 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
+                thing.RequiredToProduce = TypeOfThing.Hoe;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Farming, TypeOfThing.Hoe);
             break;
             case TypeOfThing.CabbageCrop:
@@ -415,6 +417,7 @@ public class Assets
                 thing.Storeable = true;
                 thing.Tool = true;
                 thing.StoreGroup = "tool";
+                thing.Produces = TypeOfThing.Hoe;
                 break;
             case TypeOfThing.Storage:
                 thing.Name = "storage";

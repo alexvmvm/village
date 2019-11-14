@@ -45,6 +45,9 @@ namespace Village.AI
             {
                 BeforeStartMoving();
 
+                if(_target == null)
+                    return false;
+
                 _movement.CancelCurrentPath();
                 _movement.MoveTo(_target.transform.position);
                 _started = true;

@@ -3,8 +3,11 @@ using UnityEngine;
 using Village;
 using Village.Things;
 
+public delegate void CursorMoved(Vector2Int position);
+
 public class GameCursor : MonoBehaviour
 {
+    public CursorMoved OnCursorMoved;
     public TypeOfThing? CurrentType { get; private set; }
     public bool PlaceBlueprints { get; private set; }
     private Game _game;
@@ -22,7 +25,6 @@ public class GameCursor : MonoBehaviour
     private Vector2 _validUV = new Vector2(0.5f, 0.5f);
     private Vector2 _invalidUV = new Vector2(0, 0);
     private Thing _mouseOverThing;
-    private InfoPanel _infoPanel;
     private Vector3 _cursorPosition;
     private bool _fixCursorPosition;
     private ActionPanel _actionPanel;
@@ -43,7 +45,6 @@ public class GameCursor : MonoBehaviour
         _meshRenderer = _cursorMeshObj.GetComponent<MeshRenderer>();
         _cursorMeshObj.SetActive(false);
 
-        _infoPanel = MonoBehaviour.FindObjectOfType<InfoPanel>();
         _actionPanel = MonoBehaviour.FindObjectOfType<ActionPanel>();
 
     }
@@ -160,11 +161,12 @@ public class GameCursor : MonoBehaviour
 
             var posVec2 = position.ToVector2IntFloor();
 
+            if(OnCursorMoved != null)
+                OnCursorMoved(posVec2);
+
             if(_game.IsThingOnFloor(posVec2))
             {
                 _mouseOverThing = _game.GetThingOnFloor(posVec2);
-                if(_infoPanel != null)
-                    _infoPanel.Setup(_mouseOverThing);
                 if(_actionPanel != null)
                     _actionPanel.Setup(_mouseOverThing);
             }
