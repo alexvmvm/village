@@ -9,22 +9,19 @@ namespace Village.Things
     public class Storage : MonoBehaviour
     {
         public Dictionary<TypeOfThing, bool> Allowed { get { return _allowed; } }
+        public Thing[] Stored { get { return GetComponentsInChildren<Thing>(); }}
         private Dictionary<TypeOfThing, bool> _allowed;
         private Game _game;
-        private Thing _thing;
-        private List<Thing> _stored;
         private int _max;
-        private int _currentStoredCount { get { return _stored.Sum(t => t.Hitpoints); } }
+        private int _currentStoredCount { get { return Stored.Sum(t => t.Hitpoints); } }
         
         void Awake()
         {
             _game = FindObjectOfType<Game>();
             _allowed = new Dictionary<TypeOfThing, bool>();
-            _thing = GetComponent<Thing>();
-            _stored = new List<Thing>();
             _max = 100;
         }
-
+        
         public Thing Add(Thing thing)
         {
             var total = _currentStoredCount + thing.Hitpoints;
@@ -38,22 +35,21 @@ namespace Village.Things
                 thing.Hitpoints = _max - _currentStoredCount;
             }
 
-            if(_stored.Any(t => t.Config.TypeOfThing == thing.Config.TypeOfThing))
+            // any existing items of same type
+            if(Stored.Any(t => t.Config.TypeOfThing == thing.Config.TypeOfThing))
             {
-                var totalInStorage = _stored.Where(t => t.Config.TypeOfThing == thing.Config.TypeOfThing).Sum(t => t.Hitpoints);
-                var toRemove = _stored.Where(t => t.Config.TypeOfThing == thing.Config.TypeOfThing).ToList();
+                var totalInStorage = Stored.Where(t => t.Config.TypeOfThing == thing.Config.TypeOfThing).Sum(t => t.Hitpoints);
+                var toRemove = Stored.Where(t => t.Config.TypeOfThing == thing.Config.TypeOfThing).ToList();
                 
                 foreach(var remove in toRemove)
                 {
-                    _stored.Remove(remove);
                     _game.Remove(remove);
                 }
 
                 thing.Hitpoints += totalInStorage;
             }
 
-            _stored.Add(thing);
-            thing.transform.SetParent(_thing.transform);
+            thing.transform.SetParent(transform);
             thing.transform.localPosition = Vector3.zero;
 
             return remainder;

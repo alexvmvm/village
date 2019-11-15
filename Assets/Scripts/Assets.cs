@@ -182,6 +182,9 @@ public class Assets
                 thing.Sprite = "colored_transparent_209";
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Resource = true;
+                thing.Storeable = true;
+                thing.StoreGroup = "resource";
+                thing.Produces = TypeOfThing.Wood;
             break;
             case TypeOfThing.FallenWood:
                 thing.Name = "Wood";

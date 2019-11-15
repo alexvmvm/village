@@ -35,7 +35,7 @@ public class BuildingPanel : MonoBehaviour
     {
         ButtonPooler.DeactivateAll();
         
-        var things = _game.ThingConfigs.Where(t => t.Construction != null && t.Construction.Group == group);
+        var things = _game.ThingConfigs.Where(t => t.Construction != null && t.Construction.Group == group).ToList();
 
         foreach(var thing in things)
         {

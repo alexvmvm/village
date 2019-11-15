@@ -63,6 +63,13 @@ public class InfoPanel : MonoBehaviour
                 AddTextLine("<color=black>Factory</color>");
                 AddTextLine($"Currently Producing: {thing.Factory.CurrentlyProducing()}");         
             break;
+            case TypeOfThing.Storage:
+                AddTextLine("<color=black>Storage</color>");
+                foreach(var stored in thing.Storage.Stored)
+                {
+                    AddTextLine($"{stored.Config.TypeOfThing}: {stored.Hitpoints}");   
+                }
+            break;
         }
     }
 

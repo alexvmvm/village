@@ -32,6 +32,10 @@ namespace Village.AI
             Effects.Add(GOAPAction.Effect.HAS_THING, config.Produces);
             Effects.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, true);
             Effects.Add(GOAPAction.Effect.HAS_EDIBLE_THING, config.Edible);
+
+            // costs more if not a straight resource
+            // pickup
+            Cost = config.Produces == config.TypeOfThing ? 1 : 2;
         }
 
         public override bool Filter(Thing thing)

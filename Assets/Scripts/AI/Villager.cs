@@ -113,7 +113,10 @@ namespace Village.AI
             */
 
             AddAction(new GetThingToMoveToStorage(this, _game, _thing, _movement, TypeOfThing.Iron, this));
+            AddAction(new GetThingToMoveToStorage(this, _game, _thing, _movement, TypeOfThing.Wood, this));
+
             AddAction(new FillStorage(this, _game, _movement, _thing.Inventory, TypeOfThing.Iron));
+            AddAction(new FillStorage(this, _game, _movement, _thing.Inventory, TypeOfThing.Wood));
 
 
             // foreach(var resource in resources)

@@ -26,7 +26,7 @@ namespace Village.AI
 
         public override bool IsPossibleToPerform()
         {
-            return VillagerCount() == 0 && Time.timeSinceLevelLoad > 5;
+            return VillagerCount() == 0 && _game.TimeSinceLoaded > 5;
         }
 
         public override bool Perform()

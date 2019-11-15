@@ -30,8 +30,7 @@ public class Session : MonoBehaviour
 
     IEnumerator SetupGame()
     {
-        yield return StartCoroutine(Game.RemoveAll());
-        Game.Generate();
+        yield return StartCoroutine(Game.LoadNewGame());
     }
 
     [BitStrap.Button]
@@ -45,8 +44,7 @@ public class Session : MonoBehaviour
         var gameSave = SaveFiles.LoadGameFromName(SaveFileName);
         if(gameSave != null)
         {
-            yield return StartCoroutine(Game.RemoveAll());
-            Game.FromSaveObj(gameSave);
+            yield return StartCoroutine(Game.LoadGame(gameSave));
         }
         else
         {

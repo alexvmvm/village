@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Village.Things;
 
@@ -29,9 +30,21 @@ namespace Village.AI
             return _inventory != null;
         }
 
+        Vector3 FindNearestClearPosition()
+        {
+            var position = _agent.transform.position.ToVector2IntFloor();
+            while(!_game.IsFloorForRegion(position) || _game.QueryLooseThings().Any(t => t.Position == position))
+                position += Vector2Int.one;
+            return position.ToVector3();
+        }
+
         public override bool Perform()
         {
-            _inventory.Drop();
+            var thing = _inventory.Drop();
+            if(thing != null)
+            {
+                thing.transform.position = FindNearestClearPosition();
+            }
             return true;
         }
 

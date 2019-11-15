@@ -19,6 +19,7 @@ namespace Village
         public AstarPath AStarPath;
         public Vector2Int Size = Vector2Int.one * 50;
         public WorldTime WorldTime { get { return _worldTime; } }
+        public float TimeSinceLoaded { get { return _timeSinceLoaded; } }
         public List<Thing.ThingConfig> ThingConfigs { get; private set; }
         public ThingAdded OnThingAdded;
         public ThingRemoved OnThingRemoved;
@@ -29,6 +30,8 @@ namespace Village
         private Dictionary<Vector2Int, Thing> _floor;
         private List<Thing> _loose;
         private Queue<GameObject> _delete;
+        private float _timeSinceLoaded;
+        private bool _loaded;
 
         void Awake()
         {
@@ -47,6 +50,9 @@ namespace Village
             _delete = new Queue<GameObject>();
             
             ThingConfigs = Assets.AllThingConfigs().ToList();
+
+            _timeSinceLoaded = 0f;
+            _loaded = false;
         }
 
         public void Generate()
@@ -221,20 +227,6 @@ namespace Village
             _delete.Enqueue(thing.gameObject);
         }
 
-        public IEnumerator RemoveAll()
-        {
-            foreach(var thing in _things.ToArray())
-            {
-                Remove(thing);
-            }
-            
-            while(_delete.Count > 0)
-                yield return null;
-
-            Debug.Log("All Removed");
-        }
-
-
         public IEnumerable<Thing> QueryThings()
         {
             return _things;
@@ -365,6 +357,11 @@ namespace Village
                     thing.Construct();
                 }
             }
+
+            if(_loaded)
+            {
+                _timeSinceLoaded += Time.deltaTime;
+            }
         }
 
         void LateUpdate()
@@ -373,6 +370,43 @@ namespace Village
             {
                 Destroy(_delete.Dequeue());
             }
+        }
+
+        /*
+            Saving/Loading
+        */
+
+        public IEnumerator LoadNewGame()
+        {
+            ResetTimeSinceLoad();
+            yield return StartCoroutine(RemoveAll());
+            Generate();
+        }
+
+        public IEnumerator LoadGame(GameSave obj)
+        {
+            ResetTimeSinceLoad();
+            yield return StartCoroutine(RemoveAll());
+            FromSaveObj(obj);
+        }
+
+        void ResetTimeSinceLoad()
+        {
+            _loaded = true;
+            _timeSinceLoaded = 0f;
+        }
+
+        IEnumerator RemoveAll()
+        {
+            foreach(var thing in _things.ToArray())
+            {
+                Remove(thing);
+            }
+            
+            while(_delete.Count > 0)
+                yield return null;
+
+            Debug.Log("All Removed");
         }
 
         public GameSave ToSaveObj()
