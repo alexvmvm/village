@@ -35,7 +35,7 @@ namespace Village.AI
         public override bool PerformAtTarget()
         {
             if(_target == null)
-                return false;
+                return true;
 
             if (_inventory.IsHoldingSomething() && !_inventory.IsHoldingTool())
             {
