@@ -86,9 +86,15 @@ namespace Village.Things
             }
             else
             {
-                var item = _jobs.Dequeue();
-                var thing = _game.CreateAtPosition(item, _thing.Position + Vector2Int.down);
-                _timer = _timeToProduce;
+                var position = _game.FindNearestLoosePosition(transform.position.ToVector2IntFloor());
+
+                if(position.HasValue)
+                {
+                    var item = _jobs.Dequeue();
+                    var thing = _game.CreateAtPosition(item, position.Value);
+                    _timer = _timeToProduce;
+                }
+
             }
         }
 

@@ -45,7 +45,7 @@ public class StoragePanel : MonoBehaviour
 
                 var toggle = toggleObj.GetComponentInChildren<Toggle>();
                 toggle.onValueChanged.RemoveAllListeners();
-                toggle.isOn = storage.IsAllowing(thing.Config.TypeOfThing);
+                toggle.isOn = storage.IsAllowing(groupThing.TypeOfThing);
                 toggle.onValueChanged.AddListener((value) => {
                     if(value)
                         thing.Storage.Allow(groupThing.TypeOfThing);
@@ -55,19 +55,6 @@ public class StoragePanel : MonoBehaviour
             }
 
             obj.SetActive(true);
-
-            // var obj = TogglePooler.GetPooledObject();
-            // obj.GetComponentInChildren<Text>().text = item.name.ToUppercaseFirst();
-            // var toggle = obj.GetComponentInChildren<Toggle>();
-            // toggle.onValueChanged.RemoveAllListeners();
-            // toggle.isOn = false;
-            // toggle.onValueChanged.AddListener((value) => {
-            //     if(value) 
-            //         thing.GetTrait<Storage>().Allow(item.type);
-            //     else
-            //         thing.GetTrait<Storage>().Disallow(item.type);
-            // });
-            // obj.SetActive(true);
         }
 
         gameObject.SetActive(true);

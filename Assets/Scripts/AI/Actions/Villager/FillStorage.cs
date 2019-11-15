@@ -19,6 +19,7 @@ public class FillStorage : MoveGOAPAction
         _inventory = inventory;
         _type = type;
 
+        Preconditions.Add(GOAPAction.Effect.HAS_THING, type);
         Preconditions.Add(GOAPAction.Effect.HAS_THING_FOR_STORAGE, true);
         Effects.Add(GOAPAction.Effect.HAS_THING_FOR_STORAGE, false);
         Effects.Add(GOAPAction.Effect.IS_WORKING, true);

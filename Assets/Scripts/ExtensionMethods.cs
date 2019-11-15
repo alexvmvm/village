@@ -255,7 +255,17 @@ public static class ExtensionMethods
         var attributes = memInfo[0].GetCustomAttributes(typeof(T), false);
         return (attributes.Length > 0) ? (T)attributes[0] : null;
     }
-
+    
+    public static T[] GetComponentsInChildrenExcludingParent<T>(this Component target) where T : MonoBehaviour
+    {
+        var list = new List<T>();
+        foreach(var c in target.GetComponentsInChildren<T>())
+        {
+            if (c.gameObject == target.gameObject) continue;
+            list.AddRange(c.GetComponentsInChildren<T>());
+        }
+        return list.ToArray();
+    }
 
     public static T GetComponentInChildrenExcludingParent<T>(this Component target) where T : MonoBehaviour
     {

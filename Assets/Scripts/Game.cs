@@ -237,7 +237,25 @@ namespace Village
             return _loose;
         }
 
+        private static Vector2Int[] _dropLocations = new Vector2Int[]
+        {
+            Vector2Int.down,
+            Vector2Int.left,
+            Vector2Int.right,
+            Vector2Int.up
+        };
 
+        public Vector2Int? FindNearestLoosePosition(Vector2Int position)
+        {
+            foreach(var p in _dropLocations)
+            {
+                var testPositon = position + p;
+                if(!IsFloorForRegion(testPositon) || QueryLooseThings().Any(t => t.Position == testPositon))
+                    continue;
+                return testPositon;
+            }   
+            return null;
+        }
 
         /*
             Construction

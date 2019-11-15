@@ -9,7 +9,7 @@ namespace Village.Things
     public class Storage : MonoBehaviour
     {
         public Dictionary<TypeOfThing, bool> Allowed { get { return _allowed; } }
-        public Thing[] Stored { get { return GetComponentsInChildren<Thing>(); }}
+        public Thing[] Stored { get { return transform.GetComponentsInChildrenExcludingParent<Thing>(); }}
         private Dictionary<TypeOfThing, bool> _allowed;
         private Game _game;
         private int _max;
