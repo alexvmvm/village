@@ -362,15 +362,17 @@ namespace Village.Things
         {
 #if UNITY_EDITOR
 
-            if (!string.IsNullOrEmpty(belongsToFamily))
+            if(!Config.FixedToFloor)
             {
                 var style = new GUIStyle();
                 style.fontSize = 10;
                 style.normal.textColor = Color.white;
 
+                var label = $"Hitpoints: {Hitpoints}";
+
                 // current actions
                 var position = transform.position + Vector3.up;
-                UnityEditor.Handles.Label(position, belongsToFamily, style);
+                UnityEditor.Handles.Label(position, label, style);
             }
 #endif
         }
