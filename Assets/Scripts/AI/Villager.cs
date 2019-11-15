@@ -82,6 +82,7 @@ namespace Village.AI
                 TypeOfThing.Ore,
                 TypeOfThing.Iron,
                 TypeOfThing.CabbageSeed,
+                TypeOfThing.Cabbage,
                 TypeOfThing.Axe,
                 TypeOfThing.Hoe
             };

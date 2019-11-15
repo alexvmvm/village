@@ -11,13 +11,16 @@ namespace Village.Things
         private Game _game;
         private string[] _sprites;
         private float _age;
+        private float _delayBeforeProducing;
         private float _timeToGrow;
+        private TypeOfThing _produces;
         private int _index;
 
         void Awake() 
         {
             _game = FindObjectOfType<Game>();
             _thing = GetComponent<Thing>();
+            _delayBeforeProducing = 10f;
         }
 
         public void Setup(Thing.CropConfig config)
@@ -25,11 +28,17 @@ namespace Village.Things
             _sprites = config.Sprites;
             _timeToGrow = config.TimeToGrow;
             _thing.Config.TileRule = new CropTile(this);
+            _produces = config.Produces;
         }
 
         public string GetSprite()
         {
             return _sprites[_index];
+        }
+
+        public int GetSpriteIndex()
+        {
+            return Mathf.FloorToInt(Mathf.Min(_age / _timeToGrow, 1) * (_sprites.Length - 1));
         }
 
         void Update()
@@ -38,11 +47,20 @@ namespace Village.Things
                 return;
 
             _age += Time.deltaTime;
-            var index = Mathf.FloorToInt(Mathf.Min(_age / _timeToGrow, 1) * (_sprites.Length - 1));
+            var index = GetSpriteIndex();
             if (index != _index)
             {
                 _index = index;
                 _thing.SetSprite();
+            }
+
+            if(index == _sprites.Length - 1)
+                _delayBeforeProducing -= Time.deltaTime;
+
+            if(_delayBeforeProducing < 0f)
+            {
+                _game.CreateAtPosition(_produces, transform.position.ToVector2IntFloor());
+                _game.Remove(_thing);
             }
         }
 

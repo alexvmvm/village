@@ -99,11 +99,13 @@ namespace Village.Things
         {
             public float TimeToGrow { get; protected set; }
             public string[] Sprites { get; protected set; }
-
-            public CropConfig(float timeToGrow, string[] sprites)
+            public TypeOfThing Produces { get; protected set; }
+            
+            public CropConfig(float timeToGrow, string[] sprites, TypeOfThing produces)
             {
                 TimeToGrow = timeToGrow;
                 Sprites = sprites;
+                Produces = produces;
             }
         }
         

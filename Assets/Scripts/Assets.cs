@@ -293,8 +293,20 @@ public class Assets
                 thing.Sprite = "colored_transparent_204";
                 thing.BuildSite = false;
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.Crop = new Thing.CropConfig(360, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" });
+                thing.Crop = new Thing.CropConfig(5 * 60, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" }, TypeOfThing.Cabbage);
                 thing.Construction = new Thing.ConstructionConfig(TypeOfThing.SoilFloor, ConstructionGroup.Farming, TypeOfThing.CabbageSeed);
+            }
+            break;
+            case TypeOfThing.Cabbage:
+            {
+                thing.Name = "cabbage";
+                thing.Sprite = "colored_transparent_977";
+                thing.BuildSite = false;
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.Edible = true;
+                thing.Storeable = true;
+                thing.StoreGroup = "food";
+                thing.Hitpoints = 1;
             }
             break;
             case TypeOfThing.WoodFloor:

@@ -31,6 +31,7 @@
     // SoilFloorBlueprint      ,
     CabbageSeed,
     CabbageCrop               ,
+    Cabbage,
     // CabbageCropBlueprint      ,
     ForagedWall             ,
     // ForagedWallBlueprint    ,
