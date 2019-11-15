@@ -309,7 +309,7 @@ namespace Village
 
         public bool IsFloorForRegion(Vector2Int position)
         {
-            return GetThingOnFloor(position) != null && !GetThingOnFloor(position).Config.PathBlocking;
+            return GetThingOnFloor(position) != null && GetThingOnFloor(position).Config.PathTag != Movement.TAG_BLOCKING;
         }
 
         public bool IsPathPossible(Vector2Int start, Vector2Int end)

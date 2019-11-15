@@ -33,7 +33,6 @@ namespace Village.Things
             public ITileRule TileRule;
             public int GridGroup;
             public bool Floor;
-            public bool PathBlocking;
             public bool LightBlocking;
             public bool BuildSite;
             public bool Pipe;

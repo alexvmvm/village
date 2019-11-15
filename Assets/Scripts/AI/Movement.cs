@@ -56,13 +56,9 @@ namespace Village.AI
             _seeker.startEndModifier.exactStartPoint = StartEndModifier.Exactness.NodeConnection;
             _seeker.startEndModifier.exactEndPoint = StartEndModifier.Exactness.SnapToNode;
 
-            var tagPenalties = new int[32];
-            tagPenalties[1] = 10;
-            _seeker.tagPenalties = tagPenalties;
-
-            // set which are not traversable
+            // setup pathing options
             DisableTag(TAG_BLOCKING);
-            //DisableTag(TAG_FOILIAGE);
+            SetTagPenalty(TAG_AVOID, 99999);
 
 
             //_seeker.tagPenalties[TagFromString(TAG_BLOCKING)] = 9999;
@@ -88,10 +84,16 @@ namespace Village.AI
             _seeker.traversableTags |= (1 << TagFromString(tag));
         }
         
-
         public void DisableTag(string tag)
         {
             _seeker.traversableTags &= ~(1 << TagFromString(tag));
+        }
+
+        public void SetTagPenalty(string tag, int penalty)
+        {
+            if(_seeker.tag == null)
+                _seeker.tagPenalties = new int[32];
+            _seeker.tagPenalties[_game.TagFromString(tag)] = penalty;
         }
 
         void OnDisable()
