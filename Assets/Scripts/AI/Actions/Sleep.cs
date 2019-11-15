@@ -80,15 +80,7 @@ namespace Village.AI
 
             if(_movement.ReachedEndOfPath)
             {
-                switch(_game.WorldTime.GetTimeOfDay())
-                {
-                    case TimeOfDay.Night:
-                        _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
-                    break;
-                    default:
-                        _thing.transform.rotation = Quaternion.Euler(0, 0, 0);
-                    break;
-                }
+                _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
             }
             
             return true;
@@ -96,6 +88,7 @@ namespace Village.AI
 
         public override void Reset()
         {
+            _thing.transform.rotation = Quaternion.Euler(0, 0, 0);
             _started = false;
         }
 
