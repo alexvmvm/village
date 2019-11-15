@@ -110,16 +110,32 @@ public class RegionManager
         return null;
     }
     
+    SubRegion GetClosestSubRegionToPosition(Vector2Int position)
+    {
+        var startRegion = GetRegionAtPosition(ToRegionPosition(position));
+
+        var startSubRegion = startRegion.GetSubRegionAtPosition(position);
+
+        if(startSubRegion != null)
+            return startSubRegion;
+
+        // find sub region nearby if
+        // current location doesn't return
+        foreach(var n in _neighbours)
+        {
+            startSubRegion = startRegion.GetSubRegionAtPosition(position + n);
+            if(startSubRegion != null)
+                return startSubRegion;
+        }
+
+        return null;
+        
+    }
+
     public bool IsPathPossbile(Vector2Int start, Vector2Int end)
     {
-        var startRegion = GetRegionAtPosition(ToRegionPosition(start));
-        var endRegion = GetRegionAtPosition(ToRegionPosition(end));
-
-        if(startRegion == null || endRegion == null)
-            return false;
-
-        var startSubRegion = startRegion.GetSubRegionAtPosition(start);
-        var endSubRegion = endRegion.GetSubRegionAtPosition(end);
+        var startSubRegion = GetClosestSubRegionToPosition(start);
+        var endSubRegion = GetClosestSubRegionToPosition(end);
         
         if(startSubRegion == null || endSubRegion == null)
             return false;
@@ -129,28 +145,11 @@ public class RegionManager
 
     public Thing IsPathPossbileToThing(Vector2Int start, Func<Thing, bool> filter)
     {
-        var startRegion = GetRegionAtPosition(ToRegionPosition(start));
-
-        if(startRegion == null)
+        var startSubRegion = GetClosestSubRegionToPosition(start);
+        
+        if(startSubRegion == null)
             return null;
 
-        var startSubRegion = startRegion.GetSubRegionAtPosition(start);
-
-        // find sub region nearby if
-        // current location doesn't return
-        if(startSubRegion == null)
-        {
-            foreach(var n in _neighbours)
-            {
-                startSubRegion = startRegion.GetSubRegionAtPosition(start + n);
-                if(startSubRegion != null)
-                    break;
-            }
-
-            if(startSubRegion == null)
-                return null;
-        }
-           
         Profiler.BeginSample("RegionManager_Graph_IsPathToNodes");
         var subRegion = _graph.IsPathToNodes(startSubRegion, (region) => region.HasThing(filter));
         Profiler.EndSample();
