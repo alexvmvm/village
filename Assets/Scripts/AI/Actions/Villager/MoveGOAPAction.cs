@@ -59,9 +59,7 @@ namespace Village.AI
             if (_movement.ReachedEndOfPath)
             {
                 if(!PerformAtTarget())
-                {
-                    return false;
-                }
+                    return true;
 
                 _isDone = true;
                  

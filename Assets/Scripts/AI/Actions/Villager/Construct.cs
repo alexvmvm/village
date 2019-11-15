@@ -11,7 +11,6 @@ namespace Village.AI
     {
         private Movement _movement;
         private bool _started;
-        private bool _isDone;
         private TypeOfThing _resource;
         private Thing _thing;
         private Inventory _inventory;
@@ -33,15 +32,8 @@ namespace Village.AI
             return thing != null && thing.Config.TypeOfThing == TypeOfThing.Blueprint && thing.Requires == _resource;
         }
 
-        public override bool IsDone()
-        {
-            return _isDone;
-        }
-
-
         public override bool PerformAtTarget()
         {
-            
             if(_target == null)
                 return false;
 
@@ -66,7 +58,6 @@ namespace Village.AI
             base.Reset();
 
             _started = false;
-            _isDone = false;
         }
     }
 
