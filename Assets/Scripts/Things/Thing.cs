@@ -114,6 +114,7 @@ namespace Village.Things
         public Factory Factory { get; private set; }
         public Fire Fire { get; private set; }
         public Storage Storage { get; private set; }
+        public Crop  Crop { get; private set; }
         public Inventory Inventory { get; private set; }
         public Agent Agent { get; private set; }
         public TypeOfThing Builds { get; private set; }
@@ -165,6 +166,12 @@ namespace Village.Things
             if(Config.Storage)
             {
                 Storage = gameObject.AddComponent<Storage>();
+            }
+
+            if(Config.Crop != null)
+            {
+                Crop = gameObject.AddComponent<Crop>();
+                Crop.Setup(Config.Crop);
             }
 
             switch(Config.Agent)

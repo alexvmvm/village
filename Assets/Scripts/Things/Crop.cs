@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Village.Things
 {
 
-    public class Crop : ITrait
+    public class Crop : MonoBehaviour
     {
         private Thing _thing;
         private Game _game;
@@ -14,17 +14,17 @@ namespace Village.Things
         private float _timeToGrow;
         private int _index;
 
-        public Crop(Game game, Thing thing, float timeToGrow, string[] sprites)
+        void Awake() 
         {
-            _game = game;
-            _thing = thing;
-            _sprites = sprites;
-            _timeToGrow = timeToGrow;
+            _game = FindObjectOfType<Game>();
+            _thing = GetComponent<Thing>();
         }
 
-        public void Setup()
+        public void Setup(Thing.CropConfig config)
         {
-
+            _sprites = config.Sprites;
+            _timeToGrow = config.TimeToGrow;
+            _thing.Config.TileRule = new CropTile(this);
         }
 
         public string GetSprite()
@@ -32,8 +32,11 @@ namespace Village.Things
             return _sprites[_index];
         }
 
-        public void Update()
+        void Update()
         {
+            if(_sprites == null)
+                return;
+
             _age += Time.deltaTime;
             var index = Mathf.FloorToInt(Mathf.Min(_age / _timeToGrow, 1) * (_sprites.Length - 1));
             if (index != _index)
@@ -43,7 +46,7 @@ namespace Village.Things
             }
         }
 
-        public void DrawGizmos()
+        public void OnDrawGizmos()
         {
 #if UNITY_EDITOR
 
