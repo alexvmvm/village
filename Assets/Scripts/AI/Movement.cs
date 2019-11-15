@@ -61,7 +61,7 @@ namespace Village.AI
             _seeker.tagPenalties = tagPenalties;
 
             // set which are not traversable
-            //DisableTag(TAG_BLOCKING);
+            DisableTag(TAG_BLOCKING);
             //DisableTag(TAG_FOILIAGE);
 
 

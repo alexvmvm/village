@@ -220,7 +220,8 @@ namespace Village
             if(OnThingRemoved != null)
                 OnThingRemoved(thing);
 
-            thing.ResetPath();
+            if(thing.Config.FixedToFloor)
+                thing.ResetPath();
 
             _things.Remove(thing);
 
@@ -294,14 +295,12 @@ namespace Village
             return System.Array.IndexOf(AStarPath.GetTagNames(), tag);
         }
 
-        public void UpdateAstarPath(Vector2Int position, string pathTag, bool walkable)
+        public void UpdateAstarPath(Vector2Int position, string pathTag)
         {
             var graphupdate = new GraphUpdateObject
             {
                 setTag = TagFromString(pathTag),
                 bounds = new Bounds(new Vector3(position.x, position.y, 0), Vector3.one),
-                modifyWalkability = true,
-                setWalkability = walkable,
                 modifyTag = true
             };
 

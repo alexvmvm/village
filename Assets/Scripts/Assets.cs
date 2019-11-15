@@ -276,6 +276,8 @@ public class Assets
                 thing.Sprite = "colored_transparent_855";
                 thing.BuildSite = false;
                 thing.SortingOrder = 100;
+                thing.PathTag = Movement.TAG_BLOCKING;
+                thing.PathBlocking = true;
             break;
             case TypeOfThing.SoilFloor:
                 thing.Name = "soil";
@@ -323,7 +325,7 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Pipe = true;
                 thing.LightBlocking = true;
-                thing.PathTag = Movement.TAG_AVOID;
+                thing.PathTag = Movement.TAG_BLOCKING;
                 thing.PathBlocking = true;
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.Wood);
             break;

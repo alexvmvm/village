@@ -46,7 +46,6 @@ namespace Village.Things
             public TypeOfThing RequiredToProduce = TypeOfThing.None;
             public string PositionalAudioGroup;
             public string PathTag;
-            public bool Walkable = true;
             public TypeOfThing[] RequiredToCraft;
             public bool AssignToFamily;
             public bool Inventory;
@@ -138,7 +137,7 @@ namespace Village.Things
 
             if (!string.IsNullOrEmpty(Config.PathTag))
             {
-                Game.UpdateAstarPath(transform.position.ToVector2IntFloor(), Config.PathTag, Config.Walkable);
+                Game.UpdateAstarPath(transform.position.ToVector2IntFloor(), Config.PathTag);
             }
 
 
@@ -312,7 +311,7 @@ namespace Village.Things
         {
             if (!string.IsNullOrEmpty(Config.PathTag))
             {
-                Game.UpdateAstarPath(transform.position.ToVector2IntFloor(), "ground", true);
+                Game.UpdateAstarPath(transform.position.ToVector2IntFloor(), Movement.TAG_GROUND);
             }
         }
 
