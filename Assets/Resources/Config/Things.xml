@@ -1,0 +1,26 @@
+<Main>
+    
+    <ThingParents>
+        <ThingParent id="floor">
+        
+        </ThingParent>
+    </ThingParents>
+    
+    <Things>
+
+        <!-- Floors -->
+        <Thing>
+            <Sprite></Sprite>
+            <Type>Mudfloor</Type>
+            <Parent>floor</Parent>
+            <Name></Name>
+            <Description></Description>
+            <Hitpoints></Hitpoints>
+        </Thing>
+
+        
+
+    </Things>
+
+</Main>
+
