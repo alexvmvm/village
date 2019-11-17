@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Village;
+using System.Linq;
 
 public class ManualPlacementPanel : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class ManualPlacementPanel : MonoBehaviour
     {
          ButtonPooler.DeactivateAll();
         
-        foreach(var thing in _game.ThingConfigs)
+        foreach(var thing in _game.ThingConfigs.OrderBy(t => t.TypeOfThing.ToString()))
         {
             var obj = ButtonPooler.GetPooledObject();
             obj.GetComponentInChildren<Text>().text = thing.Name.ToUppercaseFirst();

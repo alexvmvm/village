@@ -186,6 +186,15 @@ public class Assets
                 thing.StoreGroup = "resource";
                 thing.Produces = TypeOfThing.Wood;
             break;
+            case TypeOfThing.WoodenPlanks:
+                thing.Name = "Planks";
+                thing.Sprite = "colored_transparent_531";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.Resource = true;
+                thing.Storeable = true;
+                thing.RequiredToCraft = new TypeOfThing[] { TypeOfThing.Wood };
+                thing.StoreGroup = "resource";
+            break;
             case TypeOfThing.FallenWood:
                 thing.Name = "Wood";
                 thing.Sprite = "colored_70";
@@ -315,7 +324,7 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
-                thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Floors, TypeOfThing.Wood);
+                thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Floors, TypeOfThing.WoodenPlanks);
             break;
             case TypeOfThing.WoodWall:
                 thing.Name = "wood wall";
@@ -374,7 +383,30 @@ public class Assets
                 thing.Sprite = "colored_297";
                 thing.FixedToFloor = true;
                 thing.Floor = true;
-                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.WoodenPlanks);
+                break;
+            case TypeOfThing.Bucket:
+                thing.Name = "Bucket";
+                thing.Sprite = "colored_transparent_974";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.Floor = true;
+                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.WoodenPlanks);
+                break;
+            case TypeOfThing.Table:
+                thing.Name = "Table";
+                thing.Sprite = "colored_transparent_302";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.PathTag = Movement.TAG_AVOID;
+                thing.Floor = true;
+                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.WoodenPlanks);
+                break;
+            case TypeOfThing.Chair:
+                thing.Name = "Chair";
+                thing.Sprite = "colored_transparent_298";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.PathTag = Movement.TAG_AVOID;
+                thing.Floor = true;
+                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.WoodenPlanks);
                 break;
             case TypeOfThing.ForagedBed:
                 thing.Name = "Foraged Bed";
@@ -407,6 +439,15 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.AssignToFamily = true;
                 thing.Factory = new Thing.FactoryConfig(new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe });
+                thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
+            break;
+            case TypeOfThing.CarpentersBench:
+                thing.Name = "Carpenters Bench";
+                thing.Sprite = "colored_228";
+                thing.SortingOrder = (int)SortingOrders.Objects;
+                thing.FixedToFloor = true;
+                thing.AssignToFamily = true;
+                thing.Factory = new Thing.FactoryConfig(new TypeOfThing[] { TypeOfThing.WoodenPlanks });
                 thing.Construction = new Thing.ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
             break;
             case TypeOfThing.Axe:

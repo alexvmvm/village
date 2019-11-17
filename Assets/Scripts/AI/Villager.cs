@@ -76,6 +76,7 @@ namespace Village.AI
                 TypeOfThing.Tree,
                 TypeOfThing.FallenWood,
                 TypeOfThing.Wood,
+                TypeOfThing.WoodenPlanks,
                 TypeOfThing.ClayFloor,
                 TypeOfThing.Clay,
                 TypeOfThing.OreFloor,
@@ -102,7 +103,8 @@ namespace Village.AI
             {
                 Tuple.Create(TypeOfThing.ClayForge, TypeOfThing.Ore, TypeOfThing.Iron, false),
                 Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Axe, true),
-                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Hoe, true)
+                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Hoe, true),
+                Tuple.Create(TypeOfThing.CarpentersBench, TypeOfThing.Wood, TypeOfThing.WoodenPlanks, true),
             };
 
             foreach(var job in factoryJobs)
@@ -137,6 +139,7 @@ namespace Village.AI
             */
 
             AddAction(new Construct(this, _game, _movement, TypeOfThing.Wood, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.WoodenPlanks, _thing));
             AddAction(new Construct(this, _game, _movement, TypeOfThing.Stone, _thing));
             AddAction(new Construct(this, _game, _movement, TypeOfThing.Clay, _thing));
             AddAction(new Construct(this, _game, _movement, TypeOfThing.Hoe, _thing));
