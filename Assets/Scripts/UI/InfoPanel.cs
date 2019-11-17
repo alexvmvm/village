@@ -32,7 +32,7 @@ public class InfoPanel : MonoBehaviour
     {
         TextPooler.DeactivateAll();
 
-        var loose = _game.QueryLooseThings().Where(t => t.Position == position).FirstOrDefault();
+        var loose = _game.GetLooseThing(position);
         if(loose != null)
         {
             BuildList(loose);

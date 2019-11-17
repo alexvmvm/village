@@ -17,9 +17,10 @@ public class Session : MonoBehaviour
 
     void Start()
     {
-        SetupNewGame();
         if(!string.IsNullOrEmpty(SaveFileName))
             LoadGame();
+        else
+            SetupNewGame();
     }
 
     [BitStrap.Button]

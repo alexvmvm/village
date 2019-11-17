@@ -168,6 +168,16 @@ namespace Village
             return IsThingOnFloor(position) ? _floor[position] : null;
         }
 
+        public bool IsLooseThing(Vector2Int position)
+        {
+            return QueryLooseThings().Any(t => t.Position == position);
+        }
+
+        public Thing GetLooseThing(Vector2Int position)
+        {
+            return QueryLooseThings().FirstOrDefault(t => t.Position == position);
+        }
+
         /*
             Things
         */
@@ -178,11 +188,17 @@ namespace Village
 
             if(thing.Config.FixedToFloor)
             {
+                if(IsThingOnFloor(thing.Position))
+                    Remove(GetThingOnFloor(thing.Position));
+
                 _floor[thing.Position] = thing;
                 _things.Add(thing);
             }
             else
             {
+                if(IsLooseThing(thing.Position))
+                    Remove(GetLooseThing(thing.Position));
+
                 _loose.Add(thing);
                 _things.Add(thing);
             }
@@ -279,13 +295,6 @@ namespace Village
         {
             return QueryThings().Any(t => t.Config.TypeOfThing == TypeOfThing.Blueprint && t.Position == position);
         }
-
-        // public Thing CreateBlueprint(TypeOfThing type, int x, int y)
-        // {
-        //     var thing = Create(TypeOfThing.Blueprint, x, y);
-        //     thing.SetBuilds(type);
-        //     return thing;
-        // }
 
         /*
             Pathfinding
@@ -402,13 +411,19 @@ namespace Village
 
         public IEnumerator LoadGame(GameSave obj)
         {
+            Time.timeScale = 0;
             ResetTimeSinceLoad();
             Profiler.BeginSample("Game_LoadGame_RemoveAll");
+            Debug.Log("Clearing Scene");
             yield return StartCoroutine(RemoveAll());
             Profiler.EndSample();
             Profiler.BeginSample("Game_LoadGame_FormSaveObj");
-            FromSaveObj(obj);
+            Debug.Log($"Loading Game with {obj.Things.Length} entities...");
+            yield return StartCoroutine(FromSaveObjC(obj));
+            Debug.Log("Game Loaded!");
             Profiler.EndSample();
+            Time.timeScale = 1f;
+
         }
 
         void ResetTimeSinceLoad()
@@ -441,15 +456,22 @@ namespace Village
         
         public void FromSaveObj(GameSave obj)
         {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator FromSaveObjC(GameSave obj)
+        {
             // load game
+            var count = 0;
             foreach(var thingSave in obj.Things)
             {
-                Profiler.BeginSample("Game_FromSaveObj_CreateAtPosition");
                 var thing = CreateAtPosition(thingSave.type, thingSave.position);
-                Profiler.EndSample();
-                Profiler.BeginSample("Game_FromSaveObj_FromSaveObj");
                 thing.FromSaveObj(thingSave);
-                Profiler.EndSample();
+                count++;
+                if(count % 10 == 0)
+                {
+                    yield return null;
+                }
             }
         }
         

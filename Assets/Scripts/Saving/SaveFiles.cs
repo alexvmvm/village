@@ -94,6 +94,10 @@ namespace Village.Saving
             writer.Flush();
             memoryStream.Flush();
             memoryStream.Seek(0, SeekOrigin.Begin);
+
+            if(File.Exists(path))
+                File.Delete(path);
+
             using (var fileStream = File.Create(path))
                 memoryStream.WriteTo(fileStream);
 

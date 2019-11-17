@@ -112,11 +112,6 @@ public class SubRegion
             return;
 
         _dirty = true;
-
-        // if(!_things.ContainsKey(thing.Config.TypeOfThing))
-        //     _things[thing.Config.TypeOfThing] = new List<Thing>();
-        // if(!_things[thing.Config.TypeOfThing].Contains(thing))
-        //     _things[thing.Config.TypeOfThing].Add(thing);
     }
 
     public void AddListeners()
@@ -139,11 +134,6 @@ public class SubRegion
             return;
 
         _dirty = true;
-        // if(!_things.ContainsKey(thing.Config.TypeOfThing))
-        //     _things[thing.Config.TypeOfThing] = new List<Thing>();
-
-        // if(!_things[thing.Config.TypeOfThing].Contains(thing))
-        //     _things[thing.Config.TypeOfThing].Add(thing);
     }
 
     void OnThingRemoved(Thing thing)
@@ -152,8 +142,6 @@ public class SubRegion
             return;
 
         _dirty = true;
-        // if(_things[thing.Config.TypeOfThing].Contains(thing))
-        //     _things[thing.Config.TypeOfThing].Remove(thing);
     }
 
     void OnThingMoved(Thing thing, Vector2Int previous, Vector2Int current)
@@ -161,16 +149,10 @@ public class SubRegion
         if(IsInRegion(previous) && !IsInRegion(current))
         {
             _dirty = true;
-            // if(_things.ContainsKey(thing.Config.TypeOfThing) && _things[thing.Config.TypeOfThing].Contains(thing))
-            //     _things[thing.Config.TypeOfThing].Remove(thing);
         }
         else if(!IsInRegion(previous) && IsInRegion(current))
         {
             _dirty = true;
-            // if(!_things.ContainsKey(thing.Config.TypeOfThing))
-            //     _things[thing.Config.TypeOfThing] = new List<Thing>();
-            // if(!_things[thing.Config.TypeOfThing].Contains(thing))
-            //     _things[thing.Config.TypeOfThing].Add(thing);
         }
     }
 
@@ -216,13 +198,6 @@ public class SubRegion
         }
     }
 
-    // private bool _hasThingToStore;
-
-    // public bool HasTypeOfThing(TypeOfThing type)
-    // {
-    //     return CachedList.Any(t => t.Config.TypeOfThing == type);  //_things.ContainsKey(type) && _things[type].Count() > 0;
-    // }
-
     public bool HasThing(Func<Thing, bool> filter)
     {
         return CachedList.Any(filter);
@@ -232,11 +207,6 @@ public class SubRegion
     {
         return CachedList.Where(filter).First();
     }
-
-    // public List<Thing> GetThings(TypeOfThing type)
-    // {
-    //     return CachedList.Where(t => t.Config.TypeOfThing == type).ToList();
-    // }
 
     /*
         Edges
