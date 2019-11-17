@@ -11123,7 +11123,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: -538.19464}
+  m_AnchoredPosition: {x: -0.000030517578, y: -539.0099}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1324053944
@@ -12138,7 +12138,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 473427271}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9603034
+  m_Size: 0.99999183
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18452,7 +18452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AstarPath: {fileID: 1853949321}
-  SaveFileName: t
+  SaveFileName: 
   Game: {fileID: 1254532181}
   Cursor: {fileID: 1254532183}
 --- !u!1 &425697715341806823
