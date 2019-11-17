@@ -7,6 +7,7 @@ using Village.AI;
 using Village;
 using System.Linq;
 using Village.Things.Config;
+using Village.Things.Serialization;
 
 public class Assets 
 {
@@ -14,6 +15,7 @@ public class Assets
     private static Dictionary<string, AudioClip> _audioClips;
     private static Dictionary<string, Material> _materials;
     private static Dictionary<string, GameObject> _prefabs;
+    private static ThingSerialization _thingSerialization;
 
     public static Sprite GetSprite(string name)
     {
@@ -96,6 +98,12 @@ public class Assets
 
     public static ThingConfig CreateThingConfig(TypeOfThing thingType)
     {
+        if(_thingSerialization == null)
+        {
+            _thingSerialization = new ThingSerialization("Assets/Resources/Config/Things.xml");
+            var things = _thingSerialization.LoadFromFile();
+        }
+
         var thing = new ThingConfig(thingType);
 
         switch(thingType)

@@ -107,14 +107,10 @@ namespace Village.Saving
 
         public static GameSave LoadGame(string path)
         {
-            var document = new XmlDocument();
-            document.Load(path);
-
             var serializer = new XmlSerializer(typeof(GameSave));
             var reader = new StreamReader(path);
             var obj = (GameSave)serializer.Deserialize(reader);
             reader.Close();
-
             return obj;
         }
 

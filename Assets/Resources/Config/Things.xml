@@ -1,18 +1,18 @@
-<Main>
+<ThingSerializationLayout>
     
-    <ThingParents>
-        <ThingParent id="floor">
-        
-        </ThingParent>
-    </ThingParents>
+    <Parents>
+        <Thing>
+
+        </Thing>
+    </Parents>
     
     <Things>
 
         <!-- Floors -->
         <Thing>
+            <Parent>floor</Parent>
             <Sprite></Sprite>
             <Type>Mudfloor</Type>
-            <Parent>floor</Parent>
             <Name></Name>
             <Description></Description>
             <Hitpoints></Hitpoints>
@@ -22,5 +22,5 @@
 
     </Things>
 
-</Main>
+</ThingSerializationLayout>
 

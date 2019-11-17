@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System;
 using Village.Things;
+using System;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Village.Things.Config
 {
@@ -11,17 +14,20 @@ namespace Village.Things.Config
         Animal
     }
 
+    [Serializable]
     public class ThingConfig
     {
         public string Sprite;
         public string Name;
         public String Description;
+        public string Parent;
         public int Hitpoints = 100;
         public TypeOfThing TypeOfThing;
         public Color Color = UnityEngine.Color.white;
         public Vector3 Scale = Vector3.one;
         public int SortingOrder;
         public bool FixedToFloor;
+        [XmlIgnore]
         public ITileRule TileRule;
         public int GridGroup;
         public bool Floor;
@@ -42,9 +48,12 @@ namespace Village.Things.Config
         public bool Inventory;
         public bool Fire;
         public bool Storage;
+        [XmlIgnore]
         public FactoryConfig Factory;
+        [XmlIgnore]
         public CropConfig Crop;
         public AgentConfig Agent;
+        [XmlIgnore]
         public ConstructionConfig Construction;
 
         public ThingConfig(TypeOfThing type)
@@ -52,6 +61,8 @@ namespace Village.Things.Config
             this.TypeOfThing = type;
             this.Produces = type;
         }
+
+        public ThingConfig() {}
     }
 
 }
