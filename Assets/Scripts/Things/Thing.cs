@@ -2,6 +2,7 @@
 using System;
 using Village.Saving;
 using Village.AI;
+using Village.Things.Config;
 
 namespace Village.Things
 {
@@ -10,105 +11,6 @@ namespace Village.Things
     public class Thing : MonoBehaviour, ISave<ThingSave>
     {
         public static ThingMoved OnThingMoved;
-
-        public enum AgentConfig
-        {
-            None,
-            Villager,
-            Animal
-        }
-
-        [Serializable]    
-        public class ThingConfig
-        {
-            public string Sprite;
-            public string Name;
-            public String Description;
-            public int Hitpoints = 100;
-            public TypeOfThing TypeOfThing;
-            public Color Color = Color.white;
-            public Vector3 Scale = Vector3.one;
-            public int SortingOrder;
-            public bool FixedToFloor;
-            public ITileRule TileRule;
-            public int GridGroup;
-            public bool Floor;
-            public bool LightBlocking;
-            public bool BuildSite;
-            public bool Pipe;
-            public bool Edible;
-            public bool Storeable;
-            public string StoreGroup;
-            public bool Resource;
-            public bool Tool;
-            public TypeOfThing Produces;
-            public TypeOfThing RequiredToProduce = TypeOfThing.None;
-            public string PositionalAudioGroup;
-            public string PathTag;
-            public TypeOfThing[] RequiredToCraft;
-            public bool AssignToFamily;
-            public bool Inventory;
-            public bool Fire;
-            public bool Storage;
-            public FactoryConfig Factory;
-            public CropConfig Crop;
-            public AgentConfig Agent;
-            public ConstructionConfig Construction;
-
-            public ThingConfig(TypeOfThing type)
-            {
-                TypeOfThing = type;
-                Produces = type;
-            }
-        }
-
-        [Serializable]    
-        public class ConstructionConfig
-        {
-            public TypeOfThing? BuildOn { get; protected set; }
-            public TypeOfThing Builds { get; protected set; }
-            public Thing.ThingConfig BuildsConfig { get; private set; }
-            public ConstructionGroup Group { get; protected set; }
-            public TypeOfThing Requires { get; protected set; }
-
-            public ConstructionConfig(
-                TypeOfThing? buildOn,
-                ConstructionGroup group,
-                TypeOfThing requires
-            )
-            {
-                BuildOn = buildOn;
-                Group = group;
-                Requires = requires;
-            }
-        }
-
-        [Serializable]    
-        public class FactoryConfig
-        {
-            public TypeOfThing[] Produces { get; protected set; }
-
-            public FactoryConfig(TypeOfThing[] produces)
-            {
-                Produces = produces;
-            }
-        }
-
-        [Serializable]    
-        public class CropConfig
-        {
-            public float TimeToGrow { get; protected set; }
-            public string[] Sprites { get; protected set; }
-            public TypeOfThing Produces { get; protected set; }
-            
-            public CropConfig(float timeToGrow, string[] sprites, TypeOfThing produces)
-            {
-                TimeToGrow = timeToGrow;
-                Sprites = sprites;
-                Produces = produces;
-            }
-        }
-        
         public ThingConfig Config { get; protected set; }
         public SpriteRenderer SpriteRenderer { get; protected set; }
         public int Hitpoints { get; set; }

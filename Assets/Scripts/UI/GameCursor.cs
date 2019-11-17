@@ -2,6 +2,7 @@
 using UnityEngine;
 using Village;
 using Village.Things;
+using Village.Things.Config;
 
 public delegate void CursorMoved(Vector2Int position);
 
@@ -18,7 +19,7 @@ public class GameCursor : MonoBehaviour
     private Vector3 _min { get { return Vector3.Min(_down, _move);  } }
     private Vector3 _max { get { return Vector3.Max(_down, _move) + Vector3.one;  } }
     private bool _mouseDown;
-    private Thing.ThingConfig _currentToBuild;
+    private ThingConfig _currentToBuild;
     private GameObject _cursorMeshObj;
     private MeshFromPoints _meshFromPoints;
     private MeshRenderer _meshRenderer;

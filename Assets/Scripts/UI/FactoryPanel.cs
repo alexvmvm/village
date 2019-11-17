@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Village;
 using Village.Things;
+using Village.Things.Config;
 
 public class FactoryPanel : MonoBehaviour
 {
@@ -64,7 +65,7 @@ public class FactoryPanel : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    void OnMouseEnter(Thing.ThingConfig thing)
+    void OnMouseEnter(ThingConfig thing)
     {
         CostPooler.DeactivateAll();
 

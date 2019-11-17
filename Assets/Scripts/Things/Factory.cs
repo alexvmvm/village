@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Village;
-using Village.Things;
+using Village.Things.Config;
 
 namespace Village.Things 
 {
@@ -27,7 +26,7 @@ namespace Village.Things
             _queued = new Dictionary<TypeOfThing, int>();
         }
 
-        public void Setup(Thing.FactoryConfig config)
+        public void Setup(FactoryConfig config)
         {
             _produces = config.Produces;
             foreach(var type in _produces)

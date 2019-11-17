@@ -5,6 +5,7 @@ using System.Collections;
 using UnityEngine;
 using Pathfinding;
 using Village.Things;
+using Village.Things.Config;
 using Village.AI;
 using Village.Saving;
 using UnityEngine.Profiling;
@@ -20,7 +21,7 @@ namespace Village
         public Vector2Int Size = Vector2Int.one * 50;
         public WorldTime WorldTime { get { return _worldTime; } }
         public float TimeSinceLoaded { get { return _timeSinceLoaded; } }
-        public List<Thing.ThingConfig> ThingConfigs { get; private set; }
+        public List<ThingConfig> ThingConfigs { get; private set; }
         public ThingAdded OnThingAdded;
         public ThingRemoved OnThingRemoved;
         private List<PositionalAudio> _positionalAudio;
@@ -278,7 +279,7 @@ namespace Village
             Construction
         */
 
-        public bool IsPlaceableAt(Thing.ThingConfig config, Vector2Int position)
+        public bool IsPlaceableAt(ThingConfig config, Vector2Int position)
         {
             var current = GetThingOnFloor(position);
             if (current == null)

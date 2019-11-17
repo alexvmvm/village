@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Village.Things.Config;
 
 namespace Village.Things
 {
@@ -23,7 +24,7 @@ namespace Village.Things
             _delayBeforeProducing = 10f;
         }
 
-        public void Setup(Thing.CropConfig config)
+        public void Setup(CropConfig config)
         {
             _sprites = config.Sprites;
             _timeToGrow = config.TimeToGrow;

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using Village.Things;
+using Village.Things.Config;
 
 public class StoragePanel : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class StoragePanel : MonoBehaviour
         _session = FindObjectOfType<Session>();
     }
 
-    IEnumerable<IGrouping<string, Thing.ThingConfig>> GetStorableThings()
+    IEnumerable<IGrouping<string, ThingConfig>> GetStorableThings()
     {
         return _session.Game.ThingConfigs.Where(t => t.Storeable).GroupBy(t => t.StoreGroup);
     }
