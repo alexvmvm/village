@@ -403,8 +403,12 @@ namespace Village
         public IEnumerator LoadGame(GameSave obj)
         {
             ResetTimeSinceLoad();
+            Profiler.BeginSample("Game_LoadGame_RemoveAll");
             yield return StartCoroutine(RemoveAll());
+            Profiler.EndSample();
+            Profiler.BeginSample("Game_LoadGame_FormSaveObj");
             FromSaveObj(obj);
+            Profiler.EndSample();
         }
 
         void ResetTimeSinceLoad()
@@ -434,14 +438,18 @@ namespace Village
                 Things = _things.Select(t => t.ToSaveObj()).ToArray()
             };
         }
-
+        
         public void FromSaveObj(GameSave obj)
         {
             // load game
             foreach(var thingSave in obj.Things)
             {
+                Profiler.BeginSample("Game_FromSaveObj_CreateAtPosition");
                 var thing = CreateAtPosition(thingSave.type, thingSave.position);
+                Profiler.EndSample();
+                Profiler.BeginSample("Game_FromSaveObj_FromSaveObj");
                 thing.FromSaveObj(thingSave);
+                Profiler.EndSample();
             }
         }
         
