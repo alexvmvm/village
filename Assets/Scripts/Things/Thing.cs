@@ -23,7 +23,7 @@ namespace Village.Things
         public Agent Agent { get; private set; }
         public TypeOfThing Builds { get; private set; }
         public TypeOfThing Requires { get; private set; }
-
+        public ITileRule TileRule { get; private set; }
         private Vector2Int _previousPosition { get; set; }
 
         void Awake()
@@ -42,6 +42,13 @@ namespace Village.Things
             if (!string.IsNullOrEmpty(Config.PathTag))
             {
                 Game.UpdateAstarPath(transform.position.ToVector2IntFloor(), Config.PathTag);
+            }
+
+            if(config.TileRuleConfig != null)
+            {
+                var type = Type.GetType(config.TileRuleConfig.Type);
+                var instance = (ITileRule)Activator.CreateInstance(type, config.TileRuleConfig.Sprites);
+                TileRule = instance;
             }
 
 
@@ -137,7 +144,7 @@ namespace Village.Things
 
         public void SetSprite()
         {
-            var spriteName = Config.TileRule != null ? Config.TileRule.GetSprite(GetGridPositions()) : Config.Sprite;
+            var spriteName = TileRule != null ? TileRule.GetSprite(GetGridPositions()) : Config.Sprite;
             this.SpriteRenderer.sprite = Assets.GetSprite(spriteName);
             this.SpriteRenderer.sortingOrder = Config.SortingOrder;
             this.SpriteRenderer.color = Config.Color;

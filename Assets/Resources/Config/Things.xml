@@ -1,8 +1,11 @@
-<ThingSerializationLayout>
+<?xml version="1.0" encoding="utf-8"?>
+<ThingSerializationLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     
     <Parents>
         <Thing>
-
+            <Name>floor</Name>
+            <Floor>true</Floor>
+            <FixedToFloor>true</FixedToFloor>
         </Thing>
     </Parents>
     
@@ -10,12 +13,11 @@
 
         <!-- Floors -->
         <Thing>
+            <Name>grass</Name>
+            <Sprite>colored_5</Sprite>
+            <TypeOfThing>Grass</TypeOfThing>
+            <BuildSite>true</BuildSite>
             <Parent>floor</Parent>
-            <Sprite></Sprite>
-            <Type>Mudfloor</Type>
-            <Name></Name>
-            <Description></Description>
-            <Hitpoints></Hitpoints>
         </Thing>
 
         

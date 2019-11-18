@@ -8,11 +8,6 @@ namespace Village.Things.Config
     [Serializable]    
     public class FactoryConfig
     {
-        public TypeOfThing[] Produces { get; protected set; }
-
-        public FactoryConfig(TypeOfThing[] produces)
-        {
-            Produces = produces;
-        }
+        public TypeOfThing[] Produces;
     }
 }

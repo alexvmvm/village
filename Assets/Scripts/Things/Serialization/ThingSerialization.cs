@@ -9,29 +9,22 @@ namespace Village.Things.Serialization
 {
     public class ThingSerialization 
     {
-        private string _pathToXml;
         private ThingConfig[] _things;
 
-        public ThingSerialization(string pathToXml)
+
+        public ThingConfig[] LoadFromFile(string pathToXml)
         {
-            _pathToXml = pathToXml;
+            return GetThingsFromLayoutFile(GetLayoutFromFile(new StreamReader(pathToXml) as TextReader));
         }
 
-        public ThingConfig[] LoadFromFile()
+        public ThingConfig[] LoadFromString(string xml)
         {
-            if(_things == null)
-            {
-                var layout = GetLayoutFromFile();
-                _things = GetThingsFromLayoutFile(layout);
-            }
-
-            return _things;
+            return GetThingsFromLayoutFile(GetLayoutFromFile(new StringReader(xml.Trim())));
         }
 
-        ThingSerializationLayout GetLayoutFromFile()
+        ThingSerializationLayout GetLayoutFromFile(TextReader reader)
         {
             var serializer = new XmlSerializer(typeof(ThingSerializationLayout));
-            var reader = new StreamReader(_pathToXml);
             var obj = (ThingSerializationLayout)serializer.Deserialize(reader);
             reader.Close();
             return obj;
@@ -44,9 +37,9 @@ namespace Village.Things.Serialization
                     return t;
                 else
                 {
-                    var parent = layout.Parents.FirstOrDefault(p => p.Name == p.Parent);
+                    var parent = layout.Parents.FirstOrDefault(p => p.Name == t.Parent);
                     if(parent == null)
-                        throw new Exception($"Unable to find parent thing {t.Parent} in config file {_pathToXml}");
+                        throw new Exception($"Unable to find parent thing {t.Parent}");
                     return GetThingConfigFromParentChild(parent, t);
                 }
             }).ToArray();
@@ -54,12 +47,17 @@ namespace Village.Things.Serialization
 
         ThingConfig GetThingConfigFromParentChild(ThingConfig parent, ThingConfig child)
         {        
-            var properties = child.GetType().GetProperties();
-            foreach (PropertyInfo property in properties)
+            var defaultConfig = new ThingConfig();
+            var properties = parent.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            foreach (FieldInfo field in properties)
             {
-                property.SetValue(parent, property.GetValue(child));
+                var value = field.GetValue(child);
+                var defaultValue = field.GetValue(defaultConfig);
+                if(value == null || value.Equals(defaultValue))
+                    continue;
+                field.SetValue(parent, field.GetValue(child));
             }
-            return child;
+            return parent;
         }
     }
 }

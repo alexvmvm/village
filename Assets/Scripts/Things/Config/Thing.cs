@@ -14,6 +14,12 @@ namespace Village.Things.Config
         Animal
     }
 
+    public class TileRuleConfig
+    {
+        public string[] Sprites;
+        public string Type;
+    }
+
     [Serializable]
     public class ThingConfig
     {
@@ -27,8 +33,7 @@ namespace Village.Things.Config
         public Vector3 Scale = Vector3.one;
         public int SortingOrder;
         public bool FixedToFloor;
-        [XmlIgnore]
-        public ITileRule TileRule;
+        public TileRuleConfig TileRuleConfig;
         public int GridGroup;
         public bool Floor;
         public bool LightBlocking;
@@ -48,21 +53,10 @@ namespace Village.Things.Config
         public bool Inventory;
         public bool Fire;
         public bool Storage;
-        [XmlIgnore]
         public FactoryConfig Factory;
-        [XmlIgnore]
         public CropConfig Crop;
         public AgentConfig Agent;
-        [XmlIgnore]
         public ConstructionConfig Construction;
-
-        public ThingConfig(TypeOfThing type)
-        {
-            this.TypeOfThing = type;
-            this.Produces = type;
-        }
-
-        public ThingConfig() {}
     }
 
 }

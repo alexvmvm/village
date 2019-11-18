@@ -28,7 +28,7 @@ namespace Village.Things
         {
             _sprites = config.Sprites;
             _timeToGrow = config.TimeToGrow;
-            _thing.Config.TileRule = new CropTile(this);
+            //_thing.Config.TileRuleConfig = new CropTile(this);
             _produces = config.Produces;
         }
 

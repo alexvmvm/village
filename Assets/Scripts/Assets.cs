@@ -98,13 +98,9 @@ public class Assets
 
     public static ThingConfig CreateThingConfig(TypeOfThing thingType)
     {
-        if(_thingSerialization == null)
-        {
-            _thingSerialization = new ThingSerialization("Assets/Resources/Config/Things.xml");
-            var things = _thingSerialization.LoadFromFile();
-        }
-
-        var thing = new ThingConfig(thingType);
+        var thing = new ThingConfig();
+        thing.TypeOfThing = thingType;
+        thing.Produces = thingType;
 
         switch(thingType)
         {
@@ -115,7 +111,12 @@ public class Assets
                 thing.Name = "grass";
                 thing.Sprite = "colored_5";
                 thing.FixedToFloor = true;
-                thing.TileRule = new RandomTiles("colored_5", "colored_6", "colored_7");
+                //thing.TileRule = new RandomTiles("colored_5", "colored_6", "colored_7");
+                thing.TileRuleConfig = new TileRuleConfig
+                {
+                    Sprites = new string[] { "colored_5", "colored_6", "colored_7" },
+                    Type = "RandomTiles"
+                };
                 thing.Floor = true;
                 thing.BuildSite = true;
                 break;
@@ -124,11 +125,19 @@ public class Assets
                 thing.Sprite = "stream_4";
                 thing.FixedToFloor = true;
                 thing.Pipe = true;
-                thing.TileRule = new TileRuleDefinition(
-                    "stream_5!180", "stream_5", "stream_5!270", "stream_5!90", 
-                    "stream_2!180", "stream_2!90", "stream_2", "stream_2!270",
-                    "stream_3", "stream_3!180", "stream_3!90", "stream_3!270",
-                    "stream_4", "stream_1", "stream_1!90");
+                // thing.TileRule = new TileRuleDefinition(
+                //     "stream_5!180", "stream_5", "stream_5!270", "stream_5!90", 
+                //     "stream_2!180", "stream_2!90", "stream_2", "stream_2!270",
+                //     "stream_3", "stream_3!180", "stream_3!90", "stream_3!270",
+                //     "stream_4", "stream_1", "stream_1!90");
+                thing.TileRuleConfig = new TileRuleConfig
+                {
+                    Sprites = new string[] { "stream_5!180", "stream_5", "stream_5!270", "stream_5!90", 
+                        "stream_2!180", "stream_2!90", "stream_2", "stream_2!270",
+                        "stream_3", "stream_3!180", "stream_3!90", "stream_3!270",
+                        "stream_4", "stream_1", "stream_1!90" },
+                    Type = "TileRuleDefinition"
+                };
                 thing.GridGroup = 1;
                 thing.PositionalAudioGroup = "river";
                 thing.PathTag = Movement.TAG_BLOCKING;
@@ -138,11 +147,22 @@ public class Assets
                 thing.Sprite = "path_4";
                 thing.FixedToFloor = true;
                 thing.Pipe = true;
-                thing.TileRule = new TileRuleDefinition(
-                    "path_5!180", "path_5", "path_5!270", "path_5!90", 
-                    "path_2!180", "path_2!90", "path_2", "path_2!270",
-                    "path_3", "path_3!180", "path_3!90", "path_3!270",
-                    "path_4", "path_1", "path_1!90");
+                // thing.TileRule = new TileRuleDefinition(
+                //     "path_5!180", "path_5", "path_5!270", "path_5!90", 
+                //     "path_2!180", "path_2!90", "path_2", "path_2!270",
+                //     "path_3", "path_3!180", "path_3!90", "path_3!270",
+                //     "path_4", "path_1", "path_1!90");
+                thing.TileRuleConfig = new TileRuleConfig()
+                {
+                    Sprites = new string[] 
+                    {
+                        "path_5!180", "path_5", "path_5!270", "path_5!90", 
+                        "path_2!180", "path_2!90", "path_2", "path_2!270",
+                        "path_3", "path_3!180", "path_3!90", "path_3!270",
+                        "path_4", "path_1", "path_1!90"
+                    },
+                    Type = "TileRuleDefinition"
+                };
                 thing.GridGroup = 2;
                 thing.Floor = true;
                 break;
@@ -150,7 +170,11 @@ public class Assets
                 thing.Name = "tree";
                 thing.Sprite = "tree_1";
                 thing.FixedToFloor = true;
-                thing.TileRule = new RandomTiles("tree_1", "tree_2", "tree_3");
+                thing.TileRuleConfig = new TileRuleConfig()
+                {
+                    Sprites = new string[] { "tree_1", "tree_2", "tree_3" },
+                    Type = "RandomTiles"
+                };
                 thing.PositionalAudioGroup = "trees";
                 thing.Floor = true;
                 thing.LightBlocking = true;
@@ -287,7 +311,11 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Floors, TypeOfThing.None);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Floors, 
+                    Requires = TypeOfThing.None
+                };
             break;
             case TypeOfThing.Blueprint:
                 thing.Name = "blueprint";
@@ -303,7 +331,11 @@ public class Assets
                 thing.Floor = true;
                 thing.BuildSite = true;
                 thing.RequiredToProduce = TypeOfThing.Hoe;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Farming, TypeOfThing.Hoe);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Farming, 
+                    Requires = TypeOfThing.Hoe
+                };
             break;
             case TypeOfThing.CabbageCrop:
             {
@@ -311,8 +343,19 @@ public class Assets
                 thing.Sprite = "colored_transparent_204";
                 thing.BuildSite = false;
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.Crop = new CropConfig(5 * 60, new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206" }, TypeOfThing.Cabbage);
-                thing.Construction = new ConstructionConfig(TypeOfThing.SoilFloor, ConstructionGroup.Farming, TypeOfThing.CabbageSeed);
+                thing.Crop = new CropConfig()
+                {
+                    TimeToGrow = 5 * 60,
+                    Sprites = new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206"  },
+                    Produces = TypeOfThing.Cabbage
+
+                };
+                thing.Construction = new ConstructionConfig() 
+                {
+                    BuildOn = TypeOfThing.SoilFloor,
+                    Group = ConstructionGroup.Floors, 
+                    Requires = TypeOfThing.CabbageSeed
+                };
             }
             break;
             case TypeOfThing.Cabbage:
@@ -333,7 +376,11 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Floors, TypeOfThing.WoodenPlanks);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Floors, 
+                    Requires = TypeOfThing.WoodenPlanks
+                };
             break;
             case TypeOfThing.WoodWall:
                 thing.Name = "wood wall";
@@ -341,12 +388,11 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Pipe = true;
                 thing.PathTag = Movement.TAG_BLOCKING;
-                thing.TileRule = new TileRuleDefinition(
-                    "colored_98", "colored_98", "colored_98", "colored_98", 
-                    "colored_98", "colored_98", "colored_98", "colored_98",
-                    "colored_98", "colored_98", "colored_98", "colored_98",
-                    "colored_98", "colored_98", "colored_98");
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Walls, 
+                    Requires = TypeOfThing.Wood
+                };
             break;
             case TypeOfThing.ForagedWall:
                 thing.Name = "Foraged wall";
@@ -355,7 +401,11 @@ public class Assets
                 thing.Pipe = true;
                 thing.LightBlocking = true;
                 thing.PathTag = Movement.TAG_BLOCKING;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Walls, 
+                    Requires = TypeOfThing.Wood
+                };
             break;
             case TypeOfThing.Fence:
                 thing.Name = "fence";
@@ -363,12 +413,11 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Pipe = true;
                 thing.PathTag = Movement.TAG_BLOCKING;
-                thing.TileRule = new TileRuleDefinition(
-                    "colored_98", "colored_98", "colored_98", "colored_98", 
-                    "colored_98", "colored_98", "colored_98", "colored_98",
-                    "colored_98", "colored_98", "colored_98", "colored_98",
-                    "colored_98", "colored_98", "colored_98");
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.Wood);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Walls, 
+                    Requires = TypeOfThing.Wood
+                };
             break;
             case TypeOfThing.StoneFloor:
                 thing.Name = "stone floor";
@@ -376,7 +425,11 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Floors, TypeOfThing.Stone);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Floors, 
+                    Requires = TypeOfThing.Stone
+                };
             break;
             case TypeOfThing.StoneWall:
                 thing.Name = "stone wall";
@@ -385,21 +438,33 @@ public class Assets
                 thing.PathTag = Movement.TAG_BLOCKING;
                 thing.LightBlocking = true;
                 thing.Pipe = true;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Walls, TypeOfThing.Stone);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Walls, 
+                    Requires = TypeOfThing.Stone
+                };
             break;
             case TypeOfThing.Door:
                 thing.Name = "Door";
                 thing.Sprite = "colored_297";
                 thing.FixedToFloor = true;
                 thing.Floor = true;
-                 thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.WoodenPlanks);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.WoodenPlanks
+                };
                 break;
             case TypeOfThing.Bucket:
                 thing.Name = "Bucket";
                 thing.Sprite = "colored_transparent_974";
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Floor = true;
-                 thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.WoodenPlanks);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.WoodenPlanks
+                };
                 break;
             case TypeOfThing.Table:
                 thing.Name = "Table";
@@ -407,7 +472,11 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.PathTag = Movement.TAG_AVOID;
                 thing.Floor = true;
-                 thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.WoodenPlanks);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.WoodenPlanks
+                };
                 break;
             case TypeOfThing.Chair:
                 thing.Name = "Chair";
@@ -415,21 +484,33 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.PathTag = Movement.TAG_AVOID;
                 thing.Floor = true;
-                 thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.WoodenPlanks);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.WoodenPlanks
+                };
                 break;
             case TypeOfThing.ForagedBed:
                 thing.Name = "Foraged Bed";
                 thing.Sprite = "colored_204";
                 thing.FixedToFloor = true;
                 thing.Floor = true;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.Wood
+                };
                 break;
             case TypeOfThing.Bed:
                 thing.Name = "Bed";
                 thing.Sprite = "colored_261";
                 thing.FixedToFloor = true;
                 thing.Floor = true;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.Wood
+                };
                 break;
             case TypeOfThing.ClayForge:
                 thing.Name = "Clay Forge";
@@ -437,9 +518,16 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.FixedToFloor = true;
                 thing.AssignToFamily = true;
-                thing.Factory = new FactoryConfig(new TypeOfThing[] { TypeOfThing.Iron });
+                thing.Factory = new FactoryConfig()
+                { 
+                    Produces = new TypeOfThing[] { TypeOfThing.Iron }
+                };
                 thing.Fire = true;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Clay);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.Clay
+                };
             break;
             case TypeOfThing.Workbench:
                 thing.Name = "Workbench";
@@ -447,8 +535,15 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.FixedToFloor = true;
                 thing.AssignToFamily = true;
-                thing.Factory = new FactoryConfig(new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe });
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.Factory = new FactoryConfig()
+                { 
+                    Produces = new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe }
+                };
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.Wood
+                };
             break;
             case TypeOfThing.CarpentersBench:
                 thing.Name = "Carpenters Bench";
@@ -456,8 +551,15 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.FixedToFloor = true;
                 thing.AssignToFamily = true;
-                thing.Factory = new FactoryConfig(new TypeOfThing[] { TypeOfThing.WoodenPlanks });
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                 thing.Factory = new FactoryConfig()
+                { 
+                    Produces = new TypeOfThing[] { TypeOfThing.WoodenPlanks }
+                };
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.Wood
+                };
             break;
             case TypeOfThing.Axe:
                 thing.Name = "axe";
@@ -486,7 +588,11 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Storage = true;
                 thing.FixedToFloor = true;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.Wood
+                };
                 break;
             case TypeOfThing.Fire:
                 thing.Name = "fire";
@@ -494,7 +600,11 @@ public class Assets
                 thing.Sprite = "colored_334";
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Fire = true;
-                thing.Construction = new ConstructionConfig(null, ConstructionGroup.Furniture, TypeOfThing.Wood);
+                thing.Construction = new ConstructionConfig() 
+                {
+                    Group = ConstructionGroup.Furniture, 
+                    Requires = TypeOfThing.Wood
+                };
                 break;
             /*
                 Objects
