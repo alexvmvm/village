@@ -56,10 +56,8 @@ namespace Village.Things.Config
         public bool Inventory;
         public bool Fire;
         public bool Storage;
-        [XmlIgnore]
-        public FactoryConfig Factory;
+        public FactoryConfig FactoryConfig;
         public CropConfig CropConfig;
-        [XmlIgnore]
         public AgentConfig Agent;
         public ConstructionConfig ConstructionConfig;
     }

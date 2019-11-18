@@ -8,8 +8,28 @@
             <FixedToFloor>true</FixedToFloor>
         </Thing>
         <Thing>
+            <Name>furniture</Name>
+            <Floor>true</Floor>
+            <PathTag>TAG_AVOID</PathTag>
+            <SortingOrder>100</SortingOrder>
+        </Thing>
+        <Thing>
+            <Name>wall</Name>
+            <FixedToFloor>true</FixedToFloor>
+            <Pipe>true</Pipe>
+            <LightBlocking>true</LightBlocking>
+            <PathTag>TAG_BLOCKING</PathTag>
+        </Thing>
+        <Thing>
             <Name>resource</Name>
             <Resource>true</Resource>
+            <SortingOrder>100</SortingOrder>
+        </Thing>
+        <Thing>
+            <Name>tool</Name>
+            <Storeable>true</Storeable>
+            <StoreGroup>tool</StoreGroup>
+            <Tool>true</Tool>
             <SortingOrder>100</SortingOrder>
         </Thing>
         <Thing>
@@ -163,10 +183,228 @@
             <Parent>floor</Parent>
         </Thing>
 
+        <Thing>
+            <Name>Wood Floor</Name>
+            <Sprite>colored_16</Sprite>
+            <TypeOfThing>WoodWall</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Floors</Group>
+                <Requires>WoodenPlanks</Requires>
+            </ConstructionConfig>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Stone Floor</Name>
+            <Sprite>colored_416</Sprite>
+            <TypeOfThing>StoneFloor</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Floors</Group>
+                <Requires>Stone</Requires>
+            </ConstructionConfig>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <!-- Walls -->
+
+        <Thing>
+            <Name>Wood Wall</Name>
+            <Sprite>colored_98</Sprite>
+            <TypeOfThing>WoodWall</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Walls</Group>
+                <Requires>Wood</Requires>
+            </ConstructionConfig>
+            <Parent>wall</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Foraged Wall</Name>
+            <Sprite>colored_70</Sprite>
+            <TypeOfThing>ForagedWall</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Walls</Group>
+                <Requires>Wood</Requires>
+            </ConstructionConfig>
+            <Parent>wall</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Stone Wall</Name>
+            <Sprite>colored_580</Sprite>
+            <TypeOfThing>StoneWall</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Walls</Group>
+                <Requires>Stone</Requires>
+            </ConstructionConfig>
+            <Parent>wall</Parent>
+        </Thing>
+
+        <!-- Furniture -->
+
+        <Thing>
+            <Name>Table</Name>
+            <Sprite>colored_transparent_302</Sprite>
+            <TypeOfThing>Table</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>WoodenPlanks</Requires>
+            </ConstructionConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Chair</Name>
+            <Sprite>colored_transparent_298</Sprite>
+            <TypeOfThing>Chair</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>WoodenPlanks</Requires>
+            </ConstructionConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Foraged Bed</Name>
+            <Sprite>colored_204</Sprite>
+            <TypeOfThing>ForagedBed</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>Wood</Requires>
+            </ConstructionConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Bed</Name>
+            <Sprite>colored_261</Sprite>
+            <TypeOfThing>Bed</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>Wood</Requires>
+            </ConstructionConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Clay Forge</Name>
+            <Sprite>colored_680</Sprite>
+            <TypeOfThing>ClayForge</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>Clay</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>Iron</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Tool Workbench</Name>
+            <Sprite>colored_228</Sprite>
+            <TypeOfThing>Workbench</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>Wood</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>Axe</TypeOfThing>
+                    <TypeOfThing>Hoe</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Carpenters Workbench</Name>
+            <Sprite>colored_228</Sprite>
+            <TypeOfThing>CarpentersBench</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>Wood</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>WoodenPlanks</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Carpenters Workbench</Name>
+            <Sprite>colored_228</Sprite>
+            <TypeOfThing>CarpentersBench</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>Wood</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>WoodenPlanks</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Storage</Name>
+            <Description>A storage container used to store resources</Description>
+            <Sprite>colored_200</Sprite>
+            <TypeOfThing>Storage</TypeOfThing>
+            <Storage>true</Storage>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>Wood</Requires>
+            </ConstructionConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Fire</Name>
+            <Description>A storage container used to store resources</Description>
+            <Sprite>colored_334</Sprite>
+            <Fire>true</Fire>
+            <TypeOfThing>Fire</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Furniture</Group>
+                <Requires>Wood</Requires>
+            </ConstructionConfig>
+            <Parent>furniture</Parent>
+        </Thing>
+
+
+        <!-- Tools -->
+
+        <Thing>
+            <Name>Axe</Name>
+            <Description>A tool used to chop down trees.</Description>
+            <Sprite>colored_transparent_937</Sprite>
+            <RequiredToCraft>
+                <TypeOfThing>Iron</TypeOfThing>
+            </RequiredToCraft>
+            <Parent>tool</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Hoe</Name>
+            <Description>A tool used to till land for planting crops.</Description>
+            <Sprite>colored_transparent_770</Sprite>
+            <RequiredToCraft>
+                <TypeOfThing>Iron</TypeOfThing>
+            </RequiredToCraft>
+            <Parent>tool</Parent>
+        </Thing>
+
         <!-- Blueprint -->
 
         <Thing>
             <Name>Blueprint</Name>
+            <TypeOfThing>Blueprint</TypeOfThing>
             <Sprite>colored_transparent_855</Sprite>
             <BuildSite>false</BuildSite>
             <SortingOrder>100</SortingOrder>
@@ -294,7 +532,8 @@
 
         <!-- Crops -->
         <Thing>
-            <Parent>crop</Parent>
+            <Name>Cabbage</Name>
+            <TypeOfThing>CabbageCrop</TypeOfThing>
             <CropConfig>
                 <TimeToGrow>300</TimeToGrow>
                 <Sprites>
@@ -309,8 +548,48 @@
                 <Group>Floors</Group>
                 <Requires>CabbageSeed</Requires>
             </ConstructionConfig>
+            <Parent>crop</Parent>
         </Thing>
 
+        <!-- Agents -->
+        <Thing>
+            <Name>Villager</Name>
+            <TypeOfThing>Villager</TypeOfThing>
+            <Sprite>colored_transparent_24</Sprite>
+            <SortingOrder>100</SortingOrder>
+            <Inventory>true</Inventory>
+            <Agent>Villager</Agent>
+        </Thing>
+
+        <Thing>
+            <Name>Chicken</Name>
+            <TypeOfThing>Hen</TypeOfThing>
+            <Sprite>colored_transparent_249</Sprite>
+            <SortingOrder>100</SortingOrder>
+            <Agent>Animal</Agent>
+        </Thing>
+
+        <Thing>
+            <Name>Cockerl</Name>
+            <TypeOfThing>Rooster</TypeOfThing>
+            <Sprite>colored_transparent_249</Sprite>
+            <SortingOrder>100</SortingOrder>
+            <Agent>Animal</Agent>
+        </Thing>
+
+        <Thing>
+            <Name>Chick</Name>
+            <TypeOfThing>Chick</TypeOfThing>
+            <Sprite>colored_transparent_249</Sprite>
+            <SortingOrder>100</SortingOrder>
+            <Agent>Animal</Agent>
+            <Scale>
+                <x>0.5</x>
+                <y>0.5</y>
+                <z>0.5</z>
+            </Scale>
+        </Thing>
+        
 
     </Things>
 

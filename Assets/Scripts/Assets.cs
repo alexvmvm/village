@@ -518,7 +518,7 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.FixedToFloor = true;
                 thing.AssignToFamily = true;
-                thing.Factory = new FactoryConfig()
+                thing.FactoryConfig = new FactoryConfig()
                 { 
                     Produces = new TypeOfThing[] { TypeOfThing.Iron }
                 };
@@ -535,7 +535,7 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.FixedToFloor = true;
                 thing.AssignToFamily = true;
-                thing.Factory = new FactoryConfig()
+                thing.FactoryConfig = new FactoryConfig()
                 { 
                     Produces = new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe }
                 };
@@ -551,7 +551,7 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.FixedToFloor = true;
                 thing.AssignToFamily = true;
-                 thing.Factory = new FactoryConfig()
+                 thing.FactoryConfig = new FactoryConfig()
                 { 
                     Produces = new TypeOfThing[] { TypeOfThing.WoodenPlanks }
                 };

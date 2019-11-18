@@ -63,10 +63,10 @@ namespace Village.Things
                 Inventory = gameObject.AddComponent<Inventory>();
             }
             
-            if(Config.Factory != null)
+            if(Config.FactoryConfig != null)
             {
                 Factory = gameObject.AddComponent<Factory>();
-                Factory.Setup(Config.Factory);
+                Factory.Setup(Config.FactoryConfig);
             }
 
             if(Config.Fire)
@@ -216,7 +216,7 @@ namespace Village.Things
 
         public bool CanBeSeletected()
         {
-            return Config.AssignToFamily || Config.Factory != null || Config.Storage;
+            return Config.AssignToFamily || Config.FactoryConfig != null || Config.Storage;
         }
 
         public bool IsInStorage()

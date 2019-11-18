@@ -183,5 +183,37 @@ namespace Tests
             Assert.AreEqual(ConstructionGroup.Floors, things[0].ConstructionConfig.Group);
             Assert.AreEqual(TypeOfThing.None, things[0].ConstructionConfig.Requires);
         }
+
+        [Test]
+        public void ShouldSetFactoryConfig()
+        {
+            var s = new ThingSerialization();
+            var xml = @"
+                <?xml version='1.0' encoding='utf-8'?>
+                <ThingSerializationLayout xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'  xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+                    <Parents></Parents>
+                    <Things>
+                        <Thing>
+                            <Name>grass</Name>
+                            <Sprite>colored_5</Sprite>
+                            <TypeOfThing>Grass</TypeOfThing>
+                            <BuildSite>true</BuildSite>
+                            <FactoryConfig>
+                                <Produces>
+                                    <TypeOfThing>Iron</TypeOfThing>
+                                </Produces>
+                            </FactoryConfig>
+                        </Thing>
+                    </Things>
+                </ThingSerializationLayout>
+            ";
+
+            var things = s.LoadFromString(xml);
+            
+            Assert.IsInstanceOf<ThingConfig[]>(things);
+            Assert.AreEqual(1, things.Length);
+            Assert.IsNotNull(things[0].FactoryConfig);
+            Assert.AreEqual(1, things[0].FactoryConfig.Produces.Length);
+        }
     }
 }
