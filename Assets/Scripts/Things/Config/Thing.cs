@@ -14,8 +14,11 @@ namespace Village.Things.Config
         Animal
     }
 
+    [Serializable]
     public class TileRuleConfig
     {
+        [XmlArray("Sprites")]
+        [XmlArrayItem("string")] 
         public string[] Sprites;
         public string Type;
     }
@@ -53,10 +56,12 @@ namespace Village.Things.Config
         public bool Inventory;
         public bool Fire;
         public bool Storage;
+        [XmlIgnore]
         public FactoryConfig Factory;
-        public CropConfig Crop;
+        public CropConfig CropConfig;
+        [XmlIgnore]
         public AgentConfig Agent;
-        public ConstructionConfig Construction;
+        public ConstructionConfig ConstructionConfig;
     }
 
 }

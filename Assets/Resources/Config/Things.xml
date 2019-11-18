@@ -7,6 +7,16 @@
             <Floor>true</Floor>
             <FixedToFloor>true</FixedToFloor>
         </Thing>
+        <Thing>
+            <Name>resource</Name>
+            <Resource>true</Resource>
+            <SortingOrder>100</SortingOrder>
+        </Thing>
+        <Thing>
+            <Name>crop</Name>
+            <BuildSite>false</BuildSite>
+            <SortingOrder>100</SortingOrder>
+        </Thing>
     </Parents>
     
     <Things>
@@ -17,10 +27,290 @@
             <Sprite>colored_5</Sprite>
             <TypeOfThing>Grass</TypeOfThing>
             <BuildSite>true</BuildSite>
+            <TileRuleConfig>
+                <Sprites>
+                    <string>colored_5</string>
+                    <string>colored_6</string>
+                    <string>colored_7</string>
+                </Sprites>
+                <Type>RandomTiles</Type>
+            </TileRuleConfig>
             <Parent>floor</Parent>
         </Thing>
 
+        <Thing>
+            <Name>stream</Name>
+            <Sprite>colored_5</Sprite>
+            <TypeOfThing>Stream</TypeOfThing>
+            <TileRuleConfig>
+                <Sprites>
+                    <string>stream_5!180</string>
+                    <string>stream_5</string>
+                    <string>stream_5!270</string>
+                    <string>stream_5!90</string> 
+                    <string>stream_2!180</string> 
+                    <string>stream_2!90</string>
+                    <string>stream_2</string>
+                    <string>stream_2!270</string>
+                    <string>stream_3</string>
+                    <string>stream_3!180</string> 
+                    <string>stream_3!90</string> 
+                    <string>stream_3!270</string>
+                    <string>stream_4</string>
+                    <string>stream_1</string> 
+                    <string>stream_1!90</string>
+                </Sprites>
+                <Type>TileRuleDefinition</Type>
+            </TileRuleConfig>
+            <GridGroup>1</GridGroup>
+            <PositionalAudioGroup>river</PositionalAudioGroup>
+            <PathTag>TAG_BLOCKING</PathTag>
+            <Pipe>true</Pipe>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>path</Name>
+            <Sprite>colored_5</Sprite>
+            <TypeOfThing>Path</TypeOfThing>
+            <TileRuleConfig>
+                <Sprites>
+                    <string>stream_5!180</string>
+                    <string>stream_5</string>
+                    <string>stream_5!270</string>
+                    <string>stream_5!90</string> 
+                    <string>stream_2!180</string> 
+                    <string>stream_2!90</string>
+                    <string>stream_2</string>
+                    <string>stream_2!270</string>
+                    <string>stream_3</string>
+                    <string>stream_3!180</string> 
+                    <string>stream_3!90</string> 
+                    <string>stream_3!270</string>
+                    <string>stream_4</string>
+                    <string>stream_1</string> 
+                    <string>stream_1!90</string>
+                    <string>path_5!180</string> 
+                    <string>path_5</string> 
+                    <string>path_5!270</string> 
+                    <string>path_5!90</string> 
+                    <string>path_2!180</string> 
+                    <string>path_2!90</string> 
+                    <string>path_2</string> 
+                    <string>path_2!270</string>
+                    <string>path_3</string> 
+                    <string>path_3!180</string> 
+                    <string>path_3!90</string> 
+                    <string>path_3!270</string>
+                    <string>path_4</string> 
+                    <string>path_1</string> 
+                    <string>path_1!90</string>                
+                </Sprites>
+                <Type>TileRuleDefinition</Type>
+            </TileRuleConfig>
+            <GridGroup>1</GridGroup>
+            <PositionalAudioGroup>river</PositionalAudioGroup>
+            <PathTag>TAG_BLOCKING</PathTag>
+            <Pipe>true</Pipe>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>tree</Name>
+            <Sprite>colored_5</Sprite>
+            <TypeOfThing>Tree</TypeOfThing>
+            <TileRuleConfig>
+                <Sprites>
+                    <string>tree_1</string>
+                    <string>tree_2</string>
+                    <string>tree_3</string>           
+                </Sprites>
+                <Type>RandomTiles</Type>
+            </TileRuleConfig>
+            <GridGroup>1</GridGroup>
+            <PositionalAudioGroup>trees</PositionalAudioGroup>
+            <LightBlocking>true</LightBlocking>
+            <Resource>true</Resource>
+            <PathTag>TAG_AVOID</PathTag>
+            <Produces>Wood</Produces>
+            <RequiredToProduce>Axe</RequiredToProduce>
+            <Hitpoints>100</Hitpoints>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>mud floor</Name>
+            <Sprite>colored_0</Sprite>
+            <TypeOfThing>MudFloor</TypeOfThing>
+            <BuildSite>true</BuildSite>
+            <ConstructionConfig>
+                <Group>Floors</Group>
+                <Requires>None</Requires>
+            </ConstructionConfig>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Soil</Name>
+            <Sprite>colored_1</Sprite>
+            <TypeOfThing>SoilFloor</TypeOfThing>
+            <BuildSite>true</BuildSite>
+            <RequiredToProduce>Hoe</RequiredToProduce>
+            <ConstructionConfig>
+                <Group>Farming</Group>
+                <Requires>Hoe</Requires>
+            </ConstructionConfig>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <!-- Blueprint -->
+
+        <Thing>
+            <Name>Blueprint</Name>
+            <Sprite>colored_transparent_855</Sprite>
+            <BuildSite>false</BuildSite>
+            <SortingOrder>100</SortingOrder>
+            <PathTag>TAG_AVOID</PathTag>
+        </Thing>
         
+        <!-- Resource Producers -->
+
+        <Thing>
+            <Name>Berry Bush</Name>
+            <Sprite>colored_68</Sprite>
+            <TypeOfThing>BerryBush</TypeOfThing>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Mushroom</Name>
+            <Sprite>colored_71</Sprite>
+            <TypeOfThing>MushroomGrowing</TypeOfThing>
+            <Produces>Mushroom</Produces>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Clay</Name>
+            <Sprite>colored_1</Sprite>
+            <TypeOfThing>ClayFloor</TypeOfThing>
+            <Produces>Clay</Produces>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Ore</Name>
+            <Sprite>colored_4</Sprite>
+            <TypeOfThing>OreFloor</TypeOfThing>
+            <Produces>Ore</Produces>
+            <Parent>floor</Parent>
+        </Thing>
+
+
+
+        <!-- Resources -->
+        
+        <Thing>
+            <Name>Mushroom</Name>
+            <Sprite>colored_71</Sprite>
+            <TypeOfThing>Mushroom</TypeOfThing>
+            <Produces>Mushroom</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Wood</Name>
+            <Sprite>colored_transparent_209</Sprite>
+            <TypeOfThing>Wood</TypeOfThing>
+            <Produces>Wood</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Wood</Name>
+            <Sprite>colored_70</Sprite>
+            <TypeOfThing>FallenWood</TypeOfThing>
+            <Produces>Wood</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Wooden Planks</Name>
+            <Sprite>colored_transparent_531</Sprite>
+            <TypeOfThing>WoodenPlanks</TypeOfThing>
+            <Produces>WoodenPlanks</Produces>
+            <Hitpoints>20</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <RequiredToCraft>
+                <TypeOfThing>Wood</TypeOfThing>
+            </RequiredToCraft>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Rock</Name>
+            <Sprite>colored_70</Sprite>
+            <TypeOfThing>Rock</TypeOfThing>
+            <Produces>Stone</Produces>
+            <Hitpoints>20</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Stone</Name>
+            <Sprite>colored_71</Sprite>
+            <TypeOfThing>Stone</TypeOfThing>
+            <Produces>Stone</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Cabbage</Name>
+            <Sprite>colored_transparent_977</Sprite>
+            <TypeOfThing>Cabbage</TypeOfThing>
+            <Produces>Cabbage</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <!-- Crops -->
+        <Thing>
+            <Parent>crop</Parent>
+            <CropConfig>
+                <TimeToGrow>300</TimeToGrow>
+                <Sprites>
+                    <string>colored_transparent_204</string>
+                    <string>colored_transparent_205</string>
+                    <string>colored_transparent_206</string>
+                </Sprites>
+                <Produces>Cabbage</Produces>
+            </CropConfig>
+            <ConstructionConfig>
+                <BuildOn>SoilFloor</BuildOn>
+                <Group>Floors</Group>
+                <Requires>CabbageSeed</Requires>
+            </ConstructionConfig>
+        </Thing>
+
 
     </Things>
 

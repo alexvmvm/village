@@ -286,7 +286,7 @@ namespace Village
                 return false;
             if (ConstructAtPosition(current.Position))
                 return false;
-            if (config.Construction != null && config.Construction.BuildOn.HasValue && config.Construction.BuildOn != current.Config.TypeOfThing)
+            if (config.ConstructionConfig != null && config.ConstructionConfig.BuildOn.HasValue && config.ConstructionConfig.BuildOn != current.Config.TypeOfThing)
                 return false;
             return current.Config.BuildSite;
         }

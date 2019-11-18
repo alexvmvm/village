@@ -47,17 +47,23 @@ namespace Village.Things.Serialization
 
         ThingConfig GetThingConfigFromParentChild(ThingConfig parent, ThingConfig child)
         {        
-            var defaultConfig = new ThingConfig();
             var properties = parent.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            var parentCopy = new ThingConfig();
+            foreach (FieldInfo field in properties)
+            {
+                field.SetValue(parentCopy, field.GetValue(parent));
+            }
+
+            var defaultConfig = new ThingConfig();
             foreach (FieldInfo field in properties)
             {
                 var value = field.GetValue(child);
                 var defaultValue = field.GetValue(defaultConfig);
                 if(value == null || value.Equals(defaultValue))
                     continue;
-                field.SetValue(parent, field.GetValue(child));
+                field.SetValue(parentCopy, field.GetValue(child));
             }
-            return parent;
+            return parentCopy;
         }
     }
 }

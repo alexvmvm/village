@@ -79,10 +79,10 @@ namespace Village.Things
                 Storage = gameObject.AddComponent<Storage>();
             }
 
-            if(Config.Crop != null)
+            if(Config.CropConfig != null)
             {
                 Crop = gameObject.AddComponent<Crop>();
-                Crop.Setup(Config.Crop);
+                Crop.Setup(Config.CropConfig);
             }
 
             switch(Config.Agent)
@@ -109,7 +109,7 @@ namespace Village.Things
         public void SetBuilds(TypeOfThing type)
         {
             Builds = type;
-            Requires = Assets.CreateThingConfig(type).Construction.Requires;
+            Requires = Assets.CreateThingConfig(type).ConstructionConfig.Requires;
         }
 
         public void Construct()

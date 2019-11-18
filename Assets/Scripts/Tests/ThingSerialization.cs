@@ -3,6 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using Village;
+using Village.Things;
 using Village.Things.Config;
 using Village.Things.Serialization;
 
@@ -113,6 +114,74 @@ namespace Tests
             Assert.IsInstanceOf<ThingConfig[]>(things);
             Assert.AreEqual(1, things.Length);
             Assert.AreEqual(6789, things[0].Hitpoints);
+        }
+
+        [Test]
+        public void ShouldSetTileRuleConfig()
+        {
+            var s = new ThingSerialization();
+            var xml = @"
+                <?xml version='1.0' encoding='utf-8'?>
+                <ThingSerializationLayout xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'  xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+                    <Parents></Parents>
+                    <Things>
+                        <Thing>
+                            <Name>grass</Name>
+                            <Sprite>colored_5</Sprite>
+                            <TypeOfThing>Grass</TypeOfThing>
+                            <BuildSite>true</BuildSite>
+                            <TileRuleConfig>
+                                <Sprites>
+                                    <string>colored_5</string>
+                                    <string>colored_6</string>
+                                    <string>colored_7</string>
+                                </Sprites>
+                                <Type>RandomTiles</Type>
+                            </TileRuleConfig>
+                        </Thing>
+                    </Things>
+                </ThingSerializationLayout>
+            ";
+
+            var things = s.LoadFromString(xml);
+            
+            Assert.IsInstanceOf<ThingConfig[]>(things);
+            Assert.AreEqual(1, things.Length);
+            Assert.IsNotNull(things[0].TileRuleConfig);
+            Assert.AreEqual(3, things[0].TileRuleConfig.Sprites.Length);
+            Assert.AreEqual("RandomTiles", things[0].TileRuleConfig.Type);
+        }
+
+         [Test]
+        public void ShouldSetBuildConfig()
+        {
+            var s = new ThingSerialization();
+            var xml = @"
+                <?xml version='1.0' encoding='utf-8'?>
+                <ThingSerializationLayout xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'  xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+                    <Parents></Parents>
+                    <Things>
+                        <Thing>
+                            <Name>grass</Name>
+                            <Sprite>colored_5</Sprite>
+                            <TypeOfThing>Grass</TypeOfThing>
+                            <BuildSite>true</BuildSite>
+                            <ConstructionConfig>
+                                <Group>Floors</Group>
+                                <Requires>None</Requires>
+                            </ConstructionConfig>
+                        </Thing>
+                    </Things>
+                </ThingSerializationLayout>
+            ";
+
+            var things = s.LoadFromString(xml);
+            
+            Assert.IsInstanceOf<ThingConfig[]>(things);
+            Assert.AreEqual(1, things.Length);
+            Assert.IsNotNull(things[0].ConstructionConfig);
+            Assert.AreEqual(ConstructionGroup.Floors, things[0].ConstructionConfig.Group);
+            Assert.AreEqual(TypeOfThing.None, things[0].ConstructionConfig.Requires);
         }
     }
 }

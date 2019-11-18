@@ -311,7 +311,7 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Floors, 
                     Requires = TypeOfThing.None
@@ -331,7 +331,7 @@ public class Assets
                 thing.Floor = true;
                 thing.BuildSite = true;
                 thing.RequiredToProduce = TypeOfThing.Hoe;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Farming, 
                     Requires = TypeOfThing.Hoe
@@ -343,14 +343,14 @@ public class Assets
                 thing.Sprite = "colored_transparent_204";
                 thing.BuildSite = false;
                 thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.Crop = new CropConfig()
+                thing.CropConfig = new CropConfig()
                 {
                     TimeToGrow = 5 * 60,
                     Sprites = new string[] { "colored_transparent_204", "colored_transparent_205", "colored_transparent_206"  },
                     Produces = TypeOfThing.Cabbage
 
                 };
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     BuildOn = TypeOfThing.SoilFloor,
                     Group = ConstructionGroup.Floors, 
@@ -376,7 +376,7 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Floors, 
                     Requires = TypeOfThing.WoodenPlanks
@@ -388,7 +388,7 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Pipe = true;
                 thing.PathTag = Movement.TAG_BLOCKING;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Walls, 
                     Requires = TypeOfThing.Wood
@@ -401,7 +401,7 @@ public class Assets
                 thing.Pipe = true;
                 thing.LightBlocking = true;
                 thing.PathTag = Movement.TAG_BLOCKING;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Walls, 
                     Requires = TypeOfThing.Wood
@@ -413,7 +413,7 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Pipe = true;
                 thing.PathTag = Movement.TAG_BLOCKING;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Walls, 
                     Requires = TypeOfThing.Wood
@@ -425,7 +425,7 @@ public class Assets
                 thing.FixedToFloor = true;
                 thing.Floor = true;
                 thing.BuildSite = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Floors, 
                     Requires = TypeOfThing.Stone
@@ -438,7 +438,7 @@ public class Assets
                 thing.PathTag = Movement.TAG_BLOCKING;
                 thing.LightBlocking = true;
                 thing.Pipe = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Walls, 
                     Requires = TypeOfThing.Stone
@@ -449,7 +449,7 @@ public class Assets
                 thing.Sprite = "colored_297";
                 thing.FixedToFloor = true;
                 thing.Floor = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.WoodenPlanks
@@ -460,7 +460,7 @@ public class Assets
                 thing.Sprite = "colored_transparent_974";
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Floor = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.WoodenPlanks
@@ -472,7 +472,7 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.PathTag = Movement.TAG_AVOID;
                 thing.Floor = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.WoodenPlanks
@@ -484,7 +484,7 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.PathTag = Movement.TAG_AVOID;
                 thing.Floor = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.WoodenPlanks
@@ -495,7 +495,7 @@ public class Assets
                 thing.Sprite = "colored_204";
                 thing.FixedToFloor = true;
                 thing.Floor = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.Wood
@@ -506,7 +506,7 @@ public class Assets
                 thing.Sprite = "colored_261";
                 thing.FixedToFloor = true;
                 thing.Floor = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.Wood
@@ -523,7 +523,7 @@ public class Assets
                     Produces = new TypeOfThing[] { TypeOfThing.Iron }
                 };
                 thing.Fire = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.Clay
@@ -539,7 +539,7 @@ public class Assets
                 { 
                     Produces = new TypeOfThing[] { TypeOfThing.Axe, TypeOfThing.Hoe }
                 };
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.Wood
@@ -555,7 +555,7 @@ public class Assets
                 { 
                     Produces = new TypeOfThing[] { TypeOfThing.WoodenPlanks }
                 };
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.Wood
@@ -588,7 +588,7 @@ public class Assets
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Storage = true;
                 thing.FixedToFloor = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.Wood
@@ -600,7 +600,7 @@ public class Assets
                 thing.Sprite = "colored_334";
                 thing.SortingOrder = (int)SortingOrders.Objects;
                 thing.Fire = true;
-                thing.Construction = new ConstructionConfig() 
+                thing.ConstructionConfig = new ConstructionConfig() 
                 {
                     Group = ConstructionGroup.Furniture, 
                     Requires = TypeOfThing.Wood
