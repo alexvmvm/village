@@ -5,7 +5,7 @@ using System.Linq;
 
 public class GameWindow : EditorWindow
 {
-    [MenuItem("Window/Game Tree")]
+    [MenuItem("Window/Game")]
     public static void ShowWindow()
     {
         GetWindow<GameWindow>(false, "Game Window", true);

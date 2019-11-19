@@ -469,7 +469,7 @@ namespace Village
                 var thing = CreateAtPosition(thingSave.type, thingSave.position);
                 thing.FromSaveObj(thingSave);
                 count++;
-                if(count % 10 == 0)
+                if(count % 1000 == 0)
                 {
                     yield return null;
                 }

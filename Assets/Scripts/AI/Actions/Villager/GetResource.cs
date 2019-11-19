@@ -69,6 +69,11 @@ namespace Village.AI
             _target = null;
         }
 
+        public override string ToString() 
+        {
+            return $"{GetType().ToString()}({_resource})";
+        }
+
     }
 
     

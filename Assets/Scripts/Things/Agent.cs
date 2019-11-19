@@ -54,6 +54,11 @@ namespace Village.AI
         public abstract void GetWorldState(Dictionary<string, object> world);
         public abstract void GetGoalState(Dictionary<string, object> goal);
 
+        public GOAPAction[] GetActions()
+        {
+            return _available.ToArray(); 
+        }
+
         bool Plan(Dictionary<string, object> world, Dictionary<string, object> goal, Queue<GOAPAction> plan)
         {
 
