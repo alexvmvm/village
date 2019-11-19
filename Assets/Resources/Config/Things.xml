@@ -115,7 +115,6 @@
             </TileRuleConfig>
             <GridGroup>1</GridGroup>
             <PositionalAudioGroup>river</PositionalAudioGroup>
-            <PathTag>TAG_BLOCKING</PathTag>
             <Pipe>true</Pipe>
             <Parent>floor</Parent>
         </Thing>

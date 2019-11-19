@@ -44,13 +44,13 @@ namespace Village.Things
                 Game.UpdateAstarPath(transform.position.ToVector2IntFloor(), Config.PathTag);
             }
 
+            // todo: must be a better way...
             if(config.TileRuleConfig != null)
             {
                 var type = Type.GetType(config.TileRuleConfig.Type);
                 var instance = (ITileRule)Activator.CreateInstance(type, new object[] { config.TileRuleConfig.Sprites });
                 TileRule = instance;
             }
-
 
             if (Config.LightBlocking)
             {

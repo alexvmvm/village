@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 using Village.Things;
 
 namespace Village.AI
@@ -23,7 +20,6 @@ namespace Village.AI
             _villager = villager;
 
             var config = Assets.GetThingConfig(_resource);    
-            Debug.Log(resource);
             if(config.RequiredToProduce != TypeOfThing.None)
                 Preconditions.Add(GOAPAction.Effect.HAS_THING, config.RequiredToProduce);
             else
