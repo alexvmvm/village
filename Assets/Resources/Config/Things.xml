@@ -167,7 +167,7 @@
             <BuildSite>true</BuildSite>
             <RequiredToProduce>Hoe</RequiredToProduce>
             <ConstructionConfig>
-                <Group>Farming</Group>
+                <Group>Floors</Group>
                 <Requires>Hoe</Requires>
             </ConstructionConfig>
             <Parent>floor</Parent>
@@ -177,6 +177,7 @@
             <Name>Wood Floor</Name>
             <Sprite>colored_16</Sprite>
             <TypeOfThing>WoodFloor</TypeOfThing>
+            <BuildSite>true</BuildSite>
             <ConstructionConfig>
                 <Group>Floors</Group>
                 <Requires>WoodenPlanks</Requires>
@@ -188,6 +189,7 @@
             <Name>Stone Floor</Name>
             <Sprite>colored_416</Sprite>
             <TypeOfThing>StoneFloor</TypeOfThing>
+            <BuildSite>true</BuildSite>
             <ConstructionConfig>
                 <Group>Floors</Group>
                 <Requires>Stone</Requires>
