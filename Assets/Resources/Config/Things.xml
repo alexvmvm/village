@@ -370,6 +370,17 @@
             <Parent>tool</Parent>
         </Thing>
 
+        <Thing>
+            <Name>Pickaxe</Name>
+            <Description>A tool used to break rocks.</Description>
+            <Sprite>colored_transparent_770</Sprite>
+            <TypeOfThing>Pickaxe</TypeOfThing>
+            <RequiredToCraft>
+                <TypeOfThing>Iron</TypeOfThing>
+            </RequiredToCraft>
+            <Parent>tool</Parent>
+        </Thing>
+
         <!-- Blueprint -->
 
         <Thing>

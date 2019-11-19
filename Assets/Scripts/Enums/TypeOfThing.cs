@@ -58,6 +58,7 @@
     CarpentersBench,
     Axe                     ,
     Hoe                     ,
+    Pickaxe,
     Storage                 ,
     // StorageBlueprint        ,
     Tree                    ,
