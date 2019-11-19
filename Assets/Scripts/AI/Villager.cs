@@ -83,7 +83,15 @@ namespace Village.AI
                 TypeOfThing.Ore,
                 TypeOfThing.Iron,
                 TypeOfThing.CabbageSeed,
+                TypeOfThing.PotatoSeed,
+                TypeOfThing.CarrotSeed,
+                TypeOfThing.PumpkinSeed,
+                TypeOfThing.HopSeed,
+                TypeOfThing.TomatoSeed,
                 TypeOfThing.Cabbage,
+                TypeOfThing.PotatoSeed,
+                TypeOfThing.Carrot,
+                TypeOfThing.Hops,
                 TypeOfThing.Axe,
                 TypeOfThing.Hoe
             };
@@ -144,6 +152,10 @@ namespace Village.AI
             AddAction(new Construct(this, _game, _movement, TypeOfThing.Clay, _thing));
             AddAction(new Construct(this, _game, _movement, TypeOfThing.Hoe, _thing));
             AddAction(new Construct(this, _game, _movement, TypeOfThing.CabbageSeed, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.PotatoSeed, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.TomatoSeed, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.PumpkinSeed, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.CarrotSeed, _thing));
             AddAction(new Construct(this, _game, _movement, TypeOfThing.None, _thing));
         }
 

@@ -521,6 +521,8 @@
             <Parent>resource</Parent>
         </Thing>
 
+        <!-- Resource : Crops -->
+
         <Thing>
             <Name>Cabbage</Name>
             <Sprite>colored_transparent_977</Sprite>
@@ -534,10 +536,120 @@
         </Thing>
 
         <Thing>
+            <Name>Potato</Name>
+            <Sprite>colored_transparent_977</Sprite>
+            <TypeOfThing>Potato</TypeOfThing>
+            <Produces>Potato</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Tomato</Name>
+            <Sprite>colored_transparent_977</Sprite>
+            <TypeOfThing>Tomato</TypeOfThing>
+            <Produces>Tomato</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Carrot</Name>
+            <Sprite>colored_transparent_977</Sprite>
+            <TypeOfThing>Carrot</TypeOfThing>
+            <Produces>Carrot</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Hops</Name>
+            <Sprite>colored_transparent_977</Sprite>
+            <TypeOfThing>Hops</TypeOfThing>
+            <Produces>Hops</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+         <!-- Resource : Seeds -->
+
+        <Thing>
             <Name>Cabbage Seeds</Name>
             <Sprite>colored_transparent_817</Sprite>
             <TypeOfThing>CabbageSeed</TypeOfThing>
             <Produces>CabbageSeed</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Potato Seeds</Name>
+            <Sprite>colored_transparent_817</Sprite>
+            <TypeOfThing>PotatoSeed</TypeOfThing>
+            <Produces>PotatoSeed</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Tomato Seeds</Name>
+            <Sprite>colored_transparent_817</Sprite>
+            <TypeOfThing>TomatoSeed</TypeOfThing>
+            <Produces>TomatoSeed</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Pumpkin Seeds</Name>
+            <Sprite>colored_transparent_817</Sprite>
+            <TypeOfThing>PumpkinSeed</TypeOfThing>
+            <Produces>PumpkinSeed</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Carrot Seeds</Name>
+            <Sprite>colored_transparent_817</Sprite>
+            <TypeOfThing>CarrotSeed</TypeOfThing>
+            <Produces>CarrotSeed</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Hop Seeds</Name>
+            <Sprite>colored_transparent_817</Sprite>
+            <TypeOfThing>HopSeed</TypeOfThing>
+            <Produces>HopSeed</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -561,8 +673,92 @@
             </CropConfig>
             <ConstructionConfig>
                 <BuildOn>SoilFloor</BuildOn>
-                <Group>Floors</Group>
+                <Group>Farming</Group>
                 <Requires>CabbageSeed</Requires>
+            </ConstructionConfig>
+            <Parent>crop</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Potato</Name>
+            <TypeOfThing>PotatoCrop</TypeOfThing>
+            <Sprite>colored_transparent_204</Sprite>
+            <CropConfig>
+                <TimeToGrow>300</TimeToGrow>
+                <Sprites>
+                    <string>colored_transparent_204</string>
+                    <string>colored_transparent_205</string>
+                    <string>colored_transparent_206</string>
+                </Sprites>
+                <Produces>Potato</Produces>
+            </CropConfig>
+            <ConstructionConfig>
+                <BuildOn>SoilFloor</BuildOn>
+                <Group>Farming</Group>
+                <Requires>PotatoSeed</Requires>
+            </ConstructionConfig>
+            <Parent>crop</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Tomato</Name>
+            <TypeOfThing>TomatoCrop</TypeOfThing>
+            <Sprite>colored_transparent_204</Sprite>
+            <CropConfig>
+                <TimeToGrow>300</TimeToGrow>
+                <Sprites>
+                    <string>colored_transparent_204</string>
+                    <string>colored_transparent_205</string>
+                    <string>colored_transparent_206</string>
+                </Sprites>
+                <Produces>Tomato</Produces>
+            </CropConfig>
+            <ConstructionConfig>
+                <BuildOn>SoilFloor</BuildOn>
+                <Group>Farming</Group>
+                <Requires>TomatoSeed</Requires>
+            </ConstructionConfig>
+            <Parent>crop</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Pumpkin</Name>
+            <TypeOfThing>PumpkinCrop</TypeOfThing>
+            <Sprite>colored_transparent_204</Sprite>
+            <CropConfig>
+                <TimeToGrow>300</TimeToGrow>
+                <Sprites>
+                    <string>colored_transparent_204</string>
+                    <string>colored_transparent_205</string>
+                    <string>colored_transparent_206</string>
+                </Sprites>
+                <Produces>Pumpkin</Produces>
+            </CropConfig>
+            <ConstructionConfig>
+                <BuildOn>SoilFloor</BuildOn>
+                <Group>Farming</Group>
+                <Requires>PumpkinSeed</Requires>
+            </ConstructionConfig>
+            <Parent>crop</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Carrot</Name>
+            <TypeOfThing>CarrotCrop</TypeOfThing>
+            <Sprite>colored_transparent_204</Sprite>
+            <CropConfig>
+                <TimeToGrow>300</TimeToGrow>
+                <Sprites>
+                    <string>colored_transparent_204</string>
+                    <string>colored_transparent_205</string>
+                    <string>colored_transparent_206</string>
+                </Sprites>
+                <Produces>Carrot</Produces>
+            </CropConfig>
+            <ConstructionConfig>
+                <BuildOn>SoilFloor</BuildOn>
+                <Group>Farming</Group>
+                <Requires>CarrotSeed</Requires>
             </ConstructionConfig>
             <Parent>crop</Parent>
         </Thing>
