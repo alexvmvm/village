@@ -141,7 +141,7 @@ public class GameCursor : MonoBehaviour
         }
         else if(CurrentType.HasValue && (_currentToBuild == null || _currentToBuild.TypeOfThing != CurrentType.Value))
         {   
-            _currentToBuild = Assets.CreateThingConfig(CurrentType.Value);
+            _currentToBuild = Assets.GetThingConfig(CurrentType.Value);
         }
 
         // update cursor position to mouse position

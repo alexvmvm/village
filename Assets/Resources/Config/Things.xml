@@ -321,22 +321,6 @@
         </Thing>
 
         <Thing>
-            <Name>Carpenters Workbench</Name>
-            <Sprite>colored_228</Sprite>
-            <TypeOfThing>CarpentersBench</TypeOfThing>
-            <ConstructionConfig>
-                <Group>Furniture</Group>
-                <Requires>Wood</Requires>
-            </ConstructionConfig>
-            <FactoryConfig>
-                <Produces>
-                    <TypeOfThing>WoodenPlanks</TypeOfThing>
-                </Produces>
-            </FactoryConfig>
-            <Parent>furniture</Parent>
-        </Thing>
-
-        <Thing>
             <Name>Storage</Name>
             <Description>A storage container used to store resources</Description>
             <Sprite>colored_200</Sprite>

@@ -109,7 +109,7 @@ namespace Village.Things
         public void SetBuilds(TypeOfThing type)
         {
             Builds = type;
-            Requires = Assets.CreateThingConfig(type).ConstructionConfig.Requires;
+            Requires = Assets.GetThingConfig(type).ConstructionConfig.Requires;
         }
 
         public void Construct()

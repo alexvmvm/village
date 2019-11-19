@@ -28,7 +28,7 @@ public class FactoryPanel : MonoBehaviour
 
         foreach(var type in thing.Factory.Produces)
         {
-            var lineItemThing = Assets.CreateThingConfig(type);
+            var lineItemThing = Assets.GetThingConfig(type);
             var obj = FactoryLineItem.GetPooledObject();
 
             var lineItem = obj.GetComponent<FactoryLineItem>();

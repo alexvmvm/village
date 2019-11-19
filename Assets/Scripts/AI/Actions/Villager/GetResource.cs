@@ -22,7 +22,7 @@ namespace Village.AI
             _inventory = _thing.Inventory;
             _villager = villager;
 
-            var config = Assets.CreateThingConfig(_resource);    
+            var config = Assets.GetThingConfig(_resource);    
             Debug.Log(resource);
             if(config.RequiredToProduce != TypeOfThing.None)
                 Preconditions.Add(GOAPAction.Effect.HAS_THING, config.RequiredToProduce);

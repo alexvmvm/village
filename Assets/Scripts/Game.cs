@@ -50,7 +50,7 @@ namespace Village
             _loose = new List<Thing>();         
             _delete = new Queue<GameObject>();
             
-            ThingConfigs = Assets.AllThingConfigs().ToList();
+            ThingConfigs = Assets.GetAllThingConfigs().ToList();
 
             _timeSinceLoaded = 0f;
             _loaded = false;
