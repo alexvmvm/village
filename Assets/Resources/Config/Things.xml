@@ -449,6 +449,7 @@
             <RequiredToCraft>
                 <TypeOfThing>Iron</TypeOfThing>
             </RequiredToCraft>
+            <Produces>Axe</Produces>
             <Parent>tool</Parent>
         </Thing>
 
@@ -460,6 +461,7 @@
             <RequiredToCraft>
                 <TypeOfThing>Iron</TypeOfThing>
             </RequiredToCraft>
+            <Produces>Hoe</Produces>
             <Parent>tool</Parent>
         </Thing>
 
@@ -471,6 +473,7 @@
             <RequiredToCraft>
                 <TypeOfThing>Iron</TypeOfThing>
             </RequiredToCraft>
+            <Produces>Pickaxe</Produces>
             <Parent>tool</Parent>
         </Thing>
 
@@ -905,7 +908,7 @@
             <Name>Villager</Name>
             <TypeOfThing>Villager</TypeOfThing>
             <Sprite>colored_transparent_24</Sprite>
-            <SortingOrder>100</SortingOrder>
+            <SortingOrder>200</SortingOrder>
             <Inventory>true</Inventory>
             <Agent>Villager</Agent>
         </Thing>
@@ -914,7 +917,7 @@
             <Name>Chicken</Name>
             <TypeOfThing>Hen</TypeOfThing>
             <Sprite>colored_transparent_249</Sprite>
-            <SortingOrder>100</SortingOrder>
+            <SortingOrder>200</SortingOrder>
             <Agent>Animal</Agent>
         </Thing>
 
@@ -922,7 +925,7 @@
             <Name>Cockerl</Name>
             <TypeOfThing>Rooster</TypeOfThing>
             <Sprite>colored_transparent_249</Sprite>
-            <SortingOrder>100</SortingOrder>
+            <SortingOrder>200</SortingOrder>
             <Agent>Animal</Agent>
         </Thing>
 
@@ -930,7 +933,7 @@
             <Name>Chick</Name>
             <TypeOfThing>Chick</TypeOfThing>
             <Sprite>colored_transparent_249</Sprite>
-            <SortingOrder>100</SortingOrder>
+            <SortingOrder>200</SortingOrder>
             <Agent>Animal</Agent>
             <Scale>
                 <x>0.5</x>

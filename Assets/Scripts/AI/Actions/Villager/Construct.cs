@@ -59,6 +59,11 @@ namespace Village.AI
 
             _started = false;
         }
+
+        public override string ToString()
+        {
+            return $"ConstructBlueprint(required {_resource.ToString()})";
+        }
     }
 
 }
