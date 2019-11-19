@@ -180,7 +180,11 @@ namespace Tests
             var xml = @"
                 <?xml version='1.0' encoding='utf-8'?>
                 <ThingSerializationLayout xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'  xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
-                    <Parents></Parents>
+                    <Parents>
+                        <Thing>
+                            <Name>factory</Name>
+                        </Thing>
+                    </Parents>
                     <Things>
                         <Thing>
                             <Name>grass</Name>
@@ -192,6 +196,7 @@ namespace Tests
                                     <TypeOfThing>Iron</TypeOfThing>
                                 </Produces>
                             </FactoryConfig>
+                            <Parent>factory</Parent>
                         </Thing>
                     </Things>
                 </ThingSerializationLayout>

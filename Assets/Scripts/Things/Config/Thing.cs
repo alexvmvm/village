@@ -57,6 +57,11 @@ namespace Village.Things.Config
         public CropConfig CropConfig;
         public AgentConfig Agent;
         public ConstructionConfig ConstructionConfig;
+
+        public ThingConfig()
+        {
+            RequiredToCraft = new TypeOfThing[0];
+        }
     }
 
 }

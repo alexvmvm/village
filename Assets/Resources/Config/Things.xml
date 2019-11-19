@@ -18,6 +18,7 @@
             <Floor>true</Floor>
             <PathTag>TAG_AVOID</PathTag>
             <SortingOrder>100</SortingOrder>
+            <FixedToFloor>true</FixedToFloor>
         </Thing>
         <Thing>
             <Name>wall</Name>

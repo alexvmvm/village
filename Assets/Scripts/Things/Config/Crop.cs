@@ -2,7 +2,6 @@
 
 namespace Village.Things.Config
 {
-    [Serializable]    
     public class CropConfig
     {
         public float TimeToGrow;
