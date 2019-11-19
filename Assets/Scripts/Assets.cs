@@ -90,11 +90,12 @@ public class Assets
 
         return _materials[name];
     }
-    
+
     static void SetupThings()
     {
         _thingSerialization = new ThingSerialization();
-        _things = _thingSerialization.LoadFromFile($"{Application.dataPath}/Resources/Config/Things.xml");
+        var xml = Resources.Load<TextAsset>("Config/Things").text;
+        _things = _thingSerialization.LoadFromString(xml);
         _thingDictionary = _things.ToDictionary(t => t.TypeOfThing);
     }
 

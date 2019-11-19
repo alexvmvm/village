@@ -11,7 +11,7 @@ namespace Village.Things
         Floors,
         Walls,
         Furniture,
-        Objects,
+        Production,
         Farming
     }
 

@@ -11,12 +11,6 @@ namespace Village.Things.Serialization
     {
         private ThingConfig[] _things;
 
-
-        public ThingConfig[] LoadFromFile(string pathToXml)
-        {
-            return GetThingsFromLayoutFile(GetLayoutFromFile(new StreamReader(pathToXml) as TextReader));
-        }
-
         public ThingConfig[] LoadFromString(string xml)
         {
             return GetThingsFromLayoutFile(GetLayoutFromFile(new StringReader(xml.Trim())));

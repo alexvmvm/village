@@ -14,6 +14,12 @@
             <SortingOrder>100</SortingOrder>
         </Thing>
         <Thing>
+            <Name>factory</Name>
+            <Floor>true</Floor>
+            <PathTag>TAG_AVOID</PathTag>
+            <SortingOrder>100</SortingOrder>
+        </Thing>
+        <Thing>
             <Name>wall</Name>
             <FixedToFloor>true</FixedToFloor>
             <Pipe>true</Pipe>
@@ -270,12 +276,14 @@
             <Parent>furniture</Parent>
         </Thing>
 
+        <!-- Factories -->
+
         <Thing>
             <Name>Clay Forge</Name>
             <Sprite>colored_680</Sprite>
             <TypeOfThing>ClayForge</TypeOfThing>
             <ConstructionConfig>
-                <Group>Furniture</Group>
+                <Group>Production</Group>
                 <Requires>Clay</Requires>
             </ConstructionConfig>
             <FactoryConfig>
@@ -283,7 +291,7 @@
                     <TypeOfThing>Iron</TypeOfThing>
                 </Produces>
             </FactoryConfig>
-            <Parent>furniture</Parent>
+            <Parent>factory</Parent>
         </Thing>
 
         <Thing>
@@ -291,7 +299,7 @@
             <Sprite>colored_228</Sprite>
             <TypeOfThing>Workbench</TypeOfThing>
             <ConstructionConfig>
-                <Group>Furniture</Group>
+                <Group>Production</Group>
                 <Requires>Wood</Requires>
             </ConstructionConfig>
             <FactoryConfig>
@@ -300,7 +308,7 @@
                     <TypeOfThing>Hoe</TypeOfThing>
                 </Produces>
             </FactoryConfig>
-            <Parent>furniture</Parent>
+            <Parent>factory</Parent>
         </Thing>
 
         <Thing>
@@ -308,7 +316,7 @@
             <Sprite>colored_228</Sprite>
             <TypeOfThing>CarpentersBench</TypeOfThing>
             <ConstructionConfig>
-                <Group>Furniture</Group>
+                <Group>Production</Group>
                 <Requires>Wood</Requires>
             </ConstructionConfig>
             <FactoryConfig>
@@ -316,8 +324,90 @@
                     <TypeOfThing>WoodenPlanks</TypeOfThing>
                 </Produces>
             </FactoryConfig>
-            <Parent>furniture</Parent>
+            <Parent>factory</Parent>
         </Thing>
+
+        <Thing>
+            <Name>Charcoal Pit</Name>
+            <Sprite>colored_228</Sprite>
+            <TypeOfThing>CharcoalPit</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Production</Group>
+                <Requires>Clay</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>Charcoal</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Parent>factory</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Forge</Name>
+            <Sprite>colored_228</Sprite>
+            <TypeOfThing>Forge</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Production</Group>
+                <Requires>Clay</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>Steel</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Parent>factory</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Blacksmith</Name>
+            <Sprite>colored_228</Sprite>
+            <TypeOfThing>Blacksmith</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Production</Group>
+                <Requires>Clay</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>Steel</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Parent>factory</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Mason</Name>
+            <Sprite>colored_228</Sprite>
+            <TypeOfThing>Mason</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Production</Group>
+                <Requires>Clay</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>StoneBlock</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Parent>factory</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Brewery</Name>
+            <Sprite>colored_228</Sprite>
+            <TypeOfThing>Brewery</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Production</Group>
+                <Requires>Clay</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>StoneBlock</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Parent>factory</Parent>
+        </Thing>
+
+        <!-- Misc -->
 
         <Thing>
             <Name>Storage</Name>
@@ -526,6 +616,39 @@
             <Sprite>colored_transparent_721</Sprite>
             <TypeOfThing>Iron</TypeOfThing>
             <Produces>Iron</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Charcoal</Name>
+            <Sprite>colored_71</Sprite>
+            <TypeOfThing>Charcoal</TypeOfThing>
+            <Produces>Charcoal</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Steel</Name>
+            <Sprite>colored_71</Sprite>
+            <TypeOfThing>Steel</TypeOfThing>
+            <Produces>Steel</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>StoneBlock</Name>
+            <Sprite>colored_71</Sprite>
+            <TypeOfThing>StoneBlock</TypeOfThing>
+            <Produces>StoneBlock</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
