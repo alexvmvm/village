@@ -19,6 +19,9 @@ namespace Village.AI
     {
         public DateTime Created { get { return _created; } }
         public GOAPAction CurentAction { get { return _current; } }
+        public Dictionary<string, object> WorldState { get { return _world; } }
+        public Dictionary<string, object> GoalState { get { return _goal; } }
+        public GOAPAction[] Queued { get { return _actions.ToArray(); } }
         protected Game _game;
         private NormalPlanner _planner;
         private HashSet<GOAPAction> _available;

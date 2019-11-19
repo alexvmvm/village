@@ -14,7 +14,7 @@ public class AgentWindow : EditorWindow
         GetWindow<AgentWindow>(false, "Agent Window", true);
     }
 
-    private Vector2 _scrollPosition = Vector2.zero;
+    private Vector2 _actionsScrollView = Vector2.zero;
     private GameObject _selected;
     private GOAPAction _selectedAction;
     private bool _selectedActionPossible;
@@ -41,21 +41,14 @@ public class AgentWindow : EditorWindow
 
         var yOffset = 40;
 
-        _scrollPosition = GUI.BeginScrollView(
-            new Rect(10, yOffset, position.width/2, position.height - yOffset), 
-            _scrollPosition, 
-            new Rect(10, yOffset, 10000, 10000));
-
         if(_selected != null)
         {
             DrawAgent(10, yOffset, _selected);
         }
 
-        GUI.EndScrollView();
-
         if(_selectedAction != null)
         {
-            DrawActionDetail(510, yOffset, _selectedAction);
+            DrawActionDetail(520, yOffset, _selectedAction);
         }
     }
 
@@ -71,12 +64,42 @@ public class AgentWindow : EditorWindow
         var actions = agent.GetActions().OrderBy(a => a.ToString()).ToArray();
         var currentY = y;
 
+        // world state
+        var worldStateRect = DrawConditions(x, y, 500, agent.WorldState, "World State");
+        currentY += worldStateRect.height + 10;
+        
+        // goals
+        var goalStateRect = DrawConditions(x, currentY, 500, agent.GoalState, "Goal State");
+        currentY += goalStateRect.height + 10;
+
+        // current action
+        if(agent.CurentAction != null)
+        {
+            var currentRect = DrawAction(x, currentY, agent.CurentAction);
+            currentY += currentRect.height + 10;
+        }
+
+        // current queued
+        var queued = agent.Queued;
+        for(var i = 0; i < queued.Length; i++)
+        {
+            GUI.Label(new Rect(x, currentY, 500, 20), $"-> {queued[i].ToString()}");
+            currentY += 20;
+        }        
+
+        _actionsScrollView = GUI.BeginScrollView(
+            new Rect(10, currentY, 500, position.height - (currentY - y) - 20), 
+            _actionsScrollView, 
+            new Rect(10, currentY, 10000, 15000));
+
         for(var i = 0; i < actions.Count(); i++)
         {
             var action = actions[i];
-            var rect = DrawAction(x, currentY + 20, action);
+            var rect = DrawAction(x, currentY, action);
             currentY += rect.height;
         }
+
+        GUI.EndScrollView();
     }
 
     Rect DrawActionDetail(float x, float y, GOAPAction selectedAction)
