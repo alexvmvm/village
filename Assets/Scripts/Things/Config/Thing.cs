@@ -62,6 +62,11 @@ namespace Village.Things.Config
         {
             RequiredToCraft = new TypeOfThing[0];
         }
+
+        public override string ToString()
+        {
+            return TypeOfThing.ToString();
+        }
     }
 
 }

@@ -9,11 +9,10 @@ namespace Village.Things.Serialization
 {
     public class ThingSerialization 
     {
-        private ThingConfig[] _things;
-
         public ThingConfig[] LoadFromString(string xml)
         {
-            return GetThingsFromLayoutFile(GetLayoutFromFile(new StringReader(xml.Trim())));
+            var layout = GetLayoutFromFile(new StringReader(xml.Trim()));
+            return GetThingsFromLayoutFile(layout);
         }
 
         ThingSerializationLayout GetLayoutFromFile(TextReader reader)
