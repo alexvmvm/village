@@ -6,7 +6,7 @@ public class RandomTiles : ITileRule
 {
     private string[] _sprites;
 
-    public RandomTiles(params string[] sprites)
+    public RandomTiles(string[] sprites)
     {
         _sprites = sprites;
     }

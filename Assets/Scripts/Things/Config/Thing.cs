@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using Village.Things;
-using System;
-using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace Village.Things.Config

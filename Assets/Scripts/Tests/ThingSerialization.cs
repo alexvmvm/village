@@ -13,17 +13,6 @@ namespace Tests
     {
         public string filePath = $"{Application.dataPath}/Resources/Config/Things.xml";
 
-        // A Test behaves as an ordinary method
-        [Test]
-        public void ShouldGetThignsFromXmlFile()
-        {
-            var s = new ThingSerialization();
-            var things = s.LoadFromFile(filePath);
-            
-            Assert.IsInstanceOf<ThingConfig[]>(things);
-            Assert.Greater(things.Length, 0);
-        }
-
         [Test]
         public void ShouldGetThignsFromString()
         {
@@ -214,6 +203,32 @@ namespace Tests
             Assert.AreEqual(1, things.Length);
             Assert.IsNotNull(things[0].FactoryConfig);
             Assert.AreEqual(1, things[0].FactoryConfig.Produces.Length);
+        }
+
+                // A Test behaves as an ordinary method
+        [Test]
+        public void ShouldGetThignsFromXmlFile()
+        {
+            var s = new ThingSerialization();
+            var things = s.LoadFromFile(filePath);
+            
+            Assert.IsInstanceOf<ThingConfig[]>(things);
+            Assert.Greater(things.Length, 0);
+        }
+
+
+                // A Test behaves as an ordinary method
+        [Test]
+        public void AllThingsFromFileShouldHaveSpriteSet()
+        {
+            var s = new ThingSerialization();
+            var things = s.LoadFromFile(filePath);
+            
+            foreach(var thing in things)
+            {
+                Debug.Log(thing.TypeOfThing);
+                Assert.IsFalse(string.IsNullOrEmpty(thing.Sprite));
+            }
         }
     }
 }

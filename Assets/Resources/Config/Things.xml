@@ -95,21 +95,6 @@
             <TypeOfThing>Path</TypeOfThing>
             <TileRuleConfig>
                 <Sprites>
-                    <string>stream_5!180</string>
-                    <string>stream_5</string>
-                    <string>stream_5!270</string>
-                    <string>stream_5!90</string> 
-                    <string>stream_2!180</string> 
-                    <string>stream_2!90</string>
-                    <string>stream_2</string>
-                    <string>stream_2!270</string>
-                    <string>stream_3</string>
-                    <string>stream_3!180</string> 
-                    <string>stream_3!90</string> 
-                    <string>stream_3!270</string>
-                    <string>stream_4</string>
-                    <string>stream_1</string> 
-                    <string>stream_1!90</string>
                     <string>path_5!180</string> 
                     <string>path_5</string> 
                     <string>path_5!270</string> 
@@ -186,7 +171,7 @@
         <Thing>
             <Name>Wood Floor</Name>
             <Sprite>colored_16</Sprite>
-            <TypeOfThing>WoodWall</TypeOfThing>
+            <TypeOfThing>WoodFloor</TypeOfThing>
             <ConstructionConfig>
                 <Group>Floors</Group>
                 <Requires>WoodenPlanks</Requires>
@@ -384,6 +369,7 @@
             <Name>Axe</Name>
             <Description>A tool used to chop down trees.</Description>
             <Sprite>colored_transparent_937</Sprite>
+            <TypeOfThing>Axe</TypeOfThing>
             <RequiredToCraft>
                 <TypeOfThing>Iron</TypeOfThing>
             </RequiredToCraft>
@@ -394,6 +380,7 @@
             <Name>Hoe</Name>
             <Description>A tool used to till land for planting crops.</Description>
             <Sprite>colored_transparent_770</Sprite>
+            <TypeOfThing>Hoe</TypeOfThing>
             <RequiredToCraft>
                 <TypeOfThing>Iron</TypeOfThing>
             </RequiredToCraft>
@@ -519,6 +506,39 @@
         </Thing>
 
         <Thing>
+            <Name>Clay</Name>
+            <Sprite>colored_1</Sprite>
+            <TypeOfThing>Clay</TypeOfThing>
+            <Produces>Clay</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+         <Thing>
+            <Name>Ore</Name>
+            <Sprite>colored_4</Sprite>
+            <TypeOfThing>Ore</TypeOfThing>
+            <Produces>Ore</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Iron</Name>
+            <Sprite>colored_transparent_721</Sprite>
+            <TypeOfThing>Iron</TypeOfThing>
+            <Produces>Iron</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>resources</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
+        <Thing>
             <Name>Cabbage</Name>
             <Sprite>colored_transparent_977</Sprite>
             <TypeOfThing>Cabbage</TypeOfThing>
@@ -530,10 +550,23 @@
             <Parent>resource</Parent>
         </Thing>
 
+        <Thing>
+            <Name>Cabbage Seeds</Name>
+            <Sprite>colored_transparent_817</Sprite>
+            <TypeOfThing>CabbageSeed</TypeOfThing>
+            <Produces>CabbageSeed</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
         <!-- Crops -->
         <Thing>
             <Name>Cabbage</Name>
             <TypeOfThing>CabbageCrop</TypeOfThing>
+            <Sprite>colored_transparent_204</Sprite>
             <CropConfig>
                 <TimeToGrow>300</TimeToGrow>
                 <Sprites>
@@ -588,6 +621,12 @@
                 <y>0.5</y>
                 <z>0.5</z>
             </Scale>
+        </Thing>
+
+        <!-- None -->
+        <Thing>
+            <TypeOfThing>None</TypeOfThing>
+            <Sprite>colored_0</Sprite>
         </Thing>
         
 

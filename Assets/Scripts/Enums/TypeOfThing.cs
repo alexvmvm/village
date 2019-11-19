@@ -34,12 +34,8 @@
     ForagedWall             ,
     Fire                    ,
     WoodWall                ,
-    Fence                   ,
-    Bucket,
     Table,
     Chair,
-
-    Door                    ,
     Bed                     ,
     ForagedBed              ,
     ClayForge               ,

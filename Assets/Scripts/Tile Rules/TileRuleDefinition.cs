@@ -6,30 +6,25 @@ public class TileRuleDefinition : ITileRule
     private string[] _sprites;
 
     public TileRuleDefinition(
-        string bottomEnd,
-        string topEnd,
-        string rightEnd,
-        string leftEnd,
-        string bottomRightCorner,
-        string bottomLeftCorner,
-        string topLeftCorner,
-        string topRightCorner,
-        string leftEdge,
-        string rightEdge,
-        string bottomEdge,
-        string topEdge,
-        string surrounded,
-        string vertical,
-        string horizontal
+        string[] sprites
+        // string bottomEnd,
+        // string topEnd,
+        // string rightEnd,
+        // string leftEnd,
+        // string bottomRightCorner,
+        // string bottomLeftCorner,
+        // string topLeftCorner,
+        // string topRightCorner,
+        // string leftEdge,
+        // string rightEdge,
+        // string bottomEdge,
+        // string topEdge,
+        // string surrounded,
+        // string vertical,
+        // string horizontal
     )
     {
-        _sprites = new string[]
-        {
-            bottomEnd, topEnd, rightEnd, leftEnd,
-            bottomRightCorner, bottomLeftCorner, topLeftCorner, topRightCorner, 
-            leftEdge, rightEdge, bottomEdge, topEdge,
-            surrounded, vertical, horizontal
-        };
+        _sprites = sprites;
     }
 
     private Positions[] _positions = new Positions[]

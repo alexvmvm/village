@@ -16,6 +16,7 @@ public class Assets
     private static Dictionary<string, Material> _materials;
     private static Dictionary<string, GameObject> _prefabs;
     private static ThingSerialization _thingSerialization;
+    private static ThingConfig[] _things;
 
     public static Sprite GetSprite(string name)
     {
@@ -27,7 +28,7 @@ public class Assets
         }
 
         if(string.IsNullOrEmpty(name))
-            throw new System.Exception("Sprite name is null");
+            throw new System.Exception($"Sprite name is null");
 
         var spriteName = name.Contains("!") ? name.Substring(0, name.IndexOf('!')) : name;
         if(!_sprites.ContainsKey(spriteName))
@@ -98,6 +99,21 @@ public class Assets
 
     public static ThingConfig CreateThingConfig(TypeOfThing thingType)
     {
+        if(_thingSerialization == null)
+        {
+            _thingSerialization = new ThingSerialization();
+            _things = _thingSerialization.LoadFromFile($"{Application.dataPath}/Resources/Config/Things.xml");
+        }
+
+        var thing2 = _things.FirstOrDefault(t => t.TypeOfThing == thingType);
+
+        if(thing2 == null && thingType != TypeOfThing.None)
+        {
+            throw new Exception($"unable to find {thingType}");
+        }
+
+        return thing2;
+
         var thing = new ThingConfig();
         thing.TypeOfThing = thingType;
         thing.Produces = thingType;
@@ -407,18 +423,18 @@ public class Assets
                     Requires = TypeOfThing.Wood
                 };
             break;
-            case TypeOfThing.Fence:
-                thing.Name = "fence";
-                thing.Sprite = "colored_98";
-                thing.FixedToFloor = true;
-                thing.Pipe = true;
-                thing.PathTag = Movement.TAG_BLOCKING;
-                thing.ConstructionConfig = new ConstructionConfig() 
-                {
-                    Group = ConstructionGroup.Walls, 
-                    Requires = TypeOfThing.Wood
-                };
-            break;
+            // case TypeOfThing.Fence:
+            //     thing.Name = "fence";
+            //     thing.Sprite = "colored_98";
+            //     thing.FixedToFloor = true;
+            //     thing.Pipe = true;
+            //     thing.PathTag = Movement.TAG_BLOCKING;
+            //     thing.ConstructionConfig = new ConstructionConfig() 
+            //     {
+            //         Group = ConstructionGroup.Walls, 
+            //         Requires = TypeOfThing.Wood
+            //     };
+            // break;
             case TypeOfThing.StoneFloor:
                 thing.Name = "stone floor";
                 thing.Sprite = "colored_416";
@@ -444,28 +460,28 @@ public class Assets
                     Requires = TypeOfThing.Stone
                 };
             break;
-            case TypeOfThing.Door:
-                thing.Name = "Door";
-                thing.Sprite = "colored_297";
-                thing.FixedToFloor = true;
-                thing.Floor = true;
-                thing.ConstructionConfig = new ConstructionConfig() 
-                {
-                    Group = ConstructionGroup.Furniture, 
-                    Requires = TypeOfThing.WoodenPlanks
-                };
-                break;
-            case TypeOfThing.Bucket:
-                thing.Name = "Bucket";
-                thing.Sprite = "colored_transparent_974";
-                thing.SortingOrder = (int)SortingOrders.Objects;
-                thing.Floor = true;
-                thing.ConstructionConfig = new ConstructionConfig() 
-                {
-                    Group = ConstructionGroup.Furniture, 
-                    Requires = TypeOfThing.WoodenPlanks
-                };
-                break;
+            // case TypeOfThing.Door:
+            //     thing.Name = "Door";
+            //     thing.Sprite = "colored_297";
+            //     thing.FixedToFloor = true;
+            //     thing.Floor = true;
+            //     thing.ConstructionConfig = new ConstructionConfig() 
+            //     {
+            //         Group = ConstructionGroup.Furniture, 
+            //         Requires = TypeOfThing.WoodenPlanks
+            //     };
+            //     break;
+            // case TypeOfThing.Bucket:
+            //     thing.Name = "Bucket";
+            //     thing.Sprite = "colored_transparent_974";
+            //     thing.SortingOrder = (int)SortingOrders.Objects;
+            //     thing.Floor = true;
+            //     thing.ConstructionConfig = new ConstructionConfig() 
+            //     {
+            //         Group = ConstructionGroup.Furniture, 
+            //         Requires = TypeOfThing.WoodenPlanks
+            //     };
+            //     break;
             case TypeOfThing.Table:
                 thing.Name = "Table";
                 thing.Sprite = "colored_transparent_302";

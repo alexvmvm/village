@@ -47,7 +47,7 @@ namespace Village.Things
             if(config.TileRuleConfig != null)
             {
                 var type = Type.GetType(config.TileRuleConfig.Type);
-                var instance = (ITileRule)Activator.CreateInstance(type, config.TileRuleConfig.Sprites);
+                var instance = (ITileRule)Activator.CreateInstance(type, new object[] { config.TileRuleConfig.Sprites });
                 TileRule = instance;
             }
 
