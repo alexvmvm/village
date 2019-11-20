@@ -294,6 +294,7 @@
                     <TypeOfThing>Iron</TypeOfThing>
                 </Produces>
             </FactoryConfig>
+            <Fire>true</Fire>
             <Parent>factory</Parent>
         </Thing>
 
