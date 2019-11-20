@@ -28,9 +28,9 @@ public class WorldTime
     public int DaysInAMonth { get; }
     private int MorningHour { get; }
     private int NightHour { get; }
-    public TimeOfDay TimeOfDay;
-    public Season Season;
-    public int HourOfDay;
+    public TimeOfDay TimeOfDay { get; private set; }
+    public Season Season { get; private set; }
+    public int HourOfDay { get { return Mathf.FloorToInt(NormalizedTimeOfDay * 24); } }
 
 
     public WorldTime()
@@ -38,16 +38,11 @@ public class WorldTime
         SecondsInADay = 360;
         DaysInAMonth = 30;
 
-        NightHour = 5;
-        MorningHour = 23;
+        NightHour = 23;
+        MorningHour = 5;
 
         // start in day..
         TimeSinceStart = 110;
-    }
-
-    public TimeOfDay GetTimeOfDay()
-    {
-        return TimeOfDay;
     }
 
     void CalculateTimeOfDay()
@@ -80,9 +75,6 @@ public class WorldTime
     public void Update()
     {
         TimeSinceStart += Time.deltaTime;
-
-        // hour of day
-        HourOfDay = Mathf.FloorToInt(NormalizedTimeOfDay * 24); 
         
         // time of day
         CalculateTimeOfDay();

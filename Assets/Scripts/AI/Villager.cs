@@ -205,7 +205,7 @@ namespace Village.AI
                 _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
             }
 
-            if (_game.WorldTime.GetTimeOfDay() == TimeOfDay.Night && _rest >= 0f)
+            if (_game.WorldTime.TimeOfDay == TimeOfDay.Night && _rest >= 0f)
             {
                 _rest = -1f;
             }

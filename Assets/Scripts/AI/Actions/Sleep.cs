@@ -41,12 +41,12 @@ namespace Village.AI
 
         public override bool IsDone()
         {
-            return _game.WorldTime.GetTimeOfDay() == TimeOfDay.Day;
+            return _game.WorldTime.TimeOfDay == TimeOfDay.Day;
         }
 
         public override bool IsPossibleToPerform()
         {
-            return _game.WorldTime.GetTimeOfDay() == TimeOfDay.Night;
+            return _game.WorldTime.TimeOfDay == TimeOfDay.Night;
         }
 
         public override bool Perform()
