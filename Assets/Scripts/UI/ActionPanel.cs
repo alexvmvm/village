@@ -23,11 +23,6 @@ public class ActionPanel : MonoBehaviour
         if(thing == null)
             return;
 
-        if(thing.Config.TypeOfThing == TypeOfThing.ClayForge)
-        {
-            Debug.Log("forge");
-        }
-
         if(thing.Config.AssignToFamily)
         {
             AssignFamily.gameObject.SetActive(true);

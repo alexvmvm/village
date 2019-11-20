@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Village;
 
 public class Clock : MonoBehaviour
 {
     public Transform ClockFace;
+    public Text Season;
     public Color Day;
     public Color Night;
 
@@ -23,6 +25,8 @@ public class Clock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Season.text = $"{_game.WorldTime.Season.ToString()} {_game.WorldTime.DayInMonth}";
+
         var normTime = _game.WorldTime.NormalizedTimeOfDay;
 
         // rotate clock

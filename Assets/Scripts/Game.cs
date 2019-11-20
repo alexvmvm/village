@@ -37,7 +37,7 @@ namespace Village
         void Awake()
         {
             _things = new List<Thing>();
-            _worldTime = new WorldTime(360, 5, 23);
+            _worldTime = new WorldTime();
             _positionalAudio = new List<PositionalAudio>()
             {
                 new PositionalAudio(this, "river", "running_water"),
