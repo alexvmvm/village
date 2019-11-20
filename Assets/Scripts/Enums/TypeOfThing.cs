@@ -59,14 +59,21 @@
     ClayForge               ,
     Workbench               ,
     CarpentersBench,
+    Kiln,
     CharcoalPit,
     Forge,
     Blacksmith,
     Mason,
     Brewery,
+
+    /*
+        Tools
+    */
+
     Axe                     ,
     Hoe                     ,
     Pickaxe,
+    WateringPot,
     Storage                 ,
     // StorageBlueprint        ,
     Tree                    ,

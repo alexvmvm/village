@@ -344,6 +344,24 @@
                     <TypeOfThing>Charcoal</TypeOfThing>
                 </Produces>
             </FactoryConfig>
+            <Fire>true</Fire>
+            <Parent>factory</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Kiln</Name>
+            <Sprite>colored_228</Sprite>
+            <TypeOfThing>Kiln</TypeOfThing>
+            <ConstructionConfig>
+                <Group>Production</Group>
+                <Requires>Clay</Requires>
+            </ConstructionConfig>
+            <FactoryConfig>
+                <Produces>
+                    <TypeOfThing>WateringPot</TypeOfThing>
+                </Produces>
+            </FactoryConfig>
+            <Fire>true</Fire>
             <Parent>factory</Parent>
         </Thing>
 
@@ -475,6 +493,18 @@
                 <TypeOfThing>Iron</TypeOfThing>
             </RequiredToCraft>
             <Produces>Pickaxe</Produces>
+            <Parent>tool</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>WateringPot</Name>
+            <Description>A pot used to water crops.</Description>
+            <Sprite>colored_transparent_814</Sprite>
+            <TypeOfThing>WateringPot</TypeOfThing>
+            <RequiredToCraft>
+                <TypeOfThing>Clay</TypeOfThing>
+            </RequiredToCraft>
+            <Produces>WateringPot</Produces>
             <Parent>tool</Parent>
         </Thing>
 
@@ -631,7 +661,7 @@
 
         <Thing>
             <Name>Charcoal</Name>
-            <Sprite>colored_71</Sprite>
+            <Sprite>colored_transparent_754</Sprite>
             <TypeOfThing>Charcoal</TypeOfThing>
             <Produces>Charcoal</Produces>
             <Hitpoints>1</Hitpoints>
@@ -642,7 +672,7 @@
 
         <Thing>
             <Name>Steel</Name>
-            <Sprite>colored_71</Sprite>
+            <Sprite>colored_transparent_375</Sprite>
             <TypeOfThing>Steel</TypeOfThing>
             <Produces>Steel</Produces>
             <Hitpoints>1</Hitpoints>
@@ -653,7 +683,7 @@
 
         <Thing>
             <Name>StoneBlock</Name>
-            <Sprite>colored_71</Sprite>
+            <Sprite>colored_416</Sprite>
             <TypeOfThing>StoneBlock</TypeOfThing>
             <Produces>StoneBlock</Produces>
             <Hitpoints>1</Hitpoints>
@@ -732,9 +762,9 @@
             <TypeOfThing>CabbageSeed</TypeOfThing>
             <Produces>CabbageSeed</Produces>
             <Edible>true</Edible>
-            <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>food</StoreGroup>
+            <Hitpoints>10</Hitpoints>
             <Parent>resource</Parent>
         </Thing>
 

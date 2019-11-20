@@ -113,6 +113,7 @@ namespace Village.AI
                 Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Axe, true),
                 Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Hoe, true),
                 Tuple.Create(TypeOfThing.CarpentersBench, TypeOfThing.Wood, TypeOfThing.WoodenPlanks, true),
+                Tuple.Create(TypeOfThing.Kiln, TypeOfThing.Clay, TypeOfThing.WateringPot, false)
             };
 
             foreach(var job in factoryJobs)

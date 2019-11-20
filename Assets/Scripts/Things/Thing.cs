@@ -13,6 +13,7 @@ namespace Village.Things
         public static ThingMoved OnThingMoved;
         public ThingConfig Config { get; protected set; }
         public SpriteRenderer SpriteRenderer { get; protected set; }
+        public bool LabelActive { get { return _labelObj != null && _labelObj.activeSelf; } }
         public int Hitpoints { get; set; }
         public Vector2Int Position { get { return transform.position.ToVector2IntFloor(); } }
         public Factory Factory { get; private set; }
@@ -138,9 +139,18 @@ namespace Village.Things
                 _labelObj.GetComponentInChildren<MeshRenderer>().sortingOrder = (int)SortingOrders.Labels;
                 _textMesh = _labelObj.GetComponentInChildren<TextMesh>();
             }
-
+            
             _textMesh.text = label;
         }
+
+        public void HideLabel()
+        {
+            _labelObj.SetActive(false);
+        }
+
+        /*
+            Sprites
+        */
 
         public void SetSprite()
         {
@@ -241,14 +251,10 @@ namespace Village.Things
                 _previousPosition = Position;
             }
 
-            // var label = "";
-            // if (Config.Resource)
-            //     label += $"x{Hitpoints}\n";
-            // if (!string.IsNullOrEmpty(ownedBy))
-            //     label += $"owner: {ownedBy}\n";
-
-            // if (!string.IsNullOrEmpty(label))
-            //     SetLabel(label);
+            if(Config.Resource && !LabelActive)
+            {
+                SetLabel($"x{Hitpoints}");
+            }
         }
 
         public ThingSave ToSaveObj()
