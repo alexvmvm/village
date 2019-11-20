@@ -121,28 +121,6 @@ namespace Village.AI
                 AddAction(new SubmitFactoryJob(this, _game, _thing, _movement, job.Item1, job.Item2, job.Item3, job.Item4));
             }
 
-
-            /*  
-                Storage
-            */
-
-            // AddAction(new GetThingToMoveToStorage(this, _game, _thing, _movement, TypeOfThing.Iron, this));
-            // AddAction(new GetThingToMoveToStorage(this, _game, _thing, _movement, TypeOfThing.Wood, this));
-
-            // AddAction(new FillStorage(this, _game, _movement, _thing.Inventory, TypeOfThing.Iron));
-            // AddAction(new FillStorage(this, _game, _movement, _thing.Inventory, TypeOfThing.Wood));
-
-
-            // foreach(var resource in resources)
-            // {
-            //     AddAction(new GetResourceToMoveToStorage(_game, thing, _movement, resource, this)
-            //     {
-            //         Preconditions = { { "hasFullInventory", false } },
-            //         Effects = { { "hasThing", resource }, { "hasThingForStorage", true } }
-            //     });
-            // }
-
-
             /*
                 Construction
             */

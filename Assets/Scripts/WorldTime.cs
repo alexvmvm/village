@@ -2,12 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TimeOfDay
+{
+    Day,
+    Night
+}
+
+public enum Season
+{
+    Spring,
+    Summer,
+    Autumn,
+    Winter
+}
+
 public class WorldTime 
 {
     public float TimeSinceStart;
     public float NormalizedTimeOfDay { get { return ((TimeSinceStart % SecondsInADay) / SecondsInADay); } }
     public float SecondsInADay { get { return _secondsInADay; } }
     public TimeOfDay TimeOfDay;
+    public Season Season;
     public int HourOfDay;
     private float _secondsInADay;
     private int _morningHour;

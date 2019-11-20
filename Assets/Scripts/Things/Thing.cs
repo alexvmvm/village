@@ -30,6 +30,8 @@ namespace Village.Things
         void Awake()
         {
             SpriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+            SpriteRenderer.material = Assets.GetMaterial("Sprite-Diffuse");
+            
             Game = FindObjectOfType<Game>();
         }
         
