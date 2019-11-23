@@ -91,8 +91,11 @@
             </TileRuleConfig>
             <GridGroup>1</GridGroup>
             <PositionalAudioGroup>river</PositionalAudioGroup>
-            <PathTag>TAG_BLOCKING</PathTag>
+            <!-- <PathTag>TAG_BLOCKING</PathTag> -->
             <Pipe>true</Pipe>
+            <Produces>Water</Produces>
+            <Resource>true</Resource>
+            <RequiredToProduce>WateringPot</RequiredToProduce>
             <Parent>floor</Parent>
         </Thing>
 
@@ -157,6 +160,18 @@
             <ConstructionConfig>
                 <Group>Floors</Group>
                 <Requires>None</Requires>
+            </ConstructionConfig>
+            <Parent>floor</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>water crop</Name>
+            <Sprite>colored_0</Sprite>
+            <TypeOfThing>WaterCrop</TypeOfThing>
+            <BuildSite>false</BuildSite>
+            <ConstructionConfig>
+                <Group>Floors</Group>
+                <Requires>Water</Requires>
             </ConstructionConfig>
             <Parent>floor</Parent>
         </Thing>
@@ -555,6 +570,16 @@
 
 
         <!-- Resources -->
+        <Thing>
+            <Name>Water</Name>
+            <Sprite>stream_5</Sprite>
+            <TypeOfThing>Water</TypeOfThing>
+            <Produces>Water</Produces>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
         
         <Thing>
             <Name>Mushroom</Name>
@@ -747,7 +772,6 @@
             <Sprite>colored_transparent_977</Sprite>
             <TypeOfThing>Hops</TypeOfThing>
             <Produces>Hops</Produces>
-            <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>food</StoreGroup>

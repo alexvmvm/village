@@ -69,6 +69,8 @@ namespace Village.AI
             */
             var resources = new TypeOfThing[] 
             {
+                TypeOfThing.Water,
+                TypeOfThing.Stream,
                 TypeOfThing.Rock,
                 TypeOfThing.Stone,
                 TypeOfThing.MushroomGrowing,
@@ -93,7 +95,8 @@ namespace Village.AI
                 TypeOfThing.Carrot,
                 TypeOfThing.Hops,
                 TypeOfThing.Axe,
-                TypeOfThing.Hoe
+                TypeOfThing.Hoe,
+                TypeOfThing.WateringPot
             };
 
             foreach(var resource in resources)
@@ -135,6 +138,7 @@ namespace Village.AI
             AddAction(new Construct(this, _game, _movement, TypeOfThing.TomatoSeed, _thing));
             AddAction(new Construct(this, _game, _movement, TypeOfThing.PumpkinSeed, _thing));
             AddAction(new Construct(this, _game, _movement, TypeOfThing.CarrotSeed, _thing));
+            AddAction(new Construct(this, _game, _movement, TypeOfThing.Water, _thing));
             AddAction(new Construct(this, _game, _movement, TypeOfThing.None, _thing));
         }
 

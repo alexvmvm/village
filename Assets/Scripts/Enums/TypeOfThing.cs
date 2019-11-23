@@ -1,9 +1,11 @@
 ﻿public enum TypeOfThing 
 {
     None,         
+    WaterCrop,
     Blueprint,       
     Grass,                   
     Stream,                  
+    Water,
     Path,                 
     Rock,                    
     Stone,                   
