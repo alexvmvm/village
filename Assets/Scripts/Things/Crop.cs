@@ -16,6 +16,7 @@ namespace Village.Things
         private float _timeToGrow;
         private TypeOfThing _produces;
         private int _index;
+        private Season _season;
 
         void Awake() 
         {
@@ -30,6 +31,7 @@ namespace Village.Things
             _timeToGrow = config.TimeToGrow;
             //_thing.Config.TileRuleConfig = new CropTile(this);
             _produces = config.Produces;
+            _season = config.Season;
         }
 
         public string GetSprite()
@@ -42,12 +44,21 @@ namespace Village.Things
             return Mathf.FloorToInt(Mathf.Min(_age / _timeToGrow, 1) * (_sprites.Length - 1));
         }
 
+        public bool InSeason()
+        {
+            return _game.WorldTime.Season == _season;
+        }
+
         void Update()
         {
             if(_sprites == null)
                 return;
 
+            if(!InSeason())
+                return;
+
             _age += Time.deltaTime;
+
             var index = GetSpriteIndex();
             if (index != _index)
             {

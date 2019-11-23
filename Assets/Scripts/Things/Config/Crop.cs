@@ -7,5 +7,6 @@ namespace Village.Things.Config
         public float TimeToGrow;
         public string[] Sprites;
         public TypeOfThing Produces;
+        public Season Season;
     }
 }

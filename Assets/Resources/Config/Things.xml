@@ -754,6 +754,18 @@
             <Parent>resource</Parent>
         </Thing>
 
+        <Thing>
+            <Name>Pumpkin</Name>
+            <Sprite>colored_transparent_977</Sprite>
+            <TypeOfThing>Pumpkin</TypeOfThing>
+            <Produces>Pumpkin</Produces>
+            <Edible>true</Edible>
+            <Hitpoints>1</Hitpoints>
+            <Storeable>true</Storeable>
+            <StoreGroup>food</StoreGroup>
+            <Parent>resource</Parent>
+        </Thing>
+
          <!-- Resource : Seeds -->
 
         <Thing>
@@ -834,13 +846,14 @@
             <TypeOfThing>CabbageCrop</TypeOfThing>
             <Sprite>colored_transparent_204</Sprite>
             <CropConfig>
-                <TimeToGrow>300</TimeToGrow>
+                <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
                     <string>colored_transparent_204</string>
                     <string>colored_transparent_205</string>
                     <string>colored_transparent_206</string>
                 </Sprites>
                 <Produces>Cabbage</Produces>
+                <Season>Spring</Season>
             </CropConfig>
             <ConstructionConfig>
                 <BuildOn>SoilFloor</BuildOn>
@@ -855,13 +868,14 @@
             <TypeOfThing>PotatoCrop</TypeOfThing>
             <Sprite>colored_transparent_204</Sprite>
             <CropConfig>
-                <TimeToGrow>300</TimeToGrow>
+                <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
                     <string>colored_transparent_204</string>
                     <string>colored_transparent_205</string>
                     <string>colored_transparent_206</string>
                 </Sprites>
                 <Produces>Potato</Produces>
+                <Season>Spring</Season>
             </CropConfig>
             <ConstructionConfig>
                 <BuildOn>SoilFloor</BuildOn>
@@ -876,12 +890,13 @@
             <TypeOfThing>TomatoCrop</TypeOfThing>
             <Sprite>colored_transparent_204</Sprite>
             <CropConfig>
-                <TimeToGrow>300</TimeToGrow>
+                <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
                     <string>colored_transparent_204</string>
                     <string>colored_transparent_205</string>
                     <string>colored_transparent_206</string>
                 </Sprites>
+                <Season>Summer</Season>
                 <Produces>Tomato</Produces>
             </CropConfig>
             <ConstructionConfig>
@@ -893,16 +908,39 @@
         </Thing>
 
         <Thing>
-            <Name>Pumpkin</Name>
-            <TypeOfThing>PumpkinCrop</TypeOfThing>
+            <Name>Hops</Name>
+            <TypeOfThing>HopCrop</TypeOfThing>
             <Sprite>colored_transparent_204</Sprite>
             <CropConfig>
-                <TimeToGrow>300</TimeToGrow>
+                <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
                     <string>colored_transparent_204</string>
                     <string>colored_transparent_205</string>
                     <string>colored_transparent_206</string>
                 </Sprites>
+                <Season>Summer</Season>
+                <Produces>Hops</Produces>
+            </CropConfig>
+            <ConstructionConfig>
+                <BuildOn>SoilFloor</BuildOn>
+                <Group>Farming</Group>
+                <Requires>HopSeed</Requires>
+            </ConstructionConfig>
+            <Parent>crop</Parent>
+        </Thing>
+
+        <Thing>
+            <Name>Pumpkin</Name>
+            <TypeOfThing>PumpkinCrop</TypeOfThing>
+            <Sprite>colored_transparent_204</Sprite>
+            <CropConfig>
+                <TimeToGrow>3600</TimeToGrow>
+                <Sprites>
+                    <string>colored_transparent_204</string>
+                    <string>colored_transparent_205</string>
+                    <string>colored_transparent_206</string>
+                </Sprites>
+                <Season>Autumn</Season>
                 <Produces>Pumpkin</Produces>
             </CropConfig>
             <ConstructionConfig>
@@ -918,13 +956,14 @@
             <TypeOfThing>CarrotCrop</TypeOfThing>
             <Sprite>colored_transparent_204</Sprite>
             <CropConfig>
-                <TimeToGrow>300</TimeToGrow>
+                <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
                     <string>colored_transparent_204</string>
                     <string>colored_transparent_205</string>
                     <string>colored_transparent_206</string>
                 </Sprites>
                 <Produces>Carrot</Produces>
+                <Season>Winter</Season>
             </CropConfig>
             <ConstructionConfig>
                 <BuildOn>SoilFloor</BuildOn>
