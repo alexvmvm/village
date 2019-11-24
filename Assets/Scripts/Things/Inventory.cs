@@ -3,63 +3,70 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Village.AI;
+using Village.Things.Config;
 
 namespace Village.Things
 {
-
     public class Inventory : MonoBehaviour
     {
-        public Thing Holding { get; private set; }
-        public Thing Tool { get; private set; }
-
         private Game _game;
+        private Dictionary<InventorySlot, Thing> _inventory;
 
         void Awake()
         {
             _game = FindObjectOfType<Game>();
+            _inventory = new Dictionary<InventorySlot, Thing>();
         }
 
-        public void HoldThing(Thing thing)
+        public void Hold(Thing thing)
         {
-            Holding = thing;
-            Holding.transform.SetParent(transform);
-            Holding.transform.localPosition = Vector3.up;
+            _inventory[thing.Config.InventorySlot] = thing;
+
+            thing.transform.SetParent(transform);
+            thing.transform.localPosition = Vector3.up;
         }
 
-        public Thing Drop()
+        public bool IsHoldingThing(InventorySlot slot)
         {
-            if (Holding != null)
-            {
-                var thing = Holding;
-                Holding.transform.SetParent(null);
-                Holding = null;
-                
-                var position = _game.FindNearestLoosePosition(transform.position.ToVector2IntFloor());
-
-                if(position.HasValue)
-                {
-                    thing.transform.position = position.Value.ToVector3();
-                }
-                
-                return thing;
-            }
-
-            return null;
+            return _inventory.ContainsKey(slot) && _inventory[slot] != null;
         }
 
-        public bool IsHoldingSomething()
+        public TypeOfThing GetTypeOfThing(InventorySlot slot)
         {
-            return Holding != null;
+            return IsHoldingThing(slot) ?
+                _inventory[slot].Config.TypeOfThing :
+                TypeOfThing.None;
         }
 
         public bool IsHoldingSomethingToEat()
         {
-            return Holding != null && Holding.Config.Edible;
+            return IsHoldingThing(InventorySlot.Hands) && GetHoldingThing(InventorySlot.Hands).Config.Edible;
+        }
+        
+
+        public Thing GetHoldingThing(InventorySlot slot)
+        {
+            return _inventory.ContainsKey(slot) ? _inventory[slot] : null;
         }
 
-        public bool IsHoldingTool()
+        public Thing Drop(InventorySlot slot)
         {
-            return IsHoldingSomething() && Holding.Config.Tool;
+            if(!IsHoldingThing(slot))
+                return null;
+
+            var thing = GetHoldingThing(slot);
+            thing.transform.SetParent(null);
+            
+            var position = _game.FindNearestLoosePosition(transform.position.ToVector2IntFloor());
+
+            if(position.HasValue)
+            {
+                thing.transform.position = position.Value.ToVector3();
+            }
+
+            _inventory.Remove(slot);
+            
+            return thing;
         }
     }
 

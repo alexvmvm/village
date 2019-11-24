@@ -47,7 +47,6 @@ namespace Village.AI
         public override void GetWorldState(Dictionary<string, object> world)
         {
             world[GOAPAction.Effect.IS_WORKING]  = false;
-            world[GOAPAction.Effect.IS_HOLDING_SOMETHING] = false;
         }
 
         public override void Update()

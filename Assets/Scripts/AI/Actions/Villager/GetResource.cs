@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Village.Things;
+using Village.Things.Config;
 
 namespace Village.AI
 {
@@ -19,19 +20,23 @@ namespace Village.AI
             _inventory = _thing.Inventory;
             _villager = villager;
 
-            var config = Assets.GetThingConfig(_resource);    
-            if(config.RequiredToProduce != TypeOfThing.None)
-                Preconditions.Add(GOAPAction.Effect.HAS_THING, config.RequiredToProduce);
-            else
-                Preconditions.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, false);
+            var resourceConfig = Assets.GetThingConfig(_resource);    
+            var producesConfig = Assets.GetThingConfig(resourceConfig.Produces);
 
-            Effects.Add(GOAPAction.Effect.HAS_THING, config.Produces);
-            Effects.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, true);
-            Effects.Add(GOAPAction.Effect.HAS_EDIBLE_THING, config.Edible);
+            if(resourceConfig.RequiredToProduce != TypeOfThing.None)
+            {
+                var requiresConfig = Assets.GetThingConfig(resourceConfig.RequiredToProduce);
+                Preconditions.Add(GOAPAction.Effect.HAS_THING + requiresConfig.InventorySlot, requiresConfig.TypeOfThing);
+            }
+
+            Preconditions.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, false);
+
+            Effects.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, true);
+            Effects.Add(GOAPAction.Effect.HAS_THING + producesConfig.InventorySlot, producesConfig.TypeOfThing);
 
             // costs more if not a straight resource
             // pickup
-            Cost = config.Produces == config.TypeOfThing ? 1 : 2;
+            Cost = resourceConfig.Produces == resourceConfig.TypeOfThing ? 1 : 2;
         }
 
         public override bool Filter(Thing thing)
@@ -46,7 +51,7 @@ namespace Village.AI
                 var resource = _game.CreateAtPosition(_target.Config.Produces, Vector2Int.zero);
                 resource.Hitpoints = Mathf.Min(10, _target.Hitpoints);
                 resource.ownedBy = _villager.Fullname;
-                _inventory.HoldThing(resource);
+                _inventory.Hold(resource);
 
                 // damage existing resource
                 _target.Hitpoints -= 10;
@@ -56,7 +61,7 @@ namespace Village.AI
             else
             {
                 _target.ownedBy = _villager.Fullname;
-                _inventory.HoldThing(_target);
+                _inventory.Hold(_target);
             }
 
             return true;

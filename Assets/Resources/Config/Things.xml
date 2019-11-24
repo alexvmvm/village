@@ -37,6 +37,7 @@
             <Storeable>true</Storeable>
             <StoreGroup>tool</StoreGroup>
             <Tool>true</Tool>
+            <InventorySlot>Tool</InventorySlot>
             <SortingOrder>100</SortingOrder>
         </Thing>
         <Thing>

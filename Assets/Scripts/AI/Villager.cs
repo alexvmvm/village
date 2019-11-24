@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Village.Things;
+using Village.Things.Config;
 
 namespace Village.AI
 {
@@ -53,8 +54,11 @@ namespace Village.AI
                 Misc
             */
 
-            AddAction(new Drop(this, _game, _thing));
+            AddAction(new Drop(this, _game, _thing, InventorySlot.Hands));
+            AddAction(new Drop(this, _game, _thing, InventorySlot.Tool));
+
             AddAction(new Sleep(this, _game, _thing, _movement, this, _needs));
+            
             AddAction(new Idle(this, _game, _movement));
 
             /*
@@ -156,15 +160,15 @@ namespace Village.AI
             /*
                 Resources
             */
+            foreach(InventorySlot slot in Enum.GetValues(typeof(InventorySlot)))
+            {
+                world[GOAPAction.Effect.IS_HOLDING_THING + slot] = _inventory.IsHoldingThing(slot);
+                world[GOAPAction.Effect.HAS_THING + slot] = _inventory.GetTypeOfThing(slot);
+                
+            }
 
-            world[GOAPAction.Effect.HAS_THING] = _inventory.IsHoldingSomething() ?
-                _inventory.Holding.Config.TypeOfThing : TypeOfThing.None;
-
-            world[GOAPAction.Effect.HAS_EDIBLE_THING] =
-                _inventory.IsHoldingSomething() &&
-                _inventory.IsHoldingSomethingToEat();
-
-            world[GOAPAction.Effect.IS_HOLDING_SOMETHING] = _inventory.IsHoldingSomething();
+            world[GOAPAction.Effect.HAS_EDIBLE_THING] = _inventory.IsHoldingSomethingToEat();
+            
 
             /*
                 Survival

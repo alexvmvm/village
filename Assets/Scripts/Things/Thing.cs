@@ -126,11 +126,11 @@ namespace Village.Things
                     Game.Remove(existing);
             }
 
-            var thing = Game.CreateAtPosition(Builds, Position);
-            Game.Remove(this);
-
             if(OnThingConstructed != null)
                 OnThingConstructed();
+
+            var thing = Game.CreateAtPosition(Builds, Position);
+            Game.Remove(this);
         }
 
         /*
@@ -148,11 +148,6 @@ namespace Village.Things
             }
             
             _textMesh.text = label;
-        }
-
-        public void HideLabel()
-        {
-            _labelObj.SetActive(false);
         }
 
         /*
@@ -258,7 +253,7 @@ namespace Village.Things
                 _previousPosition = Position;
             }
 
-            if(Config.Resource && !LabelActive)
+            if(Config.Resource)
             {
                 SetLabel($"x{Hitpoints}");
             }

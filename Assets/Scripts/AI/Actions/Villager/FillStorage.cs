@@ -4,6 +4,7 @@ using System.Linq;
 using Village;
 using Village.AI;
 using Village.Things;
+using Village.Things.Config;
 
 public class FillStorage : MoveGOAPAction
 {
@@ -19,7 +20,9 @@ public class FillStorage : MoveGOAPAction
         _inventory = inventory;
         _type = type;
 
-        Preconditions.Add(GOAPAction.Effect.HAS_THING, type);
+        var thingConfig = Assets.GetThingConfig(type);
+        
+        Preconditions.Add(GOAPAction.Effect.HAS_THING + thingConfig.InventorySlot, type);
         Preconditions.Add(GOAPAction.Effect.HAS_THING_FOR_STORAGE, true);
         Effects.Add(GOAPAction.Effect.HAS_THING_FOR_STORAGE, false);
         Effects.Add(GOAPAction.Effect.IS_WORKING, true);
@@ -36,7 +39,7 @@ public class FillStorage : MoveGOAPAction
 
     public override bool PerformAtTarget()
     {
-        var item = _inventory.Drop();
+        var item = _inventory.Drop(InventorySlot.Hands);
         var remainder = _target.Storage.Add(item);
 
         if(remainder != null)

@@ -11,6 +11,12 @@ namespace Village.Things.Config
         Animal
     }
 
+    public enum InventorySlot
+    {
+        Hands,
+        Tool
+    }
+
     [Serializable]
     public class TileRuleConfig
     {
@@ -53,6 +59,7 @@ namespace Village.Things.Config
         public bool Inventory;
         public bool Fire;
         public bool Storage;
+        public InventorySlot InventorySlot;
         public FactoryConfig FactoryConfig;
         public CropConfig CropConfig;
         public AgentConfig Agent;

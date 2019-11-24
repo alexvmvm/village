@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Village.Things;
+using Village.Things.Config;
 
 namespace Village.AI
 {
@@ -21,7 +22,7 @@ namespace Village.AI
 
         public override bool IsDone()
         {
-            return !_inventory.IsHoldingSomething();
+            return !_inventory.IsHoldingThing(InventorySlot.Hands);
         }
 
         public override bool IsPossibleToPerform()
@@ -31,9 +32,7 @@ namespace Village.AI
 
         public override bool Perform()
         {
-            _game.Remove(_inventory.Holding);
-            _inventory.Drop();
-
+            _game.Remove(_inventory.Drop(InventorySlot.Hands));
             return true;
         }
 
@@ -44,9 +43,9 @@ namespace Village.AI
 
         public override string ToString()
         {
-            if (_inventory.Holding == null)
+            if (_inventory.GetHoldingThing(InventorySlot.Hands) == null)
                 return base.ToString();
-            return $"Eating {_inventory.Holding.Config.TypeOfThing.ToString()}";
+            return $"Eating {_inventory.GetHoldingThing(InventorySlot.Hands).Config.TypeOfThing.ToString()}";
         }
     }
 

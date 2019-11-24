@@ -171,7 +171,7 @@ namespace Village
 
         public bool IsLooseThing(Vector2Int position)
         {
-            return QueryLooseThings().Any(t => t.Position == position);
+            return QueryLooseThings().Any(t => t.transform != null && t.Position == position);
         }
 
         public Thing GetLooseThing(Vector2Int position)

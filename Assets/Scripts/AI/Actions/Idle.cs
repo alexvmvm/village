@@ -20,7 +20,7 @@ namespace Village.AI
             Cost = 9999;
 
             Preconditions.Add(GOAPAction.Effect.IS_WORKING, false);
-            Preconditions.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, false);
+            //Preconditions.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, false);
             Effects.Add(GOAPAction.Effect.IS_WORKING, true);
         }
 

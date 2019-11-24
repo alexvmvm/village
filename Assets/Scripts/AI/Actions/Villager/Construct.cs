@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Village.Things;
+using Village.Things.Config;
 
 namespace Village.AI
 {
@@ -14,6 +15,7 @@ namespace Village.AI
         private TypeOfThing _resource;
         private Thing _thing;
         private Inventory _inventory;
+        private InventorySlot _resourceSlot;
 
         public Construct(Agent agent, Game game, Movement movement, TypeOfThing resource, Thing thing) : base(agent, game, movement)
         {
@@ -22,8 +24,11 @@ namespace Village.AI
             _thing = thing;
             _inventory = _thing.Inventory;
 
+            _resourceSlot = Assets.GetThingConfig(resource).InventorySlot;
+
             if(resource != TypeOfThing.None)
-                Preconditions.Add(GOAPAction.Effect.HAS_THING, resource);
+                Preconditions.Add(GOAPAction.Effect.HAS_THING + _resourceSlot, resource);
+
             Effects.Add(GOAPAction.Effect.IS_WORKING, true);
         }
 
@@ -37,14 +42,14 @@ namespace Village.AI
             if(_target == null)
                 return true;
 
-            if (_inventory.IsHoldingSomething() && !_inventory.IsHoldingTool())
+            if (_inventory.IsHoldingThing(_resourceSlot))
             {
-                var resource = _inventory.Holding;
+                var resource = _inventory.GetHoldingThing(_resourceSlot);
                 resource.Hitpoints -= 1;
 
                 if (resource.Hitpoints == 0)
                 {
-                    _game.Remove(_inventory.Drop());
+                    _game.Remove(_inventory.Drop(_resourceSlot));
                 }
             }
 

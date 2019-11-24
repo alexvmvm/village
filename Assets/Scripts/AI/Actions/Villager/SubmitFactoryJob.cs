@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Village.Things;
+using Village.Things.Config;
 
 namespace Village.AI
 {
@@ -18,6 +19,7 @@ namespace Village.AI
         private TypeOfThing _output;
         private bool _requiresAgentToMake;
         private bool _submittedJob;
+        private InventorySlot _inputSlot;
 
         public SubmitFactoryJob(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing factoryType, TypeOfThing input, TypeOfThing output, bool requiresAgentToMake) : base(agent, game, movement)
         {
@@ -29,8 +31,13 @@ namespace Village.AI
             _input = input;
             _requiresAgentToMake = requiresAgentToMake;
 
-            Preconditions.Add(GOAPAction.Effect.HAS_THING, _input);
-            Effects.Add(GOAPAction.Effect.HAS_THING, _output);
+            var inputConfig = Assets.GetThingConfig(input);
+            _inputSlot = inputConfig.InventorySlot;
+
+            var outputConfig = Assets.GetThingConfig(output);
+
+            Preconditions.Add(GOAPAction.Effect.HAS_THING + inputConfig.InventorySlot, _input);
+            Effects.Add(GOAPAction.Effect.HAS_THING + outputConfig.InventorySlot, _output);
             Effects.Add(GOAPAction.Effect.IS_WORKING, true);
         }
 
@@ -45,10 +52,9 @@ namespace Village.AI
 
         public override bool PerformAtTarget()
         {
-            if (_inventory.IsHoldingSomething())
+            if (_inventory.IsHoldingThing(_inputSlot))
             {
-                _game.Remove(_inventory.Holding);
-                _inventory.Drop();
+                _game.Remove(_inventory.Drop(_inputSlot));
             }
 
             if (!_submittedJob)

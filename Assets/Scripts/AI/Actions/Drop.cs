@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Village.Things;
+using Village.Things.Config;
 
 namespace Village.AI 
 {
@@ -11,18 +12,18 @@ namespace Village.AI
         private Thing _thing;
         private Inventory _inventory;
 
-        public Drop(Agent agent, Game game, Thing thing) : base(agent, game)
+        public Drop(Agent agent, Game game, Thing thing, InventorySlot slot) : base(agent, game)
         {
             _thing = thing;    
             _inventory = _thing.Inventory;
             
-            Preconditions.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, true);
-            Effects.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, false);
+            Preconditions.Add(GOAPAction.Effect.IS_HOLDING_THING + slot, true);
+            Effects.Add(GOAPAction.Effect.IS_HOLDING_THING + slot, false);
         }
 
         public override bool IsDone()
         {
-            return !_inventory.IsHoldingSomething();
+            return !_inventory.IsHoldingThing(InventorySlot.Hands);
         }
 
         public override bool IsPossibleToPerform()
@@ -32,7 +33,7 @@ namespace Village.AI
 
         public override bool Perform()
         {
-            _inventory.Drop();
+            _inventory.Drop(InventorySlot.Hands);
             return true;
         }
 
