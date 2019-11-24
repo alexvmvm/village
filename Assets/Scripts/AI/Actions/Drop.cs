@@ -16,8 +16,8 @@ namespace Village.AI
             _thing = thing;    
             _inventory = _thing.Inventory;
             
-            Preconditions.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, true);
-            Effects.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, false);
+            Preconditions.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, true);
+            Effects.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, false);
         }
 
         public override bool IsDone()

@@ -7,10 +7,12 @@ using Village.Things.Config;
 namespace Village.Things
 {
     public delegate void ThingMoved(Thing thing, Vector2Int previous, Vector2Int current);
+    public delegate void ThingConstructed();
 
     public class Thing : MonoBehaviour, ISave<ThingSave>
     {
         public static ThingMoved OnThingMoved;
+        public ThingConstructed OnThingConstructed;
         public ThingConfig Config { get; protected set; }
         public SpriteRenderer SpriteRenderer { get; protected set; }
         public bool LabelActive { get { return _labelObj != null && _labelObj.activeSelf; } }
@@ -126,6 +128,9 @@ namespace Village.Things
 
             var thing = Game.CreateAtPosition(Builds, Position);
             Game.Remove(this);
+
+            if(OnThingConstructed != null)
+                OnThingConstructed();
         }
 
         /*

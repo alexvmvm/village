@@ -23,10 +23,10 @@ namespace Village.AI
             if(config.RequiredToProduce != TypeOfThing.None)
                 Preconditions.Add(GOAPAction.Effect.HAS_THING, config.RequiredToProduce);
             else
-                Preconditions.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, false);
+                Preconditions.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, false);
 
             Effects.Add(GOAPAction.Effect.HAS_THING, config.Produces);
-            Effects.Add(GOAPAction.Effect.HAS_FULL_INVENTORY, true);
+            Effects.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, true);
             Effects.Add(GOAPAction.Effect.HAS_EDIBLE_THING, config.Edible);
 
             // costs more if not a straight resource

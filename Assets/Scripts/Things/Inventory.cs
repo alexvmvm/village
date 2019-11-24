@@ -10,6 +10,7 @@ namespace Village.Things
     public class Inventory : MonoBehaviour
     {
         public Thing Holding { get; private set; }
+        public Thing Tool { get; private set; }
 
         private Game _game;
 
@@ -21,10 +22,6 @@ namespace Village.Things
         public void HoldThing(Thing thing)
         {
             Holding = thing;
-
-            //if (_holding.Agent != null)
-            //    _holding.Agent.PauseAgent();
-
             Holding.transform.SetParent(transform);
             Holding.transform.localPosition = Vector3.up;
         }
@@ -58,11 +55,6 @@ namespace Village.Things
         public bool IsHoldingSomethingToEat()
         {
             return Holding != null && Holding.Config.Edible;
-        }
-
-        public bool IsHolding(TypeOfThing type)
-        {
-            return Holding != null && Holding.Config.TypeOfThing == type;
         }
 
         public bool IsHoldingTool()

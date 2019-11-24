@@ -42,7 +42,8 @@
         <Thing>
             <Name>crop</Name>
             <BuildSite>false</BuildSite>
-            <SortingOrder>100</SortingOrder>
+            <Floor>true</Floor>
+            <FixedToFloor>true</FixedToFloor>
         </Thing>
     </Parents>
     
@@ -165,18 +166,6 @@
         </Thing>
 
         <Thing>
-            <Name>water crop</Name>
-            <Sprite>colored_0</Sprite>
-            <TypeOfThing>WaterCrop</TypeOfThing>
-            <BuildSite>false</BuildSite>
-            <ConstructionConfig>
-                <Group>Floors</Group>
-                <Requires>Water</Requires>
-            </ConstructionConfig>
-            <Parent>floor</Parent>
-        </Thing>
-
-        <Thing>
             <Name>Soil</Name>
             <Sprite>colored_1</Sprite>
             <TypeOfThing>SoilFloor</TypeOfThing>
@@ -211,6 +200,20 @@
                 <Requires>Stone</Requires>
             </ConstructionConfig>
             <Parent>floor</Parent>
+        </Thing>
+
+        <!-- Misc -->
+
+        <Thing>
+            <Name>water crop</Name>
+            <Sprite>colored_0</Sprite>
+            <TypeOfThing>WaterCrop</TypeOfThing>
+            <BuildSite>false</BuildSite>
+            <ConstructionConfig>
+                <Group>Floors</Group>
+                <Requires>Water</Requires>
+            </ConstructionConfig>
+            <SortingOrder>200</SortingOrder>
         </Thing>
 
         <!-- Walls -->
@@ -868,13 +871,13 @@
         <Thing>
             <Name>Cabbage</Name>
             <TypeOfThing>CabbageCrop</TypeOfThing>
-            <Sprite>colored_transparent_204</Sprite>
+            <Sprite>colored_205</Sprite>
             <CropConfig>
                 <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
-                    <string>colored_transparent_204</string>
-                    <string>colored_transparent_205</string>
-                    <string>colored_transparent_206</string>
+                    <string>colored_205</string>
+                    <string>colored_206</string>
+                    <string>colored_207</string>
                 </Sprites>
                 <Produces>Cabbage</Produces>
                 <Season>Spring</Season>
@@ -890,13 +893,13 @@
         <Thing>
             <Name>Potato</Name>
             <TypeOfThing>PotatoCrop</TypeOfThing>
-            <Sprite>colored_transparent_204</Sprite>
+            <Sprite>colored_205</Sprite>
             <CropConfig>
                 <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
-                    <string>colored_transparent_204</string>
-                    <string>colored_transparent_205</string>
-                    <string>colored_transparent_206</string>
+                    <string>colored_205</string>
+                    <string>colored_206</string>
+                    <string>colored_207</string>
                 </Sprites>
                 <Produces>Potato</Produces>
                 <Season>Spring</Season>
@@ -912,13 +915,13 @@
         <Thing>
             <Name>Tomato</Name>
             <TypeOfThing>TomatoCrop</TypeOfThing>
-            <Sprite>colored_transparent_204</Sprite>
+            <Sprite>colored_205</Sprite>
             <CropConfig>
                 <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
-                    <string>colored_transparent_204</string>
-                    <string>colored_transparent_205</string>
-                    <string>colored_transparent_206</string>
+                    <string>colored_205</string>
+                    <string>colored_206</string>
+                    <string>colored_207</string>
                 </Sprites>
                 <Season>Summer</Season>
                 <Produces>Tomato</Produces>
@@ -934,13 +937,13 @@
         <Thing>
             <Name>Hops</Name>
             <TypeOfThing>HopCrop</TypeOfThing>
-            <Sprite>colored_transparent_204</Sprite>
+            <Sprite>colored_205</Sprite>
             <CropConfig>
                 <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
-                    <string>colored_transparent_204</string>
-                    <string>colored_transparent_205</string>
-                    <string>colored_transparent_206</string>
+                    <string>colored_205</string>
+                    <string>colored_206</string>
+                    <string>colored_207</string>
                 </Sprites>
                 <Season>Summer</Season>
                 <Produces>Hops</Produces>
@@ -956,13 +959,13 @@
         <Thing>
             <Name>Pumpkin</Name>
             <TypeOfThing>PumpkinCrop</TypeOfThing>
-            <Sprite>colored_transparent_204</Sprite>
+            <Sprite>colored_205</Sprite>
             <CropConfig>
                 <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
-                    <string>colored_transparent_204</string>
-                    <string>colored_transparent_205</string>
-                    <string>colored_transparent_206</string>
+                    <string>colored_205</string>
+                    <string>colored_206</string>
+                    <string>colored_207</string>
                 </Sprites>
                 <Season>Autumn</Season>
                 <Produces>Pumpkin</Produces>
@@ -978,13 +981,13 @@
         <Thing>
             <Name>Carrot</Name>
             <TypeOfThing>CarrotCrop</TypeOfThing>
-            <Sprite>colored_transparent_204</Sprite>
+            <Sprite>colored_205</Sprite>
             <CropConfig>
                 <TimeToGrow>3600</TimeToGrow>
                 <Sprites>
-                    <string>colored_transparent_204</string>
-                    <string>colored_transparent_205</string>
-                    <string>colored_transparent_206</string>
+                    <string>colored_205</string>
+                    <string>colored_206</string>
+                    <string>colored_207</string>
                 </Sprites>
                 <Produces>Carrot</Produces>
                 <Season>Winter</Season>

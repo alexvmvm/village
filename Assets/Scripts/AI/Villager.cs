@@ -164,7 +164,7 @@ namespace Village.AI
                 _inventory.IsHoldingSomething() &&
                 _inventory.IsHoldingSomethingToEat();
 
-            world[GOAPAction.Effect.HAS_FULL_INVENTORY] = _inventory.IsHoldingSomething();
+            world[GOAPAction.Effect.IS_HOLDING_SOMETHING] = _inventory.IsHoldingSomething();
 
             /*
                 Survival
