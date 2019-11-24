@@ -162,6 +162,7 @@
             <ConstructionConfig>
                 <Group>Floors</Group>
                 <Requires>None</Requires>
+                <Builds>MudFloor</Builds>
             </ConstructionConfig>
             <Parent>floor</Parent>
         </Thing>
@@ -175,6 +176,7 @@
             <ConstructionConfig>
                 <Group>Floors</Group>
                 <Requires>Hoe</Requires>
+                <Builds>SoilFloor</Builds>
             </ConstructionConfig>
             <Parent>floor</Parent>
         </Thing>
@@ -187,6 +189,7 @@
             <ConstructionConfig>
                 <Group>Floors</Group>
                 <Requires>WoodenPlanks</Requires>
+                <Builds>WoodFloor</Builds>
             </ConstructionConfig>
             <Parent>floor</Parent>
         </Thing>
@@ -199,6 +202,7 @@
             <ConstructionConfig>
                 <Group>Floors</Group>
                 <Requires>Stone</Requires>
+                <Builds>StoneFloor</Builds>
             </ConstructionConfig>
             <Parent>floor</Parent>
         </Thing>
@@ -213,6 +217,7 @@
             <ConstructionConfig>
                 <Group>Floors</Group>
                 <Requires>Water</Requires>
+                <Builds>None</Builds>
             </ConstructionConfig>
             <SortingOrder>200</SortingOrder>
         </Thing>
@@ -226,6 +231,7 @@
             <ConstructionConfig>
                 <Group>Walls</Group>
                 <Requires>Wood</Requires>
+                <Builds>WoodWall</Builds>
             </ConstructionConfig>
             <Parent>wall</Parent>
         </Thing>
@@ -237,6 +243,7 @@
             <ConstructionConfig>
                 <Group>Walls</Group>
                 <Requires>Wood</Requires>
+                <Builds>ForagedWall</Builds>
             </ConstructionConfig>
             <Parent>wall</Parent>
         </Thing>
@@ -248,6 +255,7 @@
             <ConstructionConfig>
                 <Group>Walls</Group>
                 <Requires>Stone</Requires>
+                <Builds>StoneWall</Builds>
             </ConstructionConfig>
             <Parent>wall</Parent>
         </Thing>
@@ -261,6 +269,7 @@
             <ConstructionConfig>
                 <Group>Furniture</Group>
                 <Requires>WoodenPlanks</Requires>
+                <Builds>Table</Builds>
             </ConstructionConfig>
             <Parent>furniture</Parent>
         </Thing>
@@ -272,6 +281,7 @@
             <ConstructionConfig>
                 <Group>Furniture</Group>
                 <Requires>WoodenPlanks</Requires>
+                <Builds>Chair</Builds>
             </ConstructionConfig>
             <Parent>furniture</Parent>
         </Thing>
@@ -283,6 +293,7 @@
             <ConstructionConfig>
                 <Group>Furniture</Group>
                 <Requires>Wood</Requires>
+                <Builds>ForagedBed</Builds>
             </ConstructionConfig>
             <Parent>furniture</Parent>
         </Thing>
@@ -294,6 +305,7 @@
             <ConstructionConfig>
                 <Group>Furniture</Group>
                 <Requires>Wood</Requires>
+                <Builds>Bed</Builds>
             </ConstructionConfig>
             <Parent>furniture</Parent>
         </Thing>
@@ -307,6 +319,7 @@
             <ConstructionConfig>
                 <Group>Production</Group>
                 <Requires>Clay</Requires>
+                <Builds>ClayForge</Builds>
             </ConstructionConfig>
             <FactoryConfig>
                 <Produces>
@@ -324,6 +337,7 @@
             <ConstructionConfig>
                 <Group>Production</Group>
                 <Requires>Wood</Requires>
+                <Builds>Workbench</Builds>
             </ConstructionConfig>
             <FactoryConfig>
                 <Produces>
@@ -341,6 +355,7 @@
             <ConstructionConfig>
                 <Group>Production</Group>
                 <Requires>Wood</Requires>
+                <Builds>CarpentersBench</Builds>
             </ConstructionConfig>
             <FactoryConfig>
                 <Produces>
@@ -357,6 +372,7 @@
             <ConstructionConfig>
                 <Group>Production</Group>
                 <Requires>Clay</Requires>
+                <Builds>CharcoalPit</Builds>
             </ConstructionConfig>
             <FactoryConfig>
                 <Produces>
@@ -374,6 +390,7 @@
             <ConstructionConfig>
                 <Group>Production</Group>
                 <Requires>Clay</Requires>
+                <Builds>Kiln</Builds>
             </ConstructionConfig>
             <FactoryConfig>
                 <Produces>
@@ -391,6 +408,7 @@
             <ConstructionConfig>
                 <Group>Production</Group>
                 <Requires>Clay</Requires>
+                <Builds>Forge</Builds>
             </ConstructionConfig>
             <FactoryConfig>
                 <Produces>
@@ -407,6 +425,7 @@
             <ConstructionConfig>
                 <Group>Production</Group>
                 <Requires>Clay</Requires>
+                <Builds>Blacksmith</Builds>
             </ConstructionConfig>
             <FactoryConfig>
                 <Produces>
@@ -423,6 +442,7 @@
             <ConstructionConfig>
                 <Group>Production</Group>
                 <Requires>Clay</Requires>
+                <Builds>Mason</Builds>
             </ConstructionConfig>
             <FactoryConfig>
                 <Produces>
@@ -439,6 +459,7 @@
             <ConstructionConfig>
                 <Group>Production</Group>
                 <Requires>Clay</Requires>
+                <Builds>Brewery</Builds>
             </ConstructionConfig>
             <FactoryConfig>
                 <Produces>
@@ -459,6 +480,7 @@
             <ConstructionConfig>
                 <Group>Furniture</Group>
                 <Requires>Wood</Requires>
+                <Builds>Storage</Builds>
             </ConstructionConfig>
             <Parent>furniture</Parent>
         </Thing>
@@ -472,6 +494,7 @@
             <ConstructionConfig>
                 <Group>Furniture</Group>
                 <Requires>Wood</Requires>
+                <Builds>Fire</Builds>
             </ConstructionConfig>
             <Parent>furniture</Parent>
         </Thing>
@@ -887,6 +910,7 @@
                 <BuildOn>SoilFloor</BuildOn>
                 <Group>Farming</Group>
                 <Requires>CabbageSeed</Requires>
+                <Builds>CabbageCrop</Builds>
             </ConstructionConfig>
             <Parent>crop</Parent>
         </Thing>
@@ -909,6 +933,7 @@
                 <BuildOn>SoilFloor</BuildOn>
                 <Group>Farming</Group>
                 <Requires>PotatoSeed</Requires>
+                <Builds>PotatoCrop</Builds>
             </ConstructionConfig>
             <Parent>crop</Parent>
         </Thing>
@@ -931,6 +956,7 @@
                 <BuildOn>SoilFloor</BuildOn>
                 <Group>Farming</Group>
                 <Requires>TomatoSeed</Requires>
+                <Builds>TomatoCrop</Builds>
             </ConstructionConfig>
             <Parent>crop</Parent>
         </Thing>
@@ -953,6 +979,7 @@
                 <BuildOn>SoilFloor</BuildOn>
                 <Group>Farming</Group>
                 <Requires>HopSeed</Requires>
+                <Builds>HopCrop</Builds>
             </ConstructionConfig>
             <Parent>crop</Parent>
         </Thing>
@@ -975,6 +1002,7 @@
                 <BuildOn>SoilFloor</BuildOn>
                 <Group>Farming</Group>
                 <Requires>PumpkinSeed</Requires>
+                <Builds>PumpkinCrop</Builds>
             </ConstructionConfig>
             <Parent>crop</Parent>
         </Thing>
@@ -997,6 +1025,7 @@
                 <BuildOn>SoilFloor</BuildOn>
                 <Group>Farming</Group>
                 <Requires>CarrotSeed</Requires>
+                <Builds>CarrotCrop</Builds>
             </ConstructionConfig>
             <Parent>crop</Parent>
         </Thing>

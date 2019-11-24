@@ -113,8 +113,10 @@ namespace Village.Things
         */
         public void SetBuilds(TypeOfThing type)
         {
-            Builds = type;
-            Requires = Assets.GetThingConfig(type).ConstructionConfig.Requires;
+            var config = Assets.GetThingConfig(type);
+            
+            Builds = config.ConstructionConfig.Builds;
+            Requires = config.ConstructionConfig.Requires;
         }
 
         public void Construct()
@@ -129,7 +131,11 @@ namespace Village.Things
             if(OnThingConstructed != null)
                 OnThingConstructed();
 
-            var thing = Game.CreateAtPosition(Builds, Position);
+            if(Builds != TypeOfThing.None)
+            {
+                var thing = Game.CreateAtPosition(Builds, Position);
+            }
+
             Game.Remove(this);
         }
 

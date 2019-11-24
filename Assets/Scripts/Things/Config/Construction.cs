@@ -7,5 +7,6 @@ namespace Village.Things.Config
         public TypeOfThing? BuildOn;
         public ConstructionGroup Group;
         public TypeOfThing Requires;
+        public TypeOfThing Builds;
     }
 }
