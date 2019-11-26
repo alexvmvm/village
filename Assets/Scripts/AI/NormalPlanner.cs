@@ -6,7 +6,7 @@ using System.Linq;
 namespace Village.AI
 {
 
-    public class NormalPlanner
+    public class NormalPlanner : IPlanner
     {
         private class Node
         {
@@ -60,6 +60,8 @@ namespace Village.AI
 
             var start = new Node(null, 0, agentState, null);
             var success = BuildPlan(start, _leaves, usable, goal);
+
+            Debug.Log($"found {_leaves.Count()} paths");
 
             Node cheapest = null;
             foreach (var leaf in _leaves)
@@ -127,12 +129,13 @@ namespace Village.AI
         {
             bool foundOne = false;
 
+            // loop parent actions
             foreach (var action in usable)
             {
-                // if the parent state has the conditions for this action's preconditions, we can use it here
+                // if the parent state has the conditions for this action's preconditions
+                // then we can use it
                 if (InState(action.Preconditions, parent.state))
                 {
-
                     // apply the action's effects to the parent state
                     var currentState = PopulateState(parent.state, action.Effects);
                     //Debug.Log(GoapAgent.prettyPrint(currentState));

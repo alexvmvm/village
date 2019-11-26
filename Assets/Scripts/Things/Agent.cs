@@ -23,7 +23,7 @@ namespace Village.AI
         public Dictionary<string, object> GoalState { get { return _goal; } }
         public GOAPAction[] Queued { get { return _actions.ToArray(); } }
         protected Game _game;
-        private NormalPlanner _planner;
+        private IPlanner _planner;
         private HashSet<GOAPAction> _available;
         private Queue<GOAPAction> _actions;
         private List<GOAPAction> _useable;

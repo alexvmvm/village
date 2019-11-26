@@ -17,6 +17,7 @@ namespace Village.AI
         public Dictionary<string, object> Effects;
 
         public float Cost = 1f;
+        public string Goal { get; protected set; }
 
         protected Game _game;
         protected Agent _agent;
