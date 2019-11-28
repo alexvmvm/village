@@ -11,7 +11,7 @@ namespace Village.AI
         private bool _started;
         private bool _isDone;
 
-        public DrinkFromStream(Agent agent, Game game, Movement movement) : base(agent, game, movement)
+        public DrinkFromStream(GOAPAgent agent, Game game, Movement movement) : base(agent, game, movement)
         {
             _movement = movement;
 

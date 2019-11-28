@@ -14,7 +14,7 @@ namespace Village.AI
         private bool _started;
         private bool _isDone;
 
-        public MoveGOAPAction(Agent agent, Game game, Movement movement) : base(agent, game)
+        public MoveGOAPAction(GOAPAgent agent, Game game, Movement movement) : base(agent, game)
         {
             _movement = movement;
         }

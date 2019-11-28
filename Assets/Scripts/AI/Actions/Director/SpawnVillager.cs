@@ -9,7 +9,7 @@ namespace Village.AI
     public class SpawnVillager : GOAPAction
     {
 
-        public SpawnVillager(Agent agent, Game game) : base(agent, game)
+        public SpawnVillager(GOAPAgent agent, Game game) : base(agent, game)
         {
             Effects.Add(GOAPAction.Effect.IS_WORKING, true);
         }

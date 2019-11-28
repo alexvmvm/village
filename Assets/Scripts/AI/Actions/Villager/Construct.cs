@@ -17,8 +17,10 @@ namespace Village.AI
         private Inventory _inventory;
         private InventorySlot _resourceSlot;
 
-        public Construct(Agent agent, Game game, Movement movement, TypeOfThing resource, Thing thing) : base(agent, game, movement)
+        public Construct(GOAPAgent agent, Game game, Movement movement, TypeOfThing resource, Thing thing) : base(agent, game, movement)
         {
+            Goal = GOAPGoal.Goal.IS_WORKING;
+
             _movement = movement;
             _resource = resource;
             _thing = thing;

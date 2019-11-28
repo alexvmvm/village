@@ -60,46 +60,79 @@ public class AgentWindow : EditorWindow
 
     void DrawAgent(float x, float y, GameObject gameObject)
     {
-        var agent = gameObject.GetComponent<Agent>();
-        var actions = agent.GetActions().OrderBy(a => a.ToString()).ToArray();
+        var agent = gameObject.GetComponent<GOAPAgent>();
         var currentY = y;
 
-        // world state
-        var worldStateRect = DrawConditions(x, y, 500, agent.WorldState, "World State");
-        currentY += worldStateRect.height + 10;
-        
-        // goals
-        var goalStateRect = DrawConditions(x, currentY, 500, agent.GoalState, "Goal State");
-        currentY += goalStateRect.height + 10;
-
-        // current action
-        if(agent.CurentAction != null)
-        {
-            var currentRect = DrawAction(x, currentY, agent.CurentAction);
-            currentY += currentRect.height + 10;
-        }
-
-        // current queued
-        var queued = agent.Queued;
-        for(var i = 0; i < queued.Length; i++)
-        {
-            GUI.Label(new Rect(x, currentY, 500, 20), $"-> {queued[i].ToString()}");
-            currentY += 20;
-        }        
+        var columnWidth = 200;
+        var columnGap = 10;
 
         _actionsScrollView = GUI.BeginScrollView(
-            new Rect(10, currentY, 500, position.height - (currentY - y) - 20), 
+            new Rect(10, y, position.width - 20, position.height - 100), 
             _actionsScrollView, 
-            new Rect(10, currentY, 10000, 15000));
+            new Rect(10, y, 15000, 15000));
 
-        for(var i = 0; i < actions.Count(); i++)
+        var j = 0;
+        for(var i = 0; i < agent.Paths.Count; i++)
         {
-            var action = actions[i];
-            var rect = DrawAction(x, currentY, action);
-            currentY += rect.height;
+            var kv = agent.Paths.ElementAt(i);
+            var rect = new Rect(x + j * (columnWidth + columnGap), y, columnWidth, 20);
+            GUI.Box(rect, kv.Key.ToString());
+            
+            var paths = kv.Value;
+
+            if(paths.Count == 0)
+                j++;
+
+            for(; j < paths.Count; j++)
+            {
+                var path = paths.ElementAt(j);
+                for(var k = 0; k < path.Count(); k++)
+                {
+                    var action = path.ElementAt(k);
+                    var actionRect = new Rect(x + j * (columnWidth + columnGap), y + k * 30 + 30, columnWidth, 20);
+                    GUI.Box(actionRect, action.ToString());
+                }
+            }
         }
 
         GUI.EndScrollView();
+
+        // // world state
+        // var worldStateRect = DrawConditions(x, y, 500, agent.WorldState, "World State");
+        // currentY += worldStateRect.height + 10;
+        
+        // // goals
+        // var goalStateRect = DrawConditions(x, currentY, 500, agent.GoalState, "Goal State");
+        // currentY += goalStateRect.height + 10;
+
+        // // current action
+        // if(agent.CurentAction != null)
+        // {
+        //     var currentRect = DrawAction(x, currentY, agent.CurentAction);
+        //     currentY += currentRect.height + 10;
+        // }
+
+        // // current queued
+        // var queued = agent.Queued;
+        // for(var i = 0; i < queued.Length; i++)
+        // {
+        //     GUI.Label(new Rect(x, currentY, 500, 20), $"-> {queued[i].ToString()}");
+        //     currentY += 20;
+        // }        
+
+        // _actionsScrollView = GUI.BeginScrollView(
+        //     new Rect(10, currentY, 500, position.height - (currentY - y) - 20), 
+        //     _actionsScrollView, 
+        //     new Rect(10, currentY, 10000, 15000));
+
+        // for(var i = 0; i < actions.Count(); i++)
+        // {
+        //     var action = actions[i];
+        //     var rect = DrawAction(x, currentY, action);
+        //     currentY += rect.height;
+        // }
+
+        // GUI.EndScrollView();
     }
 
     Rect DrawActionDetail(float x, float y, GOAPAction selectedAction)

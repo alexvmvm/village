@@ -14,7 +14,7 @@ public class FillStorage : MoveGOAPAction
     private Inventory _inventory;
     private TypeOfThing _type;
 
-    public FillStorage(Agent agent, Game game, Movement movement, Inventory inventory, TypeOfThing type) : base(agent, game, movement)
+    public FillStorage(GOAPAgent agent, Game game, Movement movement, Inventory inventory, TypeOfThing type) : base(agent, game, movement)
     {
         _movement = movement;
         _inventory = inventory;

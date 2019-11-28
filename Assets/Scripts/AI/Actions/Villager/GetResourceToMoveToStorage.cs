@@ -4,7 +4,7 @@ namespace Village.AI
 {
     public class GetThingToMoveToStorage : GetThing
     {
-        public GetThingToMoveToStorage(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing resource, Villager villager) : base(agent, game, thing, movement, resource, villager)
+        public GetThingToMoveToStorage(GOAPAgent agent, Game game, Thing thing, Movement movement, TypeOfThing resource, Villager villager) : base(agent, game, thing, movement, resource, villager)
         {
             Effects.Add(GOAPAction.Effect.HAS_THING_FOR_STORAGE, true);
         }

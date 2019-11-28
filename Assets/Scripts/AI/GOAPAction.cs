@@ -13,19 +13,21 @@ namespace Village.AI
 
     public abstract class GOAPAction
     {
-        public Dictionary<string, object> Preconditions;
-        public Dictionary<string, object> Effects;
+        public Dictionary<string, object> Preconditions { get; protected set; }
+        public Dictionary<string, object> Effects { get; protected set; }
 
-        public float Cost = 1f;
+        public float Cost { get; protected set; }
         public string Goal { get; protected set; }
 
         protected Game _game;
-        protected Agent _agent;
+        protected GOAPAgent _agent;
 
-        public GOAPAction(Agent agent, Game game)
+        public GOAPAction(GOAPAgent agent, Game game)
         {
             _game = game;
             _agent = agent;
+
+            Cost = 1f;
 
             Preconditions = new Dictionary<string, object>();
             Effects = new Dictionary<string, object>();

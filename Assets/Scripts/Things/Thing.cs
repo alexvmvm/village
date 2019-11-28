@@ -23,7 +23,7 @@ namespace Village.Things
         public Storage Storage { get; private set; }
         public Crop  Crop { get; private set; }
         public Inventory Inventory { get; private set; }
-        public Agent Agent { get; private set; }
+        public GOAPAgent Agent { get; private set; }
         public TypeOfThing Builds { get; private set; }
         public TypeOfThing Requires { get; private set; }
         public ITileRule TileRule { get; private set; }
@@ -96,7 +96,7 @@ namespace Village.Things
                 Agent = gameObject.AddComponent<Villager>();
                 break;
                 case AgentConfig.Animal:
-                Agent = gameObject.AddComponent<Animal>();
+                //Agent = gameObject.AddComponent<Animal>();
                 break;
             }
         }

@@ -13,7 +13,7 @@ namespace Village.AI
         private VillageManager _villageManager;
         private Villager _villager;
 
-        public LeaveVillage(Agent agent, Game game, Movement movement, Thing thing, Villager villager) : base(agent, game, movement)
+        public LeaveVillage(GOAPAgent agent, Game game, Movement movement, Thing thing, Villager villager) : base(agent, game, movement)
         {
             _thing = thing;
             _villager = villager;

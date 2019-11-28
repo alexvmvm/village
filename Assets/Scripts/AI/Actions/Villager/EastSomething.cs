@@ -11,7 +11,7 @@ namespace Village.AI
     {
         private Inventory _inventory;
 
-        public EastSomething(Agent agent, Game game, Thing thing) : base(agent, game)
+        public EastSomething(GOAPAgent agent, Game game, Thing thing) : base(agent, game)
         {
             _inventory = thing.Inventory;
 

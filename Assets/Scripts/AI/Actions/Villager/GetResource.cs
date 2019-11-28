@@ -12,7 +12,7 @@ namespace Village.AI
         private Inventory _inventory;
         protected Villager _villager;
 
-        public GetThing(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing resource, Villager villager) : base(agent, game, movement)
+        public GetThing(GOAPAgent agent, Game game, Thing thing, Movement movement, TypeOfThing resource, Villager villager) : base(agent, game, movement)
         {
             _thing = thing;
             _movement = movement;
@@ -31,7 +31,7 @@ namespace Village.AI
 
             Preconditions.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, false);
 
-            Effects.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, true);
+            //Effects.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, true);
             Effects.Add(GOAPAction.Effect.HAS_THING + producesConfig.InventorySlot, producesConfig.TypeOfThing);
 
             // costs more if not a straight resource

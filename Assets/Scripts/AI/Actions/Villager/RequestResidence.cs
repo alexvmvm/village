@@ -11,7 +11,7 @@ namespace Village.AI
         private bool _isDone;
         private Thing _thing;
 
-        public RequestResidence(Agent agent, Game game, Thing thing) : base(agent, game)
+        public RequestResidence(GOAPAgent agent, Game game, Thing thing) : base(agent, game)
         {
             _thing = thing;
         }

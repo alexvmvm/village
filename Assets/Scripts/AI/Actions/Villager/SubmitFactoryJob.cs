@@ -21,7 +21,7 @@ namespace Village.AI
         private bool _submittedJob;
         private InventorySlot _inputSlot;
 
-        public SubmitFactoryJob(Agent agent, Game game, Thing thing, Movement movement, TypeOfThing factoryType, TypeOfThing input, TypeOfThing output, bool requiresAgentToMake) : base(agent, game, movement)
+        public SubmitFactoryJob(GOAPAgent agent, Game game, Thing thing, Movement movement, TypeOfThing factoryType, TypeOfThing input, TypeOfThing output, bool requiresAgentToMake) : base(agent, game, movement)
         {
             _thing = thing;
             _movement = movement;

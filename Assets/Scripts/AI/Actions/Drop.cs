@@ -12,7 +12,7 @@ namespace Village.AI
         private Thing _thing;
         private Inventory _inventory;
 
-        public Drop(Agent agent, Game game, Thing thing, InventorySlot slot) : base(agent, game)
+        public Drop(GOAPAgent agent, Game game, Thing thing, InventorySlot slot) : base(agent, game)
         {
             _thing = thing;    
             _inventory = _thing.Inventory;

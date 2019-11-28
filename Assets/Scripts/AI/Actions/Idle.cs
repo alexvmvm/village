@@ -13,7 +13,7 @@ namespace Village.AI
         private float _timeToWait;
         private float _timeWaited;
 
-        public Idle(Agent agent, Game game, Movement movement) : base(agent, game)
+        public Idle(GOAPAgent agent, Game game, Movement movement) : base(agent, game)
         {
             _movement = movement;
 
