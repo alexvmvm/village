@@ -36,12 +36,21 @@ namespace Village.AI
         abstract public bool Perform();
         abstract public bool IsDone();
         abstract public bool IsPossibleToPerform();
-
         abstract public void Reset();
+
+        public bool IsAlreadyDone(Dictionary<string, object> state)
+        {
+            return Effects.IsSubsetOf(state);
+        }
 
         public override string ToString()
         {
             return this.GetType().ToString();
+        }
+
+        public virtual void DrawGizmos()
+        {
+            
         }
 
         public class Effect

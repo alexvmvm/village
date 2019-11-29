@@ -15,6 +15,11 @@ public abstract class GOAPGoal
         _paths = new List<GOAPAction[]>();
     }
 
+    public virtual float GetGoalScore()
+    {
+        return 1f;
+    }
+
     public class Goal
     {
         public const string IS_WORKING = "IS_WORKING";

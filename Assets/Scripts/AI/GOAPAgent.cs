@@ -3,6 +3,15 @@ using UnityEngine;
 using Village.AI;
 using System.Linq;
 
+public enum AgentState
+{
+    Planning,
+    Picking,
+    Performing,
+    Completed,
+    Paused
+}
+
 public abstract class GOAPAgent : MonoBehaviour
 {
     public Dictionary<GOAPGoal, List<GOAPAction[]>> Paths { get { return _paths; } }
@@ -10,13 +19,24 @@ public abstract class GOAPAgent : MonoBehaviour
     private List<GOAPGoal> _goals;
     private List<GOAPAction> _actions;
     private Dictionary<GOAPGoal, List<GOAPAction[]>> _paths;
+    private Dictionary<string, object> _state;
     private bool _dirty;
+    private AgentState _agentState;
+    private GOAPAction _current;
+    private Queue<GOAPAction> _plan;
 
     public virtual void Awake()
     {
         _goals = new List<GOAPGoal>();
         _actions = new List<GOAPAction>();
         _paths = new Dictionary<GOAPGoal, List<GOAPAction[]>>();
+        _state = new Dictionary<string, object>();
+        _plan = new Queue<GOAPAction>();
+    }
+
+    void Start()
+    {
+        CalculatePaths();
     }
 
     public void AddGoal(GOAPGoal goal)
@@ -30,6 +50,10 @@ public abstract class GOAPAgent : MonoBehaviour
         _actions.Add(action);
         _dirty = true;
     }
+
+    /*
+        Calculations
+    */
 
     void CalculatePaths()
     {
@@ -80,12 +104,106 @@ public abstract class GOAPAgent : MonoBehaviour
         return null;
     }
 
+    IEnumerable<GOAPAction> FindPlan()
+    {
+        // loop goals in priority order
+        foreach(var kv in _paths.OrderBy(kv => kv.Key.GetGoalScore()))
+        {
+            // loop possible paths in priority order
+            foreach(var path in kv.Value.OrderBy(p => p.Sum(a => a.Cost)))
+            {
+                if(path.All(a => a.IsPossibleToPerform()))
+                    return path.Reverse();
+            }
+        }
+        
+        return null;
+    }
+
+    public abstract void UpdateState(Dictionary<string, object> state);
+
+    /*
+        Update
+    */
+
+    void Update()
+    {
+        switch(_agentState)
+            {
+                case AgentState.Planning:
+                {
+                    UpdateState(_state);
+
+                    foreach(var action in _actions)
+                    {
+                        action.Reset();
+                    }
+
+                    var plan = FindPlan();
+                    if(plan != null)
+                    {
+                        _plan.Clear();
+                        foreach(var action in plan)
+                        {
+                            if(!action.IsAlreadyDone(_state))
+                                _plan.Enqueue(action);
+                        }
+                            
+                        _agentState = AgentState.Picking;
+                    }
+                }
+                break;
+                case AgentState.Picking:
+                {
+                    if(_plan.Count() > 0)
+                    {
+                        _current = _plan.Dequeue();
+                        _agentState = AgentState.Performing;
+                    }  
+                    else
+                        _agentState = AgentState.Completed;
+                }
+                break;
+                case AgentState.Performing:
+                {
+                    if(_current.IsDone())
+                    {
+                        _agentState = AgentState.Picking;
+                    }
+                    else if(!_current.Perform())
+                    {
+                        _agentState = AgentState.Picking;
+                    }                        
+                }
+                break;
+                case AgentState.Completed:
+                {
+                    _current = null;
+                    _agentState = AgentState.Planning;
+                }
+                break;
+                case AgentState.Paused:
+                break;
+            }
+    }
+
     void LateUpdate()
     {
         if(_dirty)
         {
             CalculatePaths();
             _dirty = false;
+        }
+    }
+    
+    void OnDrawGizmos()
+    {
+        if(_actions == null)
+            return;
+
+        foreach(var action in _actions)
+        {
+            action.DrawGizmos();
         }
     }
 }

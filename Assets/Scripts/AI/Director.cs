@@ -18,6 +18,11 @@ namespace Village.AI
             AddAction(new SpawnVillager(this, _game));
         }
 
+        public override void UpdateState(Dictionary<string, object> state)
+        {
+            
+        }
+
         // public override void ActionCompleted(GOAPAction action)
         // {
 

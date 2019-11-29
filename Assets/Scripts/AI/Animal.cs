@@ -22,6 +22,11 @@ namespace Village.AI
             AddAction(new Idle(this, _game, _movement));
         }
 
+        public override void UpdateState(Dictionary<string, object> state)
+        {
+            
+        }
+
         // public override void PauseAgent()
         // {
         //     base.PauseAgent();

@@ -74,6 +74,17 @@ namespace Village.AI
             _started = false;
             _isDone = false;
         }
+
+        public override void DrawGizmos()
+        {
+            base.DrawGizmos();
+            
+            if(_target != null)
+            {
+                Gizmos.color = Color.white;
+                Gizmos.DrawLine(_target.transform.position, _agent.transform.position);
+            }
+        }
     }
 
 }

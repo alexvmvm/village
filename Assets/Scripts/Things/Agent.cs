@@ -6,15 +6,6 @@ using UnityEngine.Profiling;
 
 namespace Village.AI
 {
-    public enum AgentState
-    {
-        Planning,
-        Picking,
-        Performing,
-        Completed,
-        Paused
-    }
-
     public abstract class Agent : MonoBehaviour
     {
         public DateTime Created { get { return _created; } }

@@ -144,6 +144,32 @@ namespace Village.AI
             AddAction(new Construct(this, _game, _movement, TypeOfThing.None, _thing));
         }
 
+        public override void UpdateState(Dictionary<string, object> state)
+        {
+            /*
+                Resources
+            */
+            foreach(InventorySlot slot in Enum.GetValues(typeof(InventorySlot)))
+            {
+                state[GOAPAction.Effect.IS_HOLDING_THING + slot] = _inventory.IsHoldingThing(slot);
+                state[GOAPAction.Effect.HAS_THING + slot] = _inventory.GetTypeOfThing(slot);
+
+            }
+
+            state[GOAPAction.Effect.HAS_EDIBLE_THING] = _inventory.IsHoldingSomethingToEat();
+
+
+            /*
+                Survival
+            */
+
+            // state[GOAPAction.Effect.IS_THIRSTY] = _thirst < 0f;
+            // state[GOAPAction.Effect.IS_HUNGRY] = _hunger < 0f;
+            // state[GOAPAction.Effect.IS_RESTED] = _rest > 0f;
+            // state[GOAPAction.Effect.IS_WARM] = !_needs.IsCold();
+            state[GOAPAction.Effect.IS_WORKING] = false;
+        }
+
         // public override void GetGoalState(Dictionary<string, object> goal)
         // {
         //     goal[GOAPAction.Effect.IS_WORKING] = true;
@@ -162,11 +188,11 @@ namespace Village.AI
         //     {
         //         world[GOAPAction.Effect.IS_HOLDING_THING + slot] = _inventory.IsHoldingThing(slot);
         //         world[GOAPAction.Effect.HAS_THING + slot] = _inventory.GetTypeOfThing(slot);
-                
+
         //     }
 
         //     world[GOAPAction.Effect.HAS_EDIBLE_THING] = _inventory.IsHoldingSomethingToEat();
-            
+
 
         //     /*
         //         Survival
@@ -201,64 +227,64 @@ namespace Village.AI
 
         // }
 
-//         public override void Update()
-//         {
-//             base.Update();
+        //         public override void Update()
+        //         {
+        //             base.Update();
 
-//             if (_needs.IsDead())
-//             {
-//                 PauseAgent();
-//                 _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
-//             }
+        //             if (_needs.IsDead())
+        //             {
+        //                 PauseAgent();
+        //                 _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
+        //             }
 
-//             if (_game.WorldTime.TimeOfDay == TimeOfDay.Night && _rest >= 0f)
-//             {
-//                 _rest = -1f;
-//             }
+        //             if (_game.WorldTime.TimeOfDay == TimeOfDay.Night && _rest >= 0f)
+        //             {
+        //                 _rest = -1f;
+        //             }
 
-//             var label = Fullname + "\n";
+        //             var label = Fullname + "\n";
 
-//             if (_needs.IsDead())
-//             {
-//                 label += $"DEAD\n";
-//                 label += _needs.GetReasonsForDeath();
-//             }
-//             else if (CurentAction != null)
-//                 label += $"{CurentAction.ToString()}\n";
+        //             if (_needs.IsDead())
+        //             {
+        //                 label += $"DEAD\n";
+        //                 label += _needs.GetReasonsForDeath();
+        //             }
+        //             else if (CurentAction != null)
+        //                 label += $"{CurentAction.ToString()}\n";
 
-//             label += string.Format("hunger: {0}\n", _hunger);
-//             label += string.Format("thirst: {0}\n", _thirst);
-//             label += string.Format("warmth: {0}\n", _needs.Warmth);
-//             label += string.Format("rest: {0}\n", _rest);
+        //             label += string.Format("hunger: {0}\n", _hunger);
+        //             label += string.Format("thirst: {0}\n", _thirst);
+        //             label += string.Format("warmth: {0}\n", _needs.Warmth);
+        //             label += string.Format("rest: {0}\n", _rest);
 
-//             SetLabel(label);
-//         }
+        //             SetLabel(label);
+        //         }
 
-//         void  OnDrawGizmos()
-//         {
-// #if UNITY_EDITOR
+        //         void  OnDrawGizmos()
+        //         {
+        // #if UNITY_EDITOR
 
-//             var text = "";
+        //             var text = "";
 
-//             if (_current != null)
-//             {
-//                 text += string.Format("current action: {0}\n", _current.ToString());
-//             }
+        //             if (_current != null)
+        //             {
+        //                 text += string.Format("current action: {0}\n", _current.ToString());
+        //             }
 
-//             text += string.Format("hunger: {0}\n", _hunger);
-//             text += string.Format("thirst: {0}\n", _thing);
-//             text += string.Format("warmth: {0}\n", _needs.Warmth);
-//             text += string.Format("rest: {0}\n", _rest);
+        //             text += string.Format("hunger: {0}\n", _hunger);
+        //             text += string.Format("thirst: {0}\n", _thing);
+        //             text += string.Format("warmth: {0}\n", _needs.Warmth);
+        //             text += string.Format("rest: {0}\n", _rest);
 
-//             var style = new GUIStyle();
-//             style.fontSize = 10;
-//             style.normal.textColor = Color.white;
+        //             var style = new GUIStyle();
+        //             style.fontSize = 10;
+        //             style.normal.textColor = Color.white;
 
-//             // current actions
-//             var position = _thing.transform.position + Vector3.up;
-//             UnityEditor.Handles.Label(position, text, style);
-// #endif
-//         }
+        //             // current actions
+        //             var position = _thing.transform.position + Vector3.up;
+        //             UnityEditor.Handles.Label(position, text, style);
+        // #endif
+        //         }
     }
 
 }
