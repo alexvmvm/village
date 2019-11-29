@@ -15,6 +15,7 @@ public enum AgentState
 public abstract class GOAPAgent : MonoBehaviour
 {
     public Dictionary<GOAPGoal, List<GOAPAction[]>> Paths { get { return _paths; } }
+    public GOAPAction CurrentAction { get { return _current; } }
     
     private List<GOAPGoal> _goals;
     private List<GOAPAction> _actions;
@@ -122,11 +123,24 @@ public abstract class GOAPAgent : MonoBehaviour
 
     public abstract void UpdateState(Dictionary<string, object> state);
 
+    public abstract void ActionCompleted(GOAPAction action);
+
+    public void PauseAgent()
+    {
+        _agentState = AgentState.Paused;
+    }
+
+    public void UnPauseAgent()
+    {
+        if(_agentState == AgentState.Paused)
+            _agentState = AgentState.Planning;
+    }
+
     /*
         Update
     */
 
-    void Update()
+    public virtual void Update()
     {
         switch(_agentState)
             {

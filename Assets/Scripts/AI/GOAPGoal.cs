@@ -23,6 +23,7 @@ public abstract class GOAPGoal
     public class Goal
     {
         public const string IS_WORKING = "IS_WORKING";
+        public const string IS_RESTED = "IS_RESTED";
         public const string IS_IDLING = "IS_IDLING";
     }
 }

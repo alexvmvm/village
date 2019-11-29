@@ -10,6 +10,7 @@ namespace Village.AI
         private Thing _thing;
         private Game _game;
 
+ 
         public override void Awake()
         {
             base.Awake();
@@ -26,6 +27,12 @@ namespace Village.AI
         {
             
         }
+
+        public override void ActionCompleted(GOAPAction action)
+        {
+
+        }
+
 
         // public override void PauseAgent()
         // {

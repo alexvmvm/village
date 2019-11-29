@@ -9,6 +9,7 @@ namespace Village.AI
     {
         private Game _game;
 
+
         public override void Awake()
         {
             base.Awake();
@@ -23,20 +24,11 @@ namespace Village.AI
             
         }
 
-        // public override void ActionCompleted(GOAPAction action)
-        // {
+        
+        public override void ActionCompleted(GOAPAction action)
+        {
 
-        // }
-
-        // public override void GetGoalState(Dictionary<string, object>  goal)
-        // {
-        //     goal[GOAPAction.Effect.IS_WORKING] = true;
-        // }
-
-        // public override void GetWorldState(Dictionary<string, object> world)
-        // {
-        //     world[GOAPAction.Effect.IS_WORKING] = false;
-        // }
+        }
     }
 
 }
