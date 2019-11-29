@@ -2,6 +2,8 @@
 using UnityEngine;
 using Village.AI;
 using System.Linq;
+using Helpers.Tree;
+using Helpers.Graph;
 
 public enum AgentState
 {
@@ -26,6 +28,7 @@ public abstract class GOAPAgent : MonoBehaviour
     private GOAPAction _current;
     private Queue<GOAPAction> _plan;
     private List<GOAPAction> _workingPlan;
+    private Graph<GOAPAction> _graph;
 
     public virtual void Awake()
     {
@@ -35,6 +38,7 @@ public abstract class GOAPAgent : MonoBehaviour
         _state = new Dictionary<string, object>();
         _plan = new Queue<GOAPAction>();
         _workingPlan = new List<GOAPAction>();
+        _graph = new Graph<GOAPAction>();
     }
 
     void Start()
@@ -66,16 +70,40 @@ public abstract class GOAPAgent : MonoBehaviour
 
     void CalculatePaths()
     {
-        _paths.Clear();
-        foreach(var goal in _goals)
+        _graph.Clear();
+
+        foreach(var action in _actions)
         {
-            var list = new List<GOAPAction[]>();
-            foreach(var action in _actions.Where(a => a.Goal == goal.Key))
-            {
-                list.Add(GetActionPath(action));
-            }
-            _paths.Add(goal, list);
+            _graph.AddNode(action);
         }
+
+        foreach(var action in _actions)
+        {
+            var effects = _actions.Where(a => action.Effects.IsEqualTo(a.Preconditions));
+
+            foreach(var effect in effects)
+            {
+                _graph.AddDirectedEdge(action, effect);
+            }
+
+            var preconditions = _actions.Where(a => action.Preconditions.IsEqualTo(a.Effects));
+
+            foreach(var precon in preconditions)
+            {
+                _graph.AddDirectedEdge(precon, action);
+            }
+        }
+
+        // _paths.Clear();
+        // foreach(var goal in _goals)
+        // {
+        //     var list = new List<GOAPAction[]>();
+        //     foreach(var action in _actions.Where(a => a.Goal == goal.Key))
+        //     {
+        //         list.Add(GetActionPath(action));
+        //     }
+        //     _paths.Add(goal, list);
+        // }
     }
 
     GOAPAction[] GetActionPath(GOAPAction root)
@@ -121,6 +149,12 @@ public abstract class GOAPAgent : MonoBehaviour
 
     IEnumerable<GOAPAction> FindPlan()
     {
+        var start = _actions.Where(a => a.Effects.IsSubsetOf(_state));
+        var end = _actions.Where(a => !string.IsNullOrEmpty(a.Goal));
+
+        
+
+
         // loop goals in priority order
         foreach(var kv in _paths.OrderBy(kv => kv.Key.GetGoalScore()))
         {
