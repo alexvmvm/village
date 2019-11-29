@@ -16,7 +16,7 @@ public abstract class GOAPAgent : MonoBehaviour
 {
     public Dictionary<GOAPGoal, List<GOAPAction[]>> Paths { get { return _paths; } }
     public GOAPAction CurrentAction { get { return _current; } }
-    
+    public GOAPAction IdleAction { get; protected set; }
     private List<GOAPGoal> _goals;
     private List<GOAPAction> _actions;
     private Dictionary<GOAPGoal, List<GOAPAction[]>> _paths;
@@ -25,6 +25,7 @@ public abstract class GOAPAgent : MonoBehaviour
     private AgentState _agentState;
     private GOAPAction _current;
     private Queue<GOAPAction> _plan;
+    private List<GOAPAction> _workingPlan;
 
     public virtual void Awake()
     {
@@ -33,6 +34,7 @@ public abstract class GOAPAgent : MonoBehaviour
         _paths = new Dictionary<GOAPGoal, List<GOAPAction[]>>();
         _state = new Dictionary<string, object>();
         _plan = new Queue<GOAPAction>();
+        _workingPlan = new List<GOAPAction>();
     }
 
     void Start()
@@ -54,7 +56,13 @@ public abstract class GOAPAgent : MonoBehaviour
 
     /*
         Calculations
+    
+        1. convert to tree
+        2. find all leafs 
+        3. find all paths from leafs
+        
     */
+    
 
     void CalculatePaths()
     {
@@ -119,6 +127,20 @@ public abstract class GOAPAgent : MonoBehaviour
             // loop possible paths in priority order
             foreach(var path in kv.Value.OrderBy(p => p.Sum(a => a.Cost)))
             {
+                _workingPlan.Clear();
+                foreach(var action in path)
+                {
+                    if(action.IsPossibleToPerform())
+                    {
+                        _workingPlan.Add(action);
+                    }
+                    else if(action.IsAlreadyDone(_state) && _workingPlan.Count > 0)
+                    {
+                        _workingPlan.Reverse();
+                        return _workingPlan;
+                    }
+                }
+
                 if(path.All(a => a.IsPossibleToPerform()))
                     return path.Reverse();
             }
@@ -165,11 +187,19 @@ public abstract class GOAPAgent : MonoBehaviour
                         _plan.Clear();
                         foreach(var action in plan)
                         {
-                            if(!action.IsAlreadyDone(_state))
-                                _plan.Enqueue(action);
+                            _plan.Enqueue(action);
                         }
                             
                         _agentState = AgentState.Picking;
+                    }
+                    else
+                    {
+                        if(IdleAction != null)
+                        {
+                            _current = IdleAction;
+                            _current.Reset();
+                            _agentState = AgentState.Performing;
+                        }
                     }
                 }
                 break;

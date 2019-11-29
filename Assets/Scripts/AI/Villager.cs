@@ -61,11 +61,9 @@ namespace Village.AI
             */
 
             AddAction(new Drop(this, _game));
-
-            // AddAction(new Drop(this, _game, _thing, InventorySlot.Tool));
-
             AddAction(new Sleep(this, _game, _thing, _movement, this, _needs));
             AddAction(new Idle(this, _game, _movement));
+            AddAction(new ChopWood(this, _game, _movement));
 
             /*
                 Survival
@@ -119,7 +117,10 @@ namespace Village.AI
                 //AddAction(new FillStorage(this, _game, _movement, _thing.Inventory, resource));
             }
 
-
+            /*
+                Convert Resources
+                e.g. If tree produces wood, get an axe and chop the tree down
+            */
 
         
             /*

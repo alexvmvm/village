@@ -18,7 +18,7 @@ namespace Village.AI
             _resource = resource;
             _inventory = _thing.Inventory;
 
-            Preconditions.Add(Effect.HAS_THING, false);
+            Preconditions.Add(Effect.HAS_THING, TypeOfThing.None);
             Effects.Add(Effect.HAS_THING, resource);
 
             // var resourceConfig = Assets.GetThingConfig(_resource);    

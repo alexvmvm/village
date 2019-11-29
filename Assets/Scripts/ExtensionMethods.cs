@@ -35,15 +35,8 @@ public static class ExtensionMethods
 
 		foreach(var kv in current)
 		{
-            try {
-                if(!target.ContainsKey(kv.Key) || !target[kv.Key].Equals(kv.Value))
-				    return false;
-            } 
-            catch(Exception)
-            {
-                var x = 5;
-            }
-		
+            if(!target.ContainsKey(kv.Key) || !target[kv.Key].Equals(kv.Value))
+                return false;
 		}
 		return true;
 	}
