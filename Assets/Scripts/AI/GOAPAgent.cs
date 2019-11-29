@@ -87,6 +87,12 @@ public abstract class GOAPAgent : MonoBehaviour
             {
                 break;
             }
+
+            if(list.Count > 1000)
+            {
+                Debug.LogError($"Plan too long, exceded 1000. Root ${root.ToString()}");
+                return null;
+            }
         }
 
         return list.ToArray();
@@ -141,7 +147,7 @@ public abstract class GOAPAgent : MonoBehaviour
     */
 
     public virtual void Update()
-    {
+    {        
         switch(_agentState)
             {
                 case AgentState.Planning:
@@ -210,7 +216,7 @@ public abstract class GOAPAgent : MonoBehaviour
         }
     }
     
-    void OnDrawGizmos()
+    public virtual void OnDrawGizmos()
     {
         if(_actions == null)
             return;

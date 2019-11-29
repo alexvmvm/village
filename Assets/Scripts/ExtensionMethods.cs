@@ -30,17 +30,27 @@ public static class ExtensionMethods
 
     public static bool IsSubsetOf<TKey, TValue>(this IDictionary<TKey, TValue> current, IDictionary<TKey, TValue> target)
 	{
+        if(current.Count == 0 || target.Count == 0)
+            return false;
+
 		foreach(var kv in current)
 		{
-			if(!target.ContainsKey(kv.Key) || !target[kv.Key].Equals(kv.Value))
-				return false;
+            try {
+                if(!target.ContainsKey(kv.Key) || !target[kv.Key].Equals(kv.Value))
+				    return false;
+            } 
+            catch(Exception)
+            {
+                var x = 5;
+            }
+		
 		}
 		return true;
 	}
 
     public static bool IsEqualTo<TKey, TValue>(this IDictionary<TKey, TValue> current, IDictionary<TKey, TValue> target)
     {
-        if (current.Count != target.Count)
+        if (current.Count != target.Count || current.Count == 0 || target.Count == 0)
             return false;
 
         foreach (var kv in current)

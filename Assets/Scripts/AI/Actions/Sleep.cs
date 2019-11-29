@@ -26,6 +26,7 @@ namespace Village.AI
 
             Preconditions.Add(GOAPAction.Effect.IS_RESTED, false);
             Preconditions.Add(GOAPAction.Effect.HAS_THING, TypeOfThing.None);
+            
             Effects.Add(GOAPAction.Effect.IS_RESTED, true);
         }
 

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Village.Things;
+﻿using Village.Things;
 using Village.Things.Config;
 
 namespace Village.AI
@@ -15,9 +12,9 @@ namespace Village.AI
         {
             _inventory = thing.Inventory;
 
-            Preconditions.Add(GOAPAction.Effect.IS_HUNGRY, true);
-            Preconditions.Add(GOAPAction.Effect.HAS_EDIBLE_THING, true);
-            Effects.Add(GOAPAction.Effect.IS_HUNGRY, false);
+            // Preconditions.Add(GOAPAction.Effect.IS_HUNGRY, true);
+            // Preconditions.Add(GOAPAction.Effect.HAS_EDIBLE_THING, true);
+            // Effects.Add(GOAPAction.Effect.IS_HUNGRY, false);
         }
 
         public override bool IsDone()

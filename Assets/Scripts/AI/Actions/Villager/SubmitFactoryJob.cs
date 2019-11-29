@@ -36,9 +36,9 @@ namespace Village.AI
 
             var outputConfig = Assets.GetThingConfig(output);
 
-            Preconditions.Add(GOAPAction.Effect.HAS_THING + inputConfig.InventorySlot, _input);
-            Effects.Add(GOAPAction.Effect.HAS_THING + outputConfig.InventorySlot, _output);
-            Effects.Add(GOAPAction.Effect.IS_WORKING, true);
+            // Preconditions.Add(GOAPAction.Effect.HAS_THING + inputConfig.InventorySlot, _input);
+            // Effects.Add(GOAPAction.Effect.HAS_THING + outputConfig.InventorySlot, _output);
+            // Effects.Add(GOAPAction.Effect.IS_WORKING, true);
         }
 
         public override bool Filter(Thing thing)

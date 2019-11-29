@@ -60,10 +60,17 @@ namespace Village.AI
             public const string IS_THIRSTY = "IS_THIRSTY";
             public const string IS_HUNGRY = "IS_HUNGRY";
             public const string IS_WARM = "IS_WARM";
-            public const string IS_HOLDING_THING = "IS_HOLDING_THING";
-            public const string HAS_THING = "HAS_THING";            
-            public const string HAS_EDIBLE_THING = "HAS_EDIBLE_THING";
-            public const string HAS_THING_FOR_STORAGE = "HAS_THING_FOR_STORAGE";
+            public const string HAS_THING = "HAS_THING";
+
+            // public const string IS_HOLDING_THING = "IS_HOLDING_THING";
+            // public const string HAS_THING = "HAS_THING";            
+            // public const string HAS_EDIBLE_THING = "HAS_EDIBLE_THING";
+            // public const string HAS_THING_FOR_STORAGE = "HAS_THING_FOR_STORAGE";
+
+            public static string GET_THING(TypeOfThing thing)
+            {
+                return $"HAS_THING_{thing}";
+            }
         }
     }
 }

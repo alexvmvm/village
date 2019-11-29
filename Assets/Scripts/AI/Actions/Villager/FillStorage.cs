@@ -22,10 +22,10 @@ public class FillStorage : MoveGOAPAction
 
         var thingConfig = Assets.GetThingConfig(type);
         
-        Preconditions.Add(GOAPAction.Effect.HAS_THING + thingConfig.InventorySlot, type);
-        Preconditions.Add(GOAPAction.Effect.HAS_THING_FOR_STORAGE, true);
-        Effects.Add(GOAPAction.Effect.HAS_THING_FOR_STORAGE, false);
-        Effects.Add(GOAPAction.Effect.IS_WORKING, true);
+        // Preconditions.Add(GOAPAction.Effect.HAS_THING + thingConfig.InventorySlot, type);
+        // Preconditions.Add(GOAPAction.Effect.HAS_THING_FOR_STORAGE, true);
+        // Effects.Add(GOAPAction.Effect.HAS_THING_FOR_STORAGE, false);
+        // Effects.Add(GOAPAction.Effect.IS_WORKING, true);
     }
 
     public override bool Filter(Thing thing)

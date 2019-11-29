@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,16 +10,13 @@ namespace Village.AI
 {
     public class Drop : GOAPAction
     {
-        private Thing _thing;
         private Inventory _inventory;
 
-        public Drop(GOAPAgent agent, Game game, Thing thing, InventorySlot slot) : base(agent, game)
+        public Drop(GOAPAgent agent, Game game) : base(agent, game)
         {
-            _thing = thing;    
-            _inventory = _thing.Inventory;
-            
-            Preconditions.Add(GOAPAction.Effect.IS_HOLDING_THING + slot, true);
-            Effects.Add(GOAPAction.Effect.IS_HOLDING_THING + slot, false);
+            _inventory = agent.GetComponent<Inventory>();
+
+            Effects.Add(Effect.HAS_THING, TypeOfThing.None);
         }
 
         public override bool IsDone()

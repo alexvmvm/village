@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Village.Things;
 using Village.Things.Config;
@@ -54,15 +55,16 @@ namespace Village.AI
             AddGoal(new WorkingGoal());
             AddGoal(new RestGoal());
 
+
             /*
                 Misc
             */
 
-            AddAction(new Drop(this, _game, _thing, InventorySlot.Hands));
-            AddAction(new Drop(this, _game, _thing, InventorySlot.Tool));
+            AddAction(new Drop(this, _game));
+
+            // AddAction(new Drop(this, _game, _thing, InventorySlot.Tool));
 
             AddAction(new Sleep(this, _game, _thing, _movement, this, _needs));
-            
             AddAction(new Idle(this, _game, _movement));
 
             /*
@@ -71,6 +73,7 @@ namespace Village.AI
 
             AddAction(new DrinkFromStream(this, _game, _movement));
             AddAction(new EastSomething(this, _game, _thing));
+
 
             /*
                 Resources
@@ -109,28 +112,33 @@ namespace Village.AI
 
             foreach(var resource in resources)
             {
-                AddAction(new GetThing(this, _game, _thing, _movement, resource, this));
-                AddAction(new GetThingToMoveToStorage(this, _game, _thing, _movement, resource, this));
-                AddAction(new FillStorage(this, _game, _movement, _thing.Inventory, resource));
+                //AddAction(new GetThing(this, _game, _thing, _movement, resource, this));
+                AddAction(new GetThing(this, _game, _thing, _movement, resource));
+                //AddAction(new DropCarryingThing(this, _game, resource));
+                //AddAction(new GetThingToMoveToStorage(this, _game, _thing, _movement, resource, this));
+                //AddAction(new FillStorage(this, _game, _movement, _thing.Inventory, resource));
             }
+
+
+
         
             /*
                 Factory Job
             */
 
-            var factoryJobs = new List<Tuple<TypeOfThing, TypeOfThing, TypeOfThing, bool>>()
-            {
-                Tuple.Create(TypeOfThing.ClayForge, TypeOfThing.Ore, TypeOfThing.Iron, false),
-                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Axe, true),
-                Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Hoe, true),
-                Tuple.Create(TypeOfThing.CarpentersBench, TypeOfThing.Wood, TypeOfThing.WoodenPlanks, true),
-                Tuple.Create(TypeOfThing.Kiln, TypeOfThing.Clay, TypeOfThing.WateringPot, false)
-            };
+            // var factoryJobs = new List<Tuple<TypeOfThing, TypeOfThing, TypeOfThing, bool>>()
+            // {
+            //     Tuple.Create(TypeOfThing.ClayForge, TypeOfThing.Ore, TypeOfThing.Iron, false),
+            //     Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Axe, true),
+            //     Tuple.Create(TypeOfThing.Workbench, TypeOfThing.Iron, TypeOfThing.Hoe, true),
+            //     Tuple.Create(TypeOfThing.CarpentersBench, TypeOfThing.Wood, TypeOfThing.WoodenPlanks, true),
+            //     Tuple.Create(TypeOfThing.Kiln, TypeOfThing.Clay, TypeOfThing.WateringPot, false)
+            // };
 
-            foreach(var job in factoryJobs)
-            {
-                AddAction(new SubmitFactoryJob(this, _game, _thing, _movement, job.Item1, job.Item2, job.Item3, job.Item4));
-            }
+            // foreach(var job in factoryJobs)
+            // {
+            //     AddAction(new SubmitFactoryJob(this, _game, _thing, _movement, job.Item1, job.Item2, job.Item3, job.Item4));
+            // }
 
             /*
                 Construction
@@ -155,14 +163,16 @@ namespace Village.AI
             /*
                 Resources
             */
-            foreach(InventorySlot slot in Enum.GetValues(typeof(InventorySlot)))
-            {
-                state[GOAPAction.Effect.IS_HOLDING_THING + slot] = _inventory.IsHoldingThing(slot);
-                state[GOAPAction.Effect.HAS_THING + slot] = _inventory.GetTypeOfThing(slot);
+            // foreach(InventorySlot slot in Enum.GetValues(typeof(InventorySlot)))
+            // {
+            //     state[GOAPAction.Effect.IS_HOLDING_THING + slot] = _inventory.IsHoldingThing(slot);
+            //     state[GOAPAction.Effect.HAS_THING + slot] = _inventory.GetTypeOfThing(slot);
 
-            }
+            // }
 
-            state[GOAPAction.Effect.HAS_EDIBLE_THING] = _inventory.IsHoldingSomethingToEat();
+            state[GOAPAction.Effect.HAS_THING] = _inventory.GetTypeOfThing(InventorySlot.Hands);
+
+            //state[GOAPAction.Effect.HAS_EDIBLE_THING] = _inventory.IsHoldingSomethingToEat();
 
 
             /*
@@ -247,6 +257,11 @@ namespace Village.AI
             {
                 _rest = -1f;
             }
+        }
+
+        public override void OnDrawGizmos()
+        {
+            #if UNITY_EDITOR
 
             var label = Fullname + "\n";
 
@@ -263,7 +278,15 @@ namespace Village.AI
             label += string.Format("warmth: {0}\n", _needs.Warmth);
             label += string.Format("rest: {0}\n", _rest);
 
-            SetLabel(label);
+            var style = new GUIStyle();
+            style.fontSize = 10;
+            style.normal.textColor = Color.white;
+
+            // current actions
+            var position = _thing.transform.position + Vector3.up;
+            UnityEditor.Handles.Label(position, label, style);
+
+            #endif
         }
 
         //         void  OnDrawGizmos()

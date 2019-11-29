@@ -10,33 +10,34 @@ namespace Village.AI
         protected Movement _movement;
         protected TypeOfThing _resource;
         private Inventory _inventory;
-        protected Villager _villager;
 
-        public GetThing(GOAPAgent agent, Game game, Thing thing, Movement movement, TypeOfThing resource, Villager villager) : base(agent, game, movement)
+        public GetThing(GOAPAgent agent, Game game, Thing thing, Movement movement, TypeOfThing resource) : base(agent, game, movement)
         {
             _thing = thing;
             _movement = movement;
             _resource = resource;
             _inventory = _thing.Inventory;
-            _villager = villager;
 
-            var resourceConfig = Assets.GetThingConfig(_resource);    
-            var producesConfig = Assets.GetThingConfig(resourceConfig.Produces);
+            Preconditions.Add(Effect.HAS_THING, false);
+            Effects.Add(Effect.HAS_THING, resource);
 
-            if(resourceConfig.RequiredToProduce != TypeOfThing.None)
-            {
-                var requiresConfig = Assets.GetThingConfig(resourceConfig.RequiredToProduce);
-                Preconditions.Add(GOAPAction.Effect.HAS_THING + requiresConfig.InventorySlot, requiresConfig.TypeOfThing);
-            }
+            // var resourceConfig = Assets.GetThingConfig(_resource);    
+            // var producesConfig = Assets.GetThingConfig(resourceConfig.Produces);
 
-            Preconditions.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, false);
+            // if(resourceConfig.RequiredToProduce != TypeOfThing.None)
+            // {
+            //     var requiresConfig = Assets.GetThingConfig(resourceConfig.RequiredToProduce);
+            //     Preconditions.Add(GOAPAction.Effect.HAS_THING + requiresConfig.InventorySlot, requiresConfig.TypeOfThing);
+            // }
 
-            //Effects.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, true);
-            Effects.Add(GOAPAction.Effect.HAS_THING + producesConfig.InventorySlot, producesConfig.TypeOfThing);
+            // Preconditions.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, false);
 
-            // costs more if not a straight resource
-            // pickup
-            Cost = resourceConfig.Produces == resourceConfig.TypeOfThing ? 1 : 2;
+            // //Effects.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, true);
+            // Effects.Add(GOAPAction.Effect.HAS_THING + producesConfig.InventorySlot, producesConfig.TypeOfThing);
+
+            // // costs more if not a straight resource
+            // // pickup
+            // Cost = resourceConfig.Produces == resourceConfig.TypeOfThing ? 1 : 2;
         }
 
         public override bool Filter(Thing thing)
@@ -50,7 +51,7 @@ namespace Village.AI
             {
                 var resource = _game.CreateAtPosition(_target.Config.Produces, Vector2Int.zero);
                 resource.Hitpoints = Mathf.Min(10, _target.Hitpoints);
-                resource.ownedBy = _villager.Fullname;
+                //resource.ownedBy = _villager.Fullname;
                 _inventory.Hold(resource);
 
                 // damage existing resource
@@ -60,7 +61,7 @@ namespace Village.AI
             }
             else
             {
-                _target.ownedBy = _villager.Fullname;
+                //_target.ownedBy = _villager.Fullname;
                 _inventory.Hold(_target);
             }
 

@@ -28,10 +28,7 @@ namespace Village.AI
 
             _resourceSlot = Assets.GetThingConfig(resource).InventorySlot;
 
-            if(resource != TypeOfThing.None)
-                Preconditions.Add(GOAPAction.Effect.HAS_THING + _resourceSlot, resource);
-
-            Effects.Add(GOAPAction.Effect.IS_WORKING, true);
+            Preconditions.Add(GOAPAction.Effect.HAS_THING, resource);
         }
 
         public override bool Filter(Thing thing)
