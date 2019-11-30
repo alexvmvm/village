@@ -9,52 +9,48 @@ namespace Village.Things
 {
     public class Inventory : MonoBehaviour
     {
+        private Thing _holding;
         private Game _game;
-        private Dictionary<InventorySlot, Thing> _inventory;
 
         void Awake()
         {
             _game = FindObjectOfType<Game>();
-            _inventory = new Dictionary<InventorySlot, Thing>();
         }
 
         public void Hold(Thing thing)
         {
-            _inventory[thing.Config.InventorySlot] = thing;
-
+            _holding = thing;
             thing.transform.SetParent(transform);
             thing.transform.localPosition = Vector3.up;
         }
 
-        public bool IsHoldingThing(InventorySlot slot)
+        public bool IsHoldingThing()
         {
-            return _inventory.ContainsKey(slot) && _inventory[slot] != null;
+            return _holding != null;
         }
 
-        public TypeOfThing GetTypeOfThing(InventorySlot slot)
+        public TypeOfThing GetHoldingThingType()
         {
-            return IsHoldingThing(slot) ?
-                _inventory[slot].Config.TypeOfThing :
-                TypeOfThing.None;
+            return IsHoldingThing() ? _holding.Config.TypeOfThing : TypeOfThing.None;
         }
 
         public bool IsHoldingSomethingToEat()
         {
-            return IsHoldingThing(InventorySlot.Hands) && GetHoldingThing(InventorySlot.Hands).Config.Edible;
+            return IsHoldingThing() && _holding.Config.Edible;
         }
         
 
-        public Thing GetHoldingThing(InventorySlot slot)
+        public Thing GetHoldingThing()
         {
-            return _inventory.ContainsKey(slot) ? _inventory[slot] : null;
+            return _holding;
         }
 
-        public Thing Drop(InventorySlot slot)
+        public Thing Drop()
         {
-            if(!IsHoldingThing(slot))
+            if(!IsHoldingThing())
                 return null;
 
-            var thing = GetHoldingThing(slot);
+            var thing = GetHoldingThing();
             thing.transform.SetParent(null);
             
             var position = _game.FindNearestLoosePosition(transform.position.ToVector2IntFloor());
@@ -63,8 +59,6 @@ namespace Village.Things
             {
                 thing.transform.position = position.Value.ToVector3();
             }
-
-            _inventory.Remove(slot);
             
             return thing;
         }

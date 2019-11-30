@@ -39,7 +39,7 @@ public class FillStorage : MoveGOAPAction
 
     public override bool PerformAtTarget()
     {
-        var item = _inventory.Drop(InventorySlot.Hands);
+        var item = _inventory.Drop();
         var remainder = _target.Storage.Add(item);
 
         if(remainder != null)

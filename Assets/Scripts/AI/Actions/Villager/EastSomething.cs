@@ -12,14 +12,14 @@ namespace Village.AI
         {
             _inventory = thing.Inventory;
 
-            // Preconditions.Add(GOAPAction.Effect.IS_HUNGRY, true);
-            // Preconditions.Add(GOAPAction.Effect.HAS_EDIBLE_THING, true);
-            // Effects.Add(GOAPAction.Effect.IS_HUNGRY, false);
+            Preconditions.Add(GOAPAction.Effect.IS_HUNGRY, true);
+            Preconditions.Add(GOAPAction.Effect.HAS_THING_EDIBLE, true);
+            Effects.Add(GOAPAction.Effect.IS_HUNGRY, false);
         }
 
         public override bool IsDone()
         {
-            return !_inventory.IsHoldingThing(InventorySlot.Hands);
+            return !_inventory.IsHoldingThing();
         }
 
         public override bool IsPossibleToPerform()
@@ -29,7 +29,7 @@ namespace Village.AI
 
         public override bool Perform()
         {
-            _game.Remove(_inventory.Drop(InventorySlot.Hands));
+            _game.Remove(_inventory.Drop());
             return true;
         }
 
@@ -40,9 +40,9 @@ namespace Village.AI
 
         public override string ToString()
         {
-            if (_inventory.GetHoldingThing(InventorySlot.Hands) == null)
+            if (_inventory.GetHoldingThing() == null)
                 return base.ToString();
-            return $"Eating {_inventory.GetHoldingThing(InventorySlot.Hands).Config.TypeOfThing.ToString()}";
+            return $"Eating {_inventory.GetHoldingThing().Config.TypeOfThing.ToString()}";
         }
     }
 

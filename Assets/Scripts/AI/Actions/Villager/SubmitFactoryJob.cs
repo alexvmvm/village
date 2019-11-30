@@ -19,7 +19,6 @@ namespace Village.AI
         private TypeOfThing _output;
         private bool _requiresAgentToMake;
         private bool _submittedJob;
-        private InventorySlot _inputSlot;
 
         public SubmitFactoryJob(GOAPAgent agent, Game game, Thing thing, Movement movement, TypeOfThing factoryType, TypeOfThing input, TypeOfThing output, bool requiresAgentToMake) : base(agent, game, movement)
         {
@@ -32,8 +31,6 @@ namespace Village.AI
             _requiresAgentToMake = requiresAgentToMake;
 
             var inputConfig = Assets.GetThingConfig(input);
-            _inputSlot = inputConfig.InventorySlot;
-
             var outputConfig = Assets.GetThingConfig(output);
 
             // Preconditions.Add(GOAPAction.Effect.HAS_THING + inputConfig.InventorySlot, _input);
@@ -52,9 +49,9 @@ namespace Village.AI
 
         public override bool PerformAtTarget()
         {
-            if (_inventory.IsHoldingThing(_inputSlot))
+            if (_inventory.IsHoldingThing())
             {
-                _game.Remove(_inventory.Drop(_inputSlot));
+                _game.Remove(_inventory.Drop());
             }
 
             if (!_submittedJob)

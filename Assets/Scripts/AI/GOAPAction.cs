@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 
 namespace Village.AI
@@ -61,6 +60,7 @@ namespace Village.AI
             public const string IS_HUNGRY = "IS_HUNGRY";
             public const string IS_WARM = "IS_WARM";
             public const string HAS_THING = "HAS_THING";
+            public const string HAS_THING_EDIBLE = "HAS_THING_EDIBLE";
 
             // public const string IS_HOLDING_THING = "IS_HOLDING_THING";
             // public const string HAS_THING = "HAS_THING";            

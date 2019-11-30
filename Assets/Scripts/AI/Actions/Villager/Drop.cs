@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using Village.Things;
-using Village.Things.Config;
+﻿using Village.Things;
 
 namespace Village.AI 
 {
@@ -21,7 +15,7 @@ namespace Village.AI
 
         public override bool IsDone()
         {
-            return !_inventory.IsHoldingThing(InventorySlot.Hands);
+            return !_inventory.IsHoldingThing();
         }
 
         public override bool IsPossibleToPerform()
@@ -31,7 +25,7 @@ namespace Village.AI
 
         public override bool Perform()
         {
-            _inventory.Drop(InventorySlot.Hands);
+            _inventory.Drop();
             return true;
         }
 

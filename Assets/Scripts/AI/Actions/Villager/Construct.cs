@@ -15,7 +15,6 @@ namespace Village.AI
         private TypeOfThing _resource;
         private Thing _thing;
         private Inventory _inventory;
-        private InventorySlot _resourceSlot;
 
         public Construct(GOAPAgent agent, Game game, Movement movement, TypeOfThing resource, Thing thing) : base(agent, game, movement)
         {
@@ -25,8 +24,6 @@ namespace Village.AI
             _resource = resource;
             _thing = thing;
             _inventory = _thing.Inventory;
-
-            _resourceSlot = Assets.GetThingConfig(resource).InventorySlot;
 
             Preconditions.Add(GOAPAction.Effect.HAS_THING, resource);
         }
@@ -41,14 +38,14 @@ namespace Village.AI
             if(_target == null)
                 return true;
 
-            if (_inventory.IsHoldingThing(_resourceSlot))
+            if (_inventory.IsHoldingThing())
             {
-                var resource = _inventory.GetHoldingThing(_resourceSlot);
+                var resource = _inventory.GetHoldingThing();
                 resource.Hitpoints -= 1;
 
                 if (resource.Hitpoints == 0)
                 {
-                    _game.Remove(_inventory.Drop(_resourceSlot));
+                    _game.Remove(_inventory.Drop());
                 }
             }
 

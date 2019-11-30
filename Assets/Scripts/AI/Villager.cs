@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Village.Things;
-using Village.Things.Config;
 
 namespace Village.AI
 {
@@ -50,11 +46,12 @@ namespace Village.AI
             _thing.name = string.Format("{0} {1}", _firstname, _lastname);
 
             _villagerManager = MonoBehaviour.FindObjectOfType<VillageManager>();
+
+            IdleAction = new Idle(this, _game, _movement);
             
             AddGoal(new IdleGoal());
             AddGoal(new WorkingGoal());
             AddGoal(new RestGoal());
-
 
             /*
                 Misc
@@ -110,17 +107,10 @@ namespace Village.AI
 
             foreach(var resource in resources)
             {
-                //AddAction(new GetThing(this, _game, _thing, _movement, resource, this));
                 AddAction(new GetThing(this, _game, _thing, _movement, resource));
-                //AddAction(new DropCarryingThing(this, _game, resource));
                 //AddAction(new GetThingToMoveToStorage(this, _game, _thing, _movement, resource, this));
                 //AddAction(new FillStorage(this, _game, _movement, _thing.Inventory, resource));
             }
-
-            /*
-                Convert Resources
-                e.g. If tree produces wood, get an axe and chop the tree down
-            */
 
         
             /*
@@ -171,18 +161,17 @@ namespace Village.AI
 
             // }
 
-            state[GOAPAction.Effect.HAS_THING] = _inventory.GetTypeOfThing(InventorySlot.Hands);
-
-            //state[GOAPAction.Effect.HAS_EDIBLE_THING] = _inventory.IsHoldingSomethingToEat();
+            state[GOAPAction.Effect.HAS_THING] = _inventory.GetHoldingThingType();
+            state[GOAPAction.Effect.HAS_THING_EDIBLE] = _inventory.IsHoldingSomethingToEat();
 
 
             /*
                 Survival
             */
 
-            // state[GOAPAction.Effect.IS_THIRSTY] = _thirst < 0f;
-            // state[GOAPAction.Effect.IS_HUNGRY] = _hunger < 0f;
-            // state[GOAPAction.Effect.IS_RESTED] = _rest > 0f;
+            state[GOAPAction.Effect.IS_THIRSTY] = _thirst < 0f;
+            state[GOAPAction.Effect.IS_HUNGRY] = _hunger < 0f;
+            state[GOAPAction.Effect.IS_RESTED] = _rest > 0f;
             // state[GOAPAction.Effect.IS_WARM] = !_needs.IsCold();
             state[GOAPAction.Effect.IS_WORKING] = false;
         }

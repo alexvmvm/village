@@ -18,8 +18,15 @@ namespace Village.AI
             _resource = resource;
             _inventory = _thing.Inventory;
 
+            var resourceConfig = Assets.GetThingConfig(_resource);    
+
             Preconditions.Add(Effect.HAS_THING, TypeOfThing.None);
             Effects.Add(Effect.HAS_THING, resource);
+
+            if(resourceConfig.Edible)
+                Effects.Add(Effect.HAS_THING_EDIBLE, true);
+
+            
 
             // var resourceConfig = Assets.GetThingConfig(_resource);    
             // var producesConfig = Assets.GetThingConfig(resourceConfig.Produces);

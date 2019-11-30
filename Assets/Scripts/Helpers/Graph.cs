@@ -357,43 +357,6 @@ namespace Helpers.Graph
             return default(T);
         }
 
-
-        // public IEnumerable<T> ShortestPathToVertex(T start, T end, Func<T, bool> filter) 
-        // {
-        //     _previous.Clear();
-        //     _path.Clear();
-        //     _queue.Clear();
-
-        //     _queue.Enqueue(start);
-
-        //     while (_queue.Count > 0) {
-        //         var vertex = _queue.Dequeue();
-
-        //         if(vertex.Equals(end))
-        //         {
-        //             var current = end;
-        //             while (!current.Equals(start)) {
-        //                 _path.Add(current);
-        //                 current = _previous[current];
-        //             };
-
-        //             _path.Add(start);
-        //             _path.Reverse();
-
-        //             return _path;
-        //         }
-
-        //         foreach(GraphNode<T> neighbor in GetNodeByValue(vertex).Neighbors) {
-        //             if (_previous.ContainsKey(neighbor.Value) || filter(vertex))
-        //                 continue;
-        //             _previous[neighbor.Value] = vertex;
-        //             _queue.Enqueue(neighbor.Value);
-        //         }
-        //     }
-
-        //     return null;
-        // }
-
         public bool ShortestPathSearch(T start, Func<T, bool> filter, Func<T, bool> predicate, ref List<T> path) 
         {
             return ShortestPathSearch(GetNodeByValue(start), filter, predicate, ref path);

@@ -58,16 +58,6 @@ public abstract class GOAPAgent : MonoBehaviour
         _dirty = true;
     }
 
-    /*
-        Calculations
-    
-        1. convert to tree
-        2. find all leafs 
-        3. find all paths from leafs
-        
-    */
-    
-
     void CalculateGraph()
     {
         _graph.Clear();
@@ -174,11 +164,15 @@ public abstract class GOAPAgent : MonoBehaviour
                     }
                     else
                     {
+                        
                         if(IdleAction != null)
                         {
-                            _current = IdleAction;
-                            _current.Reset();
-                            _agentState = AgentState.Performing;
+                            IdleAction.Reset();
+                            if(IdleAction.IsPossibleToPerform())
+                            {
+                                _current = IdleAction;
+                                _agentState = AgentState.Performing;
+                            }
                         }
                     }
                 }
@@ -198,6 +192,7 @@ public abstract class GOAPAgent : MonoBehaviour
                 {
                     if(_current.IsDone())
                     {
+                        ActionCompleted(_current);
                         _agentState = AgentState.Picking;
                     }
                     else if(!_current.Perform())
