@@ -43,7 +43,7 @@ public abstract class GOAPAgent : MonoBehaviour
 
     void Start()
     {
-        CalculatePaths();
+        CalculateGraph();
     }
 
     public void AddGoal(GOAPGoal goal)
@@ -68,7 +68,7 @@ public abstract class GOAPAgent : MonoBehaviour
     */
     
 
-    void CalculatePaths()
+    void CalculateGraph()
     {
         _graph.Clear();
 
@@ -83,104 +83,57 @@ public abstract class GOAPAgent : MonoBehaviour
 
             foreach(var effect in effects)
             {
-                _graph.AddDirectedEdge(action, effect);
+                _graph.AddDirectedEdge(effect, action);
             }
 
             var preconditions = _actions.Where(a => action.Preconditions.IsEqualTo(a.Effects));
 
             foreach(var precon in preconditions)
             {
-                _graph.AddDirectedEdge(precon, action);
+                _graph.AddDirectedEdge(action, precon);
             }
         }
-
-        // _paths.Clear();
-        // foreach(var goal in _goals)
-        // {
-        //     var list = new List<GOAPAction[]>();
-        //     foreach(var action in _actions.Where(a => a.Goal == goal.Key))
-        //     {
-        //         list.Add(GetActionPath(action));
-        //     }
-        //     _paths.Add(goal, list);
-        // }
     }
 
-    GOAPAction[] GetActionPath(GOAPAction root)
+    bool FindPlan()
     {
-        var usable = new List<GOAPAction>(_actions);
-        var list = new LinkedList<GOAPAction>();
-        list.AddLast(root);
-        
-        while(true)
+        _workingPlan.Clear();
+
+        // get goals ordered by score
+        foreach(var goal in _goals.OrderBy(g => g.GetGoalScore()))
         {
-            var next = FindNextAction(list.Last.Value);
-            if(next != null)
+            var bestScore = Mathf.Infinity;
+
+            // get all actions that fulfill this goal
+            foreach(var action in _actions.Where(a => a.Goal == goal.Key))
             {
-                list.AddLast(next);
-            }
-            else
-            {
-                break;
-            }
-
-            if(list.Count > 1000)
-            {
-                Debug.LogError($"Plan too long, exceded 1000. Root ${root.ToString()}");
-                return null;
-            }
-        }
-
-        return list.ToArray();
-    }
-
-    GOAPAction FindNextAction(GOAPAction root)
-    {
-        foreach(var action in _actions)
-        {
-            if(action.Effects.IsEqualTo(root.Preconditions))
-            {
-                return action;
-            }
-        }
-
-        return null;
-    }
-
-    IEnumerable<GOAPAction> FindPlan()
-    {
-        var start = _actions.Where(a => a.Effects.IsSubsetOf(_state));
-        var end = _actions.Where(a => !string.IsNullOrEmpty(a.Goal));
-
-        
-
-
-        // loop goals in priority order
-        foreach(var kv in _paths.OrderBy(kv => kv.Key.GetGoalScore()))
-        {
-            // loop possible paths in priority order
-            foreach(var path in kv.Value.OrderBy(p => p.Sum(a => a.Cost)))
-            {
-                _workingPlan.Clear();
-                foreach(var action in path)
+                // find a path back to the agents 
+                // current state
+                if(_graph.ShortestPathSearch(
+                    action, 
+                    a => a.IsPossibleToPerform(), 
+                    a => a.Preconditions.IsSubsetOf(_state), 
+                    ref _workingPlan))
                 {
-                    if(action.IsPossibleToPerform())
+                    // test core
+                    var score = _workingPlan.Sum(a => a.Cost);
+                    if(score < bestScore)
                     {
-                        _workingPlan.Add(action);
-                    }
-                    else if(action.IsAlreadyDone(_state) && _workingPlan.Count > 0)
-                    {
-                        _workingPlan.Reverse();
-                        return _workingPlan;
+                        bestScore = score;
+                        
+                        // construct plan
+                        _plan.Clear();
+                        foreach(var a in _workingPlan)
+                            _plan.Enqueue(a);
                     }
                 }
 
-                if(path.All(a => a.IsPossibleToPerform()))
-                    return path.Reverse();
+                if(bestScore < Mathf.Infinity)
+                    return true;
             }
         }
-        
-        return null;
+
+        return false;
     }
 
     public abstract void UpdateState(Dictionary<string, object> state);
@@ -215,15 +168,8 @@ public abstract class GOAPAgent : MonoBehaviour
                         action.Reset();
                     }
 
-                    var plan = FindPlan();
-                    if(plan != null)
+                    if(FindPlan())
                     {
-                        _plan.Clear();
-                        foreach(var action in plan)
-                        {
-                            _plan.Enqueue(action);
-                        }
-                            
                         _agentState = AgentState.Picking;
                     }
                     else
@@ -275,7 +221,7 @@ public abstract class GOAPAgent : MonoBehaviour
     {
         if(_dirty)
         {
-            CalculatePaths();
+            CalculateGraph();
             _dirty = false;
         }
     }

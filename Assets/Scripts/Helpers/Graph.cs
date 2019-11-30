@@ -116,7 +116,7 @@ namespace Helpers.Graph
         public RemoveUndirectedEdgeEvent OnRemoveUndirectedEdge;
 
         private NodeList<T> nodeSet;
-        private Dictionary<T, T> _previous;
+        private Dictionary<GraphNode<T>, GraphNode<T>> _previous;
         private List<T> _path;
         private HashSet<T> _excluded;
         private Queue<GraphNode<T>> _queue;
@@ -124,7 +124,7 @@ namespace Helpers.Graph
 
         public Graph() : this(null) 
         { 
-            _previous = new Dictionary<T, T>();
+            _previous = new Dictionary<GraphNode<T>, GraphNode<T>>();
             _path = new List<T>{};
             _excluded = new HashSet<T>();
             _queue = new Queue<GraphNode<T>>();
@@ -357,6 +357,7 @@ namespace Helpers.Graph
             return default(T);
         }
 
+
         // public IEnumerable<T> ShortestPathToVertex(T start, T end, Func<T, bool> filter) 
         // {
         //     _previous.Clear();
@@ -393,41 +394,52 @@ namespace Helpers.Graph
         //     return null;
         // }
 
-        // public IEnumerable<T> ShortestPathSearch(T start, Func<T, bool> filter, Func<T, bool> predicate) {
+        public bool ShortestPathSearch(T start, Func<T, bool> filter, Func<T, bool> predicate, ref List<T> path) 
+        {
+            return ShortestPathSearch(GetNodeByValue(start), filter, predicate, ref path);
+        }
 
-        //     _previous.Clear();
-        //     _path.Clear();
-        //     _queue.Clear();
+        public bool ShortestPathSearch(GraphNode<T> start, Func<T, bool> filter, Func<T, bool> predicate, ref List<T> path) 
+        {
+            
+            if(!filter(start.Value))
+                return false;
 
-        //     _queue.Enqueue(start);
+            _previous.Clear();
+            _path.Clear();
+            _queue.Clear();
 
-        //     while (_queue.Count > 0) {
-        //         var vertex = _queue.Dequeue();
+            _queue.Enqueue(start);
 
-        //         if(predicate(vertex))
-        //         {
-        //             var current = vertex;
-        //             while (!current.Equals(start)) {
-        //                 _path.Add(current);
-        //                 current = _previous[current];
-        //             };
+            while (_queue.Count > 0) 
+            {
+                var vertex = _queue.Dequeue();
+                if(predicate(vertex.Value))
+                {
+                    var current = vertex;
+                    while (!current.Equals(start)) 
+                    {
+                        path.Add(current.Value);
+                        current = _previous[current];
+                    };
 
-        //             _path.Add(start);
-        //             _path.Reverse();
+                    path.Add(start.Value);
 
-        //             return _path;
-        //         }
+                    return true;
+                }
 
-        //         foreach(GraphNode<T> neighbor in GetNodeByValue(vertex).Neighbors) {
-        //             if (_previous.ContainsKey(neighbor.Value) || filter(vertex))
-        //                 continue;
-        //             _previous[neighbor.Value] = vertex;
-        //             _queue.Enqueue(neighbor.Value);
-        //         }
-        //     }
+                foreach(GraphNode<T> neighbor in vertex.Neighbors) 
+                {
+                    if (!_previous.ContainsKey(neighbor) && filter(neighbor.Value))
+                    {
+                        _previous[neighbor] = vertex;
+                        _queue.Enqueue(neighbor);
+                    }                    
+                }
+            }
 
-        //     return null;
-        // }
+            return false;
+        }
 
 
         public NodeList<T> Nodes
