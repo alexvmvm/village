@@ -657,7 +657,7 @@
 
         <Thing>
             <Name>Rock</Name>
-            <Sprite>colored_71</Sprite>
+            <Sprite>stone_1</Sprite>
             <TypeOfThing>Rock</TypeOfThing>
             <Produces>Stone</Produces>
             <Hitpoints>20</Hitpoints>
@@ -668,7 +668,7 @@
 
         <Thing>
             <Name>Stone</Name>
-            <Sprite>colored_71</Sprite>
+            <Sprite>stone_1</Sprite>
             <TypeOfThing>Stone</TypeOfThing>
             <Produces>Stone</Produces>
             <Hitpoints>1</Hitpoints>
