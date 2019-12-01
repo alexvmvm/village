@@ -102,7 +102,7 @@ public abstract class GOAPAgent : MonoBehaviour
                 if(_graph.ShortestPathSearch(
                     action, 
                     a => a.IsPossibleToPerform(), 
-                    a => a.Preconditions.IsSubsetOf(_state), 
+                    a => a.Preconditions.Count == 0 || a.Preconditions.IsSubsetOf(_state), 
                     ref _workingPlan))
                 {
                     // test core

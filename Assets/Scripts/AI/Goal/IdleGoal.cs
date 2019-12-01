@@ -7,4 +7,9 @@ public class IdleGoal : GOAPGoal
     public IdleGoal() : base(GOAPGoal.Goal.IS_IDLING)
     {
     }
+    
+    public override float GetGoalScore()
+    {
+        return 999f;
+    }
 }

@@ -59,6 +59,8 @@ namespace Village.Things
             {
                 thing.transform.position = position.Value.ToVector3();
             }
+
+            _holding = null;
             
             return thing;
         }

@@ -47,7 +47,7 @@ namespace Village.AI
 
             _villagerManager = MonoBehaviour.FindObjectOfType<VillageManager>();
 
-            IdleAction = new Idle(this, _game, _movement);
+            //IdleAction = new Idle(this, _game, _movement);
             
             AddGoal(new IdleGoal());
             AddGoal(new WorkingGoal());
@@ -251,6 +251,8 @@ namespace Village.AI
 
         public override void OnDrawGizmos()
         {
+            base.OnDrawGizmos();
+
             #if UNITY_EDITOR
 
             var label = Fullname + "\n";

@@ -17,11 +17,11 @@ namespace Village.AI
         {
             _movement = movement;
 
-            Cost = 9999;
+            Goal = GOAPGoal.Goal.IS_IDLING;
 
-            Preconditions.Add(GOAPAction.Effect.IS_WORKING, false);
-            //Preconditions.Add(GOAPAction.Effect.IS_HOLDING_SOMETHING, false);
-            Effects.Add(GOAPAction.Effect.IS_WORKING, true);
+            Preconditions.Add(Effect.HAS_THING, TypeOfThing.None);
+
+            //Effects.Add(GOAPAction.Effect.IS_WORKING, true);
         }
 
         public override bool IsDone()
@@ -36,7 +36,7 @@ namespace Village.AI
                 Random.Range(-5, 5),
                 Random.Range(-5, 5));
 
-            _target = _movement.transform.position + offset;
+            _target = _agent.transform.position + offset;
 
             if (!_game.IsInBounds(_target.ToVector2IntFloor()))
                 return false;

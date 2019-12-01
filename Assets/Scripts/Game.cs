@@ -117,7 +117,7 @@ namespace Village
                 var x = UnityEngine.Random.Range(0, Size.x);
                 var y = UnityEngine.Random.Range(0, Size.y);
 
-                CreateAtPosition(TypeOfThing.FallenWood, new Vector2Int(x, y));
+                CreateAtPosition(TypeOfThing.Wood, new Vector2Int(x, y));
             }
 
             return;

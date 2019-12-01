@@ -624,7 +624,7 @@
             <Sprite>colored_transparent_209</Sprite>
             <TypeOfThing>Wood</TypeOfThing>
             <Produces>Wood</Produces>
-            <Hitpoints>1</Hitpoints>
+            <Hitpoints>20</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
             <Parent>resource</Parent>
