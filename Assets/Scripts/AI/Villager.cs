@@ -9,6 +9,7 @@ namespace Village.AI
         public string Firstname { get { return _firstname; } }
         public string Lastname { get { return _lastname; } }
         public string Fullname { get { return Firstname + " " + Lastname; } }
+
         private string _firstname;
         private string _lastname;
         private bool _requestedResidence;
@@ -23,9 +24,6 @@ namespace Village.AI
             Survival
         */
 
-        private float _rest;
-        private float _hunger;
-        private float _thirst;
 
         public override void Awake()
         {
@@ -38,7 +36,7 @@ namespace Village.AI
             _movement = transform.gameObject.AddComponent<Movement>();
             _inventory = _thing.Inventory;
 
-            _needs = new Needs(_game);
+            _needs = transform.gameObject.AddComponent<Needs>();
 
             _firstname = NameGenerator.GenerateFirstName();
             _lastname = NameGenerator.GenerateLastName();
@@ -169,9 +167,9 @@ namespace Village.AI
                 Survival
             */
 
-            state[GOAPAction.Effect.IS_THIRSTY] = _thirst < 0f;
-            state[GOAPAction.Effect.IS_HUNGRY] = _hunger < 0f;
-            state[GOAPAction.Effect.IS_RESTED] = _rest > 0f;
+            state[GOAPAction.Effect.IS_THIRSTY] = _needs.Thirst < 0f;
+            state[GOAPAction.Effect.IS_HUNGRY] = _needs.Hunger < 0f;
+            state[GOAPAction.Effect.IS_RESTED] = _needs.Rest > 0f;
             // state[GOAPAction.Effect.IS_WARM] = !_needs.IsCold();
             state[GOAPAction.Effect.IS_WORKING] = false;
         }
@@ -215,21 +213,21 @@ namespace Village.AI
         {
 
             if (action.Effects.ContainsKey("isRested") && (bool)action.Effects["isRested"])
-                _rest = 0f;
+                _needs.SetRest(0f);
 
 
             // thirsty after sleeping
             if (action is Sleep)
             {
-                _thirst = -1f;
-                _hunger = -1f;
+                _needs.SetThirst(-1f);
+                _needs.SetHunger(-1f);
             }
 
             if (action is DrinkFromStream)
-                _thirst = 0f;
+                _needs.SetThirst(0f);
 
             if (action is EastSomething)
-                _hunger = 0f;
+                _needs.SetHunger(0f);
 
         }
 
@@ -243,10 +241,8 @@ namespace Village.AI
                 _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
             }
 
-            if (_game.WorldTime.TimeOfDay == TimeOfDay.Night && _rest >= 0f)
-            {
-                _rest = -1f;
-            }
+            if (_game.WorldTime.TimeOfDay == TimeOfDay.Night)
+                _needs.SetRest(-1f);
         }
 
         public override void OnDrawGizmos()
@@ -257,18 +253,8 @@ namespace Village.AI
 
             var label = Fullname + "\n";
 
-            if (_needs.IsDead())
-            {
-                label += $"DEAD\n";
-                label += _needs.GetReasonsForDeath();
-            }
-            else if (CurrentAction != null)
+            if (CurrentAction != null)
                 label += $"{CurrentAction.ToString()}\n";
-
-            label += string.Format("hunger: {0}\n", _hunger);
-            label += string.Format("thirst: {0}\n", _thirst);
-            label += string.Format("warmth: {0}\n", _needs.Warmth);
-            label += string.Format("rest: {0}\n", _rest);
 
             var style = new GUIStyle();
             style.fontSize = 10;

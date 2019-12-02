@@ -46,17 +46,17 @@ public class AgentWindow : EditorWindow
             DrawAgent(10, yOffset, _selected);
         }
 
-        if(_selectedAction != null)
-        {
-            DrawActionDetail(520, yOffset, _selectedAction);
-        }
+        // if(_selectedAction != null)
+        // {
+        //     DrawActionDetail(520, yOffset, _selectedAction);
+        // }
     }
 
-    void SetSelectedAction(GOAPAction action)
-    {
-        _selectedAction = action;
-        _selectedActionPossible = action.IsPossibleToPerform();
-    }
+    // void SetSelectedAction(GOAPAction action)
+    // {
+    //     _selectedAction = action;
+    //     _selectedActionPossible = action.IsPossibleToPerform();
+    // }
 
     void DrawAgent(float x, float y, GameObject gameObject)
     {
@@ -66,36 +66,38 @@ public class AgentWindow : EditorWindow
         var columnWidth = 200;
         var columnGap = 10;
 
-        _actionsScrollView = GUI.BeginScrollView(
-            new Rect(10, y, position.width - 20, position.height - 100), 
-            _actionsScrollView, 
-            new Rect(10, y, 15000, 15000));
 
-        var j = 0;
-        for(var i = 0; i < agent.Paths.Count; i++)
-        {
-            var kv = agent.Paths.ElementAt(i);
-            var rect = new Rect(x + j * (columnWidth + columnGap), y, columnWidth, 20);
-            GUI.Box(rect, kv.Key.ToString());
+
+        // _actionsScrollView = GUI.BeginScrollView(
+        //     new Rect(10, y, position.width - 20, position.height - 100), 
+        //     _actionsScrollView, 
+        //     new Rect(10, y, 15000, 15000));
+
+        // var j = 0;
+        // for(var i = 0; i < agent.Paths.Count; i++)
+        // {
+        //     var kv = agent.Paths.ElementAt(i);
+        //     var rect = new Rect(x + j * (columnWidth + columnGap), y, columnWidth, 20);
+        //     GUI.Box(rect, kv.Key.ToString());
             
-            var paths = kv.Value;
+        //     var paths = kv.Value;
 
-            if(paths.Count == 0)
-                j++;
+        //     if(paths.Count == 0)
+        //         j++;
 
-            for(; j < paths.Count; j++)
-            {
-                var path = paths.ElementAt(j);
-                for(var k = 0; k < path.Count(); k++)
-                {
-                    var action = path.ElementAt(k);
-                    var actionRect = new Rect(x + j * (columnWidth + columnGap), y + k * 30 + 30, columnWidth, 20);
-                    GUI.Box(actionRect, action.ToString());
-                }
-            }
-        }
+        //     for(; j < paths.Count; j++)
+        //     {
+        //         var path = paths.ElementAt(j);
+        //         for(var k = 0; k < path.Count(); k++)
+        //         {
+        //             var action = path.ElementAt(k);
+        //             var actionRect = new Rect(x + j * (columnWidth + columnGap), y + k * 30 + 30, columnWidth, 20);
+        //             GUI.Box(actionRect, action.ToString());
+        //         }
+        //     }
+        // }
 
-        GUI.EndScrollView();
+        // GUI.EndScrollView();
 
         // // world state
         // var worldStateRect = DrawConditions(x, y, 500, agent.WorldState, "World State");
@@ -135,64 +137,64 @@ public class AgentWindow : EditorWindow
         // GUI.EndScrollView();
     }
 
-    Rect DrawActionDetail(float x, float y, GOAPAction selectedAction)
-    {
-        var rect = new Rect(x, y, 500, 20);
+    // Rect DrawActionDetail(float x, float y, GOAPAction selectedAction)
+    // {
+    //     var rect = new Rect(x, y, 500, 20);
 
-        GUI.Box(rect, selectedAction.ToString());
+    //     GUI.Box(rect, selectedAction.ToString());
 
-        if(GUI.Button(new Rect(x, y + 20, 500, 20), "IsPossibleToPerform"))
-        {
-            _selectedActionPossible = selectedAction.IsPossibleToPerform();
-        }
+    //     if(GUI.Button(new Rect(x, y + 20, 500, 20), "IsPossibleToPerform"))
+    //     {
+    //         _selectedActionPossible = selectedAction.IsPossibleToPerform();
+    //     }
         
-        GUI.Box(new Rect(x, y + 40, 500, 20), _selectedActionPossible ? "yes ✔" : "no ✘");
+    //     GUI.Box(new Rect(x, y + 40, 500, 20), _selectedActionPossible ? "yes ✔" : "no ✘");
 
-        return rect;
-    }
+    //     return rect;
+    // }
 
-    Rect DrawAction(float x, float y, GOAPAction action)
-    {
-        //var rect = new Rect(x, y, 600, 1000);
+    // Rect DrawAction(float x, float y, GOAPAction action)
+    // {
+    //     //var rect = new Rect(x, y, 600, 1000);
         
-        var yOffset = 20;
-        var rect = new Rect(x, y, 500, yOffset);
+    //     var yOffset = 20;
+    //     var rect = new Rect(x, y, 500, yOffset);
 
-        GUI.Box(rect, $"{action.ToString()}");
+    //     GUI.Box(rect, $"{action.ToString()}");
 
-        // draw preconditions
-        var preconditons = DrawConditions(rect.x, rect.y + yOffset, rect.width/2, action.Preconditions, "Preconditions");
-        var effects = DrawConditions(rect.x + preconditons.width, rect.y + yOffset, rect.width/2, action.Effects, "Effects");
+    //     // draw preconditions
+    //     var preconditons = DrawConditions(rect.x, rect.y + yOffset, rect.width/2, action.Preconditions, "Preconditions");
+    //     var effects = DrawConditions(rect.x + preconditons.width, rect.y + yOffset, rect.width/2, action.Effects, "Effects");
 
-        rect.height = Mathf.Max(preconditons.height, effects.height) + yOffset;
+    //     rect.height = Mathf.Max(preconditons.height, effects.height) + yOffset;
 
-        if(GUI.Button(new Rect(x, y + rect.height, 500, 20), "check"))
-        {
-            SetSelectedAction(action);
-        }
-        rect.height += 20;
+    //     if(GUI.Button(new Rect(x, y + rect.height, 500, 20), "check"))
+    //     {
+    //         SetSelectedAction(action);
+    //     }
+    //     rect.height += 20;
 
-        return rect;
-    }
+    //     return rect;
+    // }
 
-    Rect DrawConditions(float x, float y, float width, Dictionary<string, object> conditions, string name)
-    {
-        var conditionHeight = 20;
-        var totalHeight = conditions.Count() * conditionHeight;
-        var rect = new Rect(x, y, width, totalHeight + 20);
-        GUI.Box(rect, name);
+    // Rect DrawConditions(float x, float y, float width, Dictionary<string, object> conditions, string name)
+    // {
+    //     var conditionHeight = 20;
+    //     var totalHeight = conditions.Count() * conditionHeight;
+    //     var rect = new Rect(x, y, width, totalHeight + 20);
+    //     GUI.Box(rect, name);
 
-        var yPos = y + 20;
-        for(var i = 0; i < conditions.Count(); i++)
-        {
-            var actionRect = new Rect(rect.x, yPos, width, conditionHeight);
-            var p = conditions.ElementAt(i);
-            GUI.Box(actionRect, $"{p.Key}: {p.Value}");
-            yPos += conditionHeight;
-        }
+    //     var yPos = y + 20;
+    //     for(var i = 0; i < conditions.Count(); i++)
+    //     {
+    //         var actionRect = new Rect(rect.x, yPos, width, conditionHeight);
+    //         var p = conditions.ElementAt(i);
+    //         GUI.Box(actionRect, $"{p.Key}: {p.Value}");
+    //         yPos += conditionHeight;
+    //     }
 
-        return rect;
-    }
+    //     return rect;
+    // }
 
     // Rect DrawCropView(float x, float y, ThingConfig[] crops)
     // {

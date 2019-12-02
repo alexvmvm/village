@@ -18,19 +18,19 @@ namespace Village.AI
         public float WorldTime;
     }
 
-    public class Needs
+    public class Needs : MonoBehaviour
     {
-        public float Warmth { get { return _warmth; } }
-        private float _thirst;
-        private float _hunger;
-        private float _warmth;
-        private float _rest;
+        public float Thirst { get; private set; }
+        public float Hunger { get; private set; }
+        public float Warmth { get; private set; }
+        public float Rest { get; private set; }
+
         private Game _game;
         private List<EventRecord> _events;
 
-        public Needs(Game game)
+        void Awake()
         {
-            _game = game;
+            _game = FindObjectOfType<Game>();
             _events = new List<EventRecord>();
         }
 
@@ -39,10 +39,10 @@ namespace Village.AI
             switch (needEvent)
             {
                 case NeedsEvent.SLEPT_OUTSIDE:
-                    _warmth -= 0.5f;
+                    Warmth -= 0.5f;
                     break;
                 case NeedsEvent.SLEPT_IN_BED:
-                    _warmth = 0f;
+                    Warmth = 0f;
                     break;
             }
 
@@ -51,12 +51,27 @@ namespace Village.AI
 
         public bool IsCold()
         {
-            return _warmth < 0f;
+            return Warmth < 0f;
+        }
+
+        public void SetRest(float rest)
+        {
+            Rest = rest;
+        }
+
+        public void SetThirst(float thirst)
+        {
+            Thirst = thirst;
+        }
+
+        public void SetHunger(float hunger)
+        {
+            Hunger = hunger;
         }
 
         public bool IsDead()
         {
-            return _warmth <= -3f;
+            return Warmth <= -3f;
         }
 
         public string GetReasonsForDeath()
@@ -67,10 +82,38 @@ namespace Village.AI
             if (numSleptOutside > 0)
                 reasons += $"<color=red>Spent {numSleptOutside} night{(numSleptOutside > 1 ? "s" : "")} outside.</color>\n";
 
-            if (_warmth <= -3f)
+            if (Warmth <= -3f)
                 reasons += $"<color=red>Suffering from the cold.</color>\n";
 
             return reasons;
+        }
+
+        void OnDrawGizmos()
+        {
+            #if UNITY_EDITOR
+
+            var label = "";
+
+            if (IsDead())
+            {
+                label += $"DEAD\n";
+                label += GetReasonsForDeath();
+            }
+
+            label += string.Format("hunger: {0}\n", Hunger);
+            label += string.Format("thirst: {0}\n", Thirst);
+            label += string.Format("warmth: {0}\n", Warmth);
+            label += string.Format("rest: {0}\n", Rest);
+
+            var style = new GUIStyle();
+            style.fontSize = 10;
+            style.normal.textColor = Color.white;
+
+            // current actions
+            var position = transform.position + Vector3.up;
+            UnityEditor.Handles.Label(position, label, style);
+
+            #endif
         }
     }
 
