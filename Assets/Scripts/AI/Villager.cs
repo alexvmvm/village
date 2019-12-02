@@ -248,9 +248,6 @@ namespace Village.AI
                 PauseAgent();
                 _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
             }
-
-            // if (_game.WorldTime.TimeOfDay == TimeOfDay.Night)
-            //     _needs.SetRest(-1f);
         }
 
         public override void OnDrawGizmos()
