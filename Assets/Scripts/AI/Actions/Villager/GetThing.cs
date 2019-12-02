@@ -18,33 +18,8 @@ namespace Village.AI
             _resource = resource;
             _inventory = _thing.Inventory;
 
-            var resourceConfig = Assets.GetThingConfig(_resource);    
-
             Preconditions.Add(Effect.HAS_THING, TypeOfThing.None);
             Effects.Add(Effect.HAS_THING, resource);
-
-            if(resourceConfig.Edible)
-                Effects.Add(Effect.HAS_THING_EDIBLE, true);
-
-            
-
-            // var resourceConfig = Assets.GetThingConfig(_resource);    
-            // var producesConfig = Assets.GetThingConfig(resourceConfig.Produces);
-
-            // if(resourceConfig.RequiredToProduce != TypeOfThing.None)
-            // {
-            //     var requiresConfig = Assets.GetThingConfig(resourceConfig.RequiredToProduce);
-            //     Preconditions.Add(GOAPAction.Effect.HAS_THING + requiresConfig.InventorySlot, requiresConfig.TypeOfThing);
-            // }
-
-            // Preconditions.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, false);
-
-            // //Effects.Add(GOAPAction.Effect.IS_HOLDING_THING + producesConfig.InventorySlot, true);
-            // Effects.Add(GOAPAction.Effect.HAS_THING + producesConfig.InventorySlot, producesConfig.TypeOfThing);
-
-            // // costs more if not a straight resource
-            // // pickup
-            // Cost = resourceConfig.Produces == resourceConfig.TypeOfThing ? 1 : 2;
         }
 
         public override bool Filter(Thing thing)

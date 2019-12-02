@@ -49,7 +49,10 @@ namespace Village.AI
             
             AddGoal(new IdleGoal());
             AddGoal(new WorkingGoal());
-            AddGoal(new RestGoal());
+
+            AddGoal(new DrinkGoal(_needs));
+            AddGoal(new EatGoal(_needs));
+            AddGoal(new RestGoal(_game, _needs));
 
             /*
                 Misc
@@ -58,7 +61,10 @@ namespace Village.AI
             AddAction(new Drop(this, _game));
             AddAction(new Sleep(this, _game, _thing, _movement, this, _needs));
             AddAction(new Idle(this, _game, _movement));
+
+
             AddAction(new ChopWood(this, _game, _movement));
+            AddAction(new PickMushroom(this, _game, _movement));
 
             /*
                 Survival
@@ -66,6 +72,9 @@ namespace Village.AI
 
             AddAction(new DrinkFromStream(this, _game, _movement));
             AddAction(new EastSomething(this, _game, _thing));
+
+            
+            AddAction(new HasEdibleThing(this, _game, TypeOfThing.Mushroom));
 
 
             /*
@@ -110,7 +119,6 @@ namespace Village.AI
                 //AddAction(new FillStorage(this, _game, _movement, _thing.Inventory, resource));
             }
 
-        
             /*
                 Factory Job
             */
@@ -160,7 +168,7 @@ namespace Village.AI
             // }
 
             state[GOAPAction.Effect.HAS_THING] = _inventory.GetHoldingThingType();
-            state[GOAPAction.Effect.HAS_THING_EDIBLE] = _inventory.IsHoldingSomethingToEat();
+            state[GOAPAction.Effect.HAS_EDIBLE_THING] = _inventory.IsHoldingSomethingToEat();
 
 
             /*
@@ -212,15 +220,15 @@ namespace Village.AI
         public override void ActionCompleted(GOAPAction action)
         {
 
-            if (action.Effects.ContainsKey("isRested") && (bool)action.Effects["isRested"])
-                _needs.SetRest(0f);
-
+            // if (action.Effects.ContainsKey("isRested") && (bool)action.Effects["isRested"])
+            //     _needs.SetRest(0f);
 
             // thirsty after sleeping
             if (action is Sleep)
             {
                 _needs.SetThirst(-1f);
                 _needs.SetHunger(-1f);
+                _needs.SetRest(0f);
             }
 
             if (action is DrinkFromStream)
@@ -241,8 +249,8 @@ namespace Village.AI
                 _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
             }
 
-            if (_game.WorldTime.TimeOfDay == TimeOfDay.Night)
-                _needs.SetRest(-1f);
+            // if (_game.WorldTime.TimeOfDay == TimeOfDay.Night)
+            //     _needs.SetRest(-1f);
         }
 
         public override void OnDrawGizmos()
@@ -261,7 +269,7 @@ namespace Village.AI
             style.normal.textColor = Color.white;
 
             // current actions
-            var position = _thing.transform.position + Vector3.up;
+            var position = _thing.transform.position + Vector3.up + Vector3.right;
             UnityEditor.Handles.Label(position, label, style);
 
             #endif

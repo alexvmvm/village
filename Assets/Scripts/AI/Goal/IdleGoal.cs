@@ -10,6 +10,6 @@ public class IdleGoal : GOAPGoal
     
     public override float GetGoalScore()
     {
-        return 999f;
+        return 0f;
     }
 }

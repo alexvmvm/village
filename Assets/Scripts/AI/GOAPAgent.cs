@@ -90,7 +90,7 @@ public abstract class GOAPAgent : MonoBehaviour
         _workingPlan.Clear();
 
         // get goals ordered by score
-        foreach(var goal in _goals.OrderBy(g => g.GetGoalScore()))
+        foreach(var goal in _goals.Where(g => g.IsActive()).OrderByDescending(g => g.GetGoalScore()))
         {
             var bestScore = Mathf.Infinity;
 

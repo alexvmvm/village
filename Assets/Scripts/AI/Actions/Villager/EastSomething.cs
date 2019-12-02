@@ -12,9 +12,12 @@ namespace Village.AI
         {
             _inventory = thing.Inventory;
 
-            Preconditions.Add(GOAPAction.Effect.IS_HUNGRY, true);
-            Preconditions.Add(GOAPAction.Effect.HAS_THING_EDIBLE, true);
-            Effects.Add(GOAPAction.Effect.IS_HUNGRY, false);
+            Goal = GOAPGoal.Goal.IS_NOT_HUNGRY;
+
+
+            //Preconditions.Add(GOAPAction.Effect.IS_HUNGRY, true);
+            Preconditions.Add(GOAPAction.Effect.HAS_EDIBLE_THING, true);
+            //Effects.Add(GOAPAction.Effect.IS_HUNGRY, false);
         }
 
         public override bool IsDone()

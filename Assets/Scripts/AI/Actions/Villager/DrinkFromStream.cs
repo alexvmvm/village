@@ -15,8 +15,7 @@ namespace Village.AI
         {
             _movement = movement;
 
-            Preconditions.Add(GOAPAction.Effect.IS_THIRSTY, true);
-            Effects.Add(GOAPAction.Effect.IS_THIRSTY, false);
+            Goal = GOAPGoal.Goal.IS_NOT_THIRSTY;
         }
 
         public override bool Filter(Thing thing)

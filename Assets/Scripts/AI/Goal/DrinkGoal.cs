@@ -1,27 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Village;
 using Village.AI;
 
-public class RestGoal : GOAPGoal
+public class DrinkGoal : GOAPGoal
 {
     private Needs _needs;
-    private Game _game;
-
-    public RestGoal(Game game, Needs needs) : base(GOAPGoal.Goal.IS_RESTED)
+    public DrinkGoal(Needs needs) : base(GOAPGoal.Goal.IS_NOT_THIRSTY)
     {
         _needs = needs;
-        _game = game;
     }
 
     public override float GetGoalScore()
     {
-        return 30f;
+        return 20f;
     }
 
     public override bool IsActive()
     {
-        return _game.WorldTime.TimeOfDay == TimeOfDay.Night;
+        return _needs.IsThirsty();
     }
 }

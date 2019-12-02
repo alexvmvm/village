@@ -54,6 +54,26 @@ namespace Village.AI
             return Warmth < 0f;
         }
 
+        public bool IsDead()
+        {
+            return Warmth <= -3f;
+        }
+
+        public bool IsHungry()
+        {
+            return Hunger < 0f;
+        }
+
+        public bool IsThirsty()
+        {
+            return Thirst < 0f;
+        }
+
+        public bool IsTired()
+        {
+            return Rest < 0f;
+        }
+
         public void SetRest(float rest)
         {
             Rest = rest;
@@ -69,10 +89,7 @@ namespace Village.AI
             Hunger = hunger;
         }
 
-        public bool IsDead()
-        {
-            return Warmth <= -3f;
-        }
+
 
         public string GetReasonsForDeath()
         {
@@ -110,7 +127,7 @@ namespace Village.AI
             style.normal.textColor = Color.white;
 
             // current actions
-            var position = transform.position + Vector3.up;
+            var position = transform.position + Vector3.down + Vector3.right;
             UnityEditor.Handles.Label(position, label, style);
 
             #endif

@@ -7,4 +7,9 @@ public class WorkingGoal : GOAPGoal
     public WorkingGoal() : base(GOAPGoal.Goal.IS_WORKING)
     {
     }
+
+    public override float GetGoalScore()
+    {
+        return 1f;
+    }
 }
