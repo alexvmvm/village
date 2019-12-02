@@ -115,6 +115,9 @@ public class RegionManager
     {
         var startRegion = GetRegionAtPosition(ToRegionPosition(position));
 
+        if(startRegion == null)
+            throw new Exception($"Unable to find region at position {position}");
+
         var startSubRegion = startRegion.GetSubRegionAtPosition(position);
 
         if(startSubRegion != null)

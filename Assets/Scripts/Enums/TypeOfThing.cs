@@ -1,6 +1,8 @@
 ﻿public enum TypeOfThing 
 {
-    None,         
+    None,
+    Skill,         
+    Book,
     WaterCrop,
     Blueprint,       
     Grass,                   

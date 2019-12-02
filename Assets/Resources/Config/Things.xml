@@ -94,7 +94,6 @@
             <PositionalAudioGroup>river</PositionalAudioGroup>
             <!-- <PathTag>TAG_BLOCKING</PathTag> -->
             <Pipe>true</Pipe>
-            <Produces>Water</Produces>
             <Resource>true</Resource>
             <RequiredToProduce>WateringPot</RequiredToProduce>
             <Parent>floor</Parent>
@@ -147,7 +146,6 @@
             <LightBlocking>true</LightBlocking>
             <Resource>true</Resource>
             <PathTag>TAG_AVOID</PathTag>
-            <Produces>Wood</Produces>
             <RequiredToProduce>Axe</RequiredToProduce>
             <Hitpoints>100</Hitpoints>
             <Parent>floor</Parent>
@@ -219,6 +217,18 @@
                 <Builds>None</Builds>
             </ConstructionConfig>
             <SortingOrder>200</SortingOrder>
+        </Thing>
+
+        <Thing>
+            <Name>skill</Name>
+            <Sprite>colored_transparent_880</Sprite>
+            <TypeOfThing>Skill</TypeOfThing>
+        </Thing>
+
+        <Thing>
+            <Name>book</Name>
+            <Sprite>colored_transparent_876</Sprite>
+            <TypeOfThing>Book</TypeOfThing>
         </Thing>
 
         <!-- Walls -->
@@ -509,7 +519,6 @@
             <RequiredToCraft>
                 <TypeOfThing>Iron</TypeOfThing>
             </RequiredToCraft>
-            <Produces>Axe</Produces>
             <Parent>tool</Parent>
         </Thing>
 
@@ -521,7 +530,6 @@
             <RequiredToCraft>
                 <TypeOfThing>Iron</TypeOfThing>
             </RequiredToCraft>
-            <Produces>Hoe</Produces>
             <Parent>tool</Parent>
         </Thing>
 
@@ -533,7 +541,6 @@
             <RequiredToCraft>
                 <TypeOfThing>Iron</TypeOfThing>
             </RequiredToCraft>
-            <Produces>Pickaxe</Produces>
             <Parent>tool</Parent>
         </Thing>
 
@@ -545,7 +552,6 @@
             <RequiredToCraft>
                 <TypeOfThing>Clay</TypeOfThing>
             </RequiredToCraft>
-            <Produces>WateringPot</Produces>
             <Parent>tool</Parent>
         </Thing>
 
@@ -573,7 +579,6 @@
             <Name>Mushroom</Name>
             <Sprite>colored_71</Sprite>
             <TypeOfThing>MushroomGrowing</TypeOfThing>
-            <Produces>Mushroom</Produces>
             <Parent>floor</Parent>
         </Thing>
 
@@ -581,7 +586,6 @@
             <Name>Clay</Name>
             <Sprite>colored_1</Sprite>
             <TypeOfThing>ClayFloor</TypeOfThing>
-            <Produces>Clay</Produces>
             <Parent>floor</Parent>
         </Thing>
 
@@ -589,7 +593,6 @@
             <Name>Ore</Name>
             <Sprite>colored_4</Sprite>
             <TypeOfThing>OreFloor</TypeOfThing>
-            <Produces>Ore</Produces>
             <Parent>floor</Parent>
         </Thing>
 
@@ -600,7 +603,6 @@
             <Name>Water</Name>
             <Sprite>stream_5</Sprite>
             <TypeOfThing>Water</TypeOfThing>
-            <Produces>Water</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>food</StoreGroup>
@@ -611,7 +613,6 @@
             <Name>Mushroom</Name>
             <Sprite>colored_71</Sprite>
             <TypeOfThing>Mushroom</TypeOfThing>
-            <Produces>Mushroom</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -623,7 +624,6 @@
             <Name>Wood</Name>
             <Sprite>colored_transparent_209</Sprite>
             <TypeOfThing>Wood</TypeOfThing>
-            <Produces>Wood</Produces>
             <Hitpoints>20</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -634,7 +634,6 @@
             <Name>Wood</Name>
             <Sprite>colored_70</Sprite>
             <TypeOfThing>FallenWood</TypeOfThing>
-            <Produces>Wood</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -645,7 +644,6 @@
             <Name>Wooden Planks</Name>
             <Sprite>colored_transparent_531</Sprite>
             <TypeOfThing>WoodenPlanks</TypeOfThing>
-            <Produces>WoodenPlanks</Produces>
             <Hitpoints>20</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -659,7 +657,6 @@
             <Name>Rock</Name>
             <Sprite>stone_1</Sprite>
             <TypeOfThing>Rock</TypeOfThing>
-            <Produces>Stone</Produces>
             <Hitpoints>20</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -670,7 +667,6 @@
             <Name>Stone</Name>
             <Sprite>stone_1</Sprite>
             <TypeOfThing>Stone</TypeOfThing>
-            <Produces>Stone</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -681,7 +677,6 @@
             <Name>Clay</Name>
             <Sprite>colored_1</Sprite>
             <TypeOfThing>Clay</TypeOfThing>
-            <Produces>Clay</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -692,7 +687,6 @@
             <Name>Ore</Name>
             <Sprite>colored_4</Sprite>
             <TypeOfThing>Ore</TypeOfThing>
-            <Produces>Ore</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -703,7 +697,6 @@
             <Name>Iron</Name>
             <Sprite>colored_transparent_721</Sprite>
             <TypeOfThing>Iron</TypeOfThing>
-            <Produces>Iron</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -714,7 +707,6 @@
             <Name>Charcoal</Name>
             <Sprite>colored_transparent_754</Sprite>
             <TypeOfThing>Charcoal</TypeOfThing>
-            <Produces>Charcoal</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -725,7 +717,6 @@
             <Name>Steel</Name>
             <Sprite>colored_transparent_375</Sprite>
             <TypeOfThing>Steel</TypeOfThing>
-            <Produces>Steel</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -736,7 +727,6 @@
             <Name>StoneBlock</Name>
             <Sprite>colored_416</Sprite>
             <TypeOfThing>StoneBlock</TypeOfThing>
-            <Produces>StoneBlock</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>resources</StoreGroup>
@@ -749,7 +739,6 @@
             <Name>Cabbage</Name>
             <Sprite>colored_transparent_977</Sprite>
             <TypeOfThing>Cabbage</TypeOfThing>
-            <Produces>Cabbage</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -761,7 +750,6 @@
             <Name>Potato</Name>
             <Sprite>colored_transparent_977</Sprite>
             <TypeOfThing>Potato</TypeOfThing>
-            <Produces>Potato</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -773,7 +761,6 @@
             <Name>Tomato</Name>
             <Sprite>colored_transparent_977</Sprite>
             <TypeOfThing>Tomato</TypeOfThing>
-            <Produces>Tomato</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -785,7 +772,6 @@
             <Name>Carrot</Name>
             <Sprite>colored_transparent_977</Sprite>
             <TypeOfThing>Carrot</TypeOfThing>
-            <Produces>Carrot</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -797,7 +783,6 @@
             <Name>Hops</Name>
             <Sprite>colored_transparent_977</Sprite>
             <TypeOfThing>Hops</TypeOfThing>
-            <Produces>Hops</Produces>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
             <StoreGroup>food</StoreGroup>
@@ -808,7 +793,6 @@
             <Name>Pumpkin</Name>
             <Sprite>colored_transparent_977</Sprite>
             <TypeOfThing>Pumpkin</TypeOfThing>
-            <Produces>Pumpkin</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -822,7 +806,6 @@
             <Name>Cabbage Seeds</Name>
             <Sprite>colored_transparent_817</Sprite>
             <TypeOfThing>CabbageSeed</TypeOfThing>
-            <Produces>CabbageSeed</Produces>
             <Edible>true</Edible>
             <Storeable>true</Storeable>
             <StoreGroup>food</StoreGroup>
@@ -834,7 +817,6 @@
             <Name>Potato Seeds</Name>
             <Sprite>colored_transparent_817</Sprite>
             <TypeOfThing>PotatoSeed</TypeOfThing>
-            <Produces>PotatoSeed</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -846,7 +828,6 @@
             <Name>Tomato Seeds</Name>
             <Sprite>colored_transparent_817</Sprite>
             <TypeOfThing>TomatoSeed</TypeOfThing>
-            <Produces>TomatoSeed</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -858,7 +839,6 @@
             <Name>Pumpkin Seeds</Name>
             <Sprite>colored_transparent_817</Sprite>
             <TypeOfThing>PumpkinSeed</TypeOfThing>
-            <Produces>PumpkinSeed</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -870,7 +850,6 @@
             <Name>Carrot Seeds</Name>
             <Sprite>colored_transparent_817</Sprite>
             <TypeOfThing>CarrotSeed</TypeOfThing>
-            <Produces>CarrotSeed</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>
@@ -882,7 +861,6 @@
             <Name>Hop Seeds</Name>
             <Sprite>colored_transparent_817</Sprite>
             <TypeOfThing>HopSeed</TypeOfThing>
-            <Produces>HopSeed</Produces>
             <Edible>true</Edible>
             <Hitpoints>1</Hitpoints>
             <Storeable>true</Storeable>

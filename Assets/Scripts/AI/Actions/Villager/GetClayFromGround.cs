@@ -5,20 +5,20 @@ using Village.Things;
 
 namespace Village.AI
 {
-    public class PickMushroom : MoveGOAPAction
+    public class GetClayFromGround : MoveGOAPAction
     {
         private Inventory _inventory;
 
-        public PickMushroom(GOAPAgent agent, Game game, Movement movement) : base(agent, game, movement)
+        public GetClayFromGround(GOAPAgent agent, Game game, Movement movement) : base(agent, game, movement)
         {            
-            Effects.Add(Effect.HAS_THING, TypeOfThing.Mushroom);
+            Effects.Add(Effect.HAS_THING, TypeOfThing.Clay);
 
             _inventory = agent.GetComponent<Inventory>();
         }
 
         public override bool Filter(Thing thing)
         {
-            return thing.Config.TypeOfThing == TypeOfThing.MushroomGrowing;
+            return thing.Config.TypeOfThing == TypeOfThing.ClayFloor;
         }
 
         public override bool PerformAtTarget()
@@ -30,7 +30,7 @@ namespace Village.AI
             if (_target.Hitpoints <= 0 && _target.transform != null)
                 _game.CreateAtPosition(TypeOfThing.MudFloor, _target.Position);
 
-            var resource = _game.CreateAtPosition(TypeOfThing.Mushroom, Vector2Int.zero);
+            var resource = _game.CreateAtPosition(TypeOfThing.Wood, Vector2Int.zero);
             _inventory.Hold(resource);
 
             return true;

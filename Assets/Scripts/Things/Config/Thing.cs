@@ -44,8 +44,6 @@ namespace Village.Things.Config
         public string StoreGroup;
         public bool Resource;
         public bool Tool;
-        public TypeOfThing Produces;
-        public TypeOfThing RequiredToProduce = TypeOfThing.None;
         public string PositionalAudioGroup;
         public string PathTag;
         public TypeOfThing[] RequiredToCraft;

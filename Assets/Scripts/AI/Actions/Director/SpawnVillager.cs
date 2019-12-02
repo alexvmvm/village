@@ -18,7 +18,7 @@ namespace Village.AI
 
         int VillagerCount()
         {
-            return _game.QueryThings().Count(t => t.Config.TypeOfThing == TypeOfThing.Villager);
+            return _game.QueryThings().Count(t => t.Config.TypeOfThing == TypeOfThing.Villager && !t.GetComponent<Needs>().IsDead());
         }
 
         public override bool IsDone()

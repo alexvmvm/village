@@ -31,7 +31,7 @@ namespace Village.AI
         {
             if (_target.Config.FixedToFloor)
             {
-                var resource = _game.CreateAtPosition(_target.Config.Produces, Vector2Int.zero);
+                var resource = _game.CreateAtPosition(_resource, Vector2Int.zero);
                 resource.Hitpoints = Mathf.Min(10, _target.Hitpoints);
                 //resource.ownedBy = _villager.Fullname;
                 _inventory.Hold(resource);

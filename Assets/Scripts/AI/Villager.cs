@@ -9,14 +9,13 @@ namespace Village.AI
         public string Firstname { get { return _firstname; } }
         public string Lastname { get { return _lastname; } }
         public string Fullname { get { return Firstname + " " + Lastname; } }
-
+        public Needs Needs { get; private set; }
         private string _firstname;
         private string _lastname;
         private bool _requestedResidence;
         private VillageManager _villagerManager;
         private Movement _movement;
         private Thing _thing;
-        private Needs _needs;
         private Inventory _inventory;
         private Game _game;
 
@@ -36,7 +35,7 @@ namespace Village.AI
             _movement = transform.gameObject.AddComponent<Movement>();
             _inventory = _thing.Inventory;
 
-            _needs = transform.gameObject.AddComponent<Needs>();
+            Needs = transform.gameObject.AddComponent<Needs>();
 
             _firstname = NameGenerator.GenerateFirstName();
             _lastname = NameGenerator.GenerateLastName();
@@ -50,21 +49,22 @@ namespace Village.AI
             AddGoal(new IdleGoal());
             AddGoal(new WorkingGoal());
 
-            AddGoal(new DrinkGoal(_needs));
-            AddGoal(new EatGoal(_needs));
-            AddGoal(new RestGoal(_game, _needs));
+            AddGoal(new DrinkGoal(Needs));
+            AddGoal(new EatGoal(Needs));
+            AddGoal(new RestGoal(_game, Needs));
 
             /*
                 Misc
             */
 
             AddAction(new Drop(this, _game));
-            AddAction(new Sleep(this, _game, _thing, _movement, this, _needs));
+            AddAction(new Sleep(this, _game, _thing, _movement, this, Needs));
             AddAction(new Idle(this, _game, _movement));
 
 
             AddAction(new ChopWood(this, _game, _movement));
             AddAction(new PickMushroom(this, _game, _movement));
+            AddAction(new GetClayFromGround(this, _game, _movement));
 
             /*
                 Survival
@@ -72,8 +72,8 @@ namespace Village.AI
 
             AddAction(new DrinkFromStream(this, _game, _movement));
             AddAction(new EastSomething(this, _game, _thing));
-
             
+
             AddAction(new HasEdibleThing(this, _game, TypeOfThing.Mushroom));
 
 
@@ -175,9 +175,9 @@ namespace Village.AI
                 Survival
             */
 
-            state[GOAPAction.Effect.IS_THIRSTY] = _needs.Thirst < 0f;
-            state[GOAPAction.Effect.IS_HUNGRY] = _needs.Hunger < 0f;
-            state[GOAPAction.Effect.IS_RESTED] = _needs.Rest > 0f;
+            state[GOAPAction.Effect.IS_THIRSTY] = Needs.Thirst < 0f;
+            state[GOAPAction.Effect.IS_HUNGRY] = Needs.Hunger < 0f;
+            state[GOAPAction.Effect.IS_RESTED] = Needs.Rest > 0f;
             // state[GOAPAction.Effect.IS_WARM] = !_needs.IsCold();
             state[GOAPAction.Effect.IS_WORKING] = false;
         }
@@ -226,16 +226,16 @@ namespace Village.AI
             // thirsty after sleeping
             if (action is Sleep)
             {
-                _needs.SetThirst(-1f);
-                _needs.SetHunger(-1f);
-                _needs.SetRest(0f);
+                Needs.SetThirst(-1f);
+                Needs.SetHunger(-1f);
+                Needs.SetRest(0f);
             }
 
             if (action is DrinkFromStream)
-                _needs.SetThirst(0f);
+                Needs.SetThirst(0f);
 
             if (action is EastSomething)
-                _needs.SetHunger(0f);
+                Needs.SetHunger(0f);
 
         }
 
@@ -243,7 +243,7 @@ namespace Village.AI
         {
             base.Update();
 
-            if (_needs.IsDead())
+            if (Needs.IsDead())
             {
                 PauseAgent();
                 _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
