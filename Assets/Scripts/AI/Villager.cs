@@ -246,7 +246,7 @@ namespace Village.AI
             if (Needs.IsDead())
             {
                 PauseAgent();
-                _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
+                _thing.SetDeadSprite(true);
             }
         }
 

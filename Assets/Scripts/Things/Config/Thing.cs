@@ -24,6 +24,8 @@ namespace Village.Things.Config
     public class ThingConfig
     {
         public string Sprite;
+        public string SleepSprite;
+        public string DeadSprite;
         public string Name;
         public String Description;
         public string Parent;

@@ -26,21 +26,15 @@ namespace Village.AI
         public float WorldTime;
     }
 
-    // last time shown
-    // duration to show
-    // last need
-
     public class Needs : MonoBehaviour
-    {
-        // public float Thirst { get; private set; }
-        // public float Hunger { get; private set; }
-        // public float Warmth { get; private set; }
-        // public float Rest { get; private set; }
-        
+    {        
         private Dictionary<Need, float> _needs;
         private Game _game;
         private List<EventRecord> _events;
         private SpriteRenderer _spriteRenderer;
+        private GameObject _obj;
+        private static WaitForSeconds _showIconWait;
+        private static WaitForSeconds _pauseBetweenIconWait;
 
         void Awake()
         {
@@ -54,11 +48,26 @@ namespace Village.AI
 
             if(_spriteRenderer == null)
             {
-                var obj = new GameObject();
-                obj.transform.SetParent(transform);
-                obj.transform.localPosition = Vector3.up;
-                _spriteRenderer = obj.AddComponent<SpriteRenderer>();
+                _obj = Instantiate(Assets.GetPrefab("Need"));
+                _obj.transform.SetParent(transform);
+                _obj.transform.localPosition = Vector3.up * 2;
+                _spriteRenderer = _obj.GetComponent<SpriteRenderer>();
+                _obj.SetActive(false);
             }
+
+            if(_showIconWait == null)
+                _showIconWait = new WaitForSeconds(2f);
+
+            if(_pauseBetweenIconWait == null)
+                _pauseBetweenIconWait = new WaitForSeconds(5f);
+        }
+
+        void Start()
+        {
+            SetNeed(Need.HUNGER, -1f);
+            SetNeed(Need.THIRST, -1f);
+
+            StartCoroutine(UpdateNotification());
         }
 
         public void Trigger(NeedsEvent needEvent)
@@ -91,6 +100,23 @@ namespace Village.AI
             _needs[need] += increment;
         }
 
+        public static Sprite GetNeedSprite(Need need)
+        {
+            switch(need)
+            {
+                case Need.HUNGER:
+                    return Assets.GetSprite("colored_transparent_942");
+                case Need.THIRST:
+                    return Assets.GetSprite("colored_transparent_589");
+                case Need.REST:
+                    return Assets.GetSprite("colored_transparent_260");
+                case Need.WARMTH:
+                    return Assets.GetSprite("colored_transparent_333");
+                default:
+                    return Assets.GetSprite("");
+            }
+        }
+
         public float GetNeedValue(Need need)
         {
             return _needs[need];
@@ -98,7 +124,36 @@ namespace Village.AI
 
         public bool IsDead()
         {
-            return GetNeedValue(Need.WARMTH) <= -3f;
+            return GetNeedValue(Need.WARMTH) <= -1.5f;
+        }
+
+        IEnumerator UpdateNotification()
+        {
+            while(true)
+            {
+                if(IsDead())
+                {
+                    yield return _pauseBetweenIconWait;
+                }
+                else
+                {
+                    foreach(Need need in Enum.GetValues(typeof(Need)))
+                    {
+                        if(IsNeedCritical(need))
+                        {
+                            _spriteRenderer.sprite = GetNeedSprite(need);
+                            _obj.SetActive(true);
+                            yield return _showIconWait;
+                            _spriteRenderer.sprite = null;
+                            _obj.SetActive(false);
+                            yield return _pauseBetweenIconWait;
+                            
+                        }    
+                    }
+                }
+
+                yield return null;
+            }
         }
 
         public string GetReasonsForDeath()

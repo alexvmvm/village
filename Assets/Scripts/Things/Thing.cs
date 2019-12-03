@@ -170,6 +170,30 @@ namespace Village.Things
             this.transform.rotation = Assets.GetSpriteRotation(spriteName);
         }
 
+        public void SetSleepSprite(bool set)
+        {
+            if(set)
+            {
+                SpriteRenderer.sprite = Assets.GetSprite(Config.SleepSprite);
+            }
+            else
+            {
+                SetSprite();
+            }
+        }
+
+        public void SetDeadSprite(bool set)
+        {
+            if(set)
+            {
+                SpriteRenderer.sprite = Assets.GetSprite(Config.DeadSprite);
+            }
+            else
+            {
+                SetSprite();
+            }
+        }
+
         public void RefreshSprite()
         {
             SetSprite();

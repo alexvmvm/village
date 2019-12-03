@@ -1012,6 +1012,8 @@
             <Name>Villager</Name>
             <TypeOfThing>Villager</TypeOfThing>
             <Sprite>colored_transparent_24</Sprite>
+            <SleepSprite>villager-sleeping</SleepSprite>
+            <DeadSprite>villager-dead</DeadSprite>
             <SortingOrder>200</SortingOrder>
             <Inventory>true</Inventory>
             <Agent>Villager</Agent>

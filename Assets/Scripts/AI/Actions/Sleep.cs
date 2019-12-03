@@ -84,7 +84,7 @@ namespace Village.AI
             if(_movement.ReachedEndOfPath)
             {
                 _thing.transform.position = _target;
-                _thing.transform.rotation = Quaternion.Euler(0, 0, 90);
+                _thing.SetSleepSprite(true);
             }
             
             return true;
@@ -92,7 +92,7 @@ namespace Village.AI
 
         public override void Reset()
         {
-            _thing.transform.rotation = Quaternion.Euler(0, 0, 0);
+             _thing.SetSleepSprite(false);
             _started = false;
         }
 
