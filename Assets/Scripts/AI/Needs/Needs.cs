@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 namespace Village.AI
 {
+    public enum Need
+    {
+        WARMTH,
+        THIRST,
+        HUNGER,
+        REST
+    }
 
     public enum NeedsEvent
     {
@@ -18,20 +26,39 @@ namespace Village.AI
         public float WorldTime;
     }
 
+    // last time shown
+    // duration to show
+    // last need
+
     public class Needs : MonoBehaviour
     {
-        public float Thirst { get; private set; }
-        public float Hunger { get; private set; }
-        public float Warmth { get; private set; }
-        public float Rest { get; private set; }
-
+        // public float Thirst { get; private set; }
+        // public float Hunger { get; private set; }
+        // public float Warmth { get; private set; }
+        // public float Rest { get; private set; }
+        
+        private Dictionary<Need, float> _needs;
         private Game _game;
         private List<EventRecord> _events;
+        private SpriteRenderer _spriteRenderer;
 
         void Awake()
         {
             _game = FindObjectOfType<Game>();
             _events = new List<EventRecord>();
+            
+            // need dictionary
+            _needs = new Dictionary<Need, float>();
+            foreach(Need need in Enum.GetValues(typeof(Need)))
+                _needs[need] = 0f;
+
+            if(_spriteRenderer == null)
+            {
+                var obj = new GameObject();
+                obj.transform.SetParent(transform);
+                obj.transform.localPosition = Vector3.up;
+                _spriteRenderer = obj.AddComponent<SpriteRenderer>();
+            }
         }
 
         public void Trigger(NeedsEvent needEvent)
@@ -39,57 +66,40 @@ namespace Village.AI
             switch (needEvent)
             {
                 case NeedsEvent.SLEPT_OUTSIDE:
-                    Warmth -= 0.5f;
+                    IncrementNeed(Need.WARMTH, -0.5f);
                     break;
                 case NeedsEvent.SLEPT_IN_BED:
-                    Warmth = 0f;
+                    SetNeed(Need.WARMTH, 0f);
                     break;
             }
 
             _events.Add(new EventRecord { Event = needEvent, WorldTime = _game.WorldTime.TimeSinceStart });
         }
 
-        public bool IsCold()
+        public bool IsNeedCritical(Need need)
         {
-            return Warmth < 0f;
+            return _needs[need] < 0f;
+        }
+
+        public void SetNeed(Need need, float value)
+        {
+            _needs[need] = value;
+        }
+
+        public void IncrementNeed(Need need, float increment)
+        {
+            _needs[need] += increment;
+        }
+
+        public float GetNeedValue(Need need)
+        {
+            return _needs[need];
         }
 
         public bool IsDead()
         {
-            return Warmth <= -3f;
+            return GetNeedValue(Need.WARMTH) <= -3f;
         }
-
-        public bool IsHungry()
-        {
-            return Hunger < 0f;
-        }
-
-        public bool IsThirsty()
-        {
-            return Thirst < 0f;
-        }
-
-        public bool IsTired()
-        {
-            return Rest < 0f;
-        }
-
-        public void SetRest(float rest)
-        {
-            Rest = rest;
-        }
-
-        public void SetThirst(float thirst)
-        {
-            Thirst = thirst;
-        }
-
-        public void SetHunger(float hunger)
-        {
-            Hunger = hunger;
-        }
-
-
 
         public string GetReasonsForDeath()
         {
@@ -99,7 +109,7 @@ namespace Village.AI
             if (numSleptOutside > 0)
                 reasons += $"<color=red>Spent {numSleptOutside} night{(numSleptOutside > 1 ? "s" : "")} outside.</color>\n";
 
-            if (Warmth <= -3f)
+            if (GetNeedValue(Need.WARMTH) <= -3f)
                 reasons += $"<color=red>Suffering from the cold.</color>\n";
 
             return reasons;
@@ -117,10 +127,10 @@ namespace Village.AI
                 label += GetReasonsForDeath();
             }
 
-            label += string.Format("hunger: {0}\n", Hunger);
-            label += string.Format("thirst: {0}\n", Thirst);
-            label += string.Format("warmth: {0}\n", Warmth);
-            label += string.Format("rest: {0}\n", Rest);
+            label += string.Format("hunger: {0}\n", GetNeedValue(Need.HUNGER));
+            label += string.Format("thirst: {0}\n", GetNeedValue(Need.THIRST));
+            label += string.Format("warmth: {0}\n", GetNeedValue(Need.WARMTH));
+            label += string.Format("rest: {0}\n", GetNeedValue(Need.REST));
 
             var style = new GUIStyle();
             style.fontSize = 10;

@@ -18,6 +18,6 @@ public class EatGoal : GOAPGoal
 
     public override bool IsActive()
     {
-        return _needs.IsHungry();
+        return _needs.IsNeedCritical(Need.HUNGER);
     }
 }

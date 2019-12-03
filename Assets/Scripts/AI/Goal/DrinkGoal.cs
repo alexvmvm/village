@@ -18,6 +18,6 @@ public class DrinkGoal : GOAPGoal
 
     public override bool IsActive()
     {
-        return _needs.IsThirsty();
+        return _needs.IsNeedCritical(Need.THIRST);
     }
 }

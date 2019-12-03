@@ -261,7 +261,7 @@ namespace Village.Things
 
             if(Config.Resource)
             {
-                SetLabel($"x{Hitpoints}");
+                //SetLabel($"x{Hitpoints}");
             }
         }
 

@@ -175,9 +175,9 @@ namespace Village.AI
                 Survival
             */
 
-            state[GOAPAction.Effect.IS_THIRSTY] = Needs.Thirst < 0f;
-            state[GOAPAction.Effect.IS_HUNGRY] = Needs.Hunger < 0f;
-            state[GOAPAction.Effect.IS_RESTED] = Needs.Rest > 0f;
+            state[GOAPAction.Effect.IS_THIRSTY] = Needs.IsNeedCritical(Need.THIRST);
+            state[GOAPAction.Effect.IS_HUNGRY] =  Needs.IsNeedCritical(Need.HUNGER);
+            state[GOAPAction.Effect.IS_RESTED] =  Needs.IsNeedCritical(Need.REST);
             // state[GOAPAction.Effect.IS_WARM] = !_needs.IsCold();
             state[GOAPAction.Effect.IS_WORKING] = false;
         }
@@ -226,16 +226,16 @@ namespace Village.AI
             // thirsty after sleeping
             if (action is Sleep)
             {
-                Needs.SetThirst(-1f);
-                Needs.SetHunger(-1f);
-                Needs.SetRest(0f);
+                Needs.SetNeed(Need.THIRST, -1f);
+                Needs.SetNeed(Need.HUNGER, -1f);
+                Needs.SetNeed(Need.REST, 0f);
             }
 
             if (action is DrinkFromStream)
-                Needs.SetThirst(0f);
+                Needs.SetNeed(Need.THIRST, 0f);
 
             if (action is EastSomething)
-                Needs.SetHunger(0f);
+                Needs.SetNeed(Need.HUNGER, 0f);
 
         }
 
